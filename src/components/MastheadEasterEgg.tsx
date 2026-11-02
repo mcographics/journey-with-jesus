@@ -15,6 +15,10 @@ type TrailBubble = {
 };
 
 const TRAIL_LIFETIME = 680;
+const TOUCH_REVEAL_DURATION = 2600;
+const TOUCH_REVEAL_FADE_DURATION = 240;
+const DOUBLE_TAP_INTERVAL = 380;
+const DOUBLE_TAP_DISTANCE = 48;
 
 export default function MastheadEasterEgg({ children, imageSrc }: MastheadEasterEggProps) {
   const mastheadRef = useRef<HTMLDivElement>(null);
@@ -27,7 +31,6 @@ export default function MastheadEasterEgg({ children, imageSrc }: MastheadEaster
     if (!masthead || !canvas || !context) return;
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (reducedMotion.matches) return;
 
     const mask = document.createElement("canvas");
     const maskContext = mask.getContext("2d");
@@ -35,6 +38,8 @@ export default function MastheadEasterEgg({ children, imageSrc }: MastheadEaster
 
     const revealImage = new window.Image();
     let imageLoaded = false;
+    let imageRequested = false;
+    let imageReadyCallbacks: Array<() => void> = [];
     let pointer: { x: number; y: number } | null = null;
     let trail: TrailBubble[] = [];
     let frame = 0;
@@ -43,6 +48,58 @@ export default function MastheadEasterEgg({ children, imageSrc }: MastheadEaster
     let pixelRatio = 1;
     let lastTrailAt = 0;
     let disposed = false;
+    let touchRevealActive = false;
+    let touchRevealTimer = 0;
+    let touchRevealCleanupTimer = 0;
+    let previousTouchTap: { x: number; y: number; time: number } | null = null;
+
+    const loadRevealImage = (onReady?: () => void) => {
+      if (imageLoaded) {
+        onReady?.();
+        return;
+      }
+      if (onReady) imageReadyCallbacks.push(onReady);
+      if (imageRequested) return;
+
+      imageRequested = true;
+      revealImage.onload = () => {
+        imageLoaded = true;
+        for (const callback of imageReadyCallbacks) callback();
+        imageReadyCallbacks = [];
+        if (pointer) queueFrame();
+      };
+      revealImage.onerror = () => {
+        imageRequested = false;
+        imageReadyCallbacks = [];
+      };
+      revealImage.src = imageSrc;
+    };
+
+    const clearTouchReveal = () => {
+      touchRevealActive = false;
+      canvas.style.opacity = "0";
+      touchRevealCleanupTimer = window.setTimeout(() => {
+        if (pointer) {
+          queueFrame();
+          return;
+        }
+        context.clearRect(0, 0, width, height);
+      }, TOUCH_REVEAL_FADE_DURATION);
+    };
+
+    const revealForTouch = () => {
+      pointer = null;
+      trail = [];
+      touchRevealActive = true;
+      if (touchRevealTimer) window.clearTimeout(touchRevealTimer);
+      if (touchRevealCleanupTimer) window.clearTimeout(touchRevealCleanupTimer);
+
+      loadRevealImage(() => {
+        if (disposed || !touchRevealActive) return;
+        queueFrame();
+        touchRevealTimer = window.setTimeout(clearTouchReveal, TOUCH_REVEAL_DURATION);
+      });
+    };
 
     const resize = () => {
       const bounds = masthead.getBoundingClientRect();
@@ -62,10 +119,14 @@ export default function MastheadEasterEgg({ children, imageSrc }: MastheadEaster
       pointer = null;
       trail = [];
       lastTrailAt = 0;
+      touchRevealActive = false;
+      if (touchRevealTimer) window.clearTimeout(touchRevealTimer);
+      if (touchRevealCleanupTimer) window.clearTimeout(touchRevealCleanupTimer);
       if (frame) cancelAnimationFrame(frame);
       frame = 0;
       context.clearRect(0, 0, width, height);
       maskContext.clearRect(0, 0, width, height);
+      canvas.style.opacity = "0";
     };
 
     const drawSoftBubble = (x: number, y: number, radius: number, strength: number) => {
@@ -81,9 +142,16 @@ export default function MastheadEasterEgg({ children, imageSrc }: MastheadEaster
 
     const render = (now: number) => {
       frame = 0;
-      if (disposed || !pointer || !imageLoaded || width <= 0 || height <= 0) return;
+      if (disposed || (!pointer && !touchRevealActive) || !imageLoaded || width <= 0 || height <= 0) return;
 
       context.clearRect(0, 0, width, height);
+      if (touchRevealActive) {
+        context.drawImage(revealImage, 0, 0, width, height);
+        canvas.style.opacity = "1";
+        return;
+      }
+
+      if (!pointer) return;
       maskContext.clearRect(0, 0, width, height);
       maskContext.globalCompositeOperation = "source-over";
 
@@ -100,6 +168,7 @@ export default function MastheadEasterEgg({ children, imageSrc }: MastheadEaster
       context.globalCompositeOperation = "destination-in";
       context.drawImage(mask, 0, 0, width, height);
       context.globalCompositeOperation = "source-over";
+      canvas.style.opacity = "1";
 
       const halo = context.createRadialGradient(
         pointer.x,
@@ -128,6 +197,7 @@ export default function MastheadEasterEgg({ children, imageSrc }: MastheadEaster
 
     const onPointerMove = (event: PointerEvent) => {
       if (event.pointerType !== "mouse" && event.pointerType !== "pen") return;
+      if (reducedMotion.matches) return;
 
       const bounds = masthead.getBoundingClientRect();
       const x = event.clientX - bounds.left;
@@ -145,16 +215,38 @@ export default function MastheadEasterEgg({ children, imageSrc }: MastheadEaster
           if (trail.length > 24) trail.shift();
           lastTrailAt = now;
         }
-      } else if (!imageLoaded) {
-        revealImage.onload = () => {
-          imageLoaded = true;
-          queueFrame();
-        };
-        revealImage.src = imageSrc;
-      }
+      } else loadRevealImage();
 
       pointer = { x, y };
       queueFrame();
+    };
+
+    const onPointerDown = (event: PointerEvent) => {
+      if (event.pointerType !== "touch") return;
+
+      const bounds = masthead.getBoundingClientRect();
+      const x = event.clientX - bounds.left;
+      const y = event.clientY - bounds.top;
+      if (x < 0 || y < 0 || x > bounds.width || y > bounds.height) {
+        previousTouchTap = null;
+        return;
+      }
+
+      const now = performance.now();
+      if (
+        previousTouchTap &&
+        now - previousTouchTap.time <= DOUBLE_TAP_INTERVAL &&
+        Math.hypot(x - previousTouchTap.x, y - previousTouchTap.y) <= DOUBLE_TAP_DISTANCE
+      ) {
+        previousTouchTap = null;
+        revealForTouch();
+      } else {
+        previousTouchTap = { x, y, time: now };
+      }
+    };
+
+    const onPointerCancel = (event: PointerEvent) => {
+      if (event.pointerType === "touch") previousTouchTap = null;
     };
 
     const onWindowBlur = () => clear();
@@ -163,13 +255,19 @@ export default function MastheadEasterEgg({ children, imageSrc }: MastheadEaster
     observer.observe(masthead);
     resize();
     window.addEventListener("pointermove", onPointerMove, { passive: true });
+    window.addEventListener("pointerdown", onPointerDown, { passive: true });
+    window.addEventListener("pointercancel", onPointerCancel, { passive: true });
     window.addEventListener("blur", onWindowBlur);
 
     return () => {
       disposed = true;
       observer.disconnect();
       window.removeEventListener("pointermove", onPointerMove);
+      window.removeEventListener("pointerdown", onPointerDown);
+      window.removeEventListener("pointercancel", onPointerCancel);
       window.removeEventListener("blur", onWindowBlur);
+      if (touchRevealTimer) window.clearTimeout(touchRevealTimer);
+      if (touchRevealCleanupTimer) window.clearTimeout(touchRevealCleanupTimer);
       if (frame) cancelAnimationFrame(frame);
     };
   }, [imageSrc]);
