@@ -37,12 +37,7 @@ The repository must use **Settings → Pages → Build and deployment → GitHub
 
 `https://mcographics.github.io/journey-with-jesus/`
 
-Optional repository **Actions variables**:
-
-- `NEXT_PUBLIC_SUPABASE_URL`
-- `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
-
-If they are absent, comments remain visibly unavailable and the rest of the static site builds normally.
+The Pages workflow includes the project's public Supabase URL and publishable key as build-time fallbacks. You can override them with repository **Actions variables** named `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`. These values are public by design; never place a secret or service-role key in the website.
 
 ## Media library and Studio
 
@@ -58,14 +53,14 @@ It is not linked in the public header. Sign-in uses an email magic link, and dat
 
 The repository includes the media and comment database migrations. To make uploads, playback, playlists, and comments live:
 
-1. Create or select the owner's Supabase project. Set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` as GitHub repository Actions variables.
+1. The current Pages workflow is wired to the project's public Supabase URL and publishable key. You can override either value with the matching GitHub repository Actions variable. For local development, set both in `.env.local`.
 2. Link the Supabase CLI to that project and apply the migrations with `supabase link --project-ref <project-ref>` and `supabase db push`.
 3. Deploy the anonymous comment function with `supabase functions deploy submit-comment`. Set `RATE_LIMIT_SALT` to a random secret of at least 32 characters and set `ALLOWED_ORIGINS` to `https://mcographics.github.io` plus any exact local development origins.
 4. In Supabase Auth, enable email sign-in, invite the owner's email, and add `https://mcographics.github.io/journey-with-jesus/studio` to the allowed redirect URLs. The Studio sign-in form only accepts an existing Auth user.
 5. In the Supabase SQL editor, grant that invited account Studio access:
    `insert into public.media_admins (user_id) select id from auth.users where email = 'OWNER_EMAIL';`
    Replace `OWNER_EMAIL` with the invited admin's address. Repeat only for people who should manage videos and comments.
-6. Re-run the GitHub Pages deployment workflow after setting the public Actions variables.
+6. Re-run the GitHub Pages deployment workflow after changing the public Actions variables.
 
 The comment function stores public submissions as pending, applies a one-minute per-address rate limit, and rejects direct anonymous inserts. Only approved comments can be read publicly. The Studio can approve or reject them. Never put a service-role key in the browser, repository, or Pages variables.
 
