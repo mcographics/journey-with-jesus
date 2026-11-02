@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, BookOpen, Heart, Sparkles } from "lucide-react";
+import MastheadTicker from "@/components/MastheadTicker";
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
-const mastheadTickerText = "An Animated Journey Through God's Word | Bible Stories | Conversations with Jesus | The Gospel";
 
 export const metadata: Metadata = {
   title: "Journey with Jesus — Experience the Gospel Through Animated Storytelling",
@@ -28,15 +28,7 @@ export default function HomePage() {
           src={`${basePath}/images/journey-with-jesus-header-3x.jpg`}
           width={5742}
         />
-        <div className="masthead-ticker">
-          <p className="visually-hidden">{mastheadTickerText}</p>
-          <div className="masthead-ticker-window" aria-hidden="true">
-            <div className="masthead-ticker-track">
-              <span>{mastheadTickerText}</span>
-              <span>{mastheadTickerText}</span>
-            </div>
-          </div>
-        </div>
+        <MastheadTicker />
       </div>
       <section className="home-hero" aria-labelledby="home-title">
         <div className="home-hero-content page-width">
