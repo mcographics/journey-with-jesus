@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-test("home and media are the only primary destinations, with working story CTA", async ({ page }) => {
+test("public destinations are available in the desktop menu, with working story CTA", async ({ page }) => {
   await page.goto("/");
   const masthead = page.getByRole("img", { name: /Journey with Jesus illustrated banner/ });
   await expect(masthead).toBeVisible();
@@ -9,7 +9,15 @@ test("home and media are the only primary destinations, with working story CTA",
   await expect(page.getByRole("heading", { level: 1 })).toContainText("Journey");
   await expect(page.getByText("These are more than themes. They are at the heart of the journey.")).toBeVisible();
   await expect(page.getByText("Journey with Jesus brings biblical narratives to life", { exact: false })).toBeVisible();
-  await expect(page.getByRole("navigation", { name: "Primary navigation" }).getByRole("link")).toHaveCount(2);
+  const desktopMenuButton = page.getByRole("button", { name: "Open site menu" });
+  await expect(desktopMenuButton).toBeVisible();
+  await desktopMenuButton.click();
+  const primaryNavigation = page.getByRole("navigation", { name: "Primary navigation" });
+  await expect(primaryNavigation).toBeVisible();
+  await expect(primaryNavigation.getByRole("link")).toHaveCount(5);
+  for (const destination of ["Home", "Media", "Meet the Characters", "Meet the Team", "Store"]) {
+    await expect(primaryNavigation.getByRole("link", { name: destination })).toBeVisible();
+  }
   await page.getByRole("link", { name: "Watch the Stories" }).click();
   await expect(page).toHaveURL(/\/media\/$/);
   await expect(page.getByRole("heading", { name: "Animated stories of faith." })).toBeVisible();
