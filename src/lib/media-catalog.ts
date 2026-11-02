@@ -1,4 +1,5 @@
-import type { Episode, MediaPlaylist, VideoQuality } from "@/data/episodes";
+import type { Episode, MediaPlaylist } from "@/data/episodes";
+import type { VideoQuality } from "@/lib/database.types";
 import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
 
 type EpisodeRow = { id: string; title: string; description: string; scripture_reference: string | null; thumbnail_url: string | null; duration_seconds: number | null; episode_number: number; orientation: "landscape" | "portrait" };
