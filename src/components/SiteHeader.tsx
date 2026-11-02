@@ -59,7 +59,9 @@ export function SiteHeader() {
     const resolvedTheme = mode === "auto" ? getTimeBasedTheme() : mode;
     document.documentElement.dataset.themeMode = mode;
     document.documentElement.dataset.theme = resolvedTheme;
-    setThemeMode(mode);
+    if (mode !== "auto") {
+      window.setTimeout(() => setThemeMode(mode), 0);
+    }
     setThemeColor(resolvedTheme);
   }, []);
 
