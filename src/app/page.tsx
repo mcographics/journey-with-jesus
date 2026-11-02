@@ -46,21 +46,33 @@ export default function HomePage() {
         <a className="scroll-cue" href="#scripture" aria-label="Scroll to learn about the project"><span /> Discover the journey</a>
       </section>
 
-      <section className="story-section page-width" id="scripture" aria-labelledby="scripture-title">
-        <div className="section-index"><span>01</span><i /></div>
-        <div className="story-copy">
-          <p className="eyebrow eyebrow-dark">OUR STORY</p>
-          <h2 id="scripture-title">Bringing Scripture to Life,<br /><em>One Story at a Time</em></h2>
-          <p>The Bible is filled with extraordinary moments of faith, courage, compassion, redemption, and hope.</p>
-          <p>At Journey with Jesus, our desire is to make these stories accessible and engaging through the art of animation.</p>
-          <p>Combining anime-inspired visuals with Scripture-centered storytelling, we seek to create meaningful experiences that capture the imagination, touch the heart, and encourage a deeper understanding of Jesus Christ.</p>
-          <p>Whether you&apos;re exploring Christianity for the first time or have walked in faith for years, there&apos;s a place for you on this journey.</p>
-        </div>
-        <div className="story-emblem" aria-hidden="true">
-          <div className="emblem-orbit orbit-one" />
-          <div className="emblem-orbit orbit-two" />
-          <div className="emblem-center"><BookOpen size={36} strokeWidth={1.2} /></div>
-          <span className="emblem-caption">A LIVING STORY</span>
+      <section className="storybook-section" id="scripture" aria-labelledby="scripture-title">
+        <Image
+          alt=""
+          aria-hidden="true"
+          className="storybook-background"
+          fill
+          sizes="100vw"
+          src={`${basePath}/images/scripture-city-story.webp`}
+        />
+        <div className="storybook-shade" aria-hidden="true" />
+        <div className="page-width storybook-layout">
+          <article className="storybook-card">
+            <p className="storybook-eyebrow"><Sparkles size={15} aria-hidden="true" /><span>Our Story</span><i>01</i></p>
+            <h2 className="storybook-title" id="scripture-title">Bringing Scripture to Life<em>One Story at a Time</em></h2>
+            <p className="storybook-lead">Every great journey begins with a story. This one leads to Jesus.</p>
+            <p>The Bible is filled with unforgettable moments of courage, compassion, miracles, and hope. We bring these Scripture-rooted stories to life through vivid animation and heartfelt storytelling.</p>
+            <p>Follow the journey of Jesus—from his teachings and miracles to the promise of resurrection—and discover the timeless message at the heart of every story.</p>
+            <p>Whether you are opening Scripture for the first time or returning to a beloved passage, there is a place for you on this journey.</p>
+            <Link className="button button-gold storybook-button" href="/media/">
+              <span>Explore the Stories</span><ArrowRight aria-hidden="true" size={18} />
+            </Link>
+          </article>
+          <div className="storybook-seal" aria-hidden="true">
+            <span>Faith · Hope · Love</span>
+            <BookOpen size={34} strokeWidth={1.2} />
+            <small>Let the story<br />light the way</small>
+          </div>
         </div>
       </section>
 
