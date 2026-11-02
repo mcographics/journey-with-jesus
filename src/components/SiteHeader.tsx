@@ -16,8 +16,48 @@ export function SiteHeader() {
   const routePath = basePath && pathname.startsWith(basePath) ? pathname.slice(basePath.length) || "/" : pathname;
   const normalizedPath = routePath.endsWith("/") ? routePath : `${routePath}/`;
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isAutoHidden, setIsAutoHidden] = useState(false);
   const mobileNavigationRef = useRef<HTMLDivElement>(null);
   const mobileMenuButtonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    const touchMobile = window.matchMedia("(max-width: 768px) and (hover: none) and (pointer: coarse)");
+    let hideTimer: number | undefined;
+
+    const clearHideTimer = () => {
+      if (hideTimer !== undefined) {
+        window.clearTimeout(hideTimer);
+        hideTimer = undefined;
+      }
+    };
+    const scheduleHide = () => {
+      clearHideTimer();
+      if (!touchMobile.matches) {
+        setIsAutoHidden(false);
+        return;
+      }
+      hideTimer = window.setTimeout(() => setIsAutoHidden(true), 1000);
+    };
+    const showWhileScrolling = () => {
+      if (!touchMobile.matches) return;
+      setIsAutoHidden(false);
+      scheduleHide();
+    };
+    const updateForInputMode = () => {
+      setIsAutoHidden(false);
+      scheduleHide();
+    };
+
+    window.addEventListener("scroll", showWhileScrolling, { passive: true });
+    touchMobile.addEventListener("change", updateForInputMode);
+    scheduleHide();
+
+    return () => {
+      clearHideTimer();
+      window.removeEventListener("scroll", showWhileScrolling);
+      touchMobile.removeEventListener("change", updateForInputMode);
+    };
+  }, []);
 
   useEffect(() => {
     if (!isMobileMenuOpen) return;
@@ -61,7 +101,10 @@ export function SiteHeader() {
             );
           })}
         </nav>
-        <div className="mobile-navigation" ref={mobileNavigationRef}>
+        <div
+          className={`mobile-navigation${isAutoHidden && !isMobileMenuOpen ? " is-autohidden" : ""}`}
+          ref={mobileNavigationRef}
+        >
           <nav
             aria-label="Mobile navigation"
             className="mobile-menu-options"
