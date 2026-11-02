@@ -1,5 +1,9 @@
+"use client";
+
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import ResponsivePicture, { type PictureCandidate } from "@/components/ResponsivePicture";
+import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 const wordmarkSources: PictureCandidate[] = [420, 810].map((width) => ({
@@ -8,6 +12,49 @@ const wordmarkSources: PictureCandidate[] = [420, 810].map((width) => ({
 }));
 
 export function SiteFooter() {
+  const client = useMemo(() => createBrowserSupabaseClient(), []);
+  const [showUpperRoom, setShowUpperRoom] = useState(false);
+
+  useEffect(() => {
+    if (!client) return;
+    let active = true;
+
+    const checkAdmin = async (userId: string | undefined) => {
+      if (!userId) {
+        if (active) setShowUpperRoom(false);
+        return;
+      }
+
+      const { data, error } = await client
+        .from("media_admins")
+        .select("user_id")
+        .eq("user_id", userId)
+        .maybeSingle();
+
+      if (active) setShowUpperRoom(!error && Boolean(data));
+    };
+
+    void client.auth.getSession().then(({ data, error }) => {
+      if (error) {
+        if (active) setShowUpperRoom(false);
+        return;
+      }
+      void checkAdmin(data.session?.user.id);
+    });
+
+    const { data: authData } = client.auth.onAuthStateChange((_event, session) => {
+      setShowUpperRoom(false);
+      window.setTimeout(() => {
+        void checkAdmin(session?.user.id);
+      }, 0);
+    });
+
+    return () => {
+      active = false;
+      authData.subscription.unsubscribe();
+    };
+  }, [client]);
+
   return (
     <footer className="site-footer">
       <div className="footer-inner">
@@ -31,6 +78,12 @@ export function SiteFooter() {
           <Link href="/">Home</Link>
           <span aria-hidden="true">✦</span>
           <Link href="/media/">Media</Link>
+          {showUpperRoom && (
+            <>
+              <span aria-hidden="true">✦</span>
+              <Link href="/studio/">Upper Room</Link>
+            </>
+          )}
         </nav>
       </div>
     </footer>
