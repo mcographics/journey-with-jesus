@@ -79,10 +79,17 @@ export default function HomePage() {
 
       <section className="mission-section" aria-labelledby="mission-title">
         <div className="mission-inner page-width">
-          <div className="mission-art" aria-hidden="true">
-            <div className="mission-glow" />
-            <span className="mission-quote-mark">“</span>
-            <span className="mission-art-caption">A MESSAGE OF HOPE<br />FOR EVERY GENERATION</span>
+          <div className="mission-art">
+            <Image
+              alt="A peaceful garden valley with flower-filled banks, waterfalls, and a sunlit river."
+              className="mission-landscape"
+              fill
+              sizes="(max-width: 700px) calc(100vw - 36px), 390px"
+              src={`${basePath}/images/mission-garden.png`}
+            />
+            <span className="mission-art-frame" aria-hidden="true" />
+            <Sparkles className="mission-sparkle mission-sparkle-one" aria-hidden="true" size={19} />
+            <Sparkles className="mission-sparkle mission-sparkle-two" aria-hidden="true" size={16} />
           </div>
           <div className="mission-copy">
             <div className="section-index section-index-light"><span>02</span><i /></div>
