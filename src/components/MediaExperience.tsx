@@ -1,8 +1,9 @@
 "use client";
-
-import { useSyncExternalStore } from "react";
-import type { Episode } from "@/data/episodes";
+import { useEffect, useState, useSyncExternalStore } from "react";
+import type { Episode, MediaPlaylist } from "@/data/episodes";
 import { episodeHref, resolveEpisodeId } from "@/lib/episode-navigation";
+import { loadPublishedMediaCatalog } from "@/lib/media-catalog";
+import { isSupabaseConfigured } from "@/lib/supabase/browser";
 import { CommentSection } from "@/components/CommentSection";
 import { EpisodePlaylist } from "@/components/EpisodePlaylist";
 import { VideoPlayer } from "@/components/VideoPlayer";
@@ -11,20 +12,36 @@ function subscribeToNavigation(onStoreChange: () => void) {
   window.addEventListener("popstate", onStoreChange);
   return () => window.removeEventListener("popstate", onStoreChange);
 }
+function getSearch() { return window.location.search; }
+function getServerSearch() { return ""; }
 
-function getSearch() {
-  return window.location.search;
-}
-
-function getServerSearch() {
-  return "";
-}
-
-export function MediaExperience({ episodes }: { episodes: Episode[] }) {
+export function MediaExperience({ episodes: initialEpisodes }: { episodes: Episode[] }) {
   const search = useSyncExternalStore(subscribeToNavigation, getSearch, getServerSearch);
+  const [episodes, setEpisodes] = useState(initialEpisodes);
+  const [playlists, setPlaylists] = useState<MediaPlaylist[]>([]);
+  const [playlistId, setPlaylistId] = useState("all");
+  const [catalogStatus, setCatalogStatus] = useState<"loading" | "ready" | "unconfigured" | "error">(initialEpisodes.length ? "ready" : "loading");
+
+  useEffect(() => {
+    if (!isSupabaseConfigured()) {
+      setCatalogStatus(initialEpisodes.length ? "ready" : "unconfigured");
+      return;
+    }
+    let active = true;
+    setCatalogStatus("loading");
+    void loadPublishedMediaCatalog().then((catalog) => {
+      if (!active) return;
+      setEpisodes(catalog.episodes);
+      setPlaylists(catalog.playlists);
+      setCatalogStatus("ready");
+    }).catch(() => {
+      if (active) setCatalogStatus("error");
+    });
+    return () => { active = false; };
+  }, [initialEpisodes]);
+
   const selectedId = resolveEpisodeId(search, episodes);
   const selectedEpisode = episodes.find((episode) => episode.id === selectedId) ?? null;
-
   const selectEpisode = (episode: Episode) => {
     window.history.pushState({}, "", episodeHref(window.location.href, episode.id));
     window.dispatchEvent(new PopStateEvent("popstate"));
@@ -36,15 +53,18 @@ export function MediaExperience({ episodes }: { episodes: Episode[] }) {
         <header className="media-heading">
           <p className="media-kicker">FAITH · HOPE · STORY</p>
           <h1>Animated stories of faith.</h1>
-          <p>Explore the life and teachings of Jesus through Scripture-inspired animation. Each story is made to watch at your pace and in the format that fits your screen.</p>
+          <p>Explore the life and teachings of Jesus through Scripture-inspired animation. Each story is made to watch at your pace and in the format that fits your screen. Watching and commenting are open to everyone.</p>
         </header>
-
+        {catalogStatus === "loading" && episodes.length === 0 && <p className="catalog-notice" role="status">Loading the story library…</p>}
+        {catalogStatus === "unconfigured" && episodes.length === 0 && <p className="catalog-notice" role="status">The public story library is being prepared. Please check back soon.</p>}
+        {catalogStatus === "error" && <p className="catalog-notice is-error" role="status">The story library could not be reached. Please refresh to try again.</p>}
         <div className="media-layout">
           <div className="media-main">
             <VideoPlayer episode={selectedEpisode} />
             <CommentSection key={selectedEpisode?.id ?? "none"} episode={selectedEpisode} />
           </div>
-          <EpisodePlaylist episodes={episodes} selectedId={selectedId} onSelect={selectEpisode} />
+          <EpisodePlaylist episodes={episodes} playlists={playlists} selectedPlaylistId={playlistId}
+            onPlaylistChange={setPlaylistId} selectedId={selectedId} onSelect={selectEpisode} />
         </div>
       </div>
     </main>

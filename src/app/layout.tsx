@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import "./globals.css";
+import "./media-studio.css";
 
 const siteUrl = "https://mcographics.github.io/journey-with-jesus/";
 

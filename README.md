@@ -1,6 +1,6 @@
 # Journey with Jesus
 
-An independently published, responsive Christian animation library site. It has two public destinations: Home and Media. The video catalog is intentionally empty until the owner supplies finished episodes and approved artwork.
+An independently published, responsive Christian animation library site. It has two public destinations: Home and Media. The video catalog is managed by the owner in a private Studio; it starts empty until finished videos and approved artwork are added.
 
 ## Stack and hosting
 
@@ -44,43 +44,36 @@ Optional repository **Actions variables**:
 
 If they are absent, comments remain visibly unavailable and the rest of the static site builds normally.
 
-## Add an episode
+## Media library and Studio
 
-Only publish completed, owner-approved videos and artwork. Add an entry to `src/data/episodes.ts` with a stable lowercase ID, title, accurate description, Scripture reference where applicable, episode number, orientation, and public HTTPS media source(s). Add an approved thumbnail only when the creator provides it. Keep unfinished stories out of the public catalog.
+Visitors can browse videos and submit comments without signing in. Approved comments are public; new comments enter moderation. The public video library loads from Supabase so admins can publish, reorder playlists, and manage comments without a code change.
 
-```ts
-{
-  id: "jesus-calms-the-storm",
-  title: "Jesus Calms the Storm",
-  description: "An animated retelling of Jesus calming the storm on the Sea of Galilee.",
-  scriptureReference: "Mark 4:35–41",
-  episodeNumber: 1,
-  orientation: "landscape", // "portrait" uses 9:16
-  published: true,
-  videoSources: [
-    { label: "720p", url: "https://media.example.com/story-720.mp4" },
-    { label: "1080p", url: "https://media.example.com/story-1080.mp4" },
-    { label: "4K", url: "https://media.example.com/story-4k.mp4" },
-  ],
-}
-```
+The private Studio lives at:
 
-The player uses native HTML video controls and offers a quality selector when multiple files are available. Host full-resolution video with a video/CDN provider that supports HTTPS, byte-range seeking, and the intended audience/bandwidth; GitHub Pages is for the site, not large video masters. YouTube embeds are also supported with `youtubeId`. Confirm format, captions, rights, and playback on target devices before publishing a video.
+`https://mcographics.github.io/journey-with-jesus/studio`
 
-When comments are enabled, also insert the episode ID into `public.published_episodes`. That allowlist prevents the public comment endpoint from accepting submissions for unpublished or unknown episodes.
+It is not linked in the public header. Sign-in uses an email magic link, and database/storage policies check an explicit admin list. A hidden URL is not the access control.
 
-## Set up moderated comments
+### Connect the Supabase backend
 
-1. Create or select the owner's Supabase project and install/use the Supabase CLI.
-2. Link the project, then apply the migration: `supabase link --project-ref <project-ref>` and `supabase db push`.
-3. Deploy the function: `supabase functions deploy submit-comment`.
-4. Set function secrets: `supabase secrets set RATE_LIMIT_SALT="replace-with-a-random-secret-of-at-least-32-characters" ALLOWED_ORIGINS="https://mcographics.github.io,http://localhost:3000"`. Replace the sample salt, use the production site origin and any exact local origins needed, and keep the salt private.
-5. In the database, add each published episode to `published_episodes`; review and approve comments using the Supabase dashboard or a restricted owner-only workflow.
-6. Add the Supabase URL and **publishable** key as GitHub repository Actions variables. Re-run the deployment workflow.
+The repository includes the media and comment database migrations. To make uploads, playback, playlists, and comments live:
 
-The migration enables RLS, exposes only approved comments to anonymous readers, denies public direct inserts, and restricts comment submission to the service role used by the Edge Function. The function validates fields and origin, uses a honeypot, rate-limits per client address with an HMAC fingerprint, and stores submissions as `pending`. No user-facing admin interface is included, so moderation happens in the Supabase dashboard. Do not place a secret/service-role key in the browser or Pages build.
+1. Create or select the owner's Supabase project. Set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` as GitHub repository Actions variables.
+2. Link the Supabase CLI to that project and apply the migrations with `supabase link --project-ref <project-ref>` and `supabase db push`.
+3. Deploy the anonymous comment function with `supabase functions deploy submit-comment`. Set `RATE_LIMIT_SALT` to a random secret of at least 32 characters and set `ALLOWED_ORIGINS` to `https://mcographics.github.io` plus any exact local development origins.
+4. In Supabase Auth, enable email sign-in, invite the owner's email, and add `https://mcographics.github.io/journey-with-jesus/studio` to the allowed redirect URLs. The Studio sign-in form only accepts an existing Auth user.
+5. In the Supabase SQL editor, grant that invited account Studio access:
+   `insert into public.media_admins (user_id) select id from auth.users where email = 'OWNER_EMAIL';`
+   Replace `OWNER_EMAIL` with the invited admin's address. Repeat only for people who should manage videos and comments.
+6. Re-run the GitHub Pages deployment workflow after setting the public Actions variables.
 
-The SQL authorization checks are in `supabase/tests/comments_rls.test.sql`; run them against a local Supabase database with pgTAP before enabling the service. Local automated web tests do not prove a remote Supabase project is configured or live.
+The comment function stores public submissions as pending, applies a one-minute per-address rate limit, and rejects direct anonymous inserts. Only approved comments can be read publicly. The Studio can approve or reject them. Never put a service-role key in the browser, repository, or Pages variables.
+
+### Upload videos and make playlists
+
+Create a story in Studio, save its details, then upload one or more prepared video files as 720p, 1080p, or 4K. Large uploads use resumable chunks. The player keeps landscape videos at 16:9 and portrait videos at 9:16, and shows a quality selector when multiple versions are available. Publish only after at least one video source has been uploaded. Add published stories to named playlists and publish those playlists to show them on the Media page.
+
+Studio accepts MP4, WebM, and QuickTime files. It stores uploaded files in a private Supabase Storage bucket and serves public videos through time-limited signed URLs only while their story is published. This player does not transcode files: upload each prepared quality version you want visitors to choose. Supabase project storage, upload-size, bandwidth, and egress limits apply; choose limits and hosting capacity for the actual video sizes and audience.
 
 ## Project layout
 
