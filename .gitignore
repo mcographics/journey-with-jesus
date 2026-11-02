@@ -13,6 +13,7 @@ test-results/
 !.env.example
 supabase/functions/.env
 supabase/.temp/
+supabase/.branches/
 
 # Operating system files
 .DS_Store
