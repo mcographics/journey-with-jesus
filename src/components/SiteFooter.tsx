@@ -11,10 +11,10 @@ export function SiteFooter() {
           <Image
             alt=""
             className="footer-wordmark"
-            height={308}
+            height={778}
             sizes="(max-width: 700px) 210px, 250px"
-            src={`${basePath}/images/footer-wordmark.webp`}
-            width={800}
+            src={`${basePath}/images/footer-wordmark-transparent.png`}
+            width={2020}
           />
         </Link>
         <div className="footer-message">

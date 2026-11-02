@@ -15,7 +15,7 @@ test("home and media are the only primary destinations, with working story CTA",
   await expect(page.getByRole("heading", { name: "Coming Soon" })).toBeVisible();
   await expect(page.locator("video")).toHaveCount(0);
   const footerBrand = page.getByRole("link", { name: "Journey with Jesus home" });
-  await expect(footerBrand.locator("img")).toHaveAttribute("src", /footer-wordmark\.webp/);
+  await expect(footerBrand.locator("img")).toHaveAttribute("src", /footer-wordmark-transparent\.png/);
   const footerNavigation = page.getByRole("navigation", { name: "Footer navigation" });
   await expect(footerNavigation.getByRole("link", { name: "Home" })).toBeVisible();
   await expect(footerNavigation.getByRole("link", { name: "Media" })).toBeVisible();

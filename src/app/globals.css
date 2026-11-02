@@ -157,9 +157,9 @@ button { color: inherit; }
 .site-footer { position: relative; overflow: hidden; border-top: 1px solid rgba(238, 221, 174, .18); background: radial-gradient(ellipse at 12% 0%, rgba(55, 108, 183, .12), transparent 34%), radial-gradient(ellipse at 82% 0%, rgba(226, 185, 108, .1), transparent 42%), linear-gradient(180deg, #101827 0%, #080d16 100%); }
 .site-footer::before { position: absolute; content: ""; inset: 0 0 auto; height: 1px; background: linear-gradient(90deg, transparent, rgba(243, 213, 149, .72) 18%, rgba(243, 213, 149, .2) 50%, rgba(243, 213, 149, .72) 82%, transparent); }
 .footer-inner { position: relative; width: min(1280px, calc(100% - 56px)); min-height: 154px; margin: auto; display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.2fr) auto; align-items: center; gap: clamp(24px, 4vw, 56px); padding-block: 22px; }
-.footer-brand { position: relative; display: block; width: min(250px, 100%); aspect-ratio: 2.12; overflow: hidden; border: 1px solid rgba(243, 213, 149, .3); border-radius: 8px; background: #183260; box-shadow: 0 8px 28px rgba(0, 0, 0, .28), 0 0 24px rgba(232, 184, 93, .1); line-height: 0; transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease; }
-.footer-brand:hover { transform: translateY(-2px); border-color: rgba(255, 231, 173, .68); box-shadow: 0 12px 32px rgba(0, 0, 0, .35), 0 0 28px rgba(232, 184, 93, .18); }
-.footer-wordmark { position: absolute; top: 50%; left: 50%; display: block; width: 140%; max-width: none; height: auto; transform: translate(-50%, -50%); }
+.footer-brand { position: relative; display: block; width: min(250px, 100%); aspect-ratio: 2.6; overflow: visible; border: 0; border-radius: 0; background: transparent; box-shadow: none; line-height: 0; transition: transform .25s ease, filter .25s ease; }
+.footer-brand:hover { transform: translateY(-2px); filter: drop-shadow(0 0 12px rgba(232, 184, 93, .22)); }
+.footer-wordmark { display: block; width: 100%; max-width: none; height: auto; }
 .footer-message { display: grid; justify-items: center; gap: 9px; text-align: center; }
 .footer-tagline { margin: 0; color: #fff2d3; font: 400 clamp(17px, 1.7vw, 22px)/1.35 var(--serif); letter-spacing: .01em; }
 .footer-note { margin: 0; color: #cfb982; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; }
