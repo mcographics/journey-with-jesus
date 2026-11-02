@@ -3,6 +3,8 @@ import { expect, test } from "@playwright/test";
 test("home and media are the only primary destinations, with working story CTA", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByRole("heading", { level: 1 })).toContainText("Journey");
+  await expect(page.getByText("These are more than themes. They are at the heart of the journey.")).toBeVisible();
+  await expect(page.getByText("Journey with Jesus brings biblical narratives to life", { exact: false })).toBeVisible();
   await expect(page.getByRole("navigation", { name: "Primary navigation" }).getByRole("link")).toHaveCount(2);
   await page.getByRole("link", { name: "Watch the Stories" }).click();
   await expect(page).toHaveURL(/\/media\/$/);

@@ -11,19 +11,19 @@ export const metadata: Metadata = {
     default: "Journey with Jesus — Animated Biblical Stories",
     template: "%s | Journey with Jesus",
   },
-  description: "Experience the Gospel through cinematic, anime-inspired animated storytelling.",
+  description: "Journey with Jesus brings Scripture-centered animated stories of faith, hope, love, and redemption to life.",
   applicationName: "Journey with Jesus",
   openGraph: {
     type: "website",
     siteName: "Journey with Jesus",
     title: "Journey with Jesus — Animated Biblical Stories",
-    description: "Experience the Gospel through animated storytelling.",
+    description: "Experience the Gospel through cinematic, anime-inspired animation and Scripture-centered storytelling.",
     url: siteUrl,
   },
   twitter: {
     card: "summary",
     title: "Journey with Jesus — Animated Biblical Stories",
-    description: "Experience the Gospel through animated storytelling.",
+    description: "Experience the Gospel through cinematic, anime-inspired animation and Scripture-centered storytelling.",
   },
 };
 
@@ -37,7 +37,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "Journey with Jesus",
-    description: "Experience the Gospel through cinematic, anime-inspired animated storytelling.",
+    description: "Journey with Jesus brings Scripture-centered animated stories of faith, hope, love, and redemption to life.",
     url: siteUrl,
   };
 

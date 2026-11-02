@@ -5,7 +5,7 @@ export function SiteFooter() {
     <footer className="site-footer">
       <div className="footer-inner">
         <Link className="footer-brand" href="/">Journey with Jesus</Link>
-        <p>Bringing the Gospel to Life.</p>
+        <p className="footer-tagline"><em>Journey with Jesus</em> — Bringing the Gospel to Life.</p>
         <span className="footer-note">Faith · Hope · Love · Redemption</span>
       </div>
     </footer>

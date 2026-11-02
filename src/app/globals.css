@@ -63,6 +63,8 @@ button { color: inherit; }
 .hero-subtitle { margin: 25px 0 0; color: #e4c98f; font-family: var(--serif); font-size: clamp(16px, 1.8vw, 21px); }
 .hero-quote { margin: 27px 0 0; max-width: 490px; font-family: var(--serif); color: #ded8cb; font-size: 19px; line-height: 1.65; }
 .hero-description { max-width: 460px; color: #b5b6ba; font-size: 13px; line-height: 1.85; margin: 12px 0 25px; }
+.hero-introduction { max-width: 470px; color: #b5b6ba; font-size: 12px; line-height: 1.75; margin: -12px 0 22px; }
+.hero-introduction em { color: #e1d7c0; }
 .button { min-height: 48px; display: inline-flex; align-items: center; justify-content: center; gap: 16px; padding: 0 20px; border-radius: 2px; font-size: 12px; transition: transform .2s ease, background .2s ease; }
 .button:hover { transform: translateY(-2px); }
 .button-gold { background: var(--gold); color: #171a21; font-weight: 700; }
@@ -100,6 +102,8 @@ button { color: inherit; }
 .mission-copy p:not(.eyebrow) { max-width: 600px; margin: 11px 0; }
 .virtue-line { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 26px; color: var(--gold-bright); font-family: var(--serif); font-size: 17px; }
 .virtue-line b { color: #8c744c; font-weight: 400; }
+.virtue-statement { margin-top: 24px !important; color: var(--gold-bright) !important; font: 19px var(--serif) !important; }
+.virtue-description { margin-top: -4px !important; color: #d1ccc0 !important; font-family: var(--serif); font-style: italic; }
 
 .invitation-section { padding-block: 114px; display: flex; align-items: end; justify-content: space-between; gap: 50px; }
 .invitation-heading { max-width: 720px; }
@@ -119,6 +123,8 @@ button { color: inherit; }
 .footer-brand { font: 18px var(--serif); }
 .footer-brand span { color: var(--gold); }
 .footer-note { color: #898b90; font-size: 11px; }
+.footer-tagline { color: #c8c2b7; font-family: var(--serif); font-size: 13px; }
+.footer-tagline em { color: var(--gold-bright); }
 .footer-links { display: flex; gap: 22px; color: #b5b5b5; font-size: 11px; }
 .footer-links a:hover { color: var(--gold-bright); }
 
@@ -211,7 +217,8 @@ button { color: inherit; }
   .home-hero-content { padding-bottom: 40px; }
   .home-hero h1 { font-size: clamp(63px, 18vw, 87px); }
   .hero-quote { font-size: 17px; max-width: 380px; }
-  .hero-description { max-width: 380px; font-size: 12px; }
+  .hero-description { max-width: 380px; font-size: 12px; margin-bottom: 19px; }
+  .hero-introduction { max-width: 380px; margin-bottom: 18px; }
   .hero-sun { right: 2%; top: 18%; width: 200px; }
   .hero-horizon-back { left: 15%; }
   .hero-horizon-front { left: 23%; }
