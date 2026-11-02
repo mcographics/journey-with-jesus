@@ -3,12 +3,41 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { ChevronDown, Crown, X } from "lucide-react";
+import { ChevronDown, Crown, Moon, Sun, X } from "lucide-react";
 
 const navigation = [
   { href: "/", label: "Home" },
   { href: "/media/", label: "Media" },
 ];
+
+type ThemeMode = "auto" | "light" | "dark";
+type ColorTheme = "light" | "dark";
+
+const getTimeBasedTheme = (): ColorTheme => {
+  const hour = new Date().getHours();
+  return hour >= 7 && hour < 19 ? "light" : "dark";
+};
+
+const getNextThemeSwitchDelay = () => {
+  const now = new Date();
+  const next = new Date(now);
+  if (now.getHours() < 7) {
+    next.setHours(7, 0, 0, 0);
+  } else if (now.getHours() < 19) {
+    next.setHours(19, 0, 0, 0);
+  } else {
+    next.setDate(now.getDate() + 1);
+    next.setHours(7, 0, 0, 0);
+  }
+  return Math.max(1000, next.getTime() - now.getTime() + 50);
+};
+
+const setThemeColor = (theme: ColorTheme) => {
+  document.querySelector("meta[name='theme-color']")?.setAttribute(
+    "content",
+    theme === "light" ? "#f8f6f0" : "#0B1120",
+  );
+};
 
 export function SiteHeader() {
   const pathname = usePathname() ?? "/";
@@ -17,8 +46,68 @@ export function SiteHeader() {
   const normalizedPath = routePath.endsWith("/") ? routePath : `${routePath}/`;
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isAutoHidden, setIsAutoHidden] = useState(false);
+  const [themeMode, setThemeMode] = useState<ThemeMode>("auto");
   const mobileNavigationRef = useRef<HTMLDivElement>(null);
   const mobileMenuButtonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    let storedMode: string | null = document.documentElement.dataset.themeMode ?? null;
+    try {
+      storedMode = window.localStorage.getItem("journey-with-jesus-theme-mode") ?? storedMode;
+    } catch {}
+    const mode: ThemeMode = storedMode === "light" || storedMode === "dark" ? storedMode : "auto";
+    const resolvedTheme = mode === "auto" ? getTimeBasedTheme() : mode;
+    document.documentElement.dataset.themeMode = mode;
+    document.documentElement.dataset.theme = resolvedTheme;
+    setThemeMode(mode);
+    setThemeColor(resolvedTheme);
+  }, []);
+
+  useEffect(() => {
+    if (themeMode !== "auto") return;
+
+    let switchTimer: number | undefined;
+    const updateFromLocalTime = () => {
+      if (document.documentElement.dataset.themeMode !== "auto") return;
+      const nextTheme = getTimeBasedTheme();
+      if (document.documentElement.dataset.theme !== nextTheme) {
+        document.documentElement.dataset.theme = nextTheme;
+        setThemeColor(nextTheme);
+      }
+    };
+    const scheduleNextSwitch = () => {
+      if (switchTimer !== undefined) window.clearTimeout(switchTimer);
+      switchTimer = window.setTimeout(() => {
+        updateFromLocalTime();
+        scheduleNextSwitch();
+      }, getNextThemeSwitchDelay());
+    };
+    const updateWhenVisible = () => {
+      if (document.visibilityState !== "visible") return;
+      updateFromLocalTime();
+      scheduleNextSwitch();
+    };
+
+    scheduleNextSwitch();
+    document.addEventListener("visibilitychange", updateWhenVisible);
+    return () => {
+      if (switchTimer !== undefined) window.clearTimeout(switchTimer);
+      document.removeEventListener("visibilitychange", updateWhenVisible);
+    };
+  }, [themeMode]);
+
+  const toggleTheme = () => {
+    const nextMode: ThemeMode =
+      themeMode === "auto" ? "light" : themeMode === "light" ? "dark" : "auto";
+    const nextTheme = nextMode === "auto" ? getTimeBasedTheme() : nextMode;
+    setThemeMode(nextMode);
+    document.documentElement.dataset.themeMode = nextMode;
+    document.documentElement.dataset.theme = nextTheme;
+    try {
+      window.localStorage.setItem("journey-with-jesus-theme-mode", nextMode);
+    } catch {}
+    setThemeColor(nextTheme);
+  };
 
   useEffect(() => {
     const touchMobile = window.matchMedia("(max-width: 768px) and (hover: none) and (pointer: coarse)");
@@ -101,6 +190,27 @@ export function SiteHeader() {
             );
           })}
         </nav>
+        <button
+          aria-label={themeMode === "auto"
+            ? "Automatic theme is active. Activate to use light mode."
+            : themeMode === "light"
+              ? "Light mode is active. Activate to use dark mode."
+              : "Dark mode is active. Activate to return to automatic theme."}
+          className={`theme-toggle theme-toggle-${themeMode}`}
+          onClick={toggleTheme}
+          title={themeMode === "auto"
+            ? "Automatic: light 7 AM–7 PM and dark 7 PM–7 AM, using local time."
+            : themeMode === "light"
+              ? "Light mode. Activate to switch to dark mode."
+              : "Dark mode. Activate to return to automatic theme."}
+          type="button"
+        >
+          <span className="theme-toggle-icons" aria-hidden="true">
+            <Sun size={15} strokeWidth={1.8} />
+            <span className="theme-toggle-divider" />
+            <Moon size={14} strokeWidth={1.8} />
+          </span>
+        </button>
         <div
           className={`mobile-navigation${isAutoHidden && !isMobileMenuOpen ? " is-autohidden" : ""}`}
           ref={mobileNavigationRef}
