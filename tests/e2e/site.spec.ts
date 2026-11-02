@@ -4,7 +4,8 @@ test("home and media are the only primary destinations, with working story CTA",
   await page.goto("/");
   const masthead = page.getByRole("img", { name: /Journey with Jesus illustrated banner/ });
   await expect(masthead).toBeVisible();
-  await expect.poll(() => masthead.evaluate((image) => (image as HTMLImageElement).naturalWidth)).toBe(5742);
+  await expect.poll(() => masthead.evaluate((image) => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+  await expect.poll(() => masthead.evaluate((image) => (image as HTMLImageElement).currentSrc)).toMatch(/journey-with-jesus-header-\d+\.webp$/);
   await expect(page.getByRole("heading", { level: 1 })).toContainText("Journey");
   await expect(page.getByText("These are more than themes. They are at the heart of the journey.")).toBeVisible();
   await expect(page.getByText("Journey with Jesus brings biblical narratives to life", { exact: false })).toBeVisible();
@@ -15,7 +16,8 @@ test("home and media are the only primary destinations, with working story CTA",
   await expect(page.getByRole("heading", { name: "Coming Soon" })).toBeVisible();
   await expect(page.locator("video")).toHaveCount(0);
   const footerBrand = page.getByRole("link", { name: "Journey with Jesus home" });
-  await expect(footerBrand.locator("img")).toHaveAttribute("src", /footer-wordmark-transparent\.png/);
+  await expect(footerBrand.locator('picture source[type="image/webp"]')).toHaveAttribute("srcSet", /footer-wordmark-transparent-420\.webp/);
+  await expect(footerBrand.locator("img")).toHaveAttribute("src", /footer-wordmark-fallback\.png/);
   const footerNavigation = page.getByRole("navigation", { name: "Footer navigation" });
   await expect(footerNavigation.getByRole("link", { name: "Home" })).toBeVisible();
   await expect(footerNavigation.getByRole("link", { name: "Media" })).toBeVisible();
@@ -75,6 +77,8 @@ test.describe("touch mobile navigation", () => {
     await page.goto("/");
     const storySeal = page.getByRole("link", { name: /Click Me!/ });
     await expect(storySeal).toBeVisible();
+    await storySeal.scrollIntoViewIfNeeded();
+    await expect.poll(() => page.locator(".storybook-background").evaluate((image) => (image as HTMLImageElement).currentSrc)).toMatch(/scripture-city-story-mobile-\d+\.webp$/);
     await storySeal.click();
     await expect(page).toHaveURL(/\/media\/$/);
   });

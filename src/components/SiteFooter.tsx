@@ -1,19 +1,25 @@
-import Image from "next/image";
 import Link from "next/link";
+import ResponsivePicture, { type PictureCandidate } from "@/components/ResponsivePicture";
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+const wordmarkSources: PictureCandidate[] = [420, 810].map((width) => ({
+  src: `${basePath}/images/footer-wordmark-transparent-${width}.webp`,
+  width,
+}));
 
 export function SiteFooter() {
   return (
     <footer className="site-footer">
       <div className="footer-inner">
         <Link aria-label="Journey with Jesus home" className="footer-brand" href="/">
-          <Image
+          <ResponsivePicture
             alt=""
             className="footer-wordmark"
             height={778}
+            fallbackSrc={`${basePath}/images/footer-wordmark-fallback.png`}
+            loading="lazy"
             sizes="(max-width: 700px) 210px, 250px"
-            src={`${basePath}/images/footer-wordmark-transparent.png`}
+            webpSources={wordmarkSources}
             width={2020}
           />
         </Link>

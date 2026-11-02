@@ -1,11 +1,16 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, BookOpen, Heart, Sparkles } from "lucide-react";
 import MastheadTicker from "@/components/MastheadTicker";
 import MastheadEasterEgg from "@/components/MastheadEasterEgg";
+import ResponsivePicture, { type PictureCandidate } from "@/components/ResponsivePicture";
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+const imageSources = (stem: string, widths: number[]): PictureCandidate[] =>
+  widths.map((width) => ({
+    src: `${basePath}/images/${stem}-${width}.webp`,
+    width,
+  }));
 
 export const metadata: Metadata = {
   title: "Journey with Jesus — Experience the Gospel Through Animated Storytelling",
@@ -19,14 +24,16 @@ export const metadata: Metadata = {
 export default function HomePage() {
   return (
     <main id="main-content">
-      <MastheadEasterEgg imageSrc={`${basePath}/images/header-easter-egg.webp`}>
-        <Image
+      <MastheadEasterEgg imageSrc={`${basePath}/images/header-easter-egg-2560.webp`}>
+        <ResponsivePicture
           alt="Journey with Jesus illustrated banner: Jesus and a contemporary young man overlooking a sunlit valley."
           className="home-masthead-image"
           height={2466}
-          preload
+          fallbackSrc={`${basePath}/images/journey-with-jesus-header-fallback.jpg`}
+          fetchPriority="high"
+          loading="eager"
           sizes="100vw"
-          src={`${basePath}/images/journey-with-jesus-header-3x.jpg`}
+          webpSources={imageSources("journey-with-jesus-header", [512, 768, 1024, 1440, 1920, 2560, 3200, 3840])}
           width={5742}
         />
         <MastheadTicker />
@@ -48,13 +55,17 @@ export default function HomePage() {
       </section>
 
       <section className="storybook-section" id="scripture" aria-labelledby="scripture-title">
-        <Image
+        <ResponsivePicture
           alt=""
           aria-hidden="true"
           className="storybook-background"
           fill
-          sizes="100vw"
-          src={`${basePath}/images/scripture-city-story.webp`}
+          fallbackSrc={`${basePath}/images/scripture-city-story-fallback.jpg`}
+          loading="lazy"
+          pictureClassName="responsive-picture-fill"
+          sizes="(max-width: 700px) 100vw, 130vw"
+          webpSources={imageSources("scripture-city-story", [960, 1280, 1920, 2560, 3200, 3840])}
+          mobileWebpSources={imageSources("scripture-city-story-mobile", [384, 576])}
         />
         <div className="storybook-shade" aria-hidden="true" />
         <div className="page-width storybook-layout">
@@ -82,12 +93,15 @@ export default function HomePage() {
       <section className="mission-section" aria-labelledby="mission-title">
         <div className="mission-inner page-width">
           <div className="mission-art">
-            <Image
+            <ResponsivePicture
               alt="A peaceful garden valley with flower-filled banks, waterfalls, and a sunlit river."
               className="mission-landscape"
               fill
+              fallbackSrc={`${basePath}/images/mission-garden-fallback.jpg`}
+              loading="lazy"
+              pictureClassName="responsive-picture-fill"
               sizes="(max-width: 700px) calc(100vw - 36px), 390px"
-              src={`${basePath}/images/mission-garden.png`}
+              webpSources={imageSources("mission-garden", [480, 640, 900])}
             />
             <span className="mission-art-frame" aria-hidden="true" />
             <Sparkles className="mission-sparkle mission-sparkle-one" aria-hidden="true" size={19} />
@@ -107,12 +121,16 @@ export default function HomePage() {
       </section>
 
       <section className="invitation-section" aria-labelledby="invitation-title">
-        <Image
+        <ResponsivePicture
           alt="The risen Jesus welcomes his followers at sunset as an angel opens the empty tomb."
           className="invitation-background"
           fill
-          sizes="100vw"
-          src={`${basePath}/images/resurrection-at-sunset.webp`}
+          fallbackSrc={`${basePath}/images/resurrection-at-sunset-fallback.jpg`}
+          loading="lazy"
+          pictureClassName="responsive-picture-fill"
+          sizes="(max-width: 700px) 100vw, 130vw"
+          webpSources={imageSources("resurrection-at-sunset", [960, 1280, 1920, 2560, 3200, 3840])}
+          mobileWebpSources={imageSources("resurrection-at-sunset-mobile", [400, 600, 790])}
         />
         <div className="invitation-shade" aria-hidden="true" />
         <div className="page-width invitation-content">
