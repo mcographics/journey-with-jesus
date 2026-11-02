@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, BookOpen, Heart, Sparkles } from "lucide-react";
 import MastheadTicker from "@/components/MastheadTicker";
+import MastheadEasterEgg from "@/components/MastheadEasterEgg";
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
@@ -18,7 +19,7 @@ export const metadata: Metadata = {
 export default function HomePage() {
   return (
     <main id="main-content">
-      <div className="home-masthead">
+      <MastheadEasterEgg imageSrc={`${basePath}/images/header-easter-egg.webp`}>
         <Image
           alt="Journey with Jesus illustrated banner: Jesus and a contemporary young man overlooking a sunlit valley."
           className="home-masthead-image"
@@ -29,7 +30,7 @@ export default function HomePage() {
           width={5742}
         />
         <MastheadTicker />
-      </div>
+      </MastheadEasterEgg>
       <section className="home-hero" aria-labelledby="home-title">
         <div className="home-hero-content page-width">
           <p className="eyebrow"><span /> ANIMATED BIBLICAL STORIES</p>
