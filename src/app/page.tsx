@@ -65,11 +65,15 @@ export default function HomePage() {
             <p>Follow the journey of Jesus—from his teachings and miracles to the promise of resurrection—and discover the timeless message at the heart of every story.</p>
             <p>Whether you are opening Scripture for the first time or returning to a beloved passage, there is a place for you on this journey.</p>
           </article>
-          <div className="storybook-seal" aria-hidden="true">
+          <Link
+            className="storybook-seal"
+            href="/media/"
+            aria-label="Explore Media: Faith, Hope, Love — Let the story light the way"
+          >
             <span>Faith · Hope · Love</span>
-            <BookOpen size={34} strokeWidth={1.2} />
+            <BookOpen size={34} strokeWidth={1.2} aria-hidden="true" />
             <small>Let the story<br />light the way</small>
-          </div>
+          </Link>
         </div>
       </section>
 
