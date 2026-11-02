@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#101620">
+    <meta name="description" content="Animated Bible stories, parables, and moments of faith for the whole family.">
+    <title>Journey with Jesus — Stories that stay with you</title>
+    <link rel="icon" href="assets/mark.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="videos.js" defer></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to videos</a>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Main navigation">
+        <a class="brand" href="#home" aria-label="Journey with Jesus home">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="19" fill="currentColor"/><path d="M21.8 7.5h-3.6v11h-7.8v3.6h7.8v10.4h3.6V22.1h7.8v-3.6h-7.8v-11Z" fill="#18202B"/><path d="M9 30.5c6.1-3.3 15.9-3.5 22 0" stroke="#18202B" stroke-width="1.3" stroke-linecap="round"/></svg>
+          </span>
+          <span class="brand-wordmark"><strong>JOURNEY</strong><small>WITH JESUS</small></span>
+        </a>
+
+        <nav class="side-nav" aria-label="Browse">
+          <a class="nav-link active" href="#home" aria-current="page"><span class="nav-icon" aria-hidden="true">⌂</span><span>Home</span></a>
+          <a class="nav-link" href="#stories" data-nav-filter="all"><span class="nav-icon" aria-hidden="true">▣</span><span>Stories</span></a>
+          <a class="nav-link" href="#shorts" data-nav-filter="shorts"><span class="nav-icon play-icon" aria-hidden="true">▶</span><span>Shorts</span></a>
+          <a class="nav-link" href="#collections"><span class="nav-icon" aria-hidden="true">▤</span><span>Collections</span></a>
+        </nav>
+
+        <div class="sidebar-divider"></div>
+        <p class="side-label">EXPLORE</p>
+        <nav class="side-nav side-nav-secondary" aria-label="Explore categories">
+          <a class="nav-link" href="#stories" data-category-link="Bible stories"><span class="nav-symbol">✦</span><span>Bible stories</span></a>
+          <a class="nav-link" href="#stories" data-category-link="Parables"><span class="nav-symbol">◉</span><span>Parables</span></a>
+          <a class="nav-link" href="#stories" data-category-link="Faith & life"><span class="nav-symbol">♡</span><span>Faith &amp; life</span></a>
+          <a class="nav-link" href="#stories" data-category-link="Music"><span class="nav-symbol">♫</span><span>Music</span></a>
+        </nav>
+
+        <div class="sidebar-note">
+          <span class="note-spark" aria-hidden="true">✦</span>
+          <p>Stories of hope, told with heart.</p>
+          <span class="note-line"></span>
+          <small>FAITH · FAMILY · ANIMATION</small>
+        </div>
+        <p class="sidebar-footer">A place to watch, wonder &amp; grow.</p>
+      </aside>
+
+      <div class="page-column" id="home">
+        <header class="topbar">
+          <button class="mobile-menu" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="mobile-navigation">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+          </button>
+          <a class="mobile-brand" href="#home" aria-label="Journey with Jesus home">
+            <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="19" fill="currentColor"/><path d="M21.8 7.5h-3.6v11h-7.8v3.6h7.8v10.4h3.6V22.1h7.8v-3.6h-7.8v-11Z" fill="#18202B"/></svg></span>
+            <span class="brand-wordmark"><strong>JOURNEY</strong><small>WITH JESUS</small></span>
+          </a>
+          <nav class="mobile-navigation" id="mobile-navigation" aria-label="Mobile navigation" hidden>
+            <a href="#stories" data-nav-filter="all">Stories</a><a href="#shorts" data-nav-filter="shorts">Shorts</a><a href="#collections">Collections</a>
+          </nav>
+          <form class="search-form" role="search" autocomplete="off">
+            <label class="sr-only" for="video-search">Search stories</label>
+            <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.2 4.2"/></svg>
+            <input id="video-search" type="search" placeholder="Search stories, themes, or moments" aria-controls="video-grid">
+            <kbd>/</kbd>
+          </form>
+          <a class="topbar-cta" href="#stories"><span class="cta-star" aria-hidden="true">✦</span><span>Explore stories</span></a>
+        </header>
+
+        <main id="main-content">
+          <section class="hero" aria-labelledby="hero-title">
+            <img class="hero-art" src="assets/hero-galilee.svg" alt="Illustration of a quiet lake at sunrise, with a small boat beneath a glowing sky" fetchpriority="high">
+            <div class="hero-scrim"></div>
+            <div class="hero-content">
+              <p class="eyebrow"><span class="eyebrow-line"></span> STORIES OF FAITH &amp; WONDER</p>
+              <h1 id="hero-title">A little light<br>goes a <em>long way.</em></h1>
+              <p class="hero-copy">Beautiful animated stories to watch together, share with your family, and carry with you.</p>
+              <div class="hero-actions">
+                <a class="button button-light" href="#stories"><span class="button-play" aria-hidden="true">▶</span> Find a story</a>
+                <span class="hero-format"><span class="tiny-cross" aria-hidden="true">✝</span> Made for hearts of every age</span>
+              </div>
+            </div>
+            <div class="hero-caption"><span class="caption-dot"></span> A JOURNEY THROUGH STORIES THAT MATTER</div>
+            <div class="hero-count" aria-hidden="true"><span>01</span><i></i> 03</div>
+          </section>
+
+          <section class="welcome-strip" aria-label="Welcome">
+            <span class="welcome-icon" aria-hidden="true">✦</span>
+            <p><strong>Welcome to Journey with Jesus</strong><span>Portrait shorts in 9:16 and wide films in 16:9, with a quality picker for hosted sources from 720p through 4K.</span></p>
+            <a href="#about">Our heart <span aria-hidden="true">↗</span></a>
+          </section>
+
+          <section class="content-section" id="stories" aria-labelledby="stories-title">
+            <div class="section-heading">
+              <div>
+                <p class="section-kicker">GATHER AROUND</p>
+                <h2 id="stories-title">Stories for the <em>journey</em></h2>
+                <p class="section-subtitle">Choose a moment. Let the story speak.</p>
+              </div>
+              <a class="text-link desktop-link" href="#shorts">Browse short films <span aria-hidden="true">→</span></a>
+            </div>
+
+            <div class="filter-row" role="group" aria-label="Filter video stories">
+              <button class="filter-chip selected" type="button" data-filter="all" aria-pressed="true">All stories</button>
+              <button class="filter-chip" type="button" data-filter="Bible stories" aria-pressed="false">Bible stories</button>
+              <button class="filter-chip" type="button" data-filter="Parables" aria-pressed="false">Parables</button>
+              <button class="filter-chip" type="button" data-filter="Faith & life" aria-pressed="false">Faith &amp; life</button>
+              <button class="filter-chip" type="button" data-filter="Music" aria-pressed="false">Music</button>
+              <span class="filter-spacer"></span>
+              <label class="sort-control" for="sort-select"><span>Sort</span>
+                <select id="sort-select" aria-label="Sort videos"><option value="featured">Featured</option><option value="title">A to Z</option></select>
+              </label>
+            </div>
+
+            <div class="video-grid" id="video-grid" aria-live="polite"></div>
+            <p class="empty-state" id="empty-state" hidden>No stories match that search yet. Try another word or clear your filters.</p>
+          </section>
+
+          <section class="shorts-section" id="shorts" aria-labelledby="shorts-title">
+            <div class="shorts-heading">
+              <div class="shorts-title-wrap"><span class="shorts-badge" aria-hidden="true">↗</span><div><p class="section-kicker">A MOMENT TO CARRY</p><h2 id="shorts-title">Shorts &amp; <em>little reminders</em></h2></div></div>
+              <p>Small stories. Lasting light.</p>
+            </div>
+            <div class="shorts-track" id="shorts-track" aria-live="polite"></div>
+          </section>
+
+          <section class="collections-section" id="collections" aria-labelledby="collections-title">
+            <div class="section-heading compact-heading">
+              <div><p class="section-kicker">WATCH TOGETHER</p><h2 id="collections-title">Find your <em>next chapter</em></h2></div>
+              <span class="collection-aside">A few ways to begin</span>
+            </div>
+            <div class="collection-grid">
+              <a class="collection-card collection-bible" href="#stories" data-collection-filter="Bible stories">
+                <span class="collection-ornament" aria-hidden="true">✦</span><span class="collection-number">01 / THE SCRIPTURES</span><strong>Stories from<br>the Bible</strong><span class="collection-action">Start watching <span aria-hidden="true">↗</span></span>
+              </a>
+              <a class="collection-card collection-parables" href="#stories" data-collection-filter="Parables">
+                <span class="collection-ornament" aria-hidden="true">❋</span><span class="collection-number">02 / TIMELESS WISDOM</span><strong>Parables with<br>a purpose</strong><span class="collection-action">Find a lesson <span aria-hidden="true">↗</span></span>
+              </a>
+              <a class="collection-card collection-family" href="#stories" data-collection-filter="Faith & life">
+                <span class="collection-ornament" aria-hidden="true">☼</span><span class="collection-number">03 / FOR EVERY DAY</span><strong>Faith for<br>every day</strong><span class="collection-action">Take a moment <span aria-hidden="true">↗</span></span>
+              </a>
+            </div>
+          </section>
+
+          <section class="about-section" id="about" aria-labelledby="about-title">
+            <div class="about-mark" aria-hidden="true"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="58"/><path d="M63 23h-6v34H34v6h23v34h6V63h23v-6H63V23Z"/><path d="M24 88c20-12 52-12 72 0"/></svg></div>
+            <div><p class="section-kicker">A PLACE TO GROW</p><h2 id="about-title">More than something to <em>watch.</em></h2><p>We believe a good story can open a conversation, spark a little courage, and bring families closer. Settle in, press play, and make the journey your own.</p></div>
+            <a href="#stories" class="button button-outline">Explore the library <span aria-hidden="true">→</span></a>
+          </section>
+        </main>
+
+        <footer class="site-footer">
+          <a class="footer-brand" href="#home"><span class="footer-cross" aria-hidden="true">✝</span> JOURNEY WITH JESUS</a>
+          <p>Stories of hope, courage, and faith.</p>
+          <span class="footer-credit">A new story begins with a little wonder <span aria-hidden="true">✦</span></span>
+        </footer>
+      </div>
+    </div>
+
+    <dialog class="watch-dialog" id="watch-dialog" aria-labelledby="dialog-title">
+      <div class="dialog-inner">
+        <button class="dialog-close" type="button" aria-label="Close video player"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+        <div class="watch-stage" id="watch-stage">
+          <div class="player-placeholder" id="player-placeholder"><span class="placeholder-cross" aria-hidden="true">✝</span><span class="placeholder-title">A story is waiting</span><span class="placeholder-note">This sample listing is ready for the finished animation.</span></div>
+          <video id="video-player" controls playsinline preload="metadata" hidden></video>
+          <img class="dialog-poster" id="dialog-poster" alt="" hidden>
+        </div>
+        <div class="dialog-details">
+          <div><p class="section-kicker" id="dialog-category">STORY PREVIEW</p><h2 id="dialog-title">A story for the journey</h2><p id="dialog-description">Add a finished video source to this sample listing to enable playback.</p></div>
+          <label class="quality-picker" id="quality-picker" hidden><span>Quality</span><select id="quality-select" aria-label="Video quality"></select></label>
+        </div>
+      </div>
+    </dialog>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>

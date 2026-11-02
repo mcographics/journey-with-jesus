@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" fill="none">
+  <defs><linearGradient id="s" x1="640" y1="0" x2="640" y2="720" gradientUnits="userSpaceOnUse"><stop stop-color="#27374B"/><stop offset=".55" stop-color="#526679"/><stop offset="1" stop-color="#D98D68"/></linearGradient><linearGradient id="w" x1="640" y1="388" x2="640" y2="720" gradientUnits="userSpaceOnUse"><stop stop-color="#678195"/><stop offset="1" stop-color="#203D53"/></linearGradient><radialGradient id="l" cx="0" cy="0" r="1" gradientTransform="matrix(0 140 -140 0 831 392)" gradientUnits="userSpaceOnUse"><stop stop-color="#FFE4B0" stop-opacity=".85"/><stop offset="1" stop-color="#F7B57C" stop-opacity="0"/></radialGradient></defs>
+  <path fill="url(#s)" d="M0 0h1280v720H0z"/><circle cx="831" cy="391" r="177" fill="url(#l)"/>
+  <path fill="#26384B" d="M0 359c170-91 272-124 412-88 113 29 168 54 268 31 105-24 158-93 257-100 114-9 222 62 343 126v163H0V359Z"/>
+  <path fill="#3E5368" d="M0 399c163-70 280-102 395-67 91 28 175 60 268 48 113-15 164-78 267-77 128 2 220 62 350 111v141H0V399Z"/>
+  <path fill="url(#w)" d="M0 434c180 4 262-33 404-15 123 16 174 67 313 55 160-13 247-79 396-53 64 11 113 25 167 19v280H0V434Z"/>
+  <path stroke="#D7D9D6" stroke-opacity=".42" stroke-width="4" d="M36 525c163-33 250-6 351 3m71-10c122-9 214 23 308 26m92-29c144-20 231 3 385 26M0 615c129-22 265-12 378 10m113-3c153-10 220 15 374 12m130-24c106-11 184 6 285 21"/>
+  <path fill="#14293A" d="M397 469h287l-37 27H439l-42-27Z"/><path fill="#D7B887" d="M514 280v188h5V280h-5Zm8 26 115 146H522V306Z"/><path stroke="#13283A" stroke-width="7" d="M518 271v199"/><path fill="#F0D6A3" d="M529 332h81l-81 106V332Z"/>
+  <circle cx="495" cy="451" r="12" fill="#162C3D"/><path fill="#162C3D" d="m487 461-15 39h44l-13-39h-16Z"/><circle cx="562" cy="452" r="10" fill="#162C3D"/><path fill="#162C3D" d="m555 462-12 33h38l-12-33h-14Z"/>
+  <path fill="#FFF0D6" fill-opacity=".28" d="m827 380 70 59H760l67-59Z"/><path fill="#F8D3A0" fill-opacity=".7" d="M833 409c-36 19-63 41-83 65 34-8 66-16 94-17 28 0 60 8 95 17-26-30-59-51-106-65Z"/>
+  <path fill="#111C28" fill-opacity=".12" d="M0 0h1280v720H0z"/>
+</svg>
