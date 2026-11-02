@@ -16,12 +16,23 @@ test("home and media are the only primary destinations, with working story CTA",
   await expect(page.locator("video")).toHaveCount(0);
 });
 
-test("the mobile navigation shows Home and Media and the layout has no horizontal overflow", async ({ page }) => {
+test("the floating mobile menu opens Home and Media and the layout has no horizontal overflow", async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 812 });
   await page.goto("/");
   const masthead = page.getByRole("img", { name: /Journey with Jesus illustrated banner/ });
   await expect(masthead).toBeVisible();
-  const navigation = page.getByRole("navigation", { name: "Primary navigation" });
+  const menuButton = page.getByRole("button", { name: "Open navigation menu" });
+  await expect(menuButton).toBeVisible();
+  const initialButtonPosition = await menuButton.boundingBox();
+  expect(initialButtonPosition).not.toBeNull();
+  await page.evaluate(() => window.scrollTo(0, 240));
+  const scrolledButtonPosition = await menuButton.boundingBox();
+  expect(scrolledButtonPosition?.y).toBeCloseTo(initialButtonPosition!.y, 0);
+
+  const navigation = page.getByRole("navigation", { name: "Mobile navigation" });
+  await expect(navigation).toBeHidden();
+  await menuButton.click();
+  await expect(navigation).toBeVisible();
   await expect(navigation.getByRole("link", { name: "Home" })).toBeVisible();
   const mediaLink = navigation.getByRole("link", { name: "Media" });
   await expect(mediaLink).toBeVisible();
