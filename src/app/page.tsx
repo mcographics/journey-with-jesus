@@ -21,11 +21,11 @@ export default function HomePage() {
         <Image
           alt="Journey with Jesus illustrated banner: Jesus and a contemporary young man overlooking a sunlit valley."
           className="home-masthead-image"
-          height={768}
+          height={2466}
           preload
           sizes="100vw"
           src={`${basePath}/images/journey-with-jesus-header.jpg`}
-          width={1914}
+          width={5742}
         />
       </div>
       <section className="home-hero" aria-labelledby="home-title">
