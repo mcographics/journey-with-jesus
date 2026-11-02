@@ -1,3 +1,20 @@
+# Dependencies and generated output
+node_modules/
+.next/
+out/
+coverage/
+playwright-report/
+test-results/
+*.tsbuildinfo
+
+# Local environment
+.env
+.env.*
+!.env.example
+supabase/functions/.env
+supabase/.temp/
+
+# Operating system files
 .DS_Store
 Thumbs.db
 *.log

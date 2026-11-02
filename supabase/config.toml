@@ -1,0 +1,5 @@
+project_id = "journey-with-jesus"
+
+[functions.submit-comment]
+# Supabase's `withSupabase` wrapper validates the publishable API key.
+verify_jwt = false
