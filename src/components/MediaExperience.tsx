@@ -58,8 +58,8 @@ export function MediaExperience({ episodes: initialEpisodes }: { episodes: Episo
         {catalogStatus === "error" && <p className="catalog-notice is-error" role="status">The story library could not be reached. Please refresh to try again.</p>}
         <div className="media-layout">
           <div className="media-main">
-            <VideoPlayer key={selectedEpisode?.id ?? "none"} episode={selectedEpisode} />
-            <CommentSection key={selectedEpisode?.id ?? "none"} episode={selectedEpisode} />
+            <VideoPlayer key={"player-" + (selectedEpisode?.id ?? "none")} episode={selectedEpisode} />
+            <CommentSection key={"comments-" + (selectedEpisode?.id ?? "none")} episode={selectedEpisode} />
           </div>
           <EpisodePlaylist episodes={episodes} playlists={playlists} selectedPlaylistId={playlistId}
             onPlaylistChange={setPlaylistId} selectedId={selectedId} onSelect={selectEpisode} />
