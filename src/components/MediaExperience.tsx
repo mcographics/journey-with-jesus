@@ -20,15 +20,13 @@ export function MediaExperience({ episodes: initialEpisodes }: { episodes: Episo
   const [episodes, setEpisodes] = useState(initialEpisodes);
   const [playlists, setPlaylists] = useState<MediaPlaylist[]>([]);
   const [playlistId, setPlaylistId] = useState("all");
-  const [catalogStatus, setCatalogStatus] = useState<"loading" | "ready" | "unconfigured" | "error">(initialEpisodes.length ? "ready" : "loading");
+  const [catalogStatus, setCatalogStatus] = useState<"loading" | "ready" | "unconfigured" | "error">(() =>
+    initialEpisodes.length ? "ready" : isSupabaseConfigured() ? "loading" : "unconfigured",
+  );
 
   useEffect(() => {
-    if (!isSupabaseConfigured()) {
-      setCatalogStatus(initialEpisodes.length ? "ready" : "unconfigured");
-      return;
-    }
+    if (!isSupabaseConfigured()) return;
     let active = true;
-    setCatalogStatus("loading");
     void loadPublishedMediaCatalog().then((catalog) => {
       if (!active) return;
       setEpisodes(catalog.episodes);
@@ -60,7 +58,7 @@ export function MediaExperience({ episodes: initialEpisodes }: { episodes: Episo
         {catalogStatus === "error" && <p className="catalog-notice is-error" role="status">The story library could not be reached. Please refresh to try again.</p>}
         <div className="media-layout">
           <div className="media-main">
-            <VideoPlayer episode={selectedEpisode} />
+            <VideoPlayer key={selectedEpisode?.id ?? "none"} episode={selectedEpisode} />
             <CommentSection key={selectedEpisode?.id ?? "none"} episode={selectedEpisode} />
           </div>
           <EpisodePlaylist episodes={episodes} playlists={playlists} selectedPlaylistId={playlistId}

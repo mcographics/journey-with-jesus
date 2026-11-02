@@ -11,7 +11,10 @@ type Props = {
 export function EpisodePlaylist({ episodes, selectedId, onSelect, playlists = [], selectedPlaylistId = "all", onPlaylistChange }: Props) {
   const [query, setQuery] = useState("");
   const playlist = playlists.find((item) => item.id === selectedPlaylistId);
-  const playlistEpisodes = playlist ? episodes.filter((episode) => playlist.episodeIds.includes(episode.id)) : episodes;
+  const playlistEpisodes = useMemo(
+    () => playlist ? episodes.filter((episode) => playlist.episodeIds.includes(episode.id)) : episodes,
+    [episodes, playlist],
+  );
   const visibleEpisodes = useMemo(() => {
     const normalized = query.trim().toLocaleLowerCase();
     if (!normalized) return playlistEpisodes;

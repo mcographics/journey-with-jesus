@@ -6,7 +6,6 @@ import type { Database, VideoContentType, VideoQuality } from "@/lib/database.ty
 import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
 import { uploadVideoResumable } from "@/lib/supabase/resumable-upload";
 
-type Client = SupabaseClient<Database>;
 type SourceRow = Database["public"]["Tables"]["media_video_sources"]["Row"];
 type EpisodeRow = Database["public"]["Tables"]["media_episodes"]["Row"];
 type PlaylistRow = Database["public"]["Tables"]["media_playlists"]["Row"];
@@ -45,7 +44,7 @@ export function StudioExperience() {
   const [playlistForm, setPlaylistForm] = useState<PlaylistForm>(freshPlaylist);
 
   useEffect(() => {
-    if (!client) { setAuthLoading(false); return; }
+    if (!client) return;
     let active = true;
     const verifyAdmin = async (nextSession: Session | null) => {
       setSession(nextSession);
@@ -100,7 +99,11 @@ export function StudioExperience() {
     } finally { setLoadingData(false); }
   }, [client]);
 
-  useEffect(() => { if (isAdmin) void loadStudioData(); }, [isAdmin, loadStudioData]);
+  useEffect(() => {
+    if (!isAdmin) return;
+    const timer = window.setTimeout(() => { void loadStudioData(); }, 0);
+    return () => window.clearTimeout(timer);
+  }, [isAdmin, loadStudioData]);
 
   async function requestSignIn(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -211,7 +214,23 @@ export function StudioExperience() {
     if (error) { setNotice(error.message); setNoticeError(true); return; }
     setPlaylistItems(data ?? []);
   }, [client]);
-  useEffect(() => { if (isAdmin) void loadPlaylistItems(); }, [isAdmin, loadPlaylistItems]);
+  useEffect(() => {
+    if (!isAdmin) return;
+    const timer = window.setTimeout(() => { void loadPlaylistItems(); }, 0);
+    return () => window.clearTimeout(timer);
+  }, [isAdmin, loadPlaylistItems]);
+
+  function movePlaylistItem(index: number, direction: -1 | 1) {
+    setPlaylistForm((current) => {
+      const nextIndex = index + direction;
+      if (nextIndex < 0 || nextIndex >= current.episodeIds.length) return current;
+      const episodeIds = [...current.episodeIds];
+      const moving = episodeIds[index]!;
+      episodeIds[index] = episodeIds[nextIndex]!;
+      episodeIds[nextIndex] = moving;
+      return { ...current, episodeIds };
+    });
+  }
 
   async function savePlaylist(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -313,7 +332,7 @@ export function StudioExperience() {
                 <div className="studio-panel-heading"><div><h2>{episodeForm.id ? "Edit story" : "New story"}</h2><p>Set details and player shape.</p></div></div>
                 <div className="studio-form-grid">
                   <label className="studio-span-two">Title<input value={episodeForm.title} onChange={(event) => setEpisodeForm({ ...episodeForm, title: event.target.value })} maxLength={180} required /></label>
-                  <label>Story ID<input value={episodeForm.id} onChange={(event) => setEpisodeForm({ ...episodeForm, id: slugify(event.target.value) })} placeholder="created-from-title" /></label>
+                  <label>Story ID<input value={episodeForm.id} onChange={(event) => setEpisodeForm({ ...episodeForm, id: event.target.value.toLocaleLowerCase().replace(/[^a-z0-9-]/g, "") })} placeholder="created-from-title" /></label>
                   <label>Episode number<input type="number" min="1" value={episodeForm.number} onChange={(event) => setEpisodeForm({ ...episodeForm, number: event.target.value })} required /></label>
                   <label>Aspect ratio<select value={episodeForm.orientation} onChange={(event) => setEpisodeForm({ ...episodeForm, orientation: event.target.value as EpisodeForm["orientation"] })}><option value="landscape">16:9 landscape</option><option value="portrait">9:16 portrait</option></select></label>
                   <label>Duration, seconds<input type="number" min="0" value={episodeForm.duration} onChange={(event) => setEpisodeForm({ ...episodeForm, duration: event.target.value })} placeholder="Optional" /></label>
@@ -364,6 +383,18 @@ export function StudioExperience() {
                   <label key={episode.id}><input type="checkbox" checked={playlistForm.episodeIds.includes(episode.id)} onChange={(event) => setPlaylistForm((current) => ({ ...current, episodeIds: event.target.checked ? [...current.episodeIds, episode.id] : current.episodeIds.filter((id) => id !== episode.id) }))} /><span>{episode.title}</span></label>
                 ))}
               </fieldset>
+              <div className="studio-order-list" aria-label="Playlist story order">
+                {playlistForm.episodeIds.map((id, index) => {
+                  const title = episodes.find((episode) => episode.id === id)?.title ?? id;
+                  return <div className="studio-order-row" key={id}>
+                    <span>{index + 1}. {title}</span>
+                    <span>
+                      <button type="button" aria-label={"Move " + title + " up"} disabled={index === 0} onClick={() => movePlaylistItem(index, -1)}>↑</button>
+                      <button type="button" aria-label={"Move " + title + " down"} disabled={index === playlistForm.episodeIds.length - 1} onClick={() => movePlaylistItem(index, 1)}>↓</button>
+                    </span>
+                  </div>;
+                })}
+              </div>
               <label className="studio-check"><input type="checkbox" checked={playlistForm.published} onChange={(event) => setPlaylistForm({ ...playlistForm, published: event.target.checked })} />Publish this playlist</label>
               <button className="button button-gold" type="submit"><Check size={16} />Save playlist</button>
             </form>

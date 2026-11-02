@@ -1,14 +1,12 @@
 "use client";
 import { Play, Video } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useState } from "react";
 import type { Episode } from "@/data/episodes";
 import { getDefaultVideoSource } from "@/lib/episode-navigation";
 
 type VideoPlayerProps = { episode: Episode | null };
 export function VideoPlayer({ episode }: VideoPlayerProps) {
-  const initialSource = useMemo(() => episode ? getDefaultVideoSource(episode) : null, [episode]);
-  const [selectedUrl, setSelectedUrl] = useState(initialSource?.url ?? "");
-  useEffect(() => setSelectedUrl(initialSource?.url ?? ""), [episode?.id, initialSource?.url]);
+  const [selectedUrl, setSelectedUrl] = useState(() => episode ? getDefaultVideoSource(episode)?.url ?? "" : "");
 
   if (!episode) return (
     <div className="video-shell" aria-label="Video player"><div className="video-frame">
