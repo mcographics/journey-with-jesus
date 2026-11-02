@@ -21,24 +21,19 @@ test("home and media are the only primary destinations, with working story CTA",
   await expect(footerNavigation.getByRole("link", { name: "Media" })).toBeVisible();
 });
 
-test("the floating mobile menu opens Home and Media and the layout has no horizontal overflow", async ({ page }) => {
+test("the mobile menu scrolls with the page, opens Home and Media, and the layout has no horizontal overflow", async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 812 });
   await page.goto("/");
   const masthead = page.getByRole("img", { name: /Journey with Jesus illustrated banner/ });
   await expect(masthead).toBeVisible();
-  const storySeal = page.getByRole("link", { name: /Click Me!/ });
-  await expect(storySeal).toBeVisible();
-  await storySeal.click();
-  await expect(page).toHaveURL(/\/media\/$/);
-  await page.goto("/");
-
   const menuButton = page.getByRole("button", { name: "Open navigation menu" });
   await expect(menuButton).toBeVisible();
   const initialButtonPosition = await menuButton.boundingBox();
   expect(initialButtonPosition).not.toBeNull();
   await page.evaluate(() => window.scrollTo(0, 240));
+  await page.waitForFunction(() => window.scrollY >= 240);
   const scrolledButtonPosition = await menuButton.boundingBox();
-  expect(scrolledButtonPosition?.y).toBeCloseTo(initialButtonPosition!.y, 0);
+  expect(scrolledButtonPosition?.y).toBeCloseTo(initialButtonPosition!.y - 240, 0);
 
   const navigation = page.getByRole("navigation", { name: "Mobile navigation" });
   await expect(navigation).toBeHidden();
@@ -54,6 +49,12 @@ test("the floating mobile menu opens Home and Media and the layout has no horizo
     content: document.documentElement.scrollWidth,
   }));
   expect(dimensions.content).toBeLessThanOrEqual(dimensions.viewport);
+
+  await page.goto("/");
+  const storySeal = page.getByRole("link", { name: /Click Me!/ });
+  await expect(storySeal).toBeVisible();
+  await storySeal.click();
+  await expect(page).toHaveURL(/\/media\/$/);
 });
 
 test("desktop media page fits the player and playlist without overflow", async ({ page }) => {
