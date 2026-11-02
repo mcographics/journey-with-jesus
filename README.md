@@ -1,6 +1,6 @@
 # Journey with Jesus
 
-An independently published, responsive Christian animation library site. It has two public destinations: Home and Media. The video catalog is managed by the owner in a private Studio; it starts empty until finished videos and approved artwork are added.
+An independently published, responsive Christian animation library site. Public destinations include Home, Media, Meet the Characters, Meet the Team, and Store. The video catalog is managed by the owner in a private Studio; it starts empty until finished videos and approved artwork are added.
 
 ## Stack and hosting
 
@@ -72,7 +72,7 @@ Studio accepts MP4, WebM, and QuickTime files. It stores uploaded files in a pri
 
 ## Project layout
 
-- `src/app/` — Home and Media routes, global layout, metadata, styles, and favicon
+- `src/app/` — Home, Media, Meet the Characters, Meet the Team, and Store routes, global layout, metadata, styles, and favicon
 - `src/components/` — responsive navigation, player, playlist, and comments UI
 - `src/data/episodes.ts` — owner-managed published episode catalog
 - `supabase/migrations/` — comment tables, RLS policies, and submission procedure

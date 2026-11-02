@@ -3,6 +3,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import "./globals.css";
 import "./media-studio.css";
+import "./editorial-pages.css";
 
 const siteUrl = "https://mcographics.github.io/journey-with-jesus/";
 

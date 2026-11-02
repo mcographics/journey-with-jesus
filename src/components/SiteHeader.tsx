@@ -3,11 +3,14 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { ChevronDown, Crown, Moon, Sun, X } from "lucide-react";
+import { ChevronDown, Crown, Menu, Moon, Sun, X } from "lucide-react";
 
 const navigation = [
   { href: "/", label: "Home" },
   { href: "/media/", label: "Media" },
+  { href: "/characters/", label: "Meet the Characters" },
+  { href: "/team/", label: "Meet the Team" },
+  { href: "/store/", label: "Store" },
 ];
 
 type ThemeMode = "auto" | "light" | "dark";
@@ -44,9 +47,12 @@ export function SiteHeader() {
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
   const routePath = basePath && pathname.startsWith(basePath) ? pathname.slice(basePath.length) || "/" : pathname;
   const normalizedPath = routePath.endsWith("/") ? routePath : `${routePath}/`;
+  const [isDesktopMenuOpen, setIsDesktopMenuOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isAutoHidden, setIsAutoHidden] = useState(false);
   const [themeMode, setThemeMode] = useState<ThemeMode>("auto");
+  const desktopNavigationRef = useRef<HTMLDivElement>(null);
+  const desktopMenuButtonRef = useRef<HTMLButtonElement>(null);
   const mobileNavigationRef = useRef<HTMLDivElement>(null);
   const mobileMenuButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -151,6 +157,29 @@ export function SiteHeader() {
   }, []);
 
   useEffect(() => {
+    if (!isDesktopMenuOpen) return;
+
+    const closeOnOutsidePointer = (event: PointerEvent) => {
+      if (!desktopNavigationRef.current?.contains(event.target as Node)) {
+        setIsDesktopMenuOpen(false);
+      }
+    };
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsDesktopMenuOpen(false);
+        desktopMenuButtonRef.current?.focus();
+      }
+    };
+
+    document.addEventListener("pointerdown", closeOnOutsidePointer);
+    document.addEventListener("keydown", closeOnEscape);
+    return () => {
+      document.removeEventListener("pointerdown", closeOnOutsidePointer);
+      document.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [isDesktopMenuOpen]);
+
+  useEffect(() => {
     if (!isMobileMenuOpen) return;
 
     const closeOnOutsidePointer = (event: PointerEvent) => {
@@ -176,22 +205,43 @@ export function SiteHeader() {
   return (
     <header className="site-header">
       <div className="header-inner">
-        <nav aria-label="Primary navigation" className="primary-navigation">
-          {navigation.map(({ href, label }) => {
-            const isCurrent = normalizedPath === href;
-            return (
-              <Link
-                aria-current={isCurrent ? "page" : undefined}
-                className={`nav-link${isCurrent ? " is-current" : ""}`}
-                href={href}
-                key={href}
-              >
-                <Crown aria-hidden="true" size={16} strokeWidth={1.7} />
-                <span>{label}</span>
-              </Link>
-            );
-          })}
-        </nav>
+        <div className="desktop-navigation" ref={desktopNavigationRef}>
+          <button
+            aria-controls="desktop-navigation-options"
+            aria-expanded={isDesktopMenuOpen}
+            aria-label={isDesktopMenuOpen ? "Close site menu" : "Open site menu"}
+            className="desktop-menu-toggle"
+            onClick={() => setIsDesktopMenuOpen((open) => !open)}
+            ref={desktopMenuButtonRef}
+            type="button"
+          >
+            {isDesktopMenuOpen ? <X aria-hidden="true" size={18} /> : <Menu aria-hidden="true" size={18} />}
+            <span>Menu</span>
+            <ChevronDown aria-hidden="true" className="desktop-menu-chevron" size={15} />
+          </button>
+          <nav
+            aria-label="Primary navigation"
+            className="desktop-menu-options"
+            hidden={!isDesktopMenuOpen}
+            id="desktop-navigation-options"
+          >
+            {navigation.map(({ href, label }) => {
+              const isCurrent = normalizedPath === href;
+              return (
+                <Link
+                  aria-current={isCurrent ? "page" : undefined}
+                  className={`desktop-menu-link${isCurrent ? " is-current" : ""}`}
+                  href={href}
+                  key={href}
+                  onClick={() => setIsDesktopMenuOpen(false)}
+                >
+                  <Crown aria-hidden="true" size={15} strokeWidth={1.7} />
+                  <span>{label}</span>
+                </Link>
+              );
+            })}
+          </nav>
+        </div>
         <button
           aria-label={themeMode === "auto"
             ? "Automatic theme is active. Activate to use light mode."
