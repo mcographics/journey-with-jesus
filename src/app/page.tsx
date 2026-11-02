@@ -25,7 +25,7 @@ export default function HomePage() {
           height={2466}
           preload
           sizes="100vw"
-          src={`${basePath}/images/journey-with-jesus-header.jpg`}
+          src={`${basePath}/images/journey-with-jesus-header-3x.jpg`}
           width={5742}
         />
         <div className="masthead-ticker">
