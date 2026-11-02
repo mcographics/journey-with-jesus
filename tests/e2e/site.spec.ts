@@ -21,6 +21,12 @@ test("the floating mobile menu opens Home and Media and the layout has no horizo
   await page.goto("/");
   const masthead = page.getByRole("img", { name: /Journey with Jesus illustrated banner/ });
   await expect(masthead).toBeVisible();
+  const storySeal = page.getByRole("link", { name: /Click Me!/ });
+  await expect(storySeal).toBeVisible();
+  await storySeal.click();
+  await expect(page).toHaveURL(/\/media\/$/);
+  await page.goto("/");
+
   const menuButton = page.getByRole("button", { name: "Open navigation menu" });
   await expect(menuButton).toBeVisible();
   const initialButtonPosition = await menuButton.boundingBox();
