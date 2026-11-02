@@ -114,10 +114,15 @@ button { color: inherit; }
 .invitation-text strong { font: 18px var(--serif); font-weight: 400; }
 .invitation-arrow { margin-left: auto; }
 
-.site-footer { background: #080d16; }
-.footer-inner { width: 100%; }
-.footer-banner { position: relative; display: block; width: 100%; aspect-ratio: 4096 / 247; overflow: hidden; background: #080d16; }
-.footer-banner-image { object-fit: cover; object-position: center; }
+.site-footer { background: #080d16; border-top: 1px solid rgba(238, 221, 174, .11); }
+.footer-inner { width: min(1280px, calc(100% - 56px)); min-height: 115px; margin: auto; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.footer-brand { font: 18px var(--serif); }
+.footer-brand span { color: var(--gold); }
+.footer-note { color: #898b90; font-size: 11px; }
+.footer-tagline { color: #c8c2b7; font-family: var(--serif); font-size: 13px; }
+.footer-tagline em { color: var(--gold-bright); }
+.footer-links { display: flex; gap: 22px; color: #b5b5b5; font-size: 11px; }
+.footer-links a:hover { color: var(--gold-bright); }
 
 /* Media library */
 .media-page { min-height: calc(100vh - 200px); padding: 55px 0 100px; background: radial-gradient(ellipse at 82% 0%, rgba(226, 185, 108, .08), transparent 30%), var(--night); }
@@ -195,7 +200,7 @@ button { color: inherit; }
   .invitation-section { align-items: start; flex-direction: column; }
 }
 @media (max-width: 700px) {
-  .page-width, .header-inner { width: min(100% - 36px, 560px); }
+  .page-width, .header-inner, .footer-inner { width: min(100% - 36px, 560px); }
   .header-inner { height: 72px; }
   .brand-name { font-size: 20px; }
   .menu-toggle { display: grid; width: 42px; height: 42px; align-content: center; justify-items: center; gap: 6px; border: 1px solid var(--line); border-radius: 3px; background: transparent; cursor: pointer; }
@@ -219,6 +224,9 @@ button { color: inherit; }
   .mission-copy .section-index { margin-bottom: 20px; }
   .invitation-section { padding-block: 70px; gap: 25px; }
   .media-invitation { width: 100%; }
+  .footer-inner { padding-block: 23px; min-height: 0; display: grid; grid-template-columns: 1fr auto; }
+  .footer-note { grid-column: 1 / -1; grid-row: 2; }
+  .footer-links { gap: 14px; }
   .media-page { padding-top: 37px; }
   .media-layout { grid-template-columns: 1fr; }
   .playlist-panel { order: 2; }
@@ -228,13 +236,14 @@ button { color: inherit; }
   .player-title { font-size: 18px; }
 }
 @media (max-width: 440px) {
-  .page-width, .header-inner { width: calc(100% - 30px); }
+  .page-width, .header-inner, .footer-inner { width: calc(100% - 30px); }
   .hero-subtitle { max-width: 290px; line-height: 1.5; }
   .desktop-break { display: none; }
   .hero-quote { max-width: 310px; }
   .player-meta { flex-direction: column; }
   .video-frame.is-portrait { max-width: 76%; }
   .virtue-line { font-size: 15px; gap: 7px; }
+  .footer-links { font-size: 10px; gap: 10px; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
