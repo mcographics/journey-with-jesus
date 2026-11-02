@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, BookOpen, Heart, Sparkles } from "lucide-react";
+
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
 export const metadata: Metadata = {
   title: "Journey with Jesus — Experience the Gospel Through Animated Storytelling",
@@ -14,16 +17,21 @@ export const metadata: Metadata = {
 export default function HomePage() {
   return (
     <main id="main-content">
+      <div className="home-masthead">
+        <Image
+          alt="Journey with Jesus illustrated banner: Jesus and a contemporary young man overlooking a sunlit valley."
+          className="home-masthead-image"
+          height={768}
+          preload
+          sizes="100vw"
+          src={`${basePath}/images/journey-with-jesus-header.jpg`}
+          width={1914}
+        />
+      </div>
       <section className="home-hero" aria-labelledby="home-title">
-        <div className="hero-atmosphere" aria-hidden="true">
-          <div className="hero-sun" />
-          <div className="hero-horizon hero-horizon-back" />
-          <div className="hero-horizon hero-horizon-front" />
-          <div className="hero-light-path" />
-        </div>
         <div className="home-hero-content page-width">
           <p className="eyebrow"><span /> ANIMATED BIBLICAL STORIES</p>
-          <h1 id="home-title">Journey<br />with <em>Jesus</em></h1>
+          <h1 className="visually-hidden" id="home-title">Journey with Jesus</h1>
           <p className="hero-subtitle">Experience the Gospel Through Animated Storytelling</p>
           <p className="hero-quote">“One extraordinary life. One timeless message.<br className="desktop-break" /> A journey that changes everything.”</p>
           <p className="hero-description">Discover the life, teachings, miracles, sacrifice, and resurrection of Jesus Christ through beautiful, anime-inspired animated stories.</p>

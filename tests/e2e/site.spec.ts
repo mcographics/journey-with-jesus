@@ -2,6 +2,9 @@ import { expect, test } from "@playwright/test";
 
 test("home and media are the only primary destinations, with working story CTA", async ({ page }) => {
   await page.goto("/");
+  const masthead = page.getByRole("img", { name: /Journey with Jesus illustrated banner/ });
+  await expect(masthead).toBeVisible();
+  await expect.poll(() => masthead.evaluate((image) => (image as HTMLImageElement).naturalWidth)).toBe(1914);
   await expect(page.getByRole("heading", { level: 1 })).toContainText("Journey");
   await expect(page.getByText("These are more than themes. They are at the heart of the journey.")).toBeVisible();
   await expect(page.getByText("Journey with Jesus brings biblical narratives to life", { exact: false })).toBeVisible();
@@ -16,6 +19,8 @@ test("home and media are the only primary destinations, with working story CTA",
 test("the mobile navigation opens and the layout has no horizontal overflow", async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 812 });
   await page.goto("/");
+  const masthead = page.getByRole("img", { name: /Journey with Jesus illustrated banner/ });
+  await expect(masthead).toBeVisible();
   await page.getByRole("button", { name: "Open navigation" }).click();
   await expect(page.getByRole("navigation", { name: "Primary navigation" }).getByRole("link", { name: "Media" })).toBeVisible();
   await page.getByRole("link", { name: "Media", exact: true }).click();
