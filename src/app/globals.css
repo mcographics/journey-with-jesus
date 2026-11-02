@@ -35,7 +35,7 @@ button { color: inherit; }
 .skip-link:focus { transform: translateY(0); }
 .page-width { width: min(1160px, calc(100% - 56px)); margin-inline: auto; }
 .site-header { position: absolute; z-index: 20; top: 0; left: 0; width: 100%; height: 0; background: transparent; pointer-events: none; }
-.header-inner { width: min(1280px, calc(100% - 56px)); height: auto; margin: auto; display: flex; align-items: center; justify-content: flex-end; padding-top: 18px; pointer-events: none; }
+.header-inner { width: min(1280px, calc(100% - 56px)); height: auto; margin: auto; display: flex; align-items: center; justify-content: flex-end; gap: 18px; padding-top: 18px; pointer-events: none; }
 .primary-navigation { display: flex; align-items: center; gap: 12px; height: auto; pointer-events: auto; }
 .mobile-navigation { display: none; }
 .mobile-menu-toggle { position: relative; display: inline-flex; min-height: 48px; align-items: center; justify-content: center; gap: 9px; padding: 0 16px; border: 1px solid rgba(255, 226, 165, .88); border-radius: 999px; background: linear-gradient(150deg, rgba(10, 18, 37, .98), rgba(23, 31, 49, .96)); box-shadow: inset 0 0 0 3px rgba(255, 231, 173, .1), 0 8px 24px rgba(2, 6, 15, .45); color: #f8e8c4; font-family: var(--serif); font-size: 14px; letter-spacing: .055em; text-shadow: 0 1px 2px rgba(0, 0, 0, .32); cursor: pointer; touch-action: manipulation; }
