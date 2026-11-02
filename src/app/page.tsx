@@ -19,13 +19,13 @@ export default function HomePage() {
     <main id="main-content">
       <div className="home-masthead">
         <Image
-          alt="Journey with Jesus illustrated banner: Jesus and a contemporary young man overlooking a sunlit valley."
+          alt="Journey with Jesus illustrated banner: Jesus and a young man overlooking Jerusalem at sunset, with the words 'An Animated Journey Through God's Word.'"
           className="home-masthead-image"
-          height={2466}
+          height={2049}
           preload
           sizes="100vw"
           src={`${basePath}/images/journey-with-jesus-header.jpg`}
-          width={5742}
+          width={6144}
         />
       </div>
       <section className="home-hero" aria-labelledby="home-title">

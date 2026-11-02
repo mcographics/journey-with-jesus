@@ -4,7 +4,7 @@ test("home and media are the only primary destinations, with working story CTA",
   await page.goto("/");
   const masthead = page.getByRole("img", { name: /Journey with Jesus illustrated banner/ });
   await expect(masthead).toBeVisible();
-  await expect.poll(() => masthead.evaluate((image) => (image as HTMLImageElement).naturalWidth)).toBe(5742);
+  await expect.poll(() => masthead.evaluate((image) => (image as HTMLImageElement).naturalWidth)).toBe(6144);
   await expect(page.getByRole("heading", { level: 1 })).toContainText("Journey");
   await expect(page.getByText("These are more than themes. They are at the heart of the journey.")).toBeVisible();
   await expect(page.getByText("Journey with Jesus brings biblical narratives to life", { exact: false })).toBeVisible();
