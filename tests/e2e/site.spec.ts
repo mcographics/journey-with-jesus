@@ -34,6 +34,11 @@ test.describe("touch mobile navigation", () => {
     await expect(menuButton).toBeVisible();
     const mobileNavigation = page.locator(".mobile-navigation");
     await expect(mobileNavigation).toHaveCSS("opacity", "0", { timeout: 3000 });
+    const restingButtonBounds = await menuButton.boundingBox();
+    expect(restingButtonBounds).not.toBeNull();
+    const viewport = page.viewportSize()!;
+    expect(restingButtonBounds!.y + restingButtonBounds!.height / 2).toBeCloseTo(viewport.height / 2, 0);
+    expect(restingButtonBounds!.x + restingButtonBounds!.width).toBeCloseTo(viewport.width - 16, 0);
 
     await page.evaluate(() => window.scrollTo(0, 240));
     await page.waitForFunction(() => window.scrollY >= 240);
@@ -53,6 +58,8 @@ test.describe("touch mobile navigation", () => {
     await expect(navigation).toBeHidden();
     await menuButton.click();
     await expect(navigation).toBeVisible();
+    const openButtonPosition = await menuButton.boundingBox();
+    expect(openButtonPosition?.y).toBeCloseTo(initialButtonPosition!.y, 0);
     await menuButton.evaluate((button) => button.blur());
     await page.waitForTimeout(1100);
     await expect(mobileNavigation).toHaveCSS("opacity", "1");

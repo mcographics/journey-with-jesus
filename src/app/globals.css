@@ -336,7 +336,8 @@ button { color: inherit; }
 }
 @media (max-width: 768px) and (hover: none) and (pointer: coarse) {
   .primary-navigation { display: none; }
-  .mobile-navigation { position: fixed; z-index: 40; top: auto; right: calc(16px + env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); display: flex; flex-direction: column; align-items: flex-end; gap: 10px; opacity: 1; pointer-events: auto; transition: opacity .24s ease; }
+  .mobile-navigation { position: fixed; z-index: 40; top: 50%; right: calc(16px + env(safe-area-inset-right, 0px)); bottom: auto; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; opacity: 1; pointer-events: auto; transform: translateY(-50%); transition: opacity .24s ease; }
+  .mobile-menu-options { position: absolute; top: 50%; right: calc(100% + 10px); transform: translateY(-50%); }
   .mobile-navigation.is-autohidden { opacity: 0; pointer-events: none; }
   .mobile-navigation:focus-within { opacity: 1; pointer-events: auto; }
 }
