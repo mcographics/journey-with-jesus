@@ -16,14 +16,16 @@ test("home and media are the only primary destinations, with working story CTA",
   await expect(page.locator("video")).toHaveCount(0);
 });
 
-test("the mobile navigation opens and the layout has no horizontal overflow", async ({ page }) => {
+test("the mobile navigation shows Home and Media and the layout has no horizontal overflow", async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 812 });
   await page.goto("/");
   const masthead = page.getByRole("img", { name: /Journey with Jesus illustrated banner/ });
   await expect(masthead).toBeVisible();
-  await page.getByRole("button", { name: "Open navigation" }).click();
-  await expect(page.getByRole("navigation", { name: "Primary navigation" }).getByRole("link", { name: "Media" })).toBeVisible();
-  await page.getByRole("link", { name: "Media", exact: true }).click();
+  const navigation = page.getByRole("navigation", { name: "Primary navigation" });
+  await expect(navigation.getByRole("link", { name: "Home" })).toBeVisible();
+  const mediaLink = navigation.getByRole("link", { name: "Media" });
+  await expect(mediaLink).toBeVisible();
+  await mediaLink.click();
   await expect(page).toHaveURL(/\/media\/$/);
   const dimensions = await page.evaluate(() => ({
     viewport: document.documentElement.clientWidth,
