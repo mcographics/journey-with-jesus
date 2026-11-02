@@ -104,17 +104,27 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="invitation-section page-width" aria-labelledby="invitation-title">
-        <div className="invitation-heading">
-          <p className="eyebrow eyebrow-dark"><Sparkles size={14} aria-hidden="true" /> BEGIN YOUR JOURNEY</p>
-          <h2 id="invitation-title">Every Story Has a Purpose.<br /><em>Every Journey Begins Somewhere.</em></h2>
-          <p>Explore animated episodes inspired by Scripture, discover the teachings of Jesus, and experience the greatest story ever told through a new visual perspective.</p>
+      <section className="invitation-section" aria-labelledby="invitation-title">
+        <Image
+          alt="The risen Jesus welcomes his followers at sunset as an angel opens the empty tomb."
+          className="invitation-background"
+          fill
+          sizes="100vw"
+          src={`${basePath}/images/resurrection-at-sunset.webp`}
+        />
+        <div className="invitation-shade" aria-hidden="true" />
+        <div className="page-width invitation-content">
+          <div className="invitation-heading">
+            <p className="eyebrow"><Sparkles size={14} aria-hidden="true" /> BEGIN YOUR JOURNEY</p>
+            <h2 id="invitation-title">Every Story Has a Purpose.<br /><em>Every Journey Begins Somewhere.</em></h2>
+            <p>Explore animated episodes inspired by Scripture, discover the teachings of Jesus, and experience the greatest story ever told through a new visual perspective.</p>
+          </div>
+          <Link className="media-invitation" href="/media/">
+            <span className="invitation-icon"><Heart size={22} strokeWidth={1.4} aria-hidden="true" /></span>
+            <span className="invitation-text"><small>YOUR NEXT CHAPTER</small><strong>Explore Our Media</strong></span>
+            <span className="invitation-arrow"><ArrowRight size={19} aria-hidden="true" /></span>
+          </Link>
         </div>
-        <Link className="media-invitation" href="/media/">
-          <span className="invitation-icon"><Heart size={22} strokeWidth={1.4} aria-hidden="true" /></span>
-          <span className="invitation-text"><small>YOUR NEXT CHAPTER</small><strong>Explore Our Media</strong></span>
-          <span className="invitation-arrow"><ArrowRight size={19} aria-hidden="true" /></span>
-        </Link>
       </section>
     </main>
   );

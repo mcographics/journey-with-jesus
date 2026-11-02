@@ -132,13 +132,17 @@ button { color: inherit; }
 .virtue-statement { margin-top: 24px !important; color: var(--gold-bright) !important; font: 19px var(--serif) !important; }
 .virtue-description { margin-top: -4px !important; color: #d1ccc0 !important; font-family: var(--serif); font-style: italic; }
 
-.invitation-section { padding-block: 114px; display: flex; align-items: end; justify-content: space-between; gap: 50px; }
-.invitation-heading { max-width: 720px; }
-.invitation-heading .eyebrow { color: #987a45; }
-.invitation-heading h2 { margin: 0; }
-.invitation-heading > p:last-child { max-width: 620px; margin: 17px 0 0; }
-.media-invitation { display: flex; align-items: center; gap: 14px; flex: 0 0 auto; min-width: 240px; padding: 15px 17px; border: 1px solid var(--line); transition: border .2s, background .2s; }
-.media-invitation:hover { border-color: rgba(228, 188, 112, .6); background: rgba(228, 188, 112, .05); }
+.invitation-section { position: relative; isolation: isolate; min-height: clamp(520px, 42vw, 680px); display: flex; overflow: hidden; background: #091326; }
+.invitation-background { z-index: -2; object-fit: cover; object-position: center 49%; }
+.invitation-shade { position: absolute; z-index: -1; inset: 0; background: linear-gradient(90deg, rgba(5, 10, 24, .94) 0%, rgba(5, 10, 24, .82) 28%, rgba(5, 10, 24, .58) 43%, rgba(5, 10, 24, .16) 72%, rgba(5, 10, 24, .04) 100%), linear-gradient(0deg, rgba(5, 10, 24, .46), transparent 58%); pointer-events: none; }
+.invitation-content { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 28px; padding-block: clamp(112px, 10vw, 150px) 78px; }
+.invitation-heading { max-width: 650px; }
+.invitation-heading .eyebrow { color: #f3d595; text-shadow: 0 2px 12px rgba(0, 0, 0, .65); }
+.invitation-heading h2 { margin: 0; color: #fff9ec; font-size: clamp(36px, 3.4vw, 46px); text-shadow: 0 2px 18px rgba(0, 0, 0, .55); }
+.invitation-heading h2 em { color: #f2cb7f; text-shadow: 0 2px 18px rgba(0, 0, 0, .7); }
+.invitation-heading > p:last-child { max-width: 590px; margin: 17px 0 0; color: #f1eee8; text-shadow: 0 1px 9px rgba(0, 0, 0, .9); }
+.media-invitation { display: flex; align-items: center; gap: 14px; flex: 0 0 auto; min-width: 240px; min-height: 64px; padding: 15px 18px; border: 1px solid rgba(255, 226, 165, .8); border-radius: 4px; background: rgba(8, 14, 28, .8); box-shadow: inset 0 0 0 2px rgba(255, 231, 173, .07), 0 8px 26px rgba(0, 0, 0, .34); backdrop-filter: blur(5px); transition: border-color .2s, background .2s, box-shadow .2s, transform .2s; }
+.media-invitation:hover { transform: translateY(-2px); border-color: #fff0bd; background: rgba(11, 20, 37, .94); box-shadow: inset 0 0 0 2px rgba(255, 231, 173, .12), 0 12px 30px rgba(0, 0, 0, .44); }
 .invitation-icon, .invitation-arrow { color: var(--gold); }
 .invitation-text { display: grid; gap: 6px; }
 .invitation-text small { color: #aaa; font-size: 8px; }
@@ -228,7 +232,6 @@ button { color: inherit; }
   .episode-card { grid-template-columns: 87px minmax(0, 1fr); gap: 9px; padding: 9px; }
   .storybook-layout { grid-template-columns: minmax(0, 1fr) 220px; gap: 24px; }
   .storybook-seal { width: 210px; }
-  .invitation-section { align-items: start; flex-direction: column; }
 }
 @media (max-width: 700px) {
   .page-width, .header-inner, .footer-inner { width: min(100% - 36px, 560px); }
@@ -260,8 +263,15 @@ button { color: inherit; }
   .mission-inner { padding-block: 58px; grid-template-columns: 1fr; gap: 28px; }
   .mission-art { min-height: clamp(220px, 70vw, 280px); }
   .mission-copy .section-index { margin-bottom: 18px; }
-  .invitation-section { padding-block: 58px; gap: 22px; }
-  .media-invitation { width: 100%; }
+  .invitation-section { min-height: 0; }
+  .invitation-background { object-position: 52% center; }
+  .invitation-shade { background: linear-gradient(0deg, rgba(5, 10, 24, .99) 0%, rgba(5, 10, 24, .9) 39%, rgba(5, 10, 24, .58) 66%, rgba(5, 10, 24, .14) 100%); }
+  .invitation-content { gap: 24px; padding-block: clamp(270px, 76vw, 390px) 58px; }
+  .invitation-heading { max-width: 100%; }
+  .invitation-heading .eyebrow { margin-bottom: 18px; font-size: 10px; }
+  .invitation-heading h2 { font-size: clamp(32px, 8vw, 39px); line-height: 1.12; }
+  .invitation-heading > p:last-child { margin-top: 15px; }
+  .media-invitation { width: 100%; max-width: 400px; }
   .footer-inner { padding-block: 22px; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; }
   .footer-tagline { margin: 0; font-size: 14px; line-height: 1.5; }
   .footer-note { grid-column: auto; grid-row: auto; font-size: 10px; }
