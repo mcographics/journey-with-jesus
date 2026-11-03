@@ -1249,3 +1249,29 @@ body, .home-hero, .mission-section, .site-footer, .media-page {
   color: #fff !important;
   -webkit-text-fill-color: currentColor !important;
 }
+
+/* Dark homepage copy: keep the story text white and its titles gold. */
+:root:not([data-theme="light"]) body:has(.home-hero) .home-hero :is(
+  .eyebrow, .hero-quote, .hero-description, .hero-introduction,
+  .hero-introduction em, .hero-side-note, .scroll-cue
+),
+:root:not([data-theme="light"]) body:has(.home-hero) .mission-copy p:not(.eyebrow),
+:root:not([data-theme="light"]) body:has(.home-hero) .mission-copy p:not(.eyebrow) strong {
+  color: #fff !important;
+  -webkit-text-fill-color: currentColor !important;
+  background-image: none !important;
+  background-clip: border-box !important;
+  -webkit-background-clip: border-box !important;
+  animation: none !important;
+  filter: none !important;
+}
+:root:not([data-theme="light"]) body:has(.home-hero) .home-hero .hero-subtitle,
+:root:not([data-theme="light"]) body:has(.home-hero) .mission-copy h2,
+:root:not([data-theme="light"]) body:has(.home-hero) .mission-copy h2 em {
+  color: #ffe792 !important;
+  -webkit-text-fill-color: currentColor !important;
+  background-image: none !important;
+  background-clip: border-box !important;
+  -webkit-background-clip: border-box !important;
+  animation: none !important;
+}
