@@ -132,3 +132,24 @@
 }
 
 .character-portrait-image { display: block; width: 100%; max-height: 310px; aspect-ratio: 4 / 3; object-fit: cover; object-position: center 35%; border-bottom: 1px solid rgba(238, 221, 174, .15); }
+
+
+/* Keep editorial pages and cards cool in light mode; gold stays on accents. */
+:root[data-theme="light"] .editorial-page {
+  background: radial-gradient(ellipse at 14% 6%, rgba(139, 187, 238, .11), transparent 37%), radial-gradient(ellipse at 88% 72%, rgba(175, 209, 243, .08), transparent 42%), linear-gradient(145deg, #ffffff 0%, #fbfdff 52%, #eef5fd 100%);
+}
+:root[data-theme="light"] .character-card,
+:root[data-theme="light"] .team-card {
+  border-color: rgba(112, 149, 190, .2);
+  background: radial-gradient(ellipse at 88% 10%, rgba(159, 199, 239, .1), transparent 42%), linear-gradient(145deg, #ffffff 0%, #f6faff 100%);
+}
+:root[data-theme="light"] .team-art {
+  background: radial-gradient(ellipse at center, rgba(139, 190, 242, .16), transparent 50%), linear-gradient(145deg, #f9fcff, #eef5fd);
+}
+:root[data-theme="light"] .store-card {
+  border-color: rgba(112, 149, 190, .22);
+  background: radial-gradient(ellipse at 82% 8%, rgba(159, 199, 239, .1), transparent 44%), linear-gradient(145deg, #ffffff 0%, #f3f8fe 100%);
+}
+:root[data-theme="light"] .store-home-link:hover {
+  background: rgba(126, 171, 220, .1);
+}

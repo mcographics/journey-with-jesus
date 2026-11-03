@@ -208,3 +208,8 @@
   color: #ffd75e;
   text-shadow: 0 1px 2px rgba(0, 0, 0, .78), 0 0 7px rgba(255, 215, 94, .42);
 }
+
+
+:root[data-theme="light"] .studio-page {
+  background: radial-gradient(ellipse at 16% 6%, rgba(139, 187, 238, .11), transparent 38%), linear-gradient(145deg, #ffffff 0%, #f9fcff 54%, #eef5fd 100%);
+}
