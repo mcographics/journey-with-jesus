@@ -876,3 +876,144 @@ body, .home-hero, .mission-section, .site-footer, .media-page {
 :root[data-theme="light"] .comments-unavailable {
   background: rgba(126, 171, 220, .09);
 }
+
+
+/* Theme text: cool blue throughout light mode and readable metallic gold in dark mode. */
+:root[data-theme="light"] {
+  --text-primary: #244f76;
+  --text-muted: #4d6c89;
+  --text-emphasis: #1769ad;
+  --gold-text: #1769ad;
+  --gold-text-bright: #2e82c4;
+}
+:root:not([data-theme="light"]) {
+  --ink: #f1d77d;
+  --muted: #dbc879;
+  --quiet: #bca968;
+  --gold: #e8c24e;
+  --gold-bright: #ffe792;
+}
+:root[data-theme="light"] body,
+:root[data-theme="light"] body :is(
+  h1, h2, h3, h4, h5, h6, p, li, span, strong, b, em, small, label,
+  legend, dt, dd, time, figcaption, blockquote, summary, a, button
+) {
+  color: var(--text-primary) !important;
+  text-shadow: none !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+:root[data-theme="light"] body :is(
+  h1, h2, h3, h4, h5, h6, strong, b, em,
+  .eyebrow, .section-index, .character-role, .character-passages strong,
+  .character-passages span, .footer-note, .footer-links span,
+  .comment-card strong, .comments-unavailable strong
+) {
+  color: var(--text-emphasis) !important;
+  text-shadow: 0 1px 1px rgba(17, 55, 88, .16) !important;
+}
+:root[data-theme="light"] body :is(
+  .home-hero h1 em, h2 em, .hero-subtitle, .storybook-title em,
+  .mission-copy h2 em, .invitation-heading h2 em,
+  .storybook-eyebrow, .character-role, .character-passages strong,
+  .character-passages span, .footer-note, .footer-links span,
+  .comment-card strong, .comments-unavailable strong
+) {
+  background-image: none !important;
+  background-clip: border-box !important;
+  -webkit-background-clip: border-box !important;
+  -webkit-text-fill-color: currentColor !important;
+  animation: none !important;
+  filter: none !important;
+}
+:root[data-theme="light"] body :is(input, textarea, select) {
+  color: var(--text-primary) !important;
+}
+:root[data-theme="light"] body :is(input, textarea)::placeholder {
+  color: #6b86a0 !important;
+  opacity: 1;
+}
+:root[data-theme="light"] body :is(.button-gold, .nav-link.is-current, .mobile-menu-link.is-current, .desktop-menu-link.is-current, .skip-link) {
+  color: #17324d !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+:root[data-theme="light"] body :is(.is-error, .studio-notice.is-error, .catalog-notice.is-error, [aria-invalid="true"]) {
+  color: #9a342d !important;
+}
+:root[data-theme="light"] body :is(.studio-status.is-live, .studio-approve) {
+  color: #286c3b !important;
+}
+:root[data-theme="light"] body .studio-reject {
+  color: #9a342d !important;
+}
+
+:root:not([data-theme="light"]) body,
+:root:not([data-theme="light"]) body :is(
+  h1, h2, h3, h4, h5, h6, p, li, span, strong, b, em, small, label,
+  legend, dt, dd, time, figcaption, blockquote, summary, a, button
+) {
+  color: var(--ink) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, .42), 0 0 5px rgba(245, 210, 110, .12) !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+:root:not([data-theme="light"]) body :is(input, textarea, select) {
+  color: var(--ink) !important;
+}
+:root:not([data-theme="light"]) body :is(input, textarea)::placeholder {
+  color: #bcae7c !important;
+  opacity: 1;
+}
+:root:not([data-theme="light"]) body :is(
+  h1, h2, h3, h4, h5, h6, strong, b, em,
+  .eyebrow, .section-index, .character-role, .character-passages strong,
+  .character-passages span, .footer-note, .footer-links span,
+  .comment-card strong, .comments-unavailable strong
+) {
+  background-image: linear-gradient(105deg, #b98419 0%, #efd36f 23%, #fff6c7 42%, #d4a72f 59%, #f8e58f 77%, #ad7915 100%) !important;
+  background-size: 220% 100% !important;
+  background-position: 0% 50%;
+  background-clip: text !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, .66), 0 0 7px rgba(255, 218, 111, .2) !important;
+  animation: gold-type-shimmer 7s ease-in-out infinite !important;
+}
+@keyframes gold-type-shimmer {
+  0%, 68%, 100% { background-position: 0% 50%; }
+  82% { background-position: 100% 50%; }
+}
+:root:not([data-theme="light"]) body :is(.button-gold, .nav-link.is-current, .mobile-menu-link.is-current, .desktop-menu-link.is-current, .skip-link) {
+  color: #171b23 !important;
+  text-shadow: none !important;
+  -webkit-text-fill-color: currentColor !important;
+  background-image: none !important;
+  animation: none !important;
+}
+:root:not([data-theme="light"]) body :is(.is-error, .studio-notice.is-error, .catalog-notice.is-error, [aria-invalid="true"]) {
+  color: #ffaaa0 !important;
+  -webkit-text-fill-color: currentColor !important;
+  background-image: none !important;
+  animation: none !important;
+}
+:root:not([data-theme="light"]) body :is(.studio-status.is-live, .studio-approve) {
+  color: #a8dfad !important;
+  -webkit-text-fill-color: currentColor !important;
+  background-image: none !important;
+  animation: none !important;
+}
+:root:not([data-theme="light"]) body .studio-reject {
+  color: #ffaaa0 !important;
+  -webkit-text-fill-color: currentColor !important;
+  background-image: none !important;
+  animation: none !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  :root:not([data-theme="light"]) body :is(
+    h1, h2, h3, h4, h5, h6, strong, b, em,
+    .eyebrow, .section-index, .character-role, .character-passages strong,
+    .character-passages span, .footer-note, .footer-links span,
+    .comment-card strong, .comments-unavailable strong
+  ) {
+    animation: none !important;
+    background-position: 50% 50%;
+  }
+}
