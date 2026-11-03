@@ -1,0 +1,136 @@
+/* Character portraits occupy the entire card until a reader opens the sliding biography. */
+.character-card {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) minmax(0, 0fr);
+  height: clamp(460px, 45vw, 560px);
+  transition: grid-template-rows .42s cubic-bezier(.22, 1, .36, 1);
+}
+
+.character-card.is-expanded {
+  grid-template-rows: minmax(0, .38fr) minmax(0, .62fr);
+}
+
+.character-portrait-trigger {
+  position: relative;
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  padding: 0;
+  border: 0;
+  border-bottom: 1px solid rgba(238, 221, 174, .15);
+  background: radial-gradient(ellipse at 50% 40%, rgba(228, 188, 112, .15), transparent 58%), #141e31;
+  color: var(--gold-bright);
+  cursor: zoom-in;
+  touch-action: manipulation;
+}
+
+.character-card.is-expanded .character-portrait-trigger {
+  cursor: zoom-out;
+}
+
+.character-portrait-trigger .character-portrait-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-height: none;
+  aspect-ratio: auto;
+  border: 0;
+  object-fit: cover;
+  object-position: center 28%;
+}
+
+.character-portrait-placeholder {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  place-items: center;
+  color: var(--gold-bright);
+  font-family: var(--serif);
+  font-size: clamp(72px, 8vw, 116px);
+  letter-spacing: -.06em;
+}
+
+.character-portrait-cue {
+  position: absolute;
+  z-index: 1;
+  right: 14px;
+  bottom: 14px;
+  left: 14px;
+  width: fit-content;
+  max-width: calc(100% - 28px);
+  padding: 9px 12px;
+  border: 1px solid rgba(243, 213, 149, .48);
+  border-radius: 8px;
+  background: rgba(8, 15, 28, .83);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, .3);
+  color: #fff1d1;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .03em;
+  line-height: 1.3;
+  text-align: left;
+  backdrop-filter: blur(8px);
+}
+
+.character-portrait-cue-touch { display: none; }
+
+.character-card .character-card-copy {
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0 20px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .2s ease, visibility 0s linear .2s;
+}
+
+.character-card.is-expanded .character-card-copy {
+  padding: 16px 20px 22px;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity .2s ease .14s, visibility 0s;
+}
+
+.character-card .character-summary { min-height: 0; }
+
+.character-collapse-button {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 0 0 14px auto;
+  padding: 4px 0 6px;
+  border: 0;
+  background: transparent;
+  color: var(--gold-bright);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.character-collapse-button:hover { text-decoration: underline; }
+
+:root[data-theme="light"] .character-portrait-trigger {
+  background: radial-gradient(ellipse at center, rgba(181, 137, 39, .12), transparent 60%), #eef5fd;
+}
+
+:root[data-theme="light"] .character-portrait-placeholder,
+:root[data-theme="light"] .character-collapse-button { color: #795b2c; }
+
+@media (max-width: 700px) {
+  .character-card { height: clamp(480px, 120vw, 600px); }
+  .character-card.is-expanded .character-card-copy { padding: 14px 16px 20px; }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .character-portrait-trigger,
+  .character-card.is-expanded .character-portrait-trigger { cursor: pointer; }
+  .character-portrait-cue-desktop { display: none; }
+  .character-portrait-cue-touch { display: inline; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .character-card,
+  .character-card .character-card-copy,
+  .character-card.is-expanded .character-card-copy { transition: none; }
+}
