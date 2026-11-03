@@ -1066,12 +1066,12 @@ body, .home-hero, .mission-section, .site-footer, .media-page {
 }
 
 /* Give the story heading a crisp black shadow while preserving dark-mode shimmer. */
-:root[data-theme="light"] body .storybook-title,
-:root[data-theme="light"] body .storybook-title em {
+:root[data-theme="light"] body #scripture-title,
+:root[data-theme="light"] body #scripture-title em {
   text-shadow: 0 2px 4px rgba(0, 0, 0, .82), 0 4px 8px rgba(0, 0, 0, .42) !important;
 }
-:root:not([data-theme="light"]) body .storybook-title,
-:root:not([data-theme="light"]) body .storybook-title em {
+:root:not([data-theme="light"]) body #scripture-title,
+:root:not([data-theme="light"]) body #scripture-title em {
   text-shadow: 0 2px 3px rgba(0, 0, 0, .9), 0 4px 9px rgba(0, 0, 0, .55), 0 0 7px rgba(255, 218, 111, .2) !important;
 }
 
