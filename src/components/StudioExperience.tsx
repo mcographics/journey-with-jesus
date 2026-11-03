@@ -1,10 +1,11 @@
 "use client";
 import { useCallback, useEffect, useMemo, useState, type FormEvent } from "react";
-import { Check, Film, ListVideo, LoaderCircle, LockKeyhole, LogOut, Mail, MessageCircle, Plus, UploadCloud, X } from "lucide-react";
+import { Check, Film, ListVideo, LoaderCircle, LockKeyhole, LogOut, Mail, MessageCircle, Plus, UploadCloud, Users, X } from "lucide-react";
 import type { Session, SupabaseClient } from "@supabase/supabase-js";
 import type { Database, VideoContentType, VideoQuality } from "@/lib/database.types";
 import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
 import { uploadVideoResumable } from "@/lib/supabase/resumable-upload";
+import { StudioCharacters } from "@/components/StudioCharacters";
 
 type SourceRow = Database["public"]["Tables"]["media_video_sources"]["Row"];
 type EpisodeRow = Database["public"]["Tables"]["media_episodes"]["Row"];
@@ -16,7 +17,7 @@ type EpisodeForm = {
   duration: string; number: string; orientation: "landscape" | "portrait"; published: boolean;
 };
 type PlaylistForm = { id: string; title: string; description: string; order: string; published: boolean; episodeIds: string[] };
-type Section = "episodes" | "playlists" | "comments";
+type Section = "episodes" | "playlists" | "comments" | "characters";
 const qualities: VideoQuality[] = ["720p", "1080p", "4K"];
 const freshEpisode = (): EpisodeForm => ({ id: "", title: "", description: "", scripture: "", thumbnail: "", duration: "", number: "1", orientation: "landscape", published: false });
 const freshPlaylist = (): PlaylistForm => ({ id: "", title: "", description: "", order: "0", published: false, episodeIds: [] });
@@ -42,6 +43,10 @@ export function StudioExperience() {
   const [uploadQuality, setUploadQuality] = useState<VideoQuality | null>(null);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [playlistForm, setPlaylistForm] = useState<PlaylistForm>(freshPlaylist);
+  const reportStudioNotice = useCallback((message: string, isError = false) => {
+    setNotice(message);
+    setNoticeError(isError);
+  }, []);
 
   useEffect(() => {
     if (!client) return;
@@ -305,7 +310,7 @@ export function StudioExperience() {
     <main id="main-content" className="studio-page">
       <div className="page-width">
         <header className="studio-topbar">
-          <div><p className="media-kicker">PRIVATE ADMIN AREA</p><h1>Journey Studio</h1><p>Upload video versions, organize public playlists, and review community comments.</p></div>
+          <div><p className="media-kicker">PRIVATE ADMIN AREA</p><h1>Journey Studio</h1><p>Upload video versions, organize public playlists, edit character dossiers, and review community comments.</p></div>
           <div className="studio-account"><span>{session.user.email}</span><button className="button button-outline" onClick={() => void signOut()}><LogOut size={15} />Sign out</button></div>
         </header>
         {notice && <p className={"studio-notice" + (noticeError ? " is-error" : "")} role="status">{notice}</p>}
@@ -313,6 +318,7 @@ export function StudioExperience() {
           <button type="button" role="tab" aria-selected={section === "episodes"} onClick={() => setSection("episodes")}><Film size={16} />Videos <span>{episodes.length}</span></button>
           <button type="button" role="tab" aria-selected={section === "playlists"} onClick={() => setSection("playlists")}><ListVideo size={16} />Playlists <span>{playlists.length}</span></button>
           <button type="button" role="tab" aria-selected={section === "comments"} onClick={() => setSection("comments")}><MessageCircle size={16} />Comments <span>{comments.filter((item) => item.status === "pending").length}</span></button>
+          <button type="button" role="tab" aria-selected={section === "characters"} onClick={() => setSection("characters")}><Users size={16} />Characters</button>
         </div>
         {loadingData && <p className="studio-loading" role="status"><LoaderCircle className="studio-spin" size={16} />Loading Studio…</p>}
 
@@ -415,6 +421,8 @@ export function StudioExperience() {
             ))}
           </section>
         )}
+
+        {section === "characters" && <StudioCharacters client={client} onNotice={reportStudioNotice} />}
       </div>
     </main>
   );

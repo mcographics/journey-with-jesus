@@ -14,6 +14,12 @@ export type Database = {
       published_episodes: { Row: { id: string; published: boolean }; Insert: { id: string; published?: boolean }; Update: never; Relationships: [] };
       comment_rate_limits: { Row: { fingerprint_hash: string; next_allowed_at: string }; Insert: never; Update: never; Relationships: [] };
       media_admins: { Row: { user_id: string; created_at: string }; Insert: { user_id: string; created_at?: string }; Update: never; Relationships: [] };
+      media_characters: {
+        Row: { id: string; name: string; role: string; summary: string; scripture_references: string; portrait_url: string | null; sort_order: number; published: boolean; created_at: string; updated_at: string };
+        Insert: { id: string; name: string; role: string; summary: string; scripture_references?: string; portrait_url?: string | null; sort_order?: number; published?: boolean };
+        Update: { name?: string; role?: string; summary?: string; scripture_references?: string; portrait_url?: string | null; sort_order?: number; published?: boolean; updated_at?: string };
+        Relationships: [];
+      };
       media_episodes: {
         Row: { id: string; title: string; description: string; scripture_reference: string | null; thumbnail_url: string | null; duration_seconds: number | null; episode_number: number; orientation: "landscape" | "portrait"; published: boolean; created_at: string; updated_at: string };
         Insert: { id: string; title: string; description?: string; scripture_reference?: string | null; thumbnail_url?: string | null; duration_seconds?: number | null; episode_number?: number; orientation?: "landscape" | "portrait"; published?: boolean };

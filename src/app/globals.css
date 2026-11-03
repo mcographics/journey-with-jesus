@@ -718,3 +718,62 @@ body, .home-hero, .mission-section, .site-footer, .media-page {
     filter: drop-shadow(0 0 2px var(--gold-glow));
   }
 }
+
+
+/* Brighter yellow-gold type with a dark edge and a restrained polished glint. */
+:root[data-theme="light"] {
+  --gold: #896400;
+  --gold-bright: #987000;
+  --gold-text: #896400;
+  --gold-text-bright: #987000;
+  --gold-outline: rgba(181, 135, 0, .64);
+  --gold-outline-flash: rgba(255, 226, 117, .99);
+  --gold-glow: rgba(236, 186, 26, .34);
+}
+@keyframes gold-text-glimmer {
+  0%, 74%, 100% { text-shadow: 0 1px 2px rgba(0, 0, 0, .58), 0 0 3px rgba(237, 190, 39, .18); }
+  78%, 82% { text-shadow: 0 1px 2px rgba(0, 0, 0, .62), 0 0 7px rgba(255, 226, 117, .72), 0 0 13px rgba(237, 190, 39, .3); }
+  86% { text-shadow: 0 1px 2px rgba(0, 0, 0, .58), 0 0 3px rgba(237, 190, 39, .18); }
+}
+:root[data-theme="light"] .home-hero h1 em,
+:root[data-theme="light"] h2 em,
+:root[data-theme="light"] .hero-subtitle,
+:root[data-theme="light"] .storybook-eyebrow,
+:root[data-theme="light"] .storybook-title em,
+:root[data-theme="light"] .mission-copy h2 em,
+:root[data-theme="light"] .invitation-heading .eyebrow,
+:root[data-theme="light"] .invitation-heading h2 em,
+:root[data-theme="light"] .character-role,
+:root[data-theme="light"] .character-passages,
+:root[data-theme="light"] .character-passages p,
+:root[data-theme="light"] .character-passages span,
+:root[data-theme="light"] .character-passages strong,
+:root[data-theme="light"] .footer-note,
+:root[data-theme="light"] .footer-links span,
+:root[data-theme="light"] .comment-card strong,
+:root[data-theme="light"] .comments-unavailable strong {
+  color: var(--gold-text);
+  animation: gold-text-glimmer 6.4s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  :root[data-theme="light"] .home-hero h1 em,
+  :root[data-theme="light"] h2 em,
+  :root[data-theme="light"] .hero-subtitle,
+  :root[data-theme="light"] .storybook-eyebrow,
+  :root[data-theme="light"] .storybook-title em,
+  :root[data-theme="light"] .mission-copy h2 em,
+  :root[data-theme="light"] .invitation-heading .eyebrow,
+  :root[data-theme="light"] .invitation-heading h2 em,
+  :root[data-theme="light"] .character-role,
+  :root[data-theme="light"] .character-passages,
+  :root[data-theme="light"] .character-passages p,
+  :root[data-theme="light"] .character-passages span,
+  :root[data-theme="light"] .character-passages strong,
+  :root[data-theme="light"] .footer-note,
+  :root[data-theme="light"] .footer-links span,
+  :root[data-theme="light"] .comment-card strong,
+  :root[data-theme="light"] .comments-unavailable strong {
+    animation: none;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, .58), 0 0 4px rgba(237, 190, 39, .24);
+  }
+}

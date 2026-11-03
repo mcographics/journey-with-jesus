@@ -184,3 +184,27 @@
 .studio-order-row button:disabled { opacity: .4; cursor: not-allowed; }
 :root[data-theme="light"] .studio-order-row { color: #39465a; border-color: rgba(178, 133, 36,.16); }
 :root[data-theme="light"] .studio-order-row button { color: #735829; border-color: rgba(178, 133, 36,.19); }
+
+
+/* Character editor inside the existing Upper Room admin platform. */
+.studio-characters-grid { grid-template-columns: minmax(240px, .72fr) minmax(0, 1.45fr); }
+.studio-character-list-copy { display: flex; min-width: 0; align-items: center; gap: 10px; }
+.studio-character-list-copy img { width: 44px; height: 52px; flex: 0 0 auto; border: 1px solid rgba(228, 188, 112, .25); border-radius: 3px; object-fit: cover; }
+.studio-character-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 13px; }
+.studio-character-preview { display: flex; align-items: center; gap: 14px; color: #aeb2b9; font-size: 10px; }
+.studio-character-preview img { width: 72px; height: 88px; border: 1px solid rgba(228, 188, 112, .32); border-radius: 3px; object-fit: cover; }
+.studio-character-preview button { border: 0; color: #e6c27e; background: transparent; cursor: pointer; font: inherit; text-decoration: underline; }
+@media (max-width: 760px) {
+  .studio-characters-grid { grid-template-columns: 1fr; }
+  .studio-character-fields { grid-template-columns: 1fr; }
+}
+
+:root .studio-page .studio-tabs button[aria-selected="true"],
+:root .studio-page .studio-small-button,
+:root .studio-page .studio-panel-heading > svg,
+:root .studio-page .studio-upload-field > span,
+:root .studio-page .studio-character-preview button,
+:root .studio-page .studio-file-hint strong {
+  color: #ffd75e;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, .78), 0 0 7px rgba(255, 215, 94, .42);
+}
