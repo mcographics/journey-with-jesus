@@ -262,7 +262,7 @@ button { color: inherit; }
   .header-inner { width: 100%; padding-top: 0; }
   .desktop-navigation { display: none; }
   .mobile-navigation { position: absolute; z-index: 40; top: calc(100svh - 64px - env(safe-area-inset-bottom, 0px)); right: calc(16px + env(safe-area-inset-right, 0px)); display: flex; flex-direction: column; align-items: flex-end; gap: 10px; pointer-events: auto; }
-  .home-masthead-wordmark { top: 156px; right: 10px; width: min(38vw, 154px); }
+  .home-masthead-wordmark { top: 56px; right: 10px; width: min(38vw, 154px); }
   .home-hero-content { padding-block: 34px 72px; }
   .masthead-ticker { min-height: 36px; }
   .masthead-ticker-item { padding-block: 9px; padding-inline: 15px; font-size: 10px; letter-spacing: .065em; }
