@@ -1166,3 +1166,16 @@ body, .home-hero, .mission-section, .site-footer, .media-page {
   backdrop-filter: blur(2px);
   text-shadow: 0 1px 2px rgba(0, 0, 0, .82) !important;
 }
+
+
+/* Keep the Our Story label white and its sparkle bright gold in both themes. */
+:root[data-theme="light"] body .storybook-eyebrow > span,
+:root:not([data-theme="light"]) body .storybook-eyebrow > span {
+  color: #ffffff !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+:root[data-theme="light"] body .storybook-eyebrow > svg,
+:root:not([data-theme="light"]) body .storybook-eyebrow > svg {
+  color: #ffd54f !important;
+  filter: drop-shadow(0 0 7px rgba(255, 213, 79, .72)) !important;
+}
