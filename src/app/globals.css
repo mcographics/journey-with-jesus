@@ -887,9 +887,9 @@ body, .home-hero, .mission-section, .site-footer, .media-page {
   --gold-text-bright: #2e82c4;
 }
 :root:not([data-theme="light"]) {
-  --ink: #f1d77d;
-  --muted: #dbc879;
-  --quiet: #bca968;
+  --ink: #f8e7a6;
+  --muted: #ebd995;
+  --quiet: #d4c384;
   --gold: #e8c24e;
   --gold-bright: #ffe792;
 }
@@ -1056,4 +1056,46 @@ body, .home-hero, .mission-section, .site-footer, .media-page {
   -webkit-background-clip: border-box !important;
   -webkit-text-fill-color: currentColor !important;
   animation: none !important;
+}
+
+
+/* Show the full homepage image color without the vignette overlays. */
+.storybook-shade,
+.invitation-shade {
+  display: none !important;
+}
+
+/* Give the story heading a crisp black shadow while preserving dark-mode shimmer. */
+:root[data-theme="light"] body .storybook-title,
+:root[data-theme="light"] body .storybook-title em {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, .82), 0 4px 8px rgba(0, 0, 0, .42) !important;
+}
+:root:not([data-theme="light"]) body .storybook-title,
+:root:not([data-theme="light"]) body .storybook-title em {
+  text-shadow: 0 2px 3px rgba(0, 0, 0, .9), 0 4px 9px rgba(0, 0, 0, .55), 0 0 7px rgba(255, 218, 111, .2) !important;
+}
+
+/* Use a gold ticker surface in light mode with readable dark text and red verse words. */
+:root[data-theme="light"] .masthead-ticker {
+  background: linear-gradient(110deg, #e8bd4f 0%, #f3d875 48%, #ddb345 100%);
+  border-top-color: rgba(80, 59, 16, .55);
+  box-shadow: 0 -8px 26px rgba(17, 24, 39, .16);
+}
+:root[data-theme="light"] body .masthead-ticker .masthead-ticker-item {
+  color: #202b3b !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+:root[data-theme="light"] body .masthead-ticker .masthead-ticker-words {
+  color: #861c1c !important;
+  text-shadow: none !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+:root[data-theme="light"] body .masthead-ticker .masthead-ticker-reference {
+  color: #382e17 !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+:root[data-theme="light"] body .masthead-ticker .masthead-ticker-separator {
+  color: #76520e !important;
+  text-shadow: none !important;
+  -webkit-text-fill-color: currentColor !important;
 }
