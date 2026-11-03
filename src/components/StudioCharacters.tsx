@@ -41,7 +41,10 @@ export function StudioCharacters({ client, onNotice }: Props) {
     setLoading(false);
   }, [client, onNotice]);
 
-  useEffect(() => { void loadCharacters(); }, [loadCharacters]);
+  useEffect(() => {
+    const timer = window.setTimeout(() => { void loadCharacters(); }, 0);
+    return () => window.clearTimeout(timer);
+  }, [loadCharacters]);
 
   function editCharacter(character: CharacterRow) {
     setSelectedId(character.id);
