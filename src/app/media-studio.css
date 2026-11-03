@@ -213,3 +213,43 @@
 :root[data-theme="light"] .studio-page {
   background: radial-gradient(ellipse at 16% 6%, rgba(139, 187, 238, .11), transparent 38%), linear-gradient(145deg, #ffffff 0%, #f9fcff 54%, #eef5fd 100%);
 }
+
+/* Keep all Upper Room dark-mode typography a single soft champagne color. */
+:root:not([data-theme="light"]) .studio-page {
+  --studio-dark-text: #e8ddc2;
+  color: var(--studio-dark-text) !important;
+}
+:root:not([data-theme="light"]) .studio-page :is(
+  h1, h2, h3, h4, h5, h6, p, li, span, strong, b, em, small, label,
+  legend, dt, dd, time, figcaption, blockquote, summary, a, button,
+  input, textarea, select, option
+) {
+  color: var(--studio-dark-text) !important;
+  text-shadow: none !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+:root:not([data-theme="light"]) .studio-page :is(
+  h1, h2, h3, h4, h5, h6, strong, b, em, .eyebrow, .section-index,
+  .character-role, .character-passages strong, .character-passages span,
+  .footer-note, .footer-links span, .studio-comment strong
+) {
+  background-image: none !important;
+  background-clip: border-box !important;
+  -webkit-background-clip: border-box !important;
+  animation: none !important;
+  filter: none !important;
+}
+:root:not([data-theme="light"]) .studio-page :is(input, textarea, select)::placeholder {
+  color: var(--studio-dark-text) !important;
+  opacity: 1;
+}
+:root:not([data-theme="light"]) .studio-page :is(
+  .is-error, .studio-notice.is-error, .catalog-notice.is-error,
+  .studio-status.is-live, .studio-approve, .studio-reject, [aria-invalid="true"]
+) {
+  color: var(--studio-dark-text) !important;
+  text-shadow: none !important;
+  -webkit-text-fill-color: currentColor !important;
+  background-image: none !important;
+  animation: none !important;
+}
