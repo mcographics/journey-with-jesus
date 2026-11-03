@@ -58,6 +58,8 @@ button { color: inherit; }
 .nav-link.is-current svg { color: #76551d; }
 
 .home-masthead { position: relative; width: 100%; overflow: hidden; background: #111827; line-height: 0; touch-action: manipulation; }
+.home-masthead-brand { display: flex; justify-content: center; align-items: center; overflow: hidden; padding: 76px 24px 14px; background: radial-gradient(ellipse at 50% 100%, rgba(243, 213, 149, .11), transparent 54%), #111827; line-height: 0; }
+.home-masthead-wordmark { display: block; width: min(100%, clamp(260px, 32vw, 480px)); height: auto; filter: drop-shadow(0 5px 20px rgba(3, 8, 20, .35)); }
 .responsive-picture { display: block; line-height: 0; }
 .responsive-picture-fill { position: absolute; inset: 0; display: block; }
 .home-masthead-image { display: block; width: 100%; height: auto; }
@@ -261,6 +263,8 @@ button { color: inherit; }
   .header-inner { width: 100%; padding-top: 0; }
   .desktop-navigation { display: none; }
   .mobile-navigation { position: absolute; z-index: 40; top: calc(100svh - 64px - env(safe-area-inset-bottom, 0px)); right: calc(16px + env(safe-area-inset-right, 0px)); display: flex; flex-direction: column; align-items: flex-end; gap: 10px; pointer-events: auto; }
+  .home-masthead-brand { padding: calc(58px + env(safe-area-inset-top, 0px)) 18px 10px; }
+  .home-masthead-wordmark { width: min(100%, 320px); }
   .home-hero-content { padding-block: 34px 72px; }
   .masthead-ticker { min-height: 36px; }
   .masthead-ticker-item { padding-block: 9px; padding-inline: 15px; font-size: 10px; letter-spacing: .065em; }

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight, BookOpen, Heart, Sparkles } from "lucide-react";
 import MastheadTicker from "@/components/MastheadTicker";
 import MastheadEasterEgg from "@/components/MastheadEasterEgg";
@@ -24,6 +25,17 @@ export const metadata: Metadata = {
 export default function HomePage() {
   return (
     <main id="main-content">
+      <div className="home-masthead-brand">
+        <Image
+          alt="Journey with Jesus"
+          className="home-masthead-wordmark"
+          height={1556}
+          loading="eager"
+          src={`${basePath}/images/journey-with-jesus-wordmark.webp`}
+          unoptimized
+          width={4040}
+        />
+      </div>
       <MastheadEasterEgg imageSrc={`${basePath}/images/header-easter-egg-2560.webp`}>
         <ResponsivePicture
           alt="Jesus walks with a young man beneath an autumn tree, overlooking a sunlit valley."
