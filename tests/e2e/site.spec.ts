@@ -126,3 +126,24 @@ test("Upper Room dark mode uses soft-white text", async ({ page }) => {
   await expect(studioTitle).toHaveCSS("text-shadow", "none");
   await expect(studioCopy).toHaveCSS("color", "rgb(229, 231, 235)");
 });
+
+test("Media, Characters, Team, and Store dark mode use soft-white text", async ({ page }) => {
+  await page.addInitScript(() => {
+    window.localStorage.setItem("journey-with-jesus-theme-mode", "dark");
+  });
+
+  for (const { route, selector } of [
+    { route: "/media/", selector: ".media-page" },
+    { route: "/characters/", selector: ".characters-page" },
+    { route: "/team/", selector: ".team-page" },
+    { route: "/store/", selector: ".store-page" },
+  ]) {
+    await page.goto(route);
+    const title = page.locator(`${selector} h1`).first();
+    const copy = page.locator(`${selector} p`).first();
+    await expect(title).toBeVisible();
+    await expect(title).toHaveCSS("color", "rgb(229, 231, 235)");
+    await expect(title).toHaveCSS("text-shadow", "none");
+    await expect(copy).toHaveCSS("color", "rgb(229, 231, 235)");
+  }
+});

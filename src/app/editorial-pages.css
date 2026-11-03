@@ -154,17 +154,17 @@
   background: rgba(126, 171, 220, .1);
 }
 
-/* Keep dark-mode copy on characters, team, and store pages bright gold and clear. */
+/* Keep dark-mode copy on characters, team, and store pages soft white and clear. */
 :root:not([data-theme="light"]) body .editorial-page {
-  --page-dark-gold: #ffd75e;
-  color: var(--page-dark-gold) !important;
+  --page-dark-copy: #e5e7eb;
+  color: var(--page-dark-copy) !important;
 }
 :root:not([data-theme="light"]) body .editorial-page :is(
   h1, h2, h3, h4, h5, h6, p, li, span, strong, b, em, small, label,
   legend, dt, dd, time, figcaption, blockquote, summary, a, button,
   input, textarea, select, option
 ) {
-  color: var(--page-dark-gold) !important;
+  color: var(--page-dark-copy) !important;
   text-shadow: none !important;
   -webkit-text-fill-color: currentColor !important;
 }
@@ -182,7 +182,7 @@
   filter: none !important;
 }
 :root:not([data-theme="light"]) body .editorial-page :is(input, textarea, select)::placeholder {
-  color: var(--page-dark-gold) !important;
+  color: #c2c6cf !important;
   opacity: 1;
 }
 :root:not([data-theme="light"]) body .editorial-page .button-gold {

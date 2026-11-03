@@ -214,17 +214,17 @@
   background: radial-gradient(ellipse at 16% 6%, rgba(139, 187, 238, .11), transparent 38%), linear-gradient(145deg, #ffffff 0%, #f9fcff 54%, #eef5fd 100%);
 }
 
-/* Keep public Media copy in the site's bright-gold dark-theme treatment. */
+/* Public Media copy uses the same soft-white dark-theme text as Upper Room. */
 :root:not([data-theme="light"]) body .media-page {
-  --page-dark-gold: #ffd75e;
-  color: var(--page-dark-gold) !important;
+  --page-dark-copy: #e5e7eb;
+  color: var(--page-dark-copy) !important;
 }
 :root:not([data-theme="light"]) body .media-page :is(
   h1, h2, h3, h4, h5, h6, p, li, span, strong, b, em, small, label,
   legend, dt, dd, time, figcaption, blockquote, summary, a, button,
   input, textarea, select, option
 ) {
-  color: var(--page-dark-gold) !important;
+  color: var(--page-dark-copy) !important;
   text-shadow: none !important;
   -webkit-text-fill-color: currentColor !important;
 }
@@ -240,15 +240,21 @@
   filter: none !important;
 }
 :root:not([data-theme="light"]) body .media-page :is(input, textarea, select)::placeholder {
-  color: var(--page-dark-gold) !important;
+  color: #c2c6cf !important;
   opacity: 1;
 }
 :root:not([data-theme="light"]) body .media-page :is(
   .is-error, .studio-notice.is-error, .catalog-notice.is-error,
   .studio-status.is-live, .studio-approve, .studio-reject, [aria-invalid="true"]
 ) {
-  color: var(--page-dark-gold) !important;
+  color: #ffaaa0 !important;
   text-shadow: none !important;
+  -webkit-text-fill-color: currentColor !important;
+  background-image: none !important;
+  animation: none !important;
+}
+:root:not([data-theme="light"]) body .media-page :is(.studio-status.is-live, .studio-approve) {
+  color: #a8dfad !important;
   -webkit-text-fill-color: currentColor !important;
   background-image: none !important;
   animation: none !important;
