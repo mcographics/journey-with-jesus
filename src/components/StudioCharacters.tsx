@@ -1,10 +1,11 @@
 "use client";
 
-import { useCallback, useEffect, useState, type FormEvent } from "react";
+import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
 import { Check, LoaderCircle, Plus, UploadCloud, Users } from "lucide-react";
 import Image from "next/image";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/database.types";
+import { createStorageObjectId } from "@/lib/storage-object-id";
 
 type CharacterRow = Database["public"]["Tables"]["media_characters"]["Row"];
 type Props = {
@@ -30,15 +31,23 @@ export function StudioCharacters({ client, onNotice }: Props) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [form, setForm] = useState<CharacterForm>(blankForm);
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const portraitInput = useRef<HTMLInputElement>(null);
   const [removePortrait, setRemovePortrait] = useState(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
   const loadCharacters = useCallback(async () => {
-    const { data, error } = await client.from("media_characters").select("*").order("sort_order");
-    if (error) onNotice(error.message, true);
-    else setCharacters(data ?? []);
-    setLoading(false);
+    try {
+      const { data, error } = await client.from("media_characters").select("*").order("sort_order");
+      if (error) throw error;
+      setCharacters(data ?? []);
+      return true;
+    } catch (error) {
+      onNotice("Character list could not be refreshed: " + errorMessage(error), true);
+      return false;
+    } finally {
+      setLoading(false);
+    }
   }, [client, onNotice]);
 
   useEffect(() => {
@@ -58,6 +67,7 @@ export function StudioCharacters({ client, onNotice }: Props) {
       published: character.published,
     });
     setImageFile(null);
+    if (portraitInput.current) portraitInput.current.value = "";
     setRemovePortrait(false);
   }
 
@@ -65,6 +75,7 @@ export function StudioCharacters({ client, onNotice }: Props) {
     setSelectedId(null);
     setForm(blankForm());
     setImageFile(null);
+    if (portraitInput.current) portraitInput.current.value = "";
     setRemovePortrait(false);
   }
 
@@ -82,56 +93,61 @@ export function StudioCharacters({ client, onNotice }: Props) {
     }
 
     setSaving(true);
-    const savedValues = {
-      name,
-      role: form.role.trim(),
-      summary: form.summary.trim(),
-      scripture_references: form.scripture_references.trim(),
-      portrait_url: removePortrait ? null : (form.portrait_url || null),
-      sort_order: Number.parseInt(form.sort_order, 10) || 0,
-      published: form.published,
-    };
-    const saved = selectedId
-      ? await client.from("media_characters").update(savedValues).eq("id", selectedId)
-      : await client.from("media_characters").insert({ id, ...savedValues });
-    if (saved.error) {
-      onNotice(saved.error.message, true);
-      setSaving(false);
-      return;
-    }
+    let uploadedPath: string | null = null;
+    try {
+      let portraitUrl = removePortrait ? null : (form.portrait_url || null);
+      if (imageFile) {
+        const extensionByType: Record<string, string> = {
+          "image/jpeg": "jpg", "image/png": "png", "image/webp": "webp", "image/avif": "avif",
+        };
+        const path = id + "/" + createStorageObjectId() + "." + extensionByType[imageFile.type];
+        const { data: uploaded, error: uploadError } = await client.storage
+          .from("character-portraits")
+          .upload(path, imageFile, { cacheControl: "3600", contentType: imageFile.type, upsert: false });
+        if (uploadError || !uploaded) {
+          throw new Error("Portrait upload failed: " + (uploadError?.message ?? "unknown upload error"));
+        }
+        uploadedPath = uploaded.path;
+        portraitUrl = client.storage.from("character-portraits").getPublicUrl(uploaded.path).data.publicUrl;
+      }
 
-    let portraitUrl = savedValues.portrait_url;
-    if (imageFile) {
-      const extensionByType: Record<string, string> = {
-        "image/jpeg": "jpg", "image/png": "png", "image/webp": "webp", "image/avif": "avif",
+      const savedValues = {
+        name,
+        role: form.role.trim(),
+        summary: form.summary.trim(),
+        scripture_references: form.scripture_references.trim(),
+        portrait_url: portraitUrl,
+        sort_order: Number.parseInt(form.sort_order, 10) || 0,
+        published: form.published,
       };
-      const path = id + "/" + crypto.randomUUID() + "." + extensionByType[imageFile.type];
-      const { data: uploaded, error: uploadError } = await client.storage
-        .from("character-portraits")
-        .upload(path, imageFile, { cacheControl: "3600", contentType: imageFile.type, upsert: false });
-      if (uploadError || !uploaded) {
-        onNotice("Character details saved, but the portrait upload failed: " + (uploadError?.message ?? "unknown upload error"), true);
-        setSaving(false);
-        await loadCharacters();
-        return;
+      if (selectedId) {
+        const { data, error } = await client.from("media_characters").update(savedValues).eq("id", selectedId).select("id").maybeSingle();
+        if (error) throw error;
+        if (!data) throw new Error("Character details were not saved. Reload the list and try again.");
+      } else {
+        const { data, error } = await client.from("media_characters").insert({ id, ...savedValues }).select("id").single();
+        if (error) throw error;
+        if (!data) throw new Error("Character details could not be saved.");
       }
-      portraitUrl = client.storage.from("character-portraits").getPublicUrl(uploaded.path).data.publicUrl;
-      const portraitSave = await client.from("media_characters").update({ portrait_url: portraitUrl }).eq("id", id);
-      if (portraitSave.error) {
-        onNotice("Character details saved, but its portrait link could not be saved: " + portraitSave.error.message, true);
-        setSaving(false);
-        await loadCharacters();
-        return;
-      }
-    }
 
-    setSelectedId(id);
-    setForm((current) => ({ ...current, portrait_url: portraitUrl ?? "" }));
-    setImageFile(null);
-    setRemovePortrait(false);
-    onNotice("Character saved in Upper Room.", false);
-    await loadCharacters();
-    setSaving(false);
+      const uploadedPortrait = Boolean(imageFile);
+      uploadedPath = null;
+      setSelectedId(id);
+      setForm((current) => ({ ...current, portrait_url: portraitUrl ?? "" }));
+      setImageFile(null);
+      if (portraitInput.current) portraitInput.current.value = "";
+      setRemovePortrait(false);
+      if (await loadCharacters()) {
+        onNotice(uploadedPortrait ? "Character and portrait saved in Upper Room." : "Character details saved in Upper Room.", false);
+      }
+    } catch (error) {
+      if (uploadedPath) {
+        try { await client.storage.from("character-portraits").remove([uploadedPath]); } catch { /* Keep the original save error visible. */ }
+      }
+      onNotice(errorMessage(error), true);
+    } finally {
+      setSaving(false);
+    }
   }
 
   return (
@@ -166,7 +182,7 @@ export function StudioCharacters({ client, onNotice }: Props) {
           <label className="studio-span-two">Bible references<input value={form.scripture_references} onChange={(event) => setForm({ ...form, scripture_references: event.target.value })} maxLength={500} placeholder="e.g. Luke 1–2 · John 2" /></label>
           <label>Display order<input type="number" value={form.sort_order} onChange={(event) => setForm({ ...form, sort_order: event.target.value })} /></label>
           <label className="studio-check"><input type="checkbox" checked={form.published} onChange={(event) => setForm({ ...form, published: event.target.checked })} />Publish on the public page</label>
-          <label className="studio-span-two studio-upload-field"><span>Portrait image</span><input type="file" accept="image/jpeg,image/png,image/webp,image/avif" onChange={(event) => { setImageFile(event.target.files?.[0] ?? null); setRemovePortrait(false); }} /><small>{imageFile?.name ?? (form.portrait_url ? "A portrait is saved. Choose a new image to replace it." : "No portrait uploaded.")}</small></label>
+          <label className="studio-span-two studio-upload-field"><span>Portrait image</span><input ref={portraitInput} type="file" accept="image/jpeg,image/png,image/webp,image/avif" onChange={(event) => { setImageFile(event.target.files?.[0] ?? null); setRemovePortrait(false); }} /><small>{imageFile?.name ?? (form.portrait_url ? "A portrait is saved. Choose a new image to replace it." : "No portrait uploaded.")}</small></label>
         </div>
         {(form.portrait_url || removePortrait) && (
           <div className="studio-character-preview">
@@ -184,4 +200,8 @@ export function StudioCharacters({ client, onNotice }: Props) {
 function slugify(value: string): string {
   return value.toLocaleLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
     .replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 100);
+}
+
+function errorMessage(error: unknown): string {
+  return error instanceof Error ? error.message : "Character could not be saved.";
 }

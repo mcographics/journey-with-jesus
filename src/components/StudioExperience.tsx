@@ -1,10 +1,11 @@
 "use client";
-import { useCallback, useEffect, useMemo, useState, type FormEvent } from "react";
+import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
 import { Check, Film, ListVideo, LoaderCircle, LockKeyhole, LogOut, Mail, MessageCircle, Plus, UploadCloud, Users, X } from "lucide-react";
 import type { Session } from "@supabase/supabase-js";
 import type { Database, VideoContentType, VideoQuality } from "@/lib/database.types";
-import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
+import { createBrowserSupabaseClient, isSupabaseConfigured } from "@/lib/supabase/browser";
 import { uploadVideoResumable } from "@/lib/supabase/resumable-upload";
+import { createStorageObjectId } from "@/lib/storage-object-id";
 import { StudioCharacters } from "@/components/StudioCharacters";
 
 type SourceRow = Database["public"]["Tables"]["media_video_sources"]["Row"];
@@ -23,7 +24,7 @@ const freshEpisode = (): EpisodeForm => ({ id: "", title: "", description: "", s
 const freshPlaylist = (): PlaylistForm => ({ id: "", title: "", description: "", order: "0", published: false, episodeIds: [] });
 
 export function StudioExperience() {
-  const client = useMemo(() => createBrowserSupabaseClient(), []);
+  const [client, setClient] = useState<ReturnType<typeof createBrowserSupabaseClient>>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -39,13 +40,25 @@ export function StudioExperience() {
   const [episodeForm, setEpisodeForm] = useState<EpisodeForm>(freshEpisode);
   const [selectedEpisodeId, setSelectedEpisodeId] = useState("");
   const [files, setFiles] = useState<Record<VideoQuality, File | null>>({ "720p": null, "1080p": null, "4K": null });
+  const videoFileInputs = useRef<Partial<Record<VideoQuality, HTMLInputElement>>>({});
   const [uploadStatus, setUploadStatus] = useState("");
   const [uploadQuality, setUploadQuality] = useState<VideoQuality | null>(null);
   const [uploadProgress, setUploadProgress] = useState(0);
+  const [savingEpisode, setSavingEpisode] = useState(false);
   const [playlistForm, setPlaylistForm] = useState<PlaylistForm>(freshPlaylist);
   const reportStudioNotice = useCallback((message: string, isError = false) => {
     setNotice(message);
     setNoticeError(isError);
+  }, []);
+
+  function clearVideoFileSelections() {
+    setFiles({ "720p": null, "1080p": null, "4K": null });
+    Object.values(videoFileInputs.current).forEach((input) => { if (input) input.value = ""; });
+  }
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => setClient(createBrowserSupabaseClient()), 0);
+    return () => window.clearTimeout(timer);
   }, []);
 
   useEffect(() => {
@@ -114,8 +127,9 @@ export function StudioExperience() {
     event.preventDefault();
     if (!client) return;
     setSendingLink(true); setNotice(""); setNoticeError(false);
-    const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "/journey-with-jesus";
-    const redirect = window.location.origin + basePath.replace(/\/$/, "") + "/studio";
+    const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+    const redirectPath = basePath.replace(/\/$/, "") + "/studio/";
+    const redirect = new URL(redirectPath, window.location.origin).toString();
     const { error } = await client.auth.signInWithOtp({
       email: email.trim(),
       options: { emailRedirectTo: redirect, shouldCreateUser: false },
@@ -139,18 +153,18 @@ export function StudioExperience() {
       duration: episode.duration_seconds === null ? "" : String(episode.duration_seconds),
       number: String(episode.episode_number), orientation: episode.orientation, published: episode.published,
     });
-    setFiles({ "720p": null, "1080p": null, "4K": null });
+    clearVideoFileSelections();
     setUploadStatus("");
   }
 
   function newEpisode() {
     setSelectedEpisodeId(""); setEpisodeForm(freshEpisode());
-    setFiles({ "720p": null, "1080p": null, "4K": null }); setUploadStatus("");
+    clearVideoFileSelections(); setUploadStatus("");
   }
 
   async function saveEpisode(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!client) return;
+    if (!client || savingEpisode) return;
     const id = episodeForm.id.trim() || slugify(episodeForm.title);
     if (!id) { setNotice("Add a title so Studio can create a story ID."); setNoticeError(true); return; }
     const existing = episodes.find((episode) => episode.id === id);
@@ -165,11 +179,18 @@ export function StudioExperience() {
       episode_number: Number(episodeForm.number) || 1, orientation: episodeForm.orientation,
       published: episodeForm.published,
     };
-    const { error } = await client.from("media_episodes").upsert(payload);
-    if (error) { setNotice(error.message); setNoticeError(true); return; }
-    setEpisodeForm((current) => ({ ...current, id }));
-    setSelectedEpisodeId(id); setNotice("Story details saved."); setNoticeError(false);
-    await loadStudioData();
+    setSavingEpisode(true);
+    try {
+      const { error } = await client.from("media_episodes").upsert(payload);
+      if (error) throw error;
+      setEpisodeForm((current) => ({ ...current, id }));
+      setSelectedEpisodeId(id); setNotice("Story details saved."); setNoticeError(false);
+      await loadStudioData();
+    } catch (error) {
+      setNotice(errorMessage(error)); setNoticeError(true);
+    } finally {
+      setSavingEpisode(false);
+    }
   }
 
   async function uploadSources(event: FormEvent<HTMLFormElement>) {
@@ -178,12 +199,15 @@ export function StudioExperience() {
     const selectedFiles = qualities.flatMap((quality) => files[quality] ? [{ quality, file: files[quality]! }] : []);
     if (selectedFiles.length === 0) { setUploadStatus("Choose one or more video files first."); return; }
     setUploadStatus(""); setNoticeError(false);
+    const completedQualities: VideoQuality[] = [];
+    let pendingUploadPath: string | null = null;
     try {
       for (const item of selectedFiles) {
         const contentType = getVideoContentType(item.file);
         setUploadQuality(item.quality); setUploadProgress(0);
         const safeName = item.file.name.toLowerCase().replace(/[^a-z0-9.-]+/g, "-").replace(/^-+|-+$/g, "") || "video.mp4";
-        const path = selectedEpisodeId + "/" + item.quality.toLowerCase() + "-" + Date.now() + "-" + safeName;
+        const path = selectedEpisodeId + "/" + item.quality.toLowerCase() + "-" + createStorageObjectId() + "-" + safeName;
+        pendingUploadPath = path;
         await uploadVideoResumable(client, item.file, path, setUploadProgress);
         const prior = await client.from("media_video_sources").select("storage_path").eq("episode_id", selectedEpisodeId).eq("quality", item.quality).maybeSingle();
         if (prior.error) throw prior.error;
@@ -192,15 +216,31 @@ export function StudioExperience() {
           content_type: contentType, size_bytes: item.file.size,
         }, { onConflict: "episode_id,quality" });
         if (error) throw error;
+        pendingUploadPath = null;
+        completedQualities.push(item.quality);
+        setFiles((current) => ({ ...current, [item.quality]: null }));
+        const completedInput = videoFileInputs.current[item.quality];
+        if (completedInput) completedInput.value = "";
         const oldPath = prior.data?.storage_path;
         if (oldPath) await client.storage.from("media-videos").remove([oldPath]);
       }
       setUploadStatus("Video files uploaded. You can now publish the story.");
       setUploadQuality(null); setUploadProgress(100);
-      setFiles({ "720p": null, "1080p": null, "4K": null });
       await loadStudioData();
     } catch (error) {
-      setUploadStatus(errorMessage(error)); setNoticeError(true); setUploadQuality(null);
+      let cleanupNote = "";
+      if (pendingUploadPath) {
+        try {
+          const { error: cleanupError } = await client.storage.from("media-videos").remove([pendingUploadPath]);
+          if (cleanupError) cleanupNote = " The unfinished upload could not be removed.";
+        } catch {
+          cleanupNote = " The unfinished upload could not be removed.";
+        }
+      }
+      const completedNote = completedQualities.length ? " Saved successfully: " + completedQualities.join(", ") + "." : "";
+      setUploadStatus(errorMessage(error) + completedNote + cleanupNote); setNoticeError(true);
+    } finally {
+      setUploadQuality(null);
     }
   }
 
@@ -271,10 +311,17 @@ export function StudioExperience() {
     setComments((current) => current.map((comment) => comment.id === commentId ? { ...comment, status } : comment));
   }
 
-  if (!client) return (
+  if (!isSupabaseConfigured()) return (
     <main id="main-content" className="studio-page"><section className="studio-gate">
       <span className="studio-mark"><LockKeyhole size={24} /></span><h1>Studio setup needed</h1>
       <p>The private video Studio will appear after the site owner connects the Supabase project and deploys the media migration.</p>
+    </section></main>
+  );
+
+  if (!client) return (
+    <main id="main-content" className="studio-page"><section className="studio-gate" role="status">
+      <span className="studio-mark"><LoaderCircle className="studio-spin" size={24} /></span><h1>Opening the Upper Room</h1>
+      <p>Connecting to the secure media library…</p>
     </section></main>
   );
 
@@ -347,7 +394,7 @@ export function StudioExperience() {
                   <label className="studio-span-two">Description<textarea value={episodeForm.description} onChange={(event) => setEpisodeForm({ ...episodeForm, description: event.target.value })} maxLength={5000} rows={4} /></label>
                   <label className="studio-check"><input type="checkbox" checked={episodeForm.published} onChange={(event) => setEpisodeForm({ ...episodeForm, published: event.target.checked })} />Publish in the public library</label>
                 </div>
-                <button className="button button-gold" type="submit"><Check size={16} />Save story details</button>
+                <button className="button button-gold" type="submit" disabled={savingEpisode}><Check size={16} />{savingEpisode ? "Saving…" : "Save story details"}</button>
               </form>
               <form className="studio-panel studio-form" onSubmit={uploadSources}>
                 <div className="studio-panel-heading"><div><h2>Video versions</h2><p>Upload prepared MP4, WebM, or QuickTime files. Large uploads resume in chunks.</p></div><UploadCloud size={20} /></div>
@@ -355,7 +402,7 @@ export function StudioExperience() {
                 {!selectedEpisodeId && <p className="studio-file-hint">Save this story before uploading its files.</p>}
                 <div className="studio-upload-grid">
                   {qualities.map((quality) => (
-                    <label className="studio-upload-field" key={quality}><span>{quality}</span><input type="file" accept="video/mp4,video/webm,video/quicktime,.mp4,.webm,.mov" onChange={(event) => setFiles({ ...files, [quality]: event.target.files?.[0] ?? null })} />
+                    <label className="studio-upload-field" key={quality}><span>{quality}</span><input ref={(input) => { if (input) videoFileInputs.current[quality] = input; else delete videoFileInputs.current[quality]; }} type="file" accept="video/mp4,video/webm,video/quicktime,.mp4,.webm,.mov" onChange={(event) => setFiles({ ...files, [quality]: event.target.files?.[0] ?? null })} />
                       <small>{files[quality]?.name ?? episodes.find((episode) => episode.id === selectedEpisodeId)?.sources.find((source) => source.quality === quality)?.storage_path.split("/").at(-1) ?? "No file uploaded"}</small>
                     </label>
                   ))}
