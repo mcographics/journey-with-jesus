@@ -1017,3 +1017,43 @@ body, .home-hero, .mission-section, .site-footer, .media-page {
     background-position: 50% 50%;
   }
 }
+
+
+/* Preserve the masthead ticker's original styling in both themes. */
+:root[data-theme="light"] body .masthead-ticker .masthead-ticker-item,
+:root:not([data-theme="light"]) body .masthead-ticker .masthead-ticker-item {
+  color: #f3d595 !important;
+  text-shadow: none !important;
+  background-image: none !important;
+  -webkit-background-clip: border-box !important;
+  -webkit-text-fill-color: currentColor !important;
+  animation: none !important;
+}
+:root[data-theme="light"] body .masthead-ticker .masthead-ticker-words,
+:root:not([data-theme="light"]) body .masthead-ticker .masthead-ticker-words {
+  color: #ff7777 !important;
+  text-shadow: 0 0 12px rgba(255, 102, 102, .24) !important;
+  background-image: none !important;
+  -webkit-background-clip: border-box !important;
+  -webkit-text-fill-color: currentColor !important;
+  animation: none !important;
+  filter: none !important;
+}
+:root[data-theme="light"] body .masthead-ticker .masthead-ticker-reference,
+:root:not([data-theme="light"]) body .masthead-ticker .masthead-ticker-reference {
+  color: #f3d595 !important;
+  text-shadow: none !important;
+  background-image: none !important;
+  -webkit-background-clip: border-box !important;
+  -webkit-text-fill-color: currentColor !important;
+  animation: none !important;
+}
+:root[data-theme="light"] body .masthead-ticker .masthead-ticker-separator,
+:root:not([data-theme="light"]) body .masthead-ticker .masthead-ticker-separator {
+  color: #edbd65 !important;
+  text-shadow: 0 0 10px rgba(243, 213, 149, .5) !important;
+  background-image: none !important;
+  -webkit-background-clip: border-box !important;
+  -webkit-text-fill-color: currentColor !important;
+  animation: none !important;
+}
