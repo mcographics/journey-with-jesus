@@ -58,7 +58,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
                 document.documentElement.dataset.theme = theme;
                 document.querySelector('meta[name="theme-color"]')?.setAttribute(
                   "content",
-                  theme === "light" ? "#f8f6f0" : "#0B1120",
+                  theme === "light" ? "#f2f5f9" : "#0B1120",
                 );
               } catch {}
             })();`,

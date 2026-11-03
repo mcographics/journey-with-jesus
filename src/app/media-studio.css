@@ -124,40 +124,40 @@
   .studio-upload-field small { grid-column: 1 / -1; }
 }
 :root[data-theme="light"] .playlist-picker { color: #566171; }
-:root[data-theme="light"] .playlist-picker select { color: #283448; border-color: rgba(90,73,43,.23); background: #fff; }
+:root[data-theme="light"] .playlist-picker select { color: #283448; border-color: rgba(178, 133, 36,.23); background: #f7f9fc; }
 :root[data-theme="light"] .playlist-description { color: #596574; }
-:root[data-theme="light"] .catalog-notice { color: #5b5039; background: rgba(239,222,185,.48); }
+:root[data-theme="light"] .catalog-notice { color: #5b5039; background: rgba(232, 239, 246,.48); }
 :root[data-theme="light"] .catalog-notice.is-error { color: #8b3329; }
-:root[data-theme="light"] .studio-page { color: #253044; background: #f5f2eb; }
-:root[data-theme="light"] .studio-topbar { border-color: rgba(90,73,43,.2); }
+:root[data-theme="light"] .studio-page { color: #253044; background: #eaf0f6; }
+:root[data-theme="light"] .studio-topbar { border-color: rgba(178, 133, 36,.2); }
 :root[data-theme="light"] .studio-topbar > div:first-child > p:last-child,
 :root[data-theme="light"] .studio-account { color: #596574; }
-:root[data-theme="light"] .studio-account .button-outline { color: #6e5429; border-color: rgba(133,97,37,.42); background: #fffdf8; }
-:root[data-theme="light"] .studio-notice { color: #66552f; background: #fff9ea; }
+:root[data-theme="light"] .studio-account .button-outline { color: #6e5429; border-color: rgba(181, 137, 39,.42); background: #f7f9fc; }
+:root[data-theme="light"] .studio-notice { color: #66552f; background: #f3f6fa; }
 :root[data-theme="light"] .studio-notice.is-error { color: #8b3329; }
-:root[data-theme="light"] .studio-tabs { border-color: rgba(90,73,43,.18); }
+:root[data-theme="light"] .studio-tabs { border-color: rgba(178, 133, 36,.18); }
 :root[data-theme="light"] .studio-tabs button { color: #657080; }
 :root[data-theme="light"] .studio-tabs button[aria-selected="true"] { color: #725424; }
 :root[data-theme="light"] .studio-tabs button span { color: #526073; background: rgba(62,76,96,.1); }
 :root[data-theme="light"] .studio-loading { color: #596574; }
 :root[data-theme="light"] .studio-panel,
-:root[data-theme="light"] .studio-gate { border-color: rgba(90,73,43,.19); background: rgba(255,253,248,.96); }
+:root[data-theme="light"] .studio-gate { border-color: rgba(178, 133, 36,.19); background: rgba(247, 249, 252,.96); }
 :root[data-theme="light"] .studio-panel-heading h2 { color: #293448; }
 :root[data-theme="light"] .studio-panel-heading p,
 :root[data-theme="light"] .studio-empty { color: #606b7a; }
-:root[data-theme="light"] .studio-small-button { color: #725424; border-color: rgba(133,97,37,.4); }
-:root[data-theme="light"] .studio-list-item { border-color: rgba(90,73,43,.13); }
+:root[data-theme="light"] .studio-small-button { color: #725424; border-color: rgba(181, 137, 39,.4); }
+:root[data-theme="light"] .studio-list-item { border-color: rgba(178, 133, 36,.13); }
 :root[data-theme="light"] .studio-list-item strong { color: #293448; }
 :root[data-theme="light"] .studio-list-item small { color: #657080; }
-:root[data-theme="light"] .studio-status { color: #6b5b3a; border-color: rgba(90,73,43,.2); }
+:root[data-theme="light"] .studio-status { color: #6b5b3a; border-color: rgba(178, 133, 36,.2); }
 :root[data-theme="light"] .studio-status.is-live { color: #3d7146; border-color: rgba(66,137,78,.3); }
 :root[data-theme="light"] .studio-form label,
 :root[data-theme="light"] .studio-episode-choices legend { color: #39465a; }
 :root[data-theme="light"] .studio-form input:not([type="checkbox"]):not([type="file"]),
 :root[data-theme="light"] .studio-form textarea,
 :root[data-theme="light"] .studio-form select,
-:root[data-theme="light"] .studio-sign-in input { color: #293448; border-color: rgba(90,73,43,.22); background: #fff; }
-:root[data-theme="light"] .studio-upload-field { border-color: rgba(90,73,43,.28); background: #fbfaf6; }
+:root[data-theme="light"] .studio-sign-in input { color: #293448; border-color: rgba(178, 133, 36,.22); background: #f7f9fc; }
+:root[data-theme="light"] .studio-upload-field { border-color: rgba(178, 133, 36,.28); background: #f3f6fa; }
 :root[data-theme="light"] .studio-upload-field > span,
 :root[data-theme="light"] .studio-file-hint strong { color: #795b2c; }
 :root[data-theme="light"] .studio-upload-field input,
@@ -167,14 +167,14 @@
 :root[data-theme="light"] .studio-comment time,
 :root[data-theme="light"] .studio-comment .studio-comment-episode { color: #657080; }
 :root[data-theme="light"] .studio-progress { color: #526073; }
-:root[data-theme="light"] .studio-episode-choices { border-color: rgba(90,73,43,.17); }
-:root[data-theme="light"] .studio-comment { border-color: rgba(90,73,43,.15); }
+:root[data-theme="light"] .studio-episode-choices { border-color: rgba(178, 133, 36,.17); }
+:root[data-theme="light"] .studio-comment { border-color: rgba(178, 133, 36,.15); }
 :root[data-theme="light"] .studio-comment > div:first-child strong { color: #795b2c; }
 :root[data-theme="light"] .studio-comment > p { color: #3d4959; }
 :root[data-theme="light"] .studio-comment-actions button,
-:root[data-theme="light"] .studio-comment > button { border-color: rgba(90,73,43,.2); }
+:root[data-theme="light"] .studio-comment > button { border-color: rgba(178, 133, 36,.2); }
 :root[data-theme="light"] .studio-gate > p:not(.media-kicker):not(.studio-notice) { color: #596574; }
-:root[data-theme="light"] .button-outline { color: #705425; border-color: rgba(133,97,37,.4); background: #fffdf8; }
+:root[data-theme="light"] .button-outline { color: #705425; border-color: rgba(181, 137, 39,.4); background: #f7f9fc; }
 
 .studio-order-list { display: grid; gap: 5px; }
 .studio-order-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 7px 10px; border: 1px solid rgba(238, 221, 174, .12); color: #d8d7d1; font-size: 10px; }
@@ -182,5 +182,5 @@
 .studio-order-row > span:last-child { display: flex; gap: 4px; }
 .studio-order-row button { width: 30px; height: 28px; border: 1px solid rgba(238, 221, 174, .18); border-radius: 2px; color: #e8d4aa; background: transparent; cursor: pointer; }
 .studio-order-row button:disabled { opacity: .4; cursor: not-allowed; }
-:root[data-theme="light"] .studio-order-row { color: #39465a; border-color: rgba(90,73,43,.16); }
-:root[data-theme="light"] .studio-order-row button { color: #735829; border-color: rgba(90,73,43,.19); }
+:root[data-theme="light"] .studio-order-row { color: #39465a; border-color: rgba(178, 133, 36,.16); }
+:root[data-theme="light"] .studio-order-row button { color: #735829; border-color: rgba(178, 133, 36,.19); }

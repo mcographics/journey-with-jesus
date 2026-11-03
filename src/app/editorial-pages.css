@@ -42,38 +42,38 @@
 .store-intro { max-width: 330px; margin: 12px 0 24px; color: #b9bbc1; font-size: 13px; line-height: 1.75; }
 .store-home-link { display: inline-flex; min-height: 44px; align-items: center; gap: 10px; padding: 0 17px; border: 1px solid rgba(228, 188, 112, .4); border-radius: 999px; color: #f3d595; font-size: 11px; letter-spacing: .06em; transition: background .2s ease, border-color .2s ease; }
 .store-home-link:hover { border-color: rgba(243, 213, 149, .8); background: rgba(243, 213, 149, .08); }
-:root[data-theme="light"] .editorial-page { background: radial-gradient(ellipse at 78% 0%, rgba(164, 120, 43, .1), transparent 32%), linear-gradient(180deg, #f6f3ec 0%, #ede8dd 100%); }
+:root[data-theme="light"] .editorial-page { background: radial-gradient(ellipse at 78% 0%, rgba(164, 120, 43, .1), transparent 32%), linear-gradient(180deg, #f2f5f9 0%, #e6edf4 100%); }
 :root[data-theme="light"] .editorial-heading h1,
 :root[data-theme="light"] .store-card h1 { color: #202b3b; }
 :root[data-theme="light"] .editorial-heading h1 em { color: #936b27; }
 :root[data-theme="light"] .editorial-eyebrow { color: #795b2c; }
 :root[data-theme="light"] .editorial-intro { color: #4e5967; }
 :root[data-theme="light"] .character-card,
-:root[data-theme="light"] .team-card { border-color: rgba(90, 73, 43, .19); background: linear-gradient(145deg, rgba(255, 253, 248, .97), rgba(242, 237, 225, .97)); box-shadow: 0 14px 30px rgba(46, 39, 25, .1); }
+:root[data-theme="light"] .team-card { border-color: rgba(178, 133, 36, .19); background: linear-gradient(145deg, rgba(247, 249, 252, .97), rgba(234, 240, 247, .97)); box-shadow: 0 14px 30px rgba(18, 31, 47, .1); }
 :root[data-theme="light"] .character-card h2,
 :root[data-theme="light"] .team-card h2 { color: #273346; }
 :root[data-theme="light"] .character-summary,
 :root[data-theme="light"] .team-card-copy > p:last-child { color: #566171; }
 :root[data-theme="light"] .character-role,
 :root[data-theme="light"] .team-role { color: #795b2c; }
-:root[data-theme="light"] .character-passages { border-color: rgba(90, 73, 43, .17); color: #8e6828; }
+:root[data-theme="light"] .character-passages { border-color: rgba(178, 133, 36, .17); color: #8e6828; }
 :root[data-theme="light"] .character-passages strong { color: #795b2c; }
 :root[data-theme="light"] .character-passages span { color: #4e5967; }
 :root[data-theme="light"] .character-note,
 :root[data-theme="light"] .team-note { color: #687281; }
-:root[data-theme="light"] .team-art { background: radial-gradient(ellipse at center, rgba(164, 120, 43, .12), transparent 49%), linear-gradient(145deg, #e8dfca, #f8f5ed); }
+:root[data-theme="light"] .team-art { background: radial-gradient(ellipse at center, rgba(164, 120, 43, .12), transparent 49%), linear-gradient(145deg, #e4ebf3, #f1f5fa); }
 :root[data-theme="light"] .team-art-label,
 :root[data-theme="light"] .team-animator-caption { color: #715725; }
-:root[data-theme="light"] .team-art::before { border-color: rgba(142, 104, 40, .22); }
-:root[data-theme="light"] .team-art::after { border-color: rgba(142, 104, 40, .13); }
-:root[data-theme="light"] .team-monogram { border-color: rgba(142, 104, 40, .54); background: rgba(255, 253, 248, .75); color: #76551d; box-shadow: 0 0 0 8px rgba(142, 104, 40, .05), 0 0 48px rgba(142, 104, 40, .1); }
+:root[data-theme="light"] .team-art::before { border-color: rgba(181, 137, 39, .22); }
+:root[data-theme="light"] .team-art::after { border-color: rgba(181, 137, 39, .13); }
+:root[data-theme="light"] .team-monogram { border-color: rgba(181, 137, 39, .54); background: rgba(247, 249, 252, .75); color: #76551d; box-shadow: 0 0 0 8px rgba(181, 137, 39, .05), 0 0 48px rgba(181, 137, 39, .1); }
 :root[data-theme="light"] .team-art-mark,
 :root[data-theme="light"] .team-animator-icon { color: #8e6828; }
-:root[data-theme="light"] .store-card { border-color: rgba(90, 73, 43, .2); background: radial-gradient(ellipse at 50% 0%, rgba(164, 120, 43, .11), transparent 62%), linear-gradient(145deg, rgba(255, 253, 248, .98), rgba(242, 237, 225, .98)); box-shadow: 0 20px 55px rgba(46, 39, 25, .13); }
-:root[data-theme="light"] .store-emblem { border-color: rgba(142, 104, 40, .45); color: #8e6828; }
+:root[data-theme="light"] .store-card { border-color: rgba(178, 133, 36, .2); background: radial-gradient(ellipse at 50% 0%, rgba(164, 120, 43, .11), transparent 62%), linear-gradient(145deg, rgba(247, 249, 252, .98), rgba(234, 240, 247, .98)); box-shadow: 0 20px 55px rgba(18, 31, 47, .13); }
+:root[data-theme="light"] .store-emblem { border-color: rgba(181, 137, 39, .45); color: #8e6828; }
 :root[data-theme="light"] .store-coming-soon { color: #795b2c; }
 :root[data-theme="light"] .store-intro { color: #566171; }
-:root[data-theme="light"] .store-home-link { border-color: rgba(142, 104, 40, .42); color: #75551f; }
+:root[data-theme="light"] .store-home-link { border-color: rgba(181, 137, 39, .42); color: #75551f; }
 :root[data-theme="light"] .store-home-link:hover { border-color: #8e6828; background: rgba(188, 146, 65, .1); }
 @media (max-width: 900px) {
   .character-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -84,7 +84,6 @@
   .editorial-heading { margin-bottom: 30px; }
   .editorial-intro { font-size: 14px; }
   .character-grid, .team-grid { grid-template-columns: 1fr; gap: 16px; }
-  .character-card { display: grid; grid-template-columns: minmax(114px, 36%) minmax(0, 1fr); }
   .character-card-copy { padding: 16px 14px; }
   .character-card h2 { font-size: 21px; }
   .character-summary { min-height: 0; margin: 10px 0 13px; font-size: 11px; }
@@ -94,4 +93,40 @@
   .team-art { min-height: 230px; }
   .team-card-copy { padding: 20px; }
   .store-card { padding: 44px 25px; }
+}
+
+
+/* Light mode keeps long copy dark, while its accent typography reads as gold. */
+:root[data-theme="light"] :is(
+  .theme-toggle, .theme-toggle:hover, .nav-link:not(.is-current), .nav-link:hover:not(.is-current),
+  .mobile-menu-toggle, .mobile-menu-link:not(.is-current), .desktop-menu-toggle,
+  .desktop-menu-link:not(.is-current), .desktop-menu-link:hover:not(.is-current),
+  .hero-subtitle, .hero-quote, .storybook-eyebrow, .storybook-eyebrow i,
+  .storybook-title, .storybook-title em, .storybook-lead, .storybook-seal,
+  .storybook-seal small, .storybook-seal-cta, .mission-copy h2,
+  .invitation-heading .eyebrow, .invitation-heading h2, .invitation-heading h2 em,
+  .footer-tagline, .footer-note, .footer-links a, .footer-links a:hover, .footer-links span,
+  .editorial-heading h1, .editorial-heading h1 em, .editorial-eyebrow,
+  .character-card h2, .character-role, .character-passages strong,
+  .team-card h2, .team-role, .team-art-label, .team-art-mark, .team-animator-icon, .team-monogram,
+  .store-card h1, .store-emblem, .store-coming-soon, .store-home-link,
+  .studio-topbar h1, .studio-gate h1, .studio-panel-heading h2,
+  .studio-tabs button[aria-selected="true"], .studio-small-button,
+  .studio-upload-field > span, .studio-file-hint strong,
+  .studio-comment > div:first-child strong, .episode-copy strong, .comment-card strong,
+  .button-outline, .studio-account .button-outline,
+  .home-hero .button-gold, .home-hero .button-gold:hover,
+  .media-invitation .invitation-text strong
+) {
+  color: var(--gold-text);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, .64), 0 0 1px rgba(0, 0, 0, .72);
+}
+:root[data-theme="light"] :is(
+  .nav-link svg, .mobile-menu-toggle svg, .mobile-menu-link svg,
+  .desktop-menu-toggle svg, .desktop-menu-link svg, .studio-panel-heading > svg,
+  .studio-mark svg, .store-emblem svg, .storybook-seal svg, .character-passages svg,
+  .invitation-icon, .invitation-arrow
+) {
+  color: var(--gold-text-bright);
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, .62));
 }
