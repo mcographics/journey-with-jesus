@@ -1086,8 +1086,8 @@ body, .home-hero, .mission-section, .site-footer, .media-page {
   -webkit-text-fill-color: currentColor !important;
 }
 :root[data-theme="light"] body .masthead-ticker .masthead-ticker-words {
-  color: #861c1c !important;
-  text-shadow: none !important;
+  color: #a51d2d !important;
+  text-shadow: 0 0 1px rgba(70, 0, 10, .65), 0 1px 1px rgba(70, 0, 10, .45) !important;
   -webkit-text-fill-color: currentColor !important;
 }
 :root[data-theme="light"] body .masthead-ticker .masthead-ticker-reference {
