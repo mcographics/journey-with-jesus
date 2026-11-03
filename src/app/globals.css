@@ -1114,13 +1114,18 @@ body, .home-hero, .mission-section, .site-footer, .media-page {
 /* Match the dark-mode shimmer to the footer wordmark's brighter yellow-gold. */
 
 
-/* Put a softened white panel behind the descriptive copy below the story title. */
+/* Soft blue panel behind the descriptive copy below "One Story at a Time." */
 .storybook-description-panel {
   position: relative;
   isolation: isolate;
   max-width: 650px;
   margin-top: 12px;
   padding: 14px 20px;
+  border: 1px solid rgba(143, 187, 231, .34);
+  border-radius: 14px;
+  background: linear-gradient(120deg, rgba(13, 32, 56, .92) 0%, rgba(24, 54, 86, .84) 100%);
+  box-shadow: 0 10px 30px rgba(2, 10, 22, .25);
+  backdrop-filter: blur(5px);
 }
 .storybook-description-panel > .storybook-lead {
   margin: 0 0 12px;
@@ -1130,21 +1135,23 @@ body, .home-hero, .mission-section, .site-footer, .media-page {
   max-width: none;
   margin: 10px 0 0;
 }
-:root[data-theme="light"] .storybook-description-panel {
-  border: 1px solid rgba(255, 255, 255, .72);
-  border-radius: 12px;
-  background: rgba(255, 255, 255, .84);
-  box-shadow: 0 6px 24px rgba(36, 79, 118, .13);
-}
-:root[data-theme="light"] .storybook-description-panel::before {
+.storybook-description-panel::before {
   content: "";
   position: absolute;
   z-index: -1;
-  inset: -.55rem;
-  border-radius: 1.4rem;
-  background: radial-gradient(ellipse at center, rgba(255, 255, 255, .62) 0%, rgba(255, 255, 255, .34) 60%, rgba(255, 255, 255, 0) 100%);
-  filter: blur(8px);
+  inset: -.6rem;
+  border-radius: 1.5rem;
+  background: radial-gradient(ellipse at center, rgba(104, 162, 221, .24) 0%, rgba(104, 162, 221, .12) 62%, transparent 100%);
+  filter: blur(11px);
   pointer-events: none;
+}
+:root[data-theme="light"] .storybook-description-panel {
+  border-color: rgba(112, 157, 201, .34);
+  background: linear-gradient(120deg, rgba(238, 247, 255, .97) 0%, rgba(211, 231, 251, .9) 100%);
+  box-shadow: 0 8px 28px rgba(48, 91, 137, .15);
+}
+:root[data-theme="light"] .storybook-description-panel::before {
+  background: radial-gradient(ellipse at center, rgba(139, 189, 238, .24) 0%, rgba(139, 189, 238, .12) 62%, transparent 100%);
 }
 
 /* Add a black shadow to the full text block over the bottom image; the adjacent button is untouched. */
