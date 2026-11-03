@@ -41,6 +41,11 @@
   object-position: center 28%;
 }
 
+.character-card.is-expanded .character-portrait-trigger .character-portrait-image {
+  object-fit: contain;
+  object-position: center;
+}
+
 .character-portrait-placeholder {
   display: grid;
   width: 100%;
