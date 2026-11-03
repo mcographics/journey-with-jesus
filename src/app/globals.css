@@ -1180,3 +1180,65 @@ body, .home-hero, .mission-section, .site-footer, .media-page {
   color: #ffd54f !important;
   filter: drop-shadow(0 0 7px rgba(255, 213, 79, .72)) !important;
 }
+
+/* Homepage dark mode: bright, solid gold text without dark gradient bands. */
+:root:not([data-theme="light"]) body:has(.home-hero) {
+  --homepage-text-gold: #ffd75e;
+}
+:root:not([data-theme="light"]) body :is(.home-hero, .storybook-section, .mission-section, .invitation-section),
+:root:not([data-theme="light"]) body:has(.home-hero) .site-footer {
+  color: var(--homepage-text-gold) !important;
+}
+:root:not([data-theme="light"]) body :is(.home-hero, .storybook-section, .mission-section, .invitation-section) :is(
+  h1, h2, h3, h4, h5, h6, p, li, span, strong, b, em, small, label,
+  legend, dt, dd, time, figcaption, blockquote, summary, a, button
+),
+:root:not([data-theme="light"]) body:has(.home-hero) .site-footer :is(
+  p, li, span, strong, b, em, small, label, a, button
+) {
+  color: var(--homepage-text-gold) !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+:root:not([data-theme="light"]) body :is(.home-hero, .storybook-section, .mission-section, .invitation-section) :is(
+  h1, h2, h3, h4, h5, h6, strong, b, em, .eyebrow, .section-index,
+  .storybook-title, .storybook-seal-cta, .virtue-line, .virtue-statement
+),
+:root:not([data-theme="light"]) body:has(.home-hero) .site-footer :is(
+  strong, b, em, .footer-note, .footer-links span
+) {
+  background-image: none !important;
+  background-clip: border-box !important;
+  -webkit-background-clip: border-box !important;
+  -webkit-text-fill-color: currentColor !important;
+  animation: none !important;
+  filter: none !important;
+}
+:root:not([data-theme="light"]) body:has(.home-hero) .home-hero .button-gold,
+:root:not([data-theme="light"]) body:has(.home-hero) .home-hero .button-gold:hover {
+  border: 1px solid var(--homepage-text-gold) !important;
+  background: #111a2b !important;
+  color: var(--homepage-text-gold) !important;
+  text-shadow: none !important;
+  box-shadow: 0 6px 22px rgba(0, 0, 0, .35) !important;
+}
+:root:not([data-theme="light"]) body:has(.home-hero) :is(
+  .nav-link.is-current, .mobile-menu-link.is-current, .desktop-menu-link.is-current,
+  .skip-link
+) {
+  border: 1px solid var(--homepage-text-gold) !important;
+  background: #111a2b !important;
+  color: var(--homepage-text-gold) !important;
+  text-shadow: none !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+:root:not([data-theme="light"]) body:has(.home-hero) :is(
+  .nav-link.is-current svg, .mobile-menu-link.is-current svg,
+  .desktop-menu-link.is-current svg
+) {
+  color: var(--homepage-text-gold) !important;
+}
+:root:not([data-theme="light"]) body:has(.home-hero) .storybook-eyebrow > span,
+:root:not([data-theme="light"]) body:has(.home-hero) .invitation-heading > p:last-child {
+  color: #fff !important;
+  -webkit-text-fill-color: currentColor !important;
+}
