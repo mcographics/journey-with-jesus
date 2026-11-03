@@ -112,3 +112,17 @@ test("desktop media page fits the player and playlist without overflow", async (
   expect(dimensions.content).toBeLessThanOrEqual(dimensions.viewport);
   await expect(page.getByRole("complementary", { name: "Story playlist" })).toBeVisible();
 });
+
+test("Upper Room dark mode uses soft-white text", async ({ page }) => {
+  await page.addInitScript(() => {
+    window.localStorage.setItem("journey-with-jesus-theme-mode", "dark");
+  });
+  await page.goto("/studio/");
+
+  const studioTitle = page.locator(".studio-page h1").first();
+  const studioCopy = page.locator(".studio-page p").first();
+  await expect(studioTitle).toBeVisible();
+  await expect(studioTitle).toHaveCSS("color", "rgb(229, 231, 235)");
+  await expect(studioTitle).toHaveCSS("text-shadow", "none");
+  await expect(studioCopy).toHaveCSS("color", "rgb(229, 231, 235)");
+});
