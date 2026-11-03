@@ -6,6 +6,7 @@ import Image from "next/image";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/database.types";
 import { createStorageObjectId } from "@/lib/storage-object-id";
+import { formatStudioError } from "@/lib/supabase/studio-upload";
 
 type CharacterRow = Database["public"]["Tables"]["media_characters"]["Row"];
 type Props = {
@@ -137,9 +138,9 @@ export function StudioCharacters({ client, onNotice }: Props) {
       setImageFile(null);
       if (portraitInput.current) portraitInput.current.value = "";
       setRemovePortrait(false);
-      if (await loadCharacters()) {
-        onNotice(uploadedPortrait ? "Character and portrait saved in Upper Room." : "Character details saved in Upper Room.", false);
-      }
+      const refreshed = await loadCharacters();
+      const savedMessage = uploadedPortrait ? "Character and portrait saved in Upper Room." : "Character details saved in Upper Room.";
+      onNotice(refreshed ? savedMessage : savedMessage + " The list could not refresh; reload the page to see the latest changes.", !refreshed);
     } catch (error) {
       if (uploadedPath) {
         try { await client.storage.from("character-portraits").remove([uploadedPath]); } catch { /* Keep the original save error visible. */ }
@@ -190,8 +191,8 @@ export function StudioCharacters({ client, onNotice }: Props) {
             {removePortrait ? <span>The saved portrait will be removed when you save.</span> : <button type="button" onClick={() => { setRemovePortrait(true); setImageFile(null); }}>Remove portrait</button>}
           </div>
         )}
-        <button className="button button-gold" type="submit" disabled={saving || loading}><Check size={16} />{saving ? "Saving…" : "Save character"}</button>
-        {imageFile && <p className="studio-file-hint"><UploadCloud size={14} /> Portrait uploads when you save this character.</p>}
+        <button className="button button-gold" type="submit" disabled={saving || loading}><Check size={16} />{saving ? "Saving…" : imageFile ? "Save character and portrait" : "Save character"}</button>
+        {imageFile && <p className="studio-file-hint"><UploadCloud size={14} /> Portrait uploads as part of this save.</p>}
       </form>
     </div>
   );
@@ -203,5 +204,5 @@ function slugify(value: string): string {
 }
 
 function errorMessage(error: unknown): string {
-  return error instanceof Error ? error.message : "Character could not be saved.";
+  return formatStudioError(error, "Character could not be saved.");
 }

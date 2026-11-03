@@ -4,6 +4,7 @@ import { Check, Film, ListVideo, LoaderCircle, LockKeyhole, LogOut, Mail, Messag
 import type { Session } from "@supabase/supabase-js";
 import type { Database, VideoContentType, VideoQuality } from "@/lib/database.types";
 import { createBrowserSupabaseClient, isSupabaseConfigured } from "@/lib/supabase/browser";
+import { formatStudioError, getImageUploadInfo, getPublicStoragePath } from "@/lib/supabase/studio-upload";
 import { uploadVideoResumable } from "@/lib/supabase/resumable-upload";
 import { createStorageObjectId } from "@/lib/storage-object-id";
 import { StudioCharacters } from "@/components/StudioCharacters";
@@ -38,6 +39,8 @@ export function StudioExperience() {
   const [comments, setComments] = useState<CommentRow[]>([]);
   const [loadingData, setLoadingData] = useState(false);
   const [episodeForm, setEpisodeForm] = useState<EpisodeForm>(freshEpisode);
+  const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
+  const thumbnailFileInput = useRef<HTMLInputElement>(null);
   const [selectedEpisodeId, setSelectedEpisodeId] = useState("");
   const [files, setFiles] = useState<Record<VideoQuality, File | null>>({ "720p": null, "1080p": null, "4K": null });
   const videoFileInputs = useRef<Partial<Record<VideoQuality, HTMLInputElement>>>({});
@@ -91,7 +94,7 @@ export function StudioExperience() {
   }, [client]);
 
   const loadStudioData = useCallback(async () => {
-    if (!client) return;
+    if (!client) return false;
     setLoadingData(true);
     try {
       const [episodeResult, sourceResult, playlistResult, commentResult] = await Promise.all([
@@ -111,9 +114,11 @@ export function StudioExperience() {
       })));
       setPlaylists(playlistResult.data ?? []);
       setComments(commentResult.data ?? []);
+      return true;
     } catch (error) {
       setNotice(errorMessage(error));
       setNoticeError(true);
+      return false;
     } finally { setLoadingData(false); }
   }, [client]);
 
@@ -153,12 +158,16 @@ export function StudioExperience() {
       duration: episode.duration_seconds === null ? "" : String(episode.duration_seconds),
       number: String(episode.episode_number), orientation: episode.orientation, published: episode.published,
     });
+    setThumbnailFile(null);
+    if (thumbnailFileInput.current) thumbnailFileInput.current.value = "";
     clearVideoFileSelections();
     setUploadStatus("");
   }
 
   function newEpisode() {
     setSelectedEpisodeId(""); setEpisodeForm(freshEpisode());
+    setThumbnailFile(null);
+    if (thumbnailFileInput.current) thumbnailFileInput.current.value = "";
     clearVideoFileSelections(); setUploadStatus("");
   }
 
@@ -171,23 +180,66 @@ export function StudioExperience() {
     if (episodeForm.published && !(existing?.sources.length)) {
       setNotice("Upload at least one video quality before publishing this story."); setNoticeError(true); return;
     }
-    const payload = {
-      id, title: episodeForm.title.trim(), description: episodeForm.description.trim(),
-      scripture_reference: episodeForm.scripture.trim() || null,
-      thumbnail_url: episodeForm.thumbnail.trim() || null,
-      duration_seconds: episodeForm.duration.trim() ? Number(episodeForm.duration) : null,
-      episode_number: Number(episodeForm.number) || 1, orientation: episodeForm.orientation,
-      published: episodeForm.published,
-    };
     setSavingEpisode(true);
+    let uploadedThumbnailPath: string | null = null;
     try {
-      const { error } = await client.from("media_episodes").upsert(payload);
+      let thumbnailUrl = episodeForm.thumbnail.trim() || null;
+      if (thumbnailFile) {
+        const { contentType, extension } = getImageUploadInfo(thumbnailFile);
+        const path = id + "/" + createStorageObjectId() + "." + extension;
+        const { data: uploaded, error: uploadError } = await client.storage
+          .from("media-thumbnails")
+          .upload(path, thumbnailFile, { cacheControl: "31536000", contentType, upsert: false });
+        if (uploadError || !uploaded) {
+          throw new Error("Thumbnail upload failed: " + formatStudioError(uploadError, "Storage did not return an uploaded image."));
+        }
+        uploadedThumbnailPath = uploaded.path;
+        thumbnailUrl = client.storage.from("media-thumbnails").getPublicUrl(uploaded.path).data.publicUrl;
+      }
+
+      const payload = {
+        id, title: episodeForm.title.trim(), description: episodeForm.description.trim(),
+        scripture_reference: episodeForm.scripture.trim() || null,
+        thumbnail_url: thumbnailUrl,
+        duration_seconds: episodeForm.duration.trim() ? Number(episodeForm.duration) : null,
+        episode_number: Number(episodeForm.number) || 1, orientation: episodeForm.orientation,
+        published: episodeForm.published,
+      };
+      const { data, error } = await client.from("media_episodes").upsert(payload).select("id").single();
       if (error) throw error;
-      setEpisodeForm((current) => ({ ...current, id }));
-      setSelectedEpisodeId(id); setNotice("Story details saved."); setNoticeError(false);
-      await loadStudioData();
+      if (!data) throw new Error("Studio did not confirm that the story was saved.");
+
+      const previousThumbnail = episodes.find((episode) => episode.id === id)?.thumbnail_url;
+      const previousThumbnailPath = previousThumbnail && previousThumbnail !== thumbnailUrl
+        ? getPublicStoragePath(previousThumbnail, "media-thumbnails")
+        : null;
+      uploadedThumbnailPath = null;
+      setEpisodeForm((current) => ({ ...current, id, thumbnail: thumbnailUrl ?? "" }));
+      setThumbnailFile(null);
+      if (thumbnailFileInput.current) thumbnailFileInput.current.value = "";
+      setSelectedEpisodeId(id);
+
+      let cleanupNote = "";
+      if (previousThumbnailPath) {
+        const { error: cleanupError } = await client.storage.from("media-thumbnails").remove([previousThumbnailPath]);
+        if (cleanupError) cleanupNote = " The previous thumbnail could not be removed.";
+      }
+      const refreshed = await loadStudioData();
+      const savedMessage = thumbnailFile ? "Story details and thumbnail saved." : "Story details saved.";
+      setNotice((refreshed ? savedMessage : savedMessage + " The library could not refresh; reload the page to see the latest list.") + cleanupNote);
+      setNoticeError(!refreshed || Boolean(cleanupNote));
     } catch (error) {
-      setNotice(errorMessage(error)); setNoticeError(true);
+      let cleanupNote = "";
+      if (uploadedThumbnailPath) {
+        try {
+          const { error: cleanupError } = await client.storage.from("media-thumbnails").remove([uploadedThumbnailPath]);
+          if (cleanupError) cleanupNote = " The incomplete thumbnail upload could not be removed.";
+        } catch {
+          cleanupNote = " The incomplete thumbnail upload could not be removed.";
+        }
+      }
+      setNotice(formatStudioError(error, "Story details could not be saved.") + cleanupNote);
+      setNoticeError(true);
     } finally {
       setSavingEpisode(false);
     }
@@ -211,11 +263,12 @@ export function StudioExperience() {
         await uploadVideoResumable(client, item.file, path, setUploadProgress);
         const prior = await client.from("media_video_sources").select("storage_path").eq("episode_id", selectedEpisodeId).eq("quality", item.quality).maybeSingle();
         if (prior.error) throw prior.error;
-        const { error } = await client.from("media_video_sources").upsert({
+        const { data: savedSource, error } = await client.from("media_video_sources").upsert({
           episode_id: selectedEpisodeId, quality: item.quality, storage_path: path,
           content_type: contentType, size_bytes: item.file.size,
-        }, { onConflict: "episode_id,quality" });
+        }, { onConflict: "episode_id,quality" }).select("storage_path").single();
         if (error) throw error;
+        if (!savedSource) throw new Error("The video uploaded, but Studio did not confirm that its file record was saved.");
         pendingUploadPath = null;
         completedQualities.push(item.quality);
         setFiles((current) => ({ ...current, [item.quality]: null }));
@@ -224,9 +277,12 @@ export function StudioExperience() {
         const oldPath = prior.data?.storage_path;
         if (oldPath) await client.storage.from("media-videos").remove([oldPath]);
       }
-      setUploadStatus("Video files uploaded. You can now publish the story.");
       setUploadQuality(null); setUploadProgress(100);
-      await loadStudioData();
+      const refreshed = await loadStudioData();
+      setUploadStatus(refreshed
+        ? "Video files uploaded and saved. You can now publish the story."
+        : "Video files were uploaded and saved, but the library could not refresh. Reload to confirm the saved versions.");
+      setNoticeError(!refreshed);
     } catch (error) {
       let cleanupNote = "";
       if (pendingUploadPath) {
@@ -238,7 +294,7 @@ export function StudioExperience() {
         }
       }
       const completedNote = completedQualities.length ? " Saved successfully: " + completedQualities.join(", ") + "." : "";
-      setUploadStatus(errorMessage(error) + completedNote + cleanupNote); setNoticeError(true);
+      setUploadStatus(formatStudioError(error, "Video upload failed.") + completedNote + cleanupNote); setNoticeError(true);
     } finally {
       setUploadQuality(null);
     }
@@ -390,19 +446,20 @@ export function StudioExperience() {
                   <label>Aspect ratio<select value={episodeForm.orientation} onChange={(event) => setEpisodeForm({ ...episodeForm, orientation: event.target.value as EpisodeForm["orientation"] })}><option value="landscape">16:9 landscape</option><option value="portrait">9:16 portrait</option></select></label>
                   <label>Duration, seconds<input type="number" min="0" value={episodeForm.duration} onChange={(event) => setEpisodeForm({ ...episodeForm, duration: event.target.value })} placeholder="Optional" /></label>
                   <label className="studio-span-two">Scripture reference<input value={episodeForm.scripture} onChange={(event) => setEpisodeForm({ ...episodeForm, scripture: event.target.value })} maxLength={180} /></label>
-                  <label className="studio-span-two">Thumbnail URL<input type="url" value={episodeForm.thumbnail} onChange={(event) => setEpisodeForm({ ...episodeForm, thumbnail: event.target.value })} placeholder="Optional HTTPS image" /></label>
+                  <label className="studio-span-two">Thumbnail URL<input type="url" value={episodeForm.thumbnail} onChange={(event) => { setEpisodeForm({ ...episodeForm, thumbnail: event.target.value }); setThumbnailFile(null); if (thumbnailFileInput.current) thumbnailFileInput.current.value = ""; }} placeholder="Optional HTTPS image" /></label>
+                  <label className="studio-span-two studio-upload-field"><span>Or upload a thumbnail image</span><input ref={thumbnailFileInput} type="file" accept="image/jpeg,image/png,image/webp,image/avif" onChange={(event) => setThumbnailFile(event.target.files?.[0] ?? null)} /><small>{thumbnailFile?.name ?? "JPEG, PNG, WebP, or AVIF · up to 10 MB · saved with story details"}</small></label>
                   <label className="studio-span-two">Description<textarea value={episodeForm.description} onChange={(event) => setEpisodeForm({ ...episodeForm, description: event.target.value })} maxLength={5000} rows={4} /></label>
                   <label className="studio-check"><input type="checkbox" checked={episodeForm.published} onChange={(event) => setEpisodeForm({ ...episodeForm, published: event.target.checked })} />Publish in the public library</label>
                 </div>
-                <button className="button button-gold" type="submit" disabled={savingEpisode}><Check size={16} />{savingEpisode ? "Saving…" : "Save story details"}</button>
+                <button className="button button-gold" type="submit" disabled={savingEpisode || Boolean(uploadQuality)}><Check size={16} />{savingEpisode ? "Saving…" : thumbnailFile ? "Save story and thumbnail" : "Save story details"}</button>
               </form>
               <form className="studio-panel studio-form" onSubmit={uploadSources}>
-                <div className="studio-panel-heading"><div><h2>Video versions</h2><p>Upload prepared MP4, WebM, or QuickTime files. Large uploads resume in chunks.</p></div><UploadCloud size={20} /></div>
+                <div className="studio-panel-heading"><div><h2>Video versions</h2><p>Choose the files, then upload them here. Large MP4, WebM, and QuickTime uploads resume in chunks.</p></div><UploadCloud size={20} /></div>
                 {selectedEpisodeId && <p className="studio-file-hint">Story ID: <strong>{selectedEpisodeId}</strong></p>}
                 {!selectedEpisodeId && <p className="studio-file-hint">Save this story before uploading its files.</p>}
                 <div className="studio-upload-grid">
                   {qualities.map((quality) => (
-                    <label className="studio-upload-field" key={quality}><span>{quality}</span><input ref={(input) => { if (input) videoFileInputs.current[quality] = input; else delete videoFileInputs.current[quality]; }} type="file" accept="video/mp4,video/webm,video/quicktime,.mp4,.webm,.mov" onChange={(event) => setFiles({ ...files, [quality]: event.target.files?.[0] ?? null })} />
+                    <label className="studio-upload-field" key={quality}><span>{quality}</span><input ref={(input) => { if (input) videoFileInputs.current[quality] = input; else delete videoFileInputs.current[quality]; }} type="file" accept="video/mp4,video/webm,video/quicktime,.mp4,.webm,.mov" onChange={(event) => setFiles((current) => ({ ...current, [quality]: event.target.files?.[0] ?? null }))} />
                       <small>{files[quality]?.name ?? episodes.find((episode) => episode.id === selectedEpisodeId)?.sources.find((source) => source.quality === quality)?.storage_path.split("/").at(-1) ?? "No file uploaded"}</small>
                     </label>
                   ))}
@@ -480,7 +537,7 @@ function slugify(value: string): string {
     .replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 100);
 }
 function errorMessage(error: unknown): string {
-  return error instanceof Error ? error.message : "Studio could not complete that request.";
+  return formatStudioError(error, "Studio could not complete that request.");
 }
 function getVideoContentType(file: File): VideoContentType {
   const contentType = file.type || (file.name.toLowerCase().endsWith(".webm") ? "video/webm" : file.name.toLowerCase().endsWith(".mov") ? "video/quicktime" : "video/mp4");
