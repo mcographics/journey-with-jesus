@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Clapperboard, Feather, Sparkles } from "lucide-react";
+import { Feather, Sparkles } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Meet the Team",
@@ -18,28 +18,28 @@ export default function TeamPage() {
 
         <section aria-label="Journey with Jesus team" className="team-grid">
           <article className="team-card">
-            <div aria-hidden="true" className="team-art team-art-ken">
-              <span className="team-art-label">Founder · Creative direction</span>
-              <span className="team-monogram">KS</span>
-              <Feather className="team-art-mark" size={27} strokeWidth={1.2} />
+            <div aria-hidden="true" className="team-art team-art-eric">
+              <span className="team-art-label">Founder</span>
+              <span className="team-monogram">EO</span>
+              <Sparkles className="team-art-mark" size={27} strokeWidth={1.2} />
             </div>
             <div className="team-card-copy">
-              <p className="team-role">Website · Creative direction</p>
-              <h2>Ken</h2>
-              <p>Ken created Journey with Jesus and shapes its visual direction, bringing his graphic design background to the way each story is shared.</p>
+              <p className="team-role">Founder</p>
+              <h2>Eric Oberhausen</h2>
+              <p>Eric Oberhausen is the founder of Journey with Jesus, an animated storytelling project sharing Scripture and the life of Jesus.</p>
             </div>
           </article>
 
           <article className="team-card">
-            <div aria-hidden="true" className="team-art team-art-animation">
-              <span className="team-art-label">Animation · Visual storytelling</span>
-              <Clapperboard className="team-animator-icon" size={58} strokeWidth={1.15} />
-              <span className="team-animator-caption">Bringing each story to life</span>
+            <div aria-hidden="true" className="team-art team-art-kenneth">
+              <span className="team-art-label">Editing · Website</span>
+              <span className="team-monogram">KS</span>
+              <Feather className="team-art-mark" size={27} strokeWidth={1.2} />
             </div>
             <div className="team-card-copy">
-              <p className="team-role">Animation</p>
-              <h2>Our Animator</h2>
-              <p>Our animation collaborator brings the characters and their stories to the screen through movement and visual storytelling.</p>
+              <p className="team-role">Editor / Webmaster</p>
+              <h2>Kenneth Salmon</h2>
+              <p>Kenneth Salmon serves as Editor / Webmaster, editing site content and maintaining Journey with Jesus online.</p>
             </div>
           </article>
         </section>

@@ -160,3 +160,17 @@ test("Media, Characters, Team, and Store dark mode use soft-white text", async (
     await expect(copy).toHaveCSS("color", "rgb(229, 231, 235)");
   }
 });
+
+test("Meet the Team credits the founder and editor/webmaster accurately", async ({ page }) => {
+  await page.goto("/team/");
+  const teamCards = page.locator(".team-card");
+  await expect(teamCards).toHaveCount(2);
+
+  const founderCard = teamCards.nth(0);
+  await expect(founderCard.getByRole("heading", { name: "Eric Oberhausen" })).toBeVisible();
+  await expect(founderCard.locator(".team-role")).toHaveText("Founder");
+
+  const editorCard = teamCards.nth(1);
+  await expect(editorCard.getByRole("heading", { name: "Kenneth Salmon" })).toBeVisible();
+  await expect(editorCard.locator(".team-role")).toHaveText("Editor / Webmaster");
+});
