@@ -20,6 +20,12 @@ export type Database = {
         Update: { name?: string; role?: string; summary?: string; scripture_references?: string; portrait_url?: string | null; sort_order?: number; published?: boolean; updated_at?: string };
         Relationships: [];
       };
+      media_team_members: {
+        Row: { id: string; name: string; role: string; bio: string; profile_image_url: string | null; sort_order: number; published: boolean; created_at: string; updated_at: string };
+        Insert: { id: string; name: string; role?: string; bio?: string; profile_image_url?: string | null; sort_order?: number; published?: boolean };
+        Update: { name?: string; role?: string; bio?: string; profile_image_url?: string | null; sort_order?: number; published?: boolean; updated_at?: string };
+        Relationships: [];
+      };
       media_episodes: {
         Row: { id: string; title: string; description: string; scripture_reference: string | null; thumbnail_url: string | null; duration_seconds: number | null; episode_number: number; orientation: "landscape" | "portrait"; published: boolean; created_at: string; updated_at: string };
         Insert: { id: string; title: string; description?: string; scripture_reference?: string | null; thumbnail_url?: string | null; duration_seconds?: number | null; episode_number?: number; orientation?: "landscape" | "portrait"; published?: boolean };

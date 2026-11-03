@@ -19,20 +19,22 @@
 .character-passages strong { color: #e8d6af; font-size: 9px; letter-spacing: .11em; text-transform: uppercase; }
 .character-passages span { color: #c3c4c5; font-size: 11px; line-height: 1.55; }
 .character-note, .team-note { margin: 22px 0 0; color: #868d99; font-size: 11px; line-height: 1.7; }
-.team-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
+.team-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
 .team-card { overflow: hidden; border: 1px solid rgba(238, 221, 174, .16); border-radius: 12px; background: linear-gradient(145deg, rgba(20, 30, 49, .94), rgba(13, 21, 36, .98)); box-shadow: 0 16px 34px rgba(2, 6, 15, .2); }
 .team-art { position: relative; display: flex; min-height: 280px; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; background: radial-gradient(ellipse at center, rgba(228, 188, 112, .19), transparent 49%), linear-gradient(145deg, #1c2940, #101827); color: var(--gold-bright); }
 .team-art::before, .team-art::after { position: absolute; width: 230px; height: 230px; border: 1px solid rgba(228, 188, 112, .18); border-radius: 50%; content: ""; }
 .team-art::after { width: 270px; height: 270px; border-color: rgba(228, 188, 112, .1); }
-.team-art-label { position: absolute; top: 20px; left: 20px; color: #d1bd92; font-size: 9px; letter-spacing: .14em; text-transform: uppercase; }
+.team-art-label { position: absolute; z-index: 3; top: 20px; left: 20px; max-width: calc(100% - 40px); padding: 7px 10px; border-radius: 999px; background: rgba(7, 12, 24, .72); color: #f0dcae; font-size: 9px; letter-spacing: .12em; text-transform: uppercase; }
+.team-photo { z-index: 2; object-fit: cover; object-position: center 35%; }
 .team-monogram { z-index: 1; display: grid; width: 112px; height: 112px; place-items: center; border: 1px solid rgba(243, 213, 149, .6); border-radius: 50%; background: rgba(11, 17, 32, .72); color: #f3d595; font-family: var(--serif); font-size: 35px; letter-spacing: .05em; box-shadow: 0 0 0 8px rgba(228, 188, 112, .06), 0 0 48px rgba(228, 188, 112, .12); }
-.team-art-mark { position: absolute; right: 19%; bottom: 19%; color: rgba(243, 213, 149, .58); }
+.team-art-mark { position: absolute; z-index: 3; right: 19%; bottom: 19%; color: rgba(243, 213, 149, .58); }
 .team-animator-icon { z-index: 1; color: #f3d595; }
 .team-animator-caption { z-index: 1; margin-top: 15px; color: #d1bd92; font-family: var(--serif); font-size: 13px; font-style: italic; }
 .team-card-copy { padding: 23px 25px 26px; }
 .team-role { margin: 0 0 7px; color: var(--gold); font-size: 9px; font-weight: 600; letter-spacing: .13em; text-transform: uppercase; }
 .team-card h2 { margin: 0; color: #f1eadb; font-family: var(--serif); font-size: 27px; font-weight: 400; letter-spacing: -.02em; }
 .team-card-copy > p:last-child { margin: 12px 0 0; color: #b9bbc1; font-size: 13px; line-height: 1.8; }
+.team-empty { grid-column: 1 / -1; color: #b9bbc1; font-size: 14px; line-height: 1.7; }
 .store-page { display: grid; min-height: min(82svh, 960px); place-items: center; padding-top: 108px; padding-bottom: 84px; }
 .store-card { display: flex; width: min(510px, calc(100% - 48px)); flex-direction: column; align-items: center; padding: 55px 44px; border: 1px solid rgba(238, 221, 174, .24); border-radius: 16px; background: radial-gradient(ellipse at 50% 0%, rgba(228, 188, 112, .13), transparent 62%), linear-gradient(145deg, rgba(20, 30, 49, .97), rgba(13, 21, 36, .99)); box-shadow: 0 25px 70px rgba(2, 6, 15, .34); text-align: center; }
 .store-emblem { display: grid; width: 64px; height: 64px; margin-bottom: 23px; place-items: center; border: 1px solid rgba(228, 188, 112, .45); border-radius: 50%; color: var(--gold-bright); }
@@ -76,7 +78,7 @@
 :root[data-theme="light"] .store-home-link { border-color: rgba(181, 137, 39, .42); color: #75551f; }
 :root[data-theme="light"] .store-home-link:hover { border-color: #8e6828; background: rgba(188, 146, 65, .1); }
 @media (max-width: 900px) {
-  .character-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .character-grid, .team-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 700px) {
   .editorial-page { padding: 105px 0 64px; }
