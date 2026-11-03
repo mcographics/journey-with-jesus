@@ -72,10 +72,12 @@ export default function HomePage() {
           <article className="storybook-copy">
             <p className="storybook-eyebrow"><Sparkles size={15} aria-hidden="true" /><span>Our Story</span><i>01</i></p>
             <h2 className="storybook-title" id="scripture-title">Bringing Scripture to Life<em>One Story at a Time</em></h2>
-            <p className="storybook-lead">Every great journey begins with a story. This one leads to Jesus.</p>
-            <p>The Bible is filled with unforgettable moments of courage, compassion, miracles, and hope. We bring these Scripture-rooted stories to life through vivid animation and heartfelt storytelling.</p>
-            <p>Follow the journey of Jesus—from his teachings and miracles to the promise of resurrection—and discover the timeless message at the heart of every story.</p>
-            <p>Whether you are opening Scripture for the first time or returning to a beloved passage, there is a place for you on this journey.</p>
+            <div className="storybook-description-panel">
+              <p className="storybook-lead">Every great journey begins with a story. This one leads to Jesus.</p>
+              <p>The Bible is filled with unforgettable moments of courage, compassion, miracles, and hope. We bring these Scripture-rooted stories to life through vivid animation and heartfelt storytelling.</p>
+              <p>Follow the journey of Jesus—from his teachings and miracles to the promise of resurrection—and discover the timeless message at the heart of every story.</p>
+              <p>Whether you are opening Scripture for the first time or returning to a beloved passage, there is a place for you on this journey.</p>
+            </div>
           </article>
           <Link
             className="storybook-seal"
