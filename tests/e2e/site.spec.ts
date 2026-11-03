@@ -2,10 +2,23 @@ import { expect, test } from "@playwright/test";
 
 test("public destinations are available in the desktop menu, with working story CTA", async ({ page }) => {
   await page.goto("/");
-  const masthead = page.getByRole("img", { name: /Journey with Jesus illustrated banner/ });
+  const masthead = page.getByRole("img", { name: /Jesus walks with a young man/ });
   await expect(masthead).toBeVisible();
+  await expect(masthead).toHaveAttribute("width", "6384");
+  await expect(masthead).toHaveAttribute("height", "2736");
   await expect.poll(() => masthead.evaluate((image) => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
   await expect.poll(() => masthead.evaluate((image) => (image as HTMLImageElement).currentSrc)).toMatch(/journey-with-jesus-header-\d+\.webp$/);
+  const revealResponse = page.waitForResponse((response) =>
+    response.url().endsWith("/images/header-easter-egg-2560.webp") && response.ok(),
+  );
+  const mastheadBounds = await page.locator(".home-masthead").boundingBox();
+  expect(mastheadBounds).not.toBeNull();
+  await page.mouse.move(
+    mastheadBounds!.x + mastheadBounds!.width / 2,
+    mastheadBounds!.y + mastheadBounds!.height / 2,
+  );
+  await revealResponse;
+  await expect(page.locator(".masthead-easter-egg-canvas")).toHaveCSS("opacity", "1");
   await expect(page.getByRole("heading", { level: 1 })).toContainText("Journey");
   await expect(page.getByText("These are more than themes. They are at the heart of the journey.")).toBeVisible();
   await expect(page.getByText("Journey with Jesus brings biblical narratives to life", { exact: false })).toBeVisible();
@@ -36,7 +49,7 @@ test.describe("touch mobile navigation", () => {
 
   test("the floating menu auto-hides after scrolling, stays accessible, and opens Home and Media", async ({ page }) => {
     await page.goto("/");
-    const masthead = page.getByRole("img", { name: /Journey with Jesus illustrated banner/ });
+    const masthead = page.getByRole("img", { name: /Jesus walks with a young man/ });
     await expect(masthead).toBeVisible();
     const menuButton = page.locator(".mobile-menu-toggle");
     await expect(menuButton).toBeVisible();

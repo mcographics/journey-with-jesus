@@ -26,15 +26,15 @@ export default function HomePage() {
     <main id="main-content">
       <MastheadEasterEgg imageSrc={`${basePath}/images/header-easter-egg-2560.webp`}>
         <ResponsivePicture
-          alt="Journey with Jesus illustrated banner: Jesus and a contemporary young man overlooking a sunlit valley."
+          alt="Jesus walks with a young man beneath an autumn tree, overlooking a sunlit valley."
           className="home-masthead-image"
-          height={2466}
+          height={2736}
           fallbackSrc={`${basePath}/images/journey-with-jesus-header-fallback.jpg`}
           fetchPriority="high"
           loading="eager"
           sizes="100vw"
           webpSources={imageSources("journey-with-jesus-header", [512, 768, 1024, 1440, 1920, 2560, 3200, 3840])}
-          width={5742}
+          width={6384}
         />
         <MastheadTicker />
       </MastheadEasterEgg>
