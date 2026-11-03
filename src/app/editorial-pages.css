@@ -9,9 +9,6 @@
 .editorial-intro { max-width: 570px; margin: 19px 0 0; color: #b9bbc1; font-size: 15px; line-height: 1.8; }
 .character-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
 .character-card { overflow: hidden; border: 1px solid rgba(238, 221, 174, .16); border-radius: 12px; background: linear-gradient(145deg, rgba(20, 30, 49, .94), rgba(13, 21, 36, .98)); box-shadow: 0 16px 34px rgba(2, 6, 15, .2); }
-.character-portrait { position: relative; aspect-ratio: 1; background-repeat: no-repeat; background-size: 300% 200%; background-color: #182237; }
-.character-portrait::after { position: absolute; inset: 48% 0 0; content: ""; background: linear-gradient(180deg, transparent, rgba(6, 12, 24, .75)); }
-.character-index { position: absolute; z-index: 1; bottom: 13px; left: 15px; color: #fff1c9; font-family: var(--serif); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; text-shadow: 0 1px 5px rgba(0, 0, 0, .7); }
 .character-card-copy { padding: 20px 20px 22px; }
 .character-role { margin: 0 0 8px; color: var(--gold); font-size: 9px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; }
 .character-card h2 { margin: 0; color: #f1eadb; font-family: var(--serif); font-size: clamp(21px, 2vw, 25px); font-weight: 400; letter-spacing: -.02em; line-height: 1.2; }
@@ -88,9 +85,6 @@
   .editorial-intro { font-size: 14px; }
   .character-grid, .team-grid { grid-template-columns: 1fr; gap: 16px; }
   .character-card { display: grid; grid-template-columns: minmax(114px, 36%) minmax(0, 1fr); }
-  .character-portrait { height: 100%; min-height: 100%; aspect-ratio: auto; }
-  .character-portrait::after { inset: 0 0 0 42%; background: linear-gradient(90deg, transparent, rgba(6, 12, 24, .5)); }
-  .character-index { bottom: 10px; left: 10px; font-size: 8px; letter-spacing: .08em; }
   .character-card-copy { padding: 16px 14px; }
   .character-card h2 { font-size: 21px; }
   .character-summary { min-height: 0; margin: 10px 0 13px; font-size: 11px; }
