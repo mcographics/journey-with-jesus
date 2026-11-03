@@ -25,17 +25,6 @@ export const metadata: Metadata = {
 export default function HomePage() {
   return (
     <main id="main-content">
-      <div className="home-masthead-brand">
-        <Image
-          alt="Journey with Jesus"
-          className="home-masthead-wordmark"
-          height={1556}
-          loading="eager"
-          src={`${basePath}/images/journey-with-jesus-wordmark.webp`}
-          unoptimized
-          width={4040}
-        />
-      </div>
       <MastheadEasterEgg imageSrc={`${basePath}/images/header-easter-egg-2560.webp`}>
         <ResponsivePicture
           alt="Jesus walks with a young man beneath an autumn tree, overlooking a sunlit valley."
@@ -47,6 +36,15 @@ export default function HomePage() {
           sizes="100vw"
           webpSources={imageSources("journey-with-jesus-header", [512, 768, 1024, 1440, 1920, 2560, 3200, 3840])}
           width={6384}
+        />
+        <Image
+          alt="Journey with Jesus"
+          className="home-masthead-wordmark"
+          height={1556}
+          loading="eager"
+          src={`${basePath}/images/journey-with-jesus-wordmark.webp`}
+          unoptimized
+          width={4040}
         />
         <MastheadTicker />
       </MastheadEasterEgg>
