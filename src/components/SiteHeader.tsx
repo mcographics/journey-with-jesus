@@ -298,9 +298,7 @@ export function SiteHeader() {
             ref={mobileMenuButtonRef}
             type="button"
           >
-            {isMobileMenuOpen ? <X aria-hidden="true" size={18} /> : <Crown aria-hidden="true" size={18} />}
-            <span>Menu</span>
-            {!isMobileMenuOpen && <ChevronDown aria-hidden="true" size={15} />}
+            {isMobileMenuOpen ? <X aria-hidden="true" size={20} /> : <Menu aria-hidden="true" size={20} />}
           </button>
         </div>
       </div>

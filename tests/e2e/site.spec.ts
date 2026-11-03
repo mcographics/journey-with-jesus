@@ -40,6 +40,9 @@ test.describe("touch mobile navigation", () => {
     await expect(masthead).toBeVisible();
     const menuButton = page.locator(".mobile-menu-toggle");
     await expect(menuButton).toBeVisible();
+    await expect(page.locator(".desktop-menu-toggle")).toBeHidden();
+    await expect(menuButton).toHaveText("");
+    await expect(menuButton.locator("svg")).toBeVisible();
     const mobileNavigation = page.locator(".mobile-navigation");
     await expect(mobileNavigation).toHaveCSS("opacity", "0", { timeout: 3000 });
     const restingButtonBounds = await menuButton.boundingBox();
