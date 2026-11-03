@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState, type FormEvent } from "react";
 import { Check, LoaderCircle, Plus, UploadCloud, Users } from "lucide-react";
+import Image from "next/image";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/database.types";
 
@@ -34,7 +35,6 @@ export function StudioCharacters({ client, onNotice }: Props) {
   const [saving, setSaving] = useState(false);
 
   const loadCharacters = useCallback(async () => {
-    setLoading(true);
     const { data, error } = await client.from("media_characters").select("*").order("sort_order");
     if (error) onNotice(error.message, true);
     else setCharacters(data ?? []);
@@ -143,7 +143,7 @@ export function StudioCharacters({ client, onNotice }: Props) {
             characters.map((character) => (
               <button key={character.id} type="button" className={"studio-list-item" + (selectedId === character.id ? " is-selected" : "")} onClick={() => editCharacter(character)}>
                 <span className="studio-character-list-copy">
-                  {character.portrait_url && <img src={character.portrait_url} alt="" loading="lazy" />}
+                  {character.portrait_url && <Image src={character.portrait_url} alt="" width={88} height={104} unoptimized />}
                   <span><strong>{character.name}</strong><small>{character.published ? "Published" : "Draft"} · {character.role || "No role added"}</small></span>
                 </span>
                 <span className={"studio-status" + (character.published ? " is-live" : "")}>{character.published ? "LIVE" : "DRAFT"}</span>
@@ -167,7 +167,7 @@ export function StudioCharacters({ client, onNotice }: Props) {
         </div>
         {(form.portrait_url || removePortrait) && (
           <div className="studio-character-preview">
-            {!removePortrait && form.portrait_url && <img src={form.portrait_url} alt={form.name ? "Portrait of " + form.name : "Current character portrait"} loading="lazy" />}
+            {!removePortrait && form.portrait_url && <Image src={form.portrait_url} alt={form.name ? "Portrait of " + form.name : "Current character portrait"} width={144} height={176} unoptimized />}
             {removePortrait ? <span>The saved portrait will be removed when you save.</span> : <button type="button" onClick={() => { setRemovePortrait(true); setImageFile(null); }}>Remove portrait</button>}
           </div>
         )}

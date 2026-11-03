@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { BookOpen } from "lucide-react";
+import Image from "next/image";
 import type { Database } from "@/lib/database.types";
 import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
 
@@ -38,7 +39,7 @@ export function CharacterCatalog() {
     <div className="character-grid">
       {characters.map((character) => (
         <article className="character-card" key={character.id}>
-          {character.portrait_url && <img className="character-portrait-image" src={character.portrait_url} alt={character.name} loading="lazy" />}
+          {character.portrait_url && <Image className="character-portrait-image" src={character.portrait_url} alt={character.name} width={900} height={675} sizes="(max-width: 700px) 100vw, 33vw" unoptimized />}
           <div className="character-card-copy">
             <p className="character-role">{character.role}</p>
             <h2>{character.name}</h2>
