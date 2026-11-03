@@ -21,11 +21,12 @@
 .character-note, .team-note { margin: 22px 0 0; color: #868d99; font-size: 11px; line-height: 1.7; }
 .team-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
 .team-card { overflow: hidden; border: 1px solid rgba(238, 221, 174, .16); border-radius: 12px; background: linear-gradient(145deg, rgba(20, 30, 49, .94), rgba(13, 21, 36, .98)); box-shadow: 0 16px 34px rgba(2, 6, 15, .2); }
-.team-art { position: relative; display: flex; min-height: 280px; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; background: radial-gradient(ellipse at center, rgba(228, 188, 112, .19), transparent 49%), linear-gradient(145deg, #1c2940, #101827); color: var(--gold-bright); }
+.team-art { position: relative; display: flex; height: clamp(320px, 36vw, 440px); flex-direction: column; align-items: center; justify-content: center; overflow: hidden; background: radial-gradient(ellipse at center, rgba(228, 188, 112, .19), transparent 49%), linear-gradient(145deg, #1c2940, #101827); color: var(--gold-bright); }
+.team-art.has-photo { background: radial-gradient(ellipse at 50% 42%, rgba(228, 188, 112, .1), transparent 61%), linear-gradient(145deg, #1c2940, #101827); }
 .team-art::before, .team-art::after { position: absolute; width: 230px; height: 230px; border: 1px solid rgba(228, 188, 112, .18); border-radius: 50%; content: ""; }
 .team-art::after { width: 270px; height: 270px; border-color: rgba(228, 188, 112, .1); }
 .team-art-label { position: absolute; z-index: 3; top: 20px; left: 20px; max-width: calc(100% - 40px); padding: 7px 10px; border-radius: 999px; background: rgba(7, 12, 24, .72); color: #f0dcae; font-size: 9px; letter-spacing: .12em; text-transform: uppercase; }
-.team-photo { z-index: 2; object-fit: cover; object-position: center 35%; }
+.team-photo { z-index: 2; object-fit: contain; object-position: center; }
 .team-monogram { z-index: 1; display: grid; width: 112px; height: 112px; place-items: center; border: 1px solid rgba(243, 213, 149, .6); border-radius: 50%; background: rgba(11, 17, 32, .72); color: #f3d595; font-family: var(--serif); font-size: 35px; letter-spacing: .05em; box-shadow: 0 0 0 8px rgba(228, 188, 112, .06), 0 0 48px rgba(228, 188, 112, .12); }
 .team-art-mark { position: absolute; z-index: 3; right: 19%; bottom: 19%; color: rgba(243, 213, 149, .58); }
 .team-animator-icon { z-index: 1; color: #f3d595; }
@@ -92,7 +93,7 @@
   .character-passages { gap: 7px; padding-top: 10px; }
   .character-passages strong { font-size: 8px; }
   .character-passages span { font-size: 10px; }
-  .team-art { min-height: 230px; }
+  .team-art { height: clamp(340px, 100vw, 440px); }
   .team-card-copy { padding: 20px; }
   .store-card { padding: 44px 25px; }
 }
