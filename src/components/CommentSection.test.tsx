@@ -29,7 +29,7 @@ describe("general Media comments", () => {
     render(<CommentSection episode={null} general />);
     expect(screen.getByRole("heading", { name: "Media community" })).toBeTruthy();
     fireEvent.change(screen.getByLabelText("Display name"), { target: { value: "Alex" } });
-    fireEvent.change(screen.getByLabelText("Your reflection"), { target: { value: "Thank you for these stories!" } });
+    fireEvent.change(screen.getByRole("textbox", { name: /Your reflection/ }), { target: { value: "Thank you for these stories!" } });
     fireEvent.click(screen.getByRole("button", { name: "Submit for review" }));
     await waitFor(() => expect(mocks.invoke).toHaveBeenCalledWith("submit-comment", {
       body: { episodeId: "media-community", displayName: "Alex", body: "Thank you for these stories!", website: "" },
