@@ -61,7 +61,14 @@ export function StudioExperience() {
   }
 
   useEffect(() => {
-    const timer = window.setTimeout(() => setClient(createBrowserSupabaseClient()), 0);
+    const timer = window.setTimeout(() => {
+      const callbackNotice = consumeAuthCallbackNotice();
+      if (callbackNotice) {
+        setNotice(callbackNotice);
+        setNoticeError(true);
+      }
+      setClient(createBrowserSupabaseClient());
+    }, 0);
     return () => window.clearTimeout(timer);
   }, []);
 
@@ -81,7 +88,7 @@ export function StudioExperience() {
     };
     void client.auth.getSession().then(({ data, error }) => {
       if (active) {
-        if (error) { setNotice(error.message); setNoticeError(true); }
+        if (error) { setNotice(signInErrorMessage(error.code, error.message)); setNoticeError(true); }
         void verifyAdmin(data.session);
       }
     });
@@ -136,13 +143,23 @@ export function StudioExperience() {
     const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
     const redirectPath = basePath.replace(/\/$/, "") + "/studio/";
     const redirect = new URL(redirectPath, window.location.origin).toString();
-    const { error } = await client.auth.signInWithOtp({
-      email: email.trim(),
-      options: { emailRedirectTo: redirect, shouldCreateUser: false },
-    });
-    setSendingLink(false);
-    if (error) { setNotice(error.message); setNoticeError(true); }
-    else setNotice("Sign-in link sent. Check your email, then return here to open Studio.");
+    try {
+      const { error } = await client.auth.signInWithOtp({
+        email: email.trim(),
+        options: { emailRedirectTo: redirect, shouldCreateUser: false },
+      });
+      if (error) {
+        setNotice(signInErrorMessage(error.code, error.message));
+        setNoticeError(true);
+      } else {
+        setNotice("Sign-in link sent. Open it once in this same browser. If it fails, request a fresh link and use the newest email.");
+      }
+    } catch (error) {
+      setNotice(signInErrorMessage(undefined, errorMessage(error)));
+      setNoticeError(true);
+    } finally {
+      setSendingLink(false);
+    }
   }
 
   async function signOut() {
@@ -542,6 +559,46 @@ function slugify(value: string): string {
 function errorMessage(error: unknown): string {
   return formatStudioError(error, "Studio could not complete that request.");
 }
+
+function signInErrorMessage(code?: string, fallback?: string): string {
+  switch (code) {
+    case "otp_disabled":
+      return "Email sign-in is disabled for this project. The site administrator must enable Email Magic Link / OTP in Supabase Authentication settings.";
+    case "over_email_send_rate_limit":
+      return "The email sending limit has been reached. Wait before requesting another sign-in link.";
+    case "over_request_rate_limit":
+      return "Too many sign-in requests were made. Wait a few minutes, then try again.";
+    case "otp_expired":
+    case "flow_state_expired":
+    case "flow_state_not_found":
+      return "This sign-in link has expired or was already used. Request a fresh link and open it once.";
+    case "redirect_to_not_allowed":
+      return "Supabase blocked the Studio redirect. The site administrator must add this site's Studio URL to the Supabase Auth redirect allow list.";
+    case "callback_error":
+      return "The sign-in link could not be verified. Request a fresh link and open it once in this browser.";
+    default:
+      return fallback || "Sign-in could not be completed. Please try again.";
+  }
+}
+
+function consumeAuthCallbackNotice(): string | null {
+  const url = new URL(window.location.href);
+  const hashParams = new URLSearchParams(url.hash.startsWith("#") ? url.hash.slice(1) : url.hash);
+  const errorCode = url.searchParams.get("error_code") ?? hashParams.get("error_code");
+  const hasCallbackError = Boolean(errorCode || url.searchParams.has("error") || hashParams.has("error"));
+  if (!hasCallbackError) return null;
+
+  const authErrorParams = ["error", "error_code", "error_description", "error_hint", "error_uri"];
+  authErrorParams.forEach((key) => {
+    url.searchParams.delete(key);
+    hashParams.delete(key);
+  });
+  url.hash = hashParams.toString() ? `#${hashParams.toString()}` : "";
+  window.history.replaceState(window.history.state, "", url.toString());
+
+  return signInErrorMessage(errorCode ?? "callback_error");
+}
+
 function getVideoContentType(file: File): VideoContentType {
   const contentType = file.type || (file.name.toLowerCase().endsWith(".webm") ? "video/webm" : file.name.toLowerCase().endsWith(".mov") ? "video/quicktime" : "video/mp4");
   if (contentType !== "video/mp4" && contentType !== "video/webm" && contentType !== "video/quicktime") {
