@@ -7,6 +7,7 @@ type XrayRevealProps = {
   children: ReactNode;
   imageSrc: string;
   className?: string;
+  canvasClassName?: string;
   imageFit?: "fill" | "contain";
 };
 
@@ -26,6 +27,7 @@ export default function XrayReveal({
   children,
   imageSrc,
   className = "home-masthead",
+  canvasClassName = "xray-reveal-canvas",
   imageFit = "fill",
 }: XrayRevealProps) {
   const revealAreaRef = useRef<HTMLDivElement>(null);
@@ -293,7 +295,7 @@ export default function XrayReveal({
   return (
     <div className={className} ref={revealAreaRef}>
       {children}
-      <canvas aria-hidden="true" className="xray-reveal-canvas" ref={canvasRef} />
+      <canvas aria-hidden="true" className={canvasClassName} ref={canvasRef} />
     </div>
   );
 }

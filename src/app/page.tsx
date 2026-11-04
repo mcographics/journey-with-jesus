@@ -25,7 +25,10 @@ export const metadata: Metadata = {
 export default function HomePage() {
   return (
     <main id="main-content">
-      <XrayReveal imageSrc={`${basePath}/images/header-easter-egg-2560.webp`}>
+      <XrayReveal
+        canvasClassName="masthead-easter-egg-canvas xray-reveal-canvas"
+        imageSrc={`${basePath}/images/header-easter-egg-2560.webp`}
+      >
         <ResponsivePicture
           alt="Jesus walks with a young man beneath an autumn tree, overlooking a sunlit valley."
           className="home-masthead-image"
