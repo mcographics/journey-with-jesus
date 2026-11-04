@@ -9,6 +9,12 @@ describe("server-side comment moderation", () => {
     ["You are worthless", "harassment"],
     ["shut up", "harassment"],
     ["What the sh1t", "profanity"],
+    ["shit!", "profanity"],
+    ["I will kill you!", "threat"],
+    ["I\u0027ll kill you", "threat"],
+    ["I\u0027m going to kill you", "threat"],
+    ["You\u0027re worthless", "harassment"],
+    ["You are worthless!", "harassment"],
   ])("rejects abuse: %s", (comment, reason) => {
     expect(screenComment(comment)).toEqual({ action: "reject", reason });
   });
