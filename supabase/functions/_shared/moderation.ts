@@ -16,7 +16,7 @@ const slurs = [
   "tranny", "retard",
 ];
 const threats = [
-  /\b(?:i(?:'| a)?m going to|i will|i'll)\s+(?:kill|hurt|beat|attack)\s+(?:you|him|her|them)\b/,
+  /\b(?:i am going to|i will)\s+(?:kill|hurt|beat|attack)\s+(?:you|him|her|them)\b/,
   /\b(?:kill yourself|go kill yourself|kys)\b/,
 ];
 const targetedHarassment = [
@@ -26,8 +26,10 @@ const targetedHarassment = [
 
 function normalize(text: string): string {
   return text.normalize("NFKC").toLowerCase()
+    .replace(/\bi[’']m\b/g, "i am").replace(/\bi[’']ll\b/g, "i will")
+    .replace(/\byou[’']re\b/g, "you are")
     .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[@]/g, "a").replace(/[0]/g, "o").replace(/[1!]/g, "i")
+    .replace(/[@]/g, "a").replace(/[0]/g, "o").replace(/[1]/g, "i").replace(/(?<=[a-z])!(?=[a-z])/g, "i")
     .replace(/[3]/g, "e").replace(/[$5]/g, "s").replace(/[7]/g, "t")
     .replace(/[^a-z\s]/g, " ")
     .replace(/\s+/g, " ").trim();
