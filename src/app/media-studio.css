@@ -335,3 +335,11 @@
   background-image: none !important;
   animation: none !important;
 }
+
+/* Comment moderation controls in Journey Studio */
+.studio-comment-toolbar { display: flex; align-items: end; flex-wrap: wrap; justify-content: space-between; gap: 12px; margin: 14px 0 18px; }
+.studio-comment-toolbar label { display: flex; flex-direction: column; gap: 6px; color: #c3bbaa; font-size: 11px; }
+.studio-comment-toolbar select { min-height: 36px; padding: 5px 30px 5px 10px; color: inherit; background: #21242b; border: 1px solid rgba(238, 221, 174, .25); border-radius: 3px; }
+.studio-comment-toolbar button { min-height: 36px; }
+:root[data-theme="light"] .studio-comment-toolbar label { color: #596170; }
+:root[data-theme="light"] .studio-comment-toolbar select { color: #384354; background: #fff; border-color: rgba(178, 133, 36, .25); }

@@ -5,7 +5,8 @@ import { createBrowserSupabaseClient, isSupabaseConfigured } from "@/lib/supabas
 import type { Database } from "@/lib/database.types";
 
 type CommentRow = Database["public"]["Tables"]["episode_comments"]["Row"];
-export function CommentSection({ episode }: { episode: Episode | null }) {
+export function CommentSection({ episode, general = false }: { episode: Episode | null; general?: boolean }) {
+  const episodeId = general ? "media-community" : episode?.id ?? null;
   const [comments, setComments] = useState<CommentRow[]>([]);
   const [name, setName] = useState("");
   const [body, setBody] = useState("");
@@ -16,23 +17,23 @@ export function CommentSection({ episode }: { episode: Episode | null }) {
   const configured = isSupabaseConfigured();
 
   useEffect(() => {
-    if (!episode || !configured) return;
+    if (!episodeId || !configured) return;
     let active = true;
     const client = createBrowserSupabaseClient();
     if (!client) return;
     void client.from("episode_comments").select("id, episode_id, display_name, body, status, created_at")
-      .eq("episode_id", episode.id).eq("status", "approved").order("created_at", { ascending: false }).limit(50)
+      .eq("episode_id", episodeId).eq("status", "approved").order("created_at", { ascending: false }).limit(50)
       .then(({ data, error }) => {
         if (!active) return;
         if (error) { setIsError(true); setStatus("Comments are temporarily unavailable. Please try again later."); return; }
         setComments(data ?? []);
       });
     return () => { active = false; };
-  }, [episode, configured]);
+  }, [episodeId, configured]);
 
   async function submitComment(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!episode) return;
+    if (!episodeId) return;
     const trimmedName = name.trim();
     const trimmedBody = body.trim();
     if (!trimmedName || trimmedName.length > 60) { setIsError(true); setStatus("Use a display name between 1 and 60 characters."); return; }
@@ -43,7 +44,7 @@ export function CommentSection({ episode }: { episode: Episode | null }) {
     setSending(true); setIsError(false); setStatus("");
     try {
       const { data, error } = await client.functions.invoke("submit-comment", {
-        body: { episodeId: episode.id, displayName: trimmedName, body: trimmedBody, website },
+        body: { episodeId, displayName: trimmedName, body: trimmedBody, website },
       });
       if (error || data?.status !== "pending") {
         if (data?.error === "rate_limited") throw new Error("Please wait a minute before commenting again.");
@@ -58,10 +59,12 @@ export function CommentSection({ episode }: { episode: Episode | null }) {
   }
 
   return (
-    <section className="comment-section" aria-labelledby="comments-title">
-      <h2 id="comments-title">Community</h2>
-      <p className="comment-intro">Share a thoughtful reflection on this story. No account is needed. Comments are reviewed before they appear.</p>
-      {!episode ? (
+    <section className="comment-section" aria-labelledby={general ? "media-community-title" : "story-comments-title"}>
+      <h2 id={general ? "media-community-title" : "story-comments-title"}>{general ? "Media community" : "Story comments"}</h2>
+      <p className="comment-intro">{general
+        ? "Share a reflection, a word of encouragement, or what you hope to see on Journey with Jesus. No account is needed. Comments are reviewed before they appear."
+        : "Share a thoughtful reflection on this story. No account is needed. Comments are reviewed before they appear."}</p>
+      {!episodeId ? (
         <p className="comment-status">Choose a story to see its community conversation.</p>
       ) : !configured ? (
         <div className="comments-unavailable"><strong>Comments are not set up yet.</strong> The story library can be enjoyed while the site owner connects the moderated comments service.</div>

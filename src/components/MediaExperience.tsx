@@ -65,7 +65,8 @@ export function MediaExperience({ episodes: initialEpisodes }: { episodes: Episo
         <div className="media-layout">
           <div className="media-main">
             <VideoPlayer key={"player-" + (selectedEpisode?.id ?? "none")} episode={selectedEpisode} />
-            <CommentSection key={"comments-" + (selectedEpisode?.id ?? "none")} episode={selectedEpisode} />
+            {selectedEpisode && <CommentSection key={"comments-" + selectedEpisode.id} episode={selectedEpisode} />}
+            <CommentSection episode={null} general />
           </div>
           <EpisodePlaylist episodes={episodes} playlists={playlists} selectedPlaylistId={playlistId}
             onPlaylistChange={setPlaylistId} selectedId={selectedId} onSelect={selectEpisode} />
