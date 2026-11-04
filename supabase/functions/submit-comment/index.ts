@@ -1,5 +1,6 @@
 import { withSupabase } from "npm:@supabase/server@1";
 import { validateCommentPayload } from "../_shared/validation.ts";
+import { screenComment } from "../_shared/moderation.ts";
 
 const DEFAULT_ORIGINS = ["https://mcographics.github.io", "http://localhost:3000"];
 
@@ -37,6 +38,11 @@ const authenticatedHandler = withSupabase({ auth: "publishable" }, async (reques
 
   const validation = validateCommentPayload(payload);
   if (!validation.ok) return jsonResponse({ error: validation.message }, 400);
+
+  const moderation = screenComment(validation.value.body);
+  if (moderation.action === "reject") {
+    return jsonResponse({ error: "comment_rejected", message: "This comment does not meet our community guidelines." }, 422);
+  }
 
   const clientAddress = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
   const fingerprintSecret = Deno.env.get("RATE_LIMIT_SALT");
