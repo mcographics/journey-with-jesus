@@ -3,6 +3,7 @@
 import { useEffect, useId, useState } from "react";
 import { BookOpen, ChevronDown } from "lucide-react";
 import Image from "next/image";
+import XrayReveal from "@/components/XrayReveal";
 import type { Database } from "@/lib/database.types";
 import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
 
@@ -22,6 +23,24 @@ function CharacterCard({ character }: { character: PublicCharacter }) {
   const [expanded, setExpanded] = useState(false);
   const detailsId = useId();
   const toggle = () => setExpanded((current) => !current);
+  const normalizedId = character.id.toLowerCase();
+  const normalizedName = character.name.trim().toLowerCase();
+  const isJesus = normalizedId === "jesus-of-nazareth" || normalizedId === "jesus" || normalizedName === "jesus" || normalizedName === "jesus of nazareth";
+
+  const portrait = character.portrait_url ? (
+    <Image
+      className="character-portrait-image"
+      src={character.portrait_url}
+      alt={character.name}
+      fill
+      sizes="(max-width: 700px) calc(100vw - 36px), (max-width: 900px) 50vw, 33vw"
+      unoptimized
+    />
+  ) : (
+    <span className="character-portrait-placeholder" aria-hidden="true">
+      {character.name.split(/\s+/).map((word) => word[0]).slice(0, 2).join("")}
+    </span>
+  );
 
   return (
     <article className={`character-card${expanded ? " is-expanded" : ""}`}>
@@ -30,7 +49,7 @@ function CharacterCard({ character }: { character: PublicCharacter }) {
         className="character-portrait-trigger"
         aria-controls={detailsId}
         aria-expanded={expanded}
-        aria-label={`${expanded ? "Hide" : "Read"} the biography of ${character.name}`}
+        aria-label={`${expanded ? "Hide" : "Read"} the biography of ${character.name}${isJesus ? "; hover or double-tap to reveal the alternate portrait" : ""}`}
         onDoubleClick={() => {
           // Touchscreens use a single tap; on desktop the portrait uses a double-click.
           if (!window.matchMedia("(pointer: coarse)").matches) toggle();
@@ -40,23 +59,20 @@ function CharacterCard({ character }: { character: PublicCharacter }) {
           if (event.detail === 0 || window.matchMedia("(pointer: coarse)").matches) toggle();
         }}
       >
-        {character.portrait_url ? (
-          <Image
-            className="character-portrait-image"
-            src={character.portrait_url}
-            alt={character.name}
-            fill
-            sizes="(max-width: 700px) calc(100vw - 36px), (max-width: 900px) 50vw, 33vw"
-            unoptimized
-          />
+        {isJesus ? (
+          <XrayReveal
+            className="character-xray-layer"
+            imageFit="contain"
+            imageSrc={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/images/jesus-character-xray.webp`}
+          >
+            {portrait}
+          </XrayReveal>
         ) : (
-          <span className="character-portrait-placeholder" aria-hidden="true">
-            {character.name.split(/\s+/).map((word) => word[0]).slice(0, 2).join("")}
-          </span>
+          portrait
         )}
         <span className="character-portrait-cue">
-          <span className="character-portrait-cue-desktop">{expanded ? "Double-click to close" : "Double-click to read"}</span>
-          <span className="character-portrait-cue-touch">{expanded ? "Tap to close" : "Tap to read"}</span>
+          <span className="character-portrait-cue-desktop">{isJesus ? "Hover to reveal · " : ""}{expanded ? "Double-click to close" : "Double-click to read"}</span>
+          <span className="character-portrait-cue-touch">{isJesus ? "Double-tap to reveal · " : ""}{expanded ? "Tap to close" : "Tap to read"}</span>
         </span>
       </button>
       <div className="character-card-copy" id={detailsId} aria-hidden={!expanded}>

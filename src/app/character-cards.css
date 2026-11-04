@@ -26,6 +26,18 @@
   touch-action: manipulation;
 }
 
+.character-xray-layer {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  line-height: normal;
+  touch-action: manipulation;
+}
+
 .character-card.is-expanded .character-portrait-trigger {
   cursor: zoom-out;
 }
@@ -37,8 +49,8 @@
   max-height: none;
   aspect-ratio: auto;
   border: 0;
-  object-fit: cover;
-  object-position: center 28%;
+  object-fit: contain;
+  object-position: center;
 }
 
 .character-card.is-expanded .character-portrait-trigger .character-portrait-image {
@@ -59,7 +71,7 @@
 
 .character-portrait-cue {
   position: absolute;
-  z-index: 1;
+  z-index: 2;
   right: 14px;
   bottom: 14px;
   left: 14px;

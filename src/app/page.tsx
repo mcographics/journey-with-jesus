@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, BookOpen, Heart, Sparkles } from "lucide-react";
 import MastheadTicker from "@/components/MastheadTicker";
-import MastheadEasterEgg from "@/components/MastheadEasterEgg";
+import XrayReveal from "@/components/XrayReveal";
 import ResponsivePicture, { type PictureCandidate } from "@/components/ResponsivePicture";
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
 export default function HomePage() {
   return (
     <main id="main-content">
-      <MastheadEasterEgg imageSrc={`${basePath}/images/header-easter-egg-2560.webp`}>
+      <XrayReveal imageSrc={`${basePath}/images/header-easter-egg-2560.webp`}>
         <ResponsivePicture
           alt="Jesus walks with a young man beneath an autumn tree, overlooking a sunlit valley."
           className="home-masthead-image"
@@ -47,7 +47,7 @@ export default function HomePage() {
           width={4040}
         />
         <MastheadTicker />
-      </MastheadEasterEgg>
+      </XrayReveal>
       <section className="home-hero" aria-labelledby="home-title">
         <div className="home-hero-content page-width">
           <p className="eyebrow"><span /> ANIMATED BIBLICAL STORIES</p>

@@ -3,9 +3,11 @@
 import type { ReactNode } from "react";
 import { useEffect, useRef } from "react";
 
-type MastheadEasterEggProps = {
+type XrayRevealProps = {
   children: ReactNode;
   imageSrc: string;
+  className?: string;
+  imageFit?: "fill" | "contain";
 };
 
 type TrailBubble = {
@@ -20,15 +22,20 @@ const TOUCH_REVEAL_FADE_DURATION = 240;
 const DOUBLE_TAP_INTERVAL = 380;
 const DOUBLE_TAP_DISTANCE = 48;
 
-export default function MastheadEasterEgg({ children, imageSrc }: MastheadEasterEggProps) {
-  const mastheadRef = useRef<HTMLDivElement>(null);
+export default function XrayReveal({
+  children,
+  imageSrc,
+  className = "home-masthead",
+  imageFit = "fill",
+}: XrayRevealProps) {
+  const revealAreaRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    const masthead = mastheadRef.current;
+    const revealArea = revealAreaRef.current;
     const canvas = canvasRef.current;
     const context = canvas?.getContext("2d");
-    if (!masthead || !canvas || !context) return;
+    if (!revealArea || !canvas || !context) return;
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
@@ -52,6 +59,17 @@ export default function MastheadEasterEgg({ children, imageSrc }: MastheadEaster
     let touchRevealTimer = 0;
     let touchRevealCleanupTimer = 0;
     let previousTouchTap: { x: number; y: number; time: number } | null = null;
+
+    const drawRevealImage = () => {
+      if (imageFit === "contain") {
+        const scale = Math.min(width / revealImage.naturalWidth, height / revealImage.naturalHeight);
+        const drawWidth = revealImage.naturalWidth * scale;
+        const drawHeight = revealImage.naturalHeight * scale;
+        context.drawImage(revealImage, (width - drawWidth) / 2, (height - drawHeight) / 2, drawWidth, drawHeight);
+        return;
+      }
+      context.drawImage(revealImage, 0, 0, width, height);
+    };
 
     const loadRevealImage = (onReady?: () => void) => {
       if (imageLoaded) {
@@ -102,7 +120,7 @@ export default function MastheadEasterEgg({ children, imageSrc }: MastheadEaster
     };
 
     const resize = () => {
-      const bounds = masthead.getBoundingClientRect();
+      const bounds = revealArea.getBoundingClientRect();
       width = bounds.width;
       height = bounds.height;
       pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
@@ -146,7 +164,7 @@ export default function MastheadEasterEgg({ children, imageSrc }: MastheadEaster
 
       context.clearRect(0, 0, width, height);
       if (touchRevealActive) {
-        context.drawImage(revealImage, 0, 0, width, height);
+        drawRevealImage();
         canvas.style.opacity = "1";
         return;
       }
@@ -164,7 +182,7 @@ export default function MastheadEasterEgg({ children, imageSrc }: MastheadEaster
       }
       drawSoftBubble(pointer.x, pointer.y, bubbleRadius, 0.96);
 
-      context.drawImage(revealImage, 0, 0, width, height);
+      drawRevealImage();
       context.globalCompositeOperation = "destination-in";
       context.drawImage(mask, 0, 0, width, height);
       context.globalCompositeOperation = "source-over";
@@ -199,7 +217,7 @@ export default function MastheadEasterEgg({ children, imageSrc }: MastheadEaster
       if (event.pointerType !== "mouse" && event.pointerType !== "pen") return;
       if (reducedMotion.matches) return;
 
-      const bounds = masthead.getBoundingClientRect();
+      const bounds = revealArea.getBoundingClientRect();
       const x = event.clientX - bounds.left;
       const y = event.clientY - bounds.top;
       if (x < 0 || y < 0 || x > bounds.width || y > bounds.height) {
@@ -224,7 +242,7 @@ export default function MastheadEasterEgg({ children, imageSrc }: MastheadEaster
     const onPointerDown = (event: PointerEvent) => {
       if (event.pointerType !== "touch") return;
 
-      const bounds = masthead.getBoundingClientRect();
+      const bounds = revealArea.getBoundingClientRect();
       const x = event.clientX - bounds.left;
       const y = event.clientY - bounds.top;
       if (x < 0 || y < 0 || x > bounds.width || y > bounds.height) {
@@ -252,7 +270,7 @@ export default function MastheadEasterEgg({ children, imageSrc }: MastheadEaster
     const onWindowBlur = () => clear();
     revealImage.decoding = "async";
     const observer = new ResizeObserver(resize);
-    observer.observe(masthead);
+    observer.observe(revealArea);
     resize();
     window.addEventListener("pointermove", onPointerMove, { passive: true });
     window.addEventListener("pointerdown", onPointerDown, { passive: true });
@@ -270,12 +288,12 @@ export default function MastheadEasterEgg({ children, imageSrc }: MastheadEaster
       if (touchRevealCleanupTimer) window.clearTimeout(touchRevealCleanupTimer);
       if (frame) cancelAnimationFrame(frame);
     };
-  }, [imageSrc]);
+  }, [imageFit, imageSrc]);
 
   return (
-    <div className="home-masthead" ref={mastheadRef}>
+    <div className={className} ref={revealAreaRef}>
       {children}
-      <canvas aria-hidden="true" className="masthead-easter-egg-canvas" ref={canvasRef} />
+      <canvas aria-hidden="true" className="xray-reveal-canvas" ref={canvasRef} />
     </div>
   );
 }
