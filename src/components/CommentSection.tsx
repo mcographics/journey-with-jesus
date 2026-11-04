@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useEffect, useState, type FormEvent } from "react";
 import type { Episode } from "@/data/episodes";
 import { createBrowserSupabaseClient, isSupabaseConfigured } from "@/lib/supabase/browser";
@@ -84,6 +85,7 @@ export function CommentSection({ episode, general = false }: { episode: Episode 
             <label>Display name<input value={name} onChange={(event) => setName(event.target.value)} maxLength={60} autoComplete="nickname" required /></label>
             <label>Your reflection<textarea value={body} onChange={(event) => setBody(event.target.value)} maxLength={2000} required /><small>{Array.from(body).length} / 2,000 characters</small></label>
             <label className="honeypot-field" aria-hidden="true">Leave this field empty<input value={website} onChange={(event) => setWebsite(event.target.value)} tabIndex={-1} autoComplete="off" /></label>
+            <p className="comment-status">By submitting, you agree to our <Link href="/policies/community-guidelines/">Community Guidelines</Link> and <Link href="/policies/terms/">Terms of Service</Link>. Read our <Link href="/policies/privacy/">Privacy Policy</Link>.</p>
             <button className="button button-gold" type="submit" disabled={sending}>{sending ? "Sending…" : "Submit for review"}</button>
           </form>
         </>

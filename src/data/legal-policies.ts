@@ -1,0 +1,164 @@
+export const legalPolicies = [
+  {
+    "slug": "privacy",
+    "title": "Privacy Policy",
+    "sections": [
+      {
+        "heading": "Who operates this website",
+        "body": "Journey with Jesus is an independent Christian storytelling project created by Eric Oberhausen. Website development and maintenance are credited to Majestic Creations. The project is not represented as an incorporated business or registered charity."
+      },
+      {
+        "heading": "Information you provide",
+        "body": "When you submit a community comment, you provide a display name and comment text. No account is required to comment. Please do not include sensitive personal information in public submissions."
+      },
+      {
+        "heading": "Technical information",
+        "body": "The comment service uses technical request information to help prevent repeated submissions and abuse. The submission service generates a one-way fingerprint of the requesting network address for rate limiting. Hosting and service providers may also process ordinary server logs."
+      },
+      {
+        "heading": "How information is used",
+        "body": "Submitted comments are reviewed before public display. Approved comments may appear publicly with the display name and submission date. Comments can be hidden or rejected. Information is used to operate, secure, and moderate the website."
+      },
+      {
+        "heading": "Service providers",
+        "body": "Supabase supports the website database and comment service. GitHub Pages and related hosting or delivery services may process technical information needed to deliver the site. Embedded media, if present, may be governed by their providers' policies."
+      },
+      {
+        "heading": "Retention and requests",
+        "body": "Comment records may remain in the moderation system after being hidden or rejected. A specific retention period has not yet been established. Visitors may request review, correction, or removal of a comment through the contact method published on the website once established."
+      },
+      {
+        "heading": "Your choices",
+        "body": "Avoid sharing personal details in comments. You may choose not to submit comments. Browser settings may allow you to manage storage and third-party cookies."
+      },
+      {
+        "heading": "Contact and changes",
+        "body": "A dedicated privacy contact method must be confirmed before final publication. This policy may be updated when website features or data practices change."
+      }
+    ]
+  },
+  {
+    "slug": "terms",
+    "title": "Terms of Service",
+    "sections": [
+      {
+        "heading": "About the service",
+        "body": "Journey with Jesus offers Scripture-inspired creative storytelling, animation, and moderated community discussion. The project is created by Eric Oberhausen and independently operated, with website support by Majestic Creations."
+      },
+      {
+        "heading": "Use of the website",
+        "body": "Use the website lawfully and respectfully. Do not disrupt its services, impersonate others, post spam, threaten users, or attempt unauthorized access."
+      },
+      {
+        "heading": "Community submissions",
+        "body": "You are responsible for the comments you submit. Do not post material you lack permission to share. You grant the project a non-exclusive permission to display, store, and moderate your submitted comments as needed to operate the community."
+      },
+      {
+        "heading": "Moderation",
+        "body": "Comments are reviewed before publication. The website may decline, hide, reject, or remove comments under the Community Guidelines. Publication is not guaranteed."
+      },
+      {
+        "heading": "Creative rights",
+        "body": "Original animations, artwork, text, logos, and other content belong to their respective rights holders. Viewing the website does not grant permission to reproduce or commercially exploit its content."
+      },
+      {
+        "heading": "Faith and informational content",
+        "body": "Content is offered for creative, educational, and faith-oriented purposes. It is not professional medical, mental-health, legal, or financial advice."
+      },
+      {
+        "heading": "Availability and external links",
+        "body": "The service may change or be temporarily unavailable. External websites and embedded services have their own terms and practices."
+      },
+      {
+        "heading": "Limitations",
+        "body": "The website is provided on an as-available basis to the extent permitted by applicable law. Nothing here excludes rights or remedies that cannot legally be excluded."
+      },
+      {
+        "heading": "Updates and contact",
+        "body": "These terms may change as the website develops. A public contact channel and effective date should be confirmed before final publication."
+      }
+    ]
+  },
+  {
+    "slug": "community-guidelines",
+    "title": "Community Guidelines",
+    "sections": [
+      {
+        "heading": "Our purpose",
+        "body": "We welcome thoughtful reflections, encouragement, questions, and respectful discussion about faith and the stories shared on Journey with Jesus."
+      },
+      {
+        "heading": "Be respectful",
+        "body": "Disagreement is welcome when expressed with care. Do not attack, insult, shame, or harass other people."
+      },
+      {
+        "heading": "Prohibited submissions",
+        "body": "Do not submit threats, hateful slurs, targeted harassment, abusive profanity, spam, impersonation, personal information about others, or unlawful or infringing content."
+      },
+      {
+        "heading": "Sensitive conversations",
+        "body": "People may discuss grief, depression, doubt, or difficult experiences respectfully. Do not shame people seeking support. The community is not an emergency or crisis-response service."
+      },
+      {
+        "heading": "Review process",
+        "body": "Comments are screened and then held for human review before publication. A comment may be rejected automatically, remain pending, or be approved. Moderators may later hide approved comments."
+      },
+      {
+        "heading": "Reporting concerns",
+        "body": "A public reporting or contact method should be added before final publication. If someone is in immediate danger, contact local emergency services."
+      }
+    ]
+  },
+  {
+    "slug": "cookies",
+    "title": "Cookie and Local Storage Policy",
+    "sections": [
+      {
+        "heading": "What this site uses",
+        "body": "The website uses browser storage for preferences such as light or dark appearance. Some hosting, security, database, or embedded media services may use cookies or comparable technologies."
+      },
+      {
+        "heading": "Comment functionality",
+        "body": "Submitting a comment involves communicating with the Supabase-backed service. Technical request information may be used to protect the service from abuse."
+      },
+      {
+        "heading": "Third-party media",
+        "body": "If external video or other embeds are enabled, their providers may set cookies or collect information under their own policies."
+      },
+      {
+        "heading": "Your controls",
+        "body": "You can clear cookies and local storage or restrict third-party cookies using your browser settings. Some features may behave differently afterward."
+      },
+      {
+        "heading": "Before publication",
+        "body": "The precise list of cookies, analytics, embeds, and consent requirements should be audited against the deployed website. Do not interpret this draft as confirmation that no tracking occurs."
+      }
+    ]
+  },
+  {
+    "slug": "copyright",
+    "title": "Copyright and Content Policy",
+    "sections": [
+      {
+        "heading": "Ownership and credits",
+        "body": "Journey with Jesus is a creative project by Eric Oberhausen. Website design, development, and maintenance are credited to Majestic Creations. Individual assets may have different creators or licensors."
+      },
+      {
+        "heading": "Permitted use",
+        "body": "Visitors may view and share links to publicly available pages. Downloading, re-uploading, modifying, selling, or redistributing protected content requires authorization unless permitted by law."
+      },
+      {
+        "heading": "Scripture and third-party works",
+        "body": "Scripture translations, music, fonts, images, and third-party materials may be subject to separate licenses or attribution requirements."
+      },
+      {
+        "heading": "Visitor contributions",
+        "body": "Only submit comments or other content that you have the right to share. The website may remove material that appears to infringe rights."
+      },
+      {
+        "heading": "Copyright concerns",
+        "body": "A designated rights-contact method should be published. Notices should identify the material, the location of the alleged infringement, and a way to respond. Applicable legal procedures will be respected."
+      }
+    ]
+  }
+] as const;
