@@ -10,7 +10,7 @@ import { EpisodePlaylist } from "@/components/EpisodePlaylist";
 import { VideoPlayer } from "@/components/VideoPlayer";
 
 const mediaPageStyle = {
-  "--media-background-image": "url(\"../images/cinematic-biblical-courtyard-background.png\")",
+  "--media-background-image": "url(\"../images/biblical-sunset-over-unbroken-valley.webp\")",
 } as CSSProperties & { "--media-background-image": string };
 
 function subscribeToNavigation(onStoreChange: () => void) {
