@@ -6,7 +6,7 @@ const DEFAULT_ORIGINS = ["https://mcographics.github.io", "http://localhost:3000
 
 function allowedOrigins(): Set<string> {
   const configured = Deno.env.get("ALLOWED_ORIGINS");
-  return new Set((configured ? configured.split(",") : DEFAULT_ORIGINS).map((origin) => origin.trim()).filter(Boolean));
+  return new Set([...DEFAULT_ORIGINS, ...(configured ? configured.split(",") : [])].map((origin) => origin.trim()).filter(Boolean));
 }
 
 function jsonResponse(body: Record<string, unknown>, status: number): Response {
