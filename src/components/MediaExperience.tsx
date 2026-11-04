@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState, useSyncExternalStore } from "react";
+import type { CSSProperties } from "react";
 import type { Episode, MediaPlaylist } from "@/data/episodes";
 import { episodeHref, resolveEpisodeId } from "@/lib/episode-navigation";
 import { loadPublishedMediaCatalog } from "@/lib/media-catalog";
@@ -7,6 +8,11 @@ import { isSupabaseConfigured } from "@/lib/supabase/browser";
 import { CommentSection } from "@/components/CommentSection";
 import { EpisodePlaylist } from "@/components/EpisodePlaylist";
 import { VideoPlayer } from "@/components/VideoPlayer";
+
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+const mediaPageStyle = {
+  "--media-background-image": `url("${basePath}/images/cinematic-biblical-courtyard-background.png")`,
+} as CSSProperties & { "--media-background-image": string };
 
 function subscribeToNavigation(onStoreChange: () => void) {
   window.addEventListener("popstate", onStoreChange);
@@ -46,7 +52,7 @@ export function MediaExperience({ episodes: initialEpisodes }: { episodes: Episo
   };
 
   return (
-    <main id="main-content" className="media-page">
+    <main id="main-content" className="media-page" style={mediaPageStyle}>
       <div className="page-width">
         <header className="media-heading">
           <p className="media-kicker">FAITH · HOPE · STORY</p>
