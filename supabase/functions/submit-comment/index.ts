@@ -2,7 +2,7 @@ import { withSupabase } from "npm:@supabase/server@1";
 import { validateCommentPayload } from "../_shared/validation.ts";
 import { screenComment } from "../_shared/moderation.ts";
 
-const DEFAULT_ORIGINS = ["https://mcographics.github.io", "http://localhost:3000"];
+const DEFAULT_ORIGINS = ["https://mcographics.github.io", "https://kerygmapath.com", "https://www.kerygmapath.com", "http://localhost:3000"];
 
 function allowedOrigins(): Set<string> {
   const configured = Deno.env.get("ALLOWED_ORIGINS");
