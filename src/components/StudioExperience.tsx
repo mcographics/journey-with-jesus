@@ -38,6 +38,7 @@ export function StudioExperience() {
   const [episodes, setEpisodes] = useState<StudioEpisode[]>([]);
   const [playlists, setPlaylists] = useState<PlaylistRow[]>([]);
   const [comments, setComments] = useState<CommentRow[]>([]);
+  const [commentFilter, setCommentFilter] = useState<"pending" | "approved" | "rejected" | "all">("pending");
   const [loadingData, setLoadingData] = useState(false);
   const [episodeForm, setEpisodeForm] = useState<EpisodeForm>(freshEpisode);
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
@@ -385,6 +386,8 @@ export function StudioExperience() {
     setComments((current) => current.map((comment) => comment.id === commentId ? { ...comment, status } : comment));
   }
 
+  const visibleComments = comments.filter((comment) => commentFilter === "all" || comment.status === commentFilter);
+
   if (!isSupabaseConfigured()) return (
     <main id="main-content" className="studio-page"><section className="studio-gate">
       <span className="studio-mark"><LockKeyhole size={24} /></span><h1>Studio setup needed</h1>
@@ -533,13 +536,26 @@ export function StudioExperience() {
         {section === "comments" && (
           <section className="studio-panel studio-comments">
             <div className="studio-panel-heading"><div><h2>Community comments</h2><p>Visitors comment without signing in. Approve a comment to show it under its story.</p></div><MessageCircle size={20} /></div>
-            {comments.length === 0 ? <p className="studio-empty">No comments have been submitted.</p> : comments.map((comment) => (
+            <div className="studio-comment-toolbar">
+              <label htmlFor="studio-comment-filter">Show comments
+                <select id="studio-comment-filter" value={commentFilter}
+                  onChange={(event) => setCommentFilter(event.target.value as typeof commentFilter)}>
+                  <option value="pending">Pending ({comments.filter((item) => item.status === "pending").length})</option>
+                  <option value="approved">Approved ({comments.filter((item) => item.status === "approved").length})</option>
+                  <option value="rejected">Rejected ({comments.filter((item) => item.status === "rejected").length})</option>
+                  <option value="all">All ({comments.length})</option>
+                </select>
+              </label>
+              <button className="button button-outline" type="button" onClick={() => void loadStudioData()} disabled={loadingData}>Refresh comments</button>
+            </div>
+            {visibleComments.length === 0 ? <p className="studio-empty">No {commentFilter === "all" ? "" : commentFilter + " "}comments to review.</p> : visibleComments.map((comment) => (
               <article className="studio-comment" key={comment.id}>
                 <div><strong>{comment.display_name}</strong><span className={"studio-status" + (comment.status === "approved" ? " is-live" : "")}>{comment.status.toUpperCase()}</span><time>{new Date(comment.created_at).toLocaleString()}</time></div>
-                <p className="studio-comment-episode">{episodes.find((episode) => episode.id === comment.episode_id)?.title ?? "Story"} · {comment.episode_id}</p>
+                <p className="studio-comment-episode">{comment.episode_id === "media-community" ? "Media community · General discussion" : (episodes.find((episode) => episode.id === comment.episode_id)?.title ?? "Story") + " · " + comment.episode_id}</p>
                 <p>{comment.body}</p>
                 {comment.status === "pending" && <div className="studio-comment-actions"><button type="button" className="studio-approve" onClick={() => void moderateComment(comment.id, "approved")}><Check size={14} />Approve</button><button type="button" className="studio-reject" onClick={() => void moderateComment(comment.id, "rejected")}><X size={14} />Reject</button></div>}
                 {comment.status === "approved" && <button type="button" className="studio-reject" onClick={() => void moderateComment(comment.id, "rejected")}><X size={14} />Hide comment</button>}
+                {comment.status === "rejected" && <button type="button" className="studio-approve" onClick={() => void moderateComment(comment.id, "approved")}><Check size={14} />Restore and approve</button>}
               </article>
             ))}
           </section>

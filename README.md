@@ -41,7 +41,7 @@ The Pages workflow includes the project's public Supabase URL and publishable ke
 
 ## Media library and Studio
 
-Visitors can browse videos and submit comments without signing in. Approved comments are public; new comments enter moderation. The public video library loads from Supabase so admins can publish, reorder playlists, and manage comments without a code change.
+Visitors can browse videos and submit comments without signing in. The Media community discussion is available before the first video is published, and each published episode has its own separate discussion. Approved comments are public; new comments enter moderation. The public video library loads from Supabase so admins can publish, reorder playlists, and manage comments without a code change.
 
 The private Studio lives at:
 
@@ -62,7 +62,7 @@ The repository includes the media and comment database migrations. To make uploa
    Replace `OWNER_EMAIL` with the invited admin's address. Repeat only for people who should manage videos and comments.
 6. Re-run the GitHub Pages deployment workflow after changing the public Actions variables.
 
-The comment function stores public submissions as pending, applies a one-minute per-address rate limit, and rejects direct anonymous inserts. Only approved comments can be read publicly. The Studio can approve or reject them. Never put a service-role key in the browser, repository, or Pages variables.
+The comment function stores public submissions as pending, applies a one-minute per-address rate limit, and rejects direct anonymous inserts. Only approved comments can be read publicly. The Journey Studio Comments tab filters pending, approved, rejected, or all submissions and can approve, reject, hide, or restore them. The reserved media-community discussion uses the same moderation and rate limits as episode comments. Never put a service-role key in the browser, repository, or Pages variables.
 
 ### Upload videos and make playlists
 

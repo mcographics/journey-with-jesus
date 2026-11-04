@@ -28,6 +28,18 @@ const episodes: Episode[] = [
 afterEach(() => window.history.replaceState({}, "", "/media/"));
 
 describe("MediaExperience", () => {
+  it("shows the general Media community before any videos are published", () => {
+    render(<MediaExperience episodes={[]} />);
+    expect(screen.getByRole("heading", { name: "Media community" })).toBeTruthy();
+    expect(screen.queryByText("Choose a story to see its community conversation.")).toBeNull();
+  });
+
+  it("keeps the general conversation separate from episode comments", () => {
+    render(<MediaExperience episodes={episodes} />);
+    expect(screen.getByRole("heading", { name: "Media community" })).toBeTruthy();
+    expect(screen.getByRole("heading", { name: "Story comments" })).toBeTruthy();
+  });
+
   it("opens the requested story from a direct episode URL", () => {
     window.history.replaceState({}, "", "/media/?episode=hope-two");
     render(<MediaExperience episodes={episodes} />);
