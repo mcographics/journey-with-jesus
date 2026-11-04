@@ -9,8 +9,9 @@ import { CommentSection } from "@/components/CommentSection";
 import { EpisodePlaylist } from "@/components/EpisodePlaylist";
 import { VideoPlayer } from "@/components/VideoPlayer";
 
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 const mediaPageStyle = {
-  "--media-background-image": "url(\"../images/biblical-sunset-over-unbroken-valley.webp\")",
+  "--media-background-image": `url("${basePath}/images/biblical-sunset-over-unbroken-valley.webp")`,
 } as CSSProperties & { "--media-background-image": string };
 
 function subscribeToNavigation(onStoreChange: () => void) {
