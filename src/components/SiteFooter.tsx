@@ -33,7 +33,18 @@ export function SiteFooter() {
           <Link href="/media/">Media</Link>
           <span aria-hidden="true">✦</span>
           <Link href="/studio/">Upper Room</Link>
+          <span aria-hidden="true">✦</span>
+          <Link href="/policies/privacy/">Privacy</Link>
+          <span aria-hidden="true">✦</span>
+          <Link href="/policies/terms/">Terms</Link>
+          <span aria-hidden="true">✦</span>
+          <Link href="/policies/community-guidelines/">Community Guidelines</Link>
+          <span aria-hidden="true">✦</span>
+          <Link href="/policies/cookies/">Cookies</Link>
+          <span aria-hidden="true">✦</span>
+          <Link href="/policies/copyright/">Copyright</Link>
         </nav>
+        <p className="footer-note">Journey with Jesus — created by Eric Oberhausen · Website by Majestic Creations</p>
       </div>
     </footer>
   );
