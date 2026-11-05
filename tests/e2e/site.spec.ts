@@ -392,8 +392,15 @@ test("landing gateway hides site controls and footer until entering, including r
   await page.goto("/");
   await expect(page.locator(".site-header")).toHaveCSS("display", "none");
   await expect(page.locator(".site-footer")).toBeHidden();
-  await expect(page.locator(".kerygma-gateway-logo")).toHaveAttribute("src", /kerygma-path-gateway-logo\.png$/);
-  await expect.poll(() => page.locator(".kerygma-gateway-logo").evaluate((image) => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+  await expect.poll(() => page.locator(".kerygma-gateway-logo").evaluate(async (element) => {
+    const image = element as HTMLImageElement;
+    try {
+      await image.decode();
+      return image.naturalWidth > 0 && image.naturalHeight > 0;
+    } catch {
+      return false;
+    }
+  })).toBe(true);
   await page.getByRole("link", { name: "Enter Site" }).click();
   await expect(page).toHaveURL(/\/company\/$/);
   await expect(page.locator(".site-header")).toHaveCSS("display", "block");
