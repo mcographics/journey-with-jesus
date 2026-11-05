@@ -88,7 +88,7 @@ export function DesktopMobilePreview() {
           </button>
         </div>
         <div className="mobile-preview-viewport">
-          {previewUrl ? (
+          {isOpen && previewUrl ? (
             <iframe
               className="mobile-preview-frame"
               src={previewUrl}

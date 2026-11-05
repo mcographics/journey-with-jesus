@@ -151,9 +151,12 @@ test("desktop mobile preview opens the current page at a phone-sized viewport", 
   await expect(mobilePage.locator(".mobile-navigation")).toHaveCSS("display", "flex");
   await expect(mobilePage.locator(".desktop-navigation")).toHaveCSS("display", "none");
   await expect(mobilePage.getByRole("heading", { name: "Animated stories of faith." })).toBeVisible();
+  await mobilePage.getByRole("button", { name: "Open navigation menu" }).click();
+  await expect(mobilePage.getByRole("navigation", { name: "Mobile navigation" })).toBeVisible();
 
   await page.getByRole("button", { name: "Close mobile preview" }).click();
   await expect(previewDialog).toBeHidden();
+  await expect(previewFrame).toHaveCount(0);
   await page.setViewportSize({ width: 390, height: 844 });
   await expect(previewButton).toBeHidden();
 });

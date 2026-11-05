@@ -56,6 +56,7 @@
   border-radius: 22px;
   background: linear-gradient(150deg, #121b2c, #080d16 76%);
   color: #f8e8c4 !important;
+  pointer-events: auto;
   box-shadow: 0 28px 90px rgba(0, 0, 0, .65);
 }
 
