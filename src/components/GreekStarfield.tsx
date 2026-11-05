@@ -2,125 +2,82 @@
 
 import { useEffect, useRef } from "react";
 
-type AmbientStar = {
-  directionX: number;
-  directionY: number;
-  depth: number;
-  speed: number;
-  size: number;
-  phase: number;
-  isBlue: boolean;
-};
-
-function createAmbientStar(): AmbientStar {
-  const angle = Math.random() * Math.PI * 2;
-  return {
-    directionX: Math.cos(angle),
-    directionY: Math.sin(angle),
-    depth: Math.random(),
-    speed: 0.004 + Math.random() * 0.009,
-    size: 0.65 + Math.random() * 1.1,
-    phase: Math.random() * Math.PI * 2,
-    isBlue: Math.random() < 0.24,
-  };
+// Ported from Grace-Seek/ui/main_menu.py: Star and Starfield.
+// Preserve the source projection, density, speed, white dots, and twinkle.
+type Star = { x3: number; y3: number; z3: number; r: number; a: number; s: number; phase: number };
+function createStar(): Star {
+  return { x3: Math.random() * 2 - 1, y3: Math.random() * 2 - 1,
+    z3: 0.15 + Math.random() * 0.85, r: [0.45, 0.6, 0.8][Math.floor(Math.random() * 3)],
+    a: 0.15 + Math.random() * 0.7, s: 0.01 + Math.random() * 0.04, phase: Math.random() * Math.PI * 2 };
 }
 
 export function GreekStarfield() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-
   useEffect(() => {
     const canvas = canvasRef.current;
     const context = canvas?.getContext("2d");
     if (!canvas || !context) return;
-
-    const reduceMotionPreference = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const prefersReducedMotion = () =>
-      reduceMotionPreference.matches || document.documentElement.dataset.accessibilityReduceMotion === "true";
-    let reduceMotion = prefersReducedMotion();
-    let width = 0;
-    let height = 0;
-    let ambientStars: AmbientStar[] = [];
-    let animationFrame = 0;
-
+    const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const reduced = () => preference.matches || document.documentElement.dataset.accessibilityReduceMotion === "true";
+    let width = 1, height = 1, time = 0, last = 0, frame = 0;
+    let stars: Star[] = [];
+    const paint = () => {
+      context.fillStyle = "#000";
+      context.fillRect(0, 0, width, height);
+      const scale = Math.min(width, height) * 0.55;
+      for (const star of stars) {
+        const x = width / 2 + star.x3 / star.z3 * scale;
+        const y = height / 2 + star.y3 / star.z3 * scale;
+        const twinkle = Math.sin(time * 1.3 + y * 0.01 + star.phase) * 0.12;
+        const alpha = Math.floor(Math.max(0.05, Math.min(1, star.a + twinkle)) * 255) / 255;
+        const radius = star.r * Math.max(0.6, Math.min(2.5, 1 / star.z3));
+        context.beginPath();
+        context.arc(x, y, radius, 0, Math.PI * 2);
+        context.fillStyle = `rgba(255,255,255,${alpha})`;
+        context.fill();
+      }
+    };
     const resize = () => {
       const bounds = canvas.getBoundingClientRect();
-      width = Math.max(1, bounds.width);
-      height = Math.max(1, bounds.height);
+      width = Math.max(1, bounds.width); height = Math.max(1, bounds.height);
       const ratio = Math.min(window.devicePixelRatio || 1, 2);
-      canvas.width = Math.round(width * ratio);
-      canvas.height = Math.round(height * ratio);
+      canvas.width = Math.round(width * ratio); canvas.height = Math.round(height * ratio);
       context.setTransform(ratio, 0, 0, ratio, 0, 0);
-      ambientStars = Array.from({ length: 145 }, createAmbientStar);
+      stars = Array.from({ length: Math.min(1400, Math.max(500, Math.floor(width * height / 2600))) }, createStar);
+      paint();
     };
-
     const draw = (now: number) => {
-      reduceMotion = prefersReducedMotion();
-      context.clearRect(0, 0, width, height);
-      const centerX = width / 2;
-      const centerY = height / 2;
-      const travelRadius = Math.hypot(width, height) * 0.58;
-
-      for (const star of ambientStars) {
-        const previousDepth = star.depth;
-        if (!reduceMotion) {
-          star.depth += star.speed;
-          if (star.depth > 1.04) {
-            star.depth = 0.01 + Math.random() * 0.09;
+      // Source updates every 16 ms; elapsed time keeps that speed on any refresh rate.
+      const steps = last ? Math.min((now - last) / 16, 4) : 1;
+      last = now;
+      if (!reduced()) {
+        time += steps * 0.016;
+        const scale = Math.min(width, height) * 0.55;
+        for (const star of stars) {
+          star.z3 -= (0.0015 + star.s * 0.003) * steps;
+          const x = width / 2 + star.x3 / star.z3 * scale;
+          const y = height / 2 + star.y3 / star.z3 * scale;
+          if (star.z3 <= 0.08 || x < -20 || x > width + 20 || y < -20 || y > height + 20) {
+            star.z3 = 1; star.x3 = Math.random() * 2 - 1; star.y3 = Math.random() * 2 - 1;
           }
         }
-
-        const endX = centerX + star.directionX * star.depth * travelRadius;
-        const endY = centerY + star.directionY * star.depth * travelRadius;
-        const tailDepth = reduceMotion ? star.depth : Math.max(0, star.depth - star.speed * 5);
-        const startX = centerX + star.directionX * tailDepth * travelRadius;
-        const startY = centerY + star.directionY * tailDepth * travelRadius;
-        const flicker = 0.62 + (Math.sin(now * 0.0017 + star.phase) + 1) * 0.16;
-        const brightness = flicker * (0.3 + star.depth * 0.7);
-        const color = star.isBlue ? "125, 175, 255" : "255, 232, 178";
-
-        if (!reduceMotion && star.depth > 0.1) {
-          context.beginPath();
-          context.moveTo(startX, startY);
-          context.lineTo(endX, endY);
-          context.strokeStyle = "rgba(" + color + ", " + (brightness * 0.6).toFixed(2) + ")";
-          context.lineWidth = 0.35 + star.depth * 1.05;
-          context.stroke();
-        }
-
-        context.beginPath();
-        context.arc(endX, endY, star.size * (0.55 + star.depth * 0.9), 0, Math.PI * 2);
-        context.fillStyle = "rgba(" + color + ", " + brightness.toFixed(2) + ")";
-        context.fill();
-
-        if (reduceMotion) star.depth = previousDepth;
       }
-
-      if (!reduceMotion) animationFrame = window.requestAnimationFrame(draw);
+      paint();
+      if (!reduced()) frame = requestAnimationFrame(draw);
     };
-
-    const handleMotionPreference = () => {
-      reduceMotion = prefersReducedMotion();
-      window.cancelAnimationFrame(animationFrame);
-      if (reduceMotion) draw(performance.now());
-      else animationFrame = window.requestAnimationFrame(draw);
+    const restart = () => {
+      cancelAnimationFrame(frame); last = 0;
+      if (reduced()) paint(); else frame = requestAnimationFrame(draw);
     };
-
-    resize();
-    if (reduceMotion) draw(performance.now());
-    else animationFrame = window.requestAnimationFrame(draw);
-
-    const resizeObserver = typeof ResizeObserver !== "undefined"
-      ? new ResizeObserver(resize)
-      : null;
-    resizeObserver?.observe(canvas);
-    window.addEventListener("resize", resize);
-    reduceMotionPreference.addEventListener("change", handleMotionPreference);
-
+    const observer = new ResizeObserver(resize);
+    const motionObserver = new MutationObserver(restart);
+    resize(); restart();
+    observer.observe(canvas);
+    motionObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["data-accessibility-reduce-motion"] });
+    preference.addEventListener("change", restart);
     return () => {
-      window.cancelAnimationFrame(animationFrame);
-      resizeObserver?.disconnect();
-      window.removeEventListener("resize", resize);
-      reduceMotionPreference.removeEventListener("change", handleMotionPreference);
+      cancelAnimationFrame(frame); observer.disconnect(); motionObserver.disconnect();
+      preference.removeEventListener("change", restart);
     };
   }, []);
 

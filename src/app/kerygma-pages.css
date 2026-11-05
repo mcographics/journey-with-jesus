@@ -518,7 +518,7 @@
   justify-content: flex-start;
   padding: 72px 24px 48px;
   overflow: hidden;
-  background: #02040a;
+  background: #000000;
   text-align: center;
 }
 
@@ -527,9 +527,7 @@
   z-index: -1;
   inset: 0;
   overflow: hidden;
-  background:
-    radial-gradient(ellipse at 50% 22%, rgba(31, 72, 139, .2), transparent 47%),
-    #02040a;
+  background: #000000;
   pointer-events: none;
 }
 
