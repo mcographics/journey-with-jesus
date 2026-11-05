@@ -1,8 +1,12 @@
-/* Scope the plain, high-contrast policy typography to the five legal pages. */
-:root:not([data-theme="light"]) .legal-policy-page,
-:root:not([data-theme="light"]) .legal-policy-page :is(h1,h2,h3,h4,h5,h6,p,strong,a,span) {
-  color: #fff !important;
-  -webkit-text-fill-color: #fff !important;
+/*
+ * Keep the five policy pages independent of the site's animated global type.
+ * The ID-scoped selectors intentionally outrank the late global !important
+ * rules in globals.css.
+ */
+:root:not([data-theme="light"]) body #main-content.legal-policy-page,
+:root:not([data-theme="light"]) body #main-content.legal-policy-page *,
+:root[data-theme="light"] body #main-content.legal-policy-page,
+:root[data-theme="light"] body #main-content.legal-policy-page * {
   text-shadow: none !important;
   background-image: none !important;
   background-clip: border-box !important;
@@ -10,14 +14,23 @@
   filter: none !important;
   animation: none !important;
 }
-:root[data-theme="light"] .legal-policy-page,
-:root[data-theme="light"] .legal-policy-page :is(h1,h2,h3,h4,h5,h6,p,strong,a,span) {
+
+/* Dark mode: solid white headings and bright yellow supporting text. */
+:root:not([data-theme="light"]) body #main-content.legal-policy-page,
+:root:not([data-theme="light"]) body #main-content.legal-policy-page * {
+  color: #ffff00 !important;
+  -webkit-text-fill-color: #ffff00 !important;
+}
+
+:root:not([data-theme="light"]) body #main-content.legal-policy-page :is(h1, h2, h3, h4, h5, h6),
+:root:not([data-theme="light"]) body #main-content.legal-policy-page :is(h1, h2, h3, h4, h5, h6) * {
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+}
+
+/* Light mode: retain the requested solid black typography throughout. */
+:root[data-theme="light"] body #main-content.legal-policy-page,
+:root[data-theme="light"] body #main-content.legal-policy-page * {
   color: #000 !important;
   -webkit-text-fill-color: #000 !important;
-  text-shadow: none !important;
-  background-image: none !important;
-  background-clip: border-box !important;
-  -webkit-background-clip: border-box !important;
-  filter: none !important;
-  animation: none !important;
 }
