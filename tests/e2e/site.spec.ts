@@ -113,11 +113,6 @@ test.describe("touch mobile navigation", () => {
     await storySeal.click();
     await expect(page).toHaveURL(/\/media\/$/);
   });
-
-  test("the desktop mobile-preview control stays hidden for touch users", async ({ page }) => {
-    await page.goto("/");
-    await expect(page.getByRole("button", { name: "Preview the current page in a mobile layout" })).toBeHidden();
-  });
 });
 
 test("desktop media page fits the player and playlist without overflow", async ({ page }) => {
@@ -144,34 +139,12 @@ test("light mode uses muted surfaces and a larger mobile media kicker", async ({
   await expect(page.locator(".media-kicker")).toHaveCSS("font-size", "18px");
 });
 
-test("desktop mobile preview opens the current page at a phone-sized viewport", async ({ page }) => {
-  await page.setViewportSize({ width: 1440, height: 1000 });
-  await page.goto("/media/");
+test("the desktop mobile preview is absent from the main site", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
 
-  const previewButton = page.getByRole("button", { name: "Preview the current page in a mobile layout" });
-  await expect(previewButton).toBeVisible();
-  await previewButton.click();
-
-  const previewDialog = page.getByRole("dialog", { name: "Mobile preview" });
-  const previewFrame = page.locator(".mobile-preview-frame");
-  await expect(previewDialog).toBeVisible();
-  await expect.poll(() => previewFrame.evaluate((element) => {
-    const frame = element as HTMLIFrameElement;
-    return frame.contentWindow?.document?.documentElement?.clientWidth ?? 0;
-  })).toBe(390);
-
-  const mobilePage = page.frameLocator(".mobile-preview-frame");
-  await expect(mobilePage.locator(".mobile-navigation")).toHaveCSS("display", "flex");
-  await expect(mobilePage.locator(".desktop-navigation")).toHaveCSS("display", "none");
-  await expect(mobilePage.getByRole("heading", { name: "Animated stories of faith." })).toBeVisible();
-  await mobilePage.getByRole("button", { name: "Open navigation menu" }).click();
-  await expect(mobilePage.getByRole("navigation", { name: "Mobile navigation" })).toBeVisible();
-
-  await page.getByRole("button", { name: "Close mobile preview" }).click();
-  await expect(previewDialog).toBeHidden();
-  await expect(previewFrame).toHaveCount(0);
-  await page.setViewportSize({ width: 390, height: 844 });
-  await expect(previewButton).toBeHidden();
+  await expect(page.getByRole("button", { name: "Preview the current page in a mobile layout" })).toHaveCount(0);
+  await expect(page.getByRole("dialog", { name: "Mobile preview" })).toHaveCount(0);
 });
 
 test("Upper Room dark mode uses soft-white text", async ({ page }) => {
