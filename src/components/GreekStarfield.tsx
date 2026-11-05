@@ -59,18 +59,15 @@ export function GreekStarfield() {
         fontSize *= maxTextWidth / measured;
         maskContext.font = "600 " + fontSize + "px Georgia, 'Times New Roman', serif";
       }
-      const finalWidth = maskContext.measureText(GREEK_TEXT).width;
       maskContext.fillStyle = "#fff";
       maskContext.textAlign = "center";
       maskContext.textBaseline = "middle";
-      maskContext.translate(width / 2, 46);
-      maskContext.scale(Math.min(1, maxTextWidth / Math.max(1, finalWidth)), 1);
-      maskContext.fillText(GREEK_TEXT, 0, 0);
+      maskContext.fillText(GREEK_TEXT, width / 2, 46);
 
       const pixels = maskContext.getImageData(0, 0, mask.width, mask.height).data;
       const textCenterY = Math.max(142, Math.min(height * 0.15, 170));
       const targets: Array<{ x: number; y: number }> = [];
-      const stride = width < 520 ? 4 : 5;
+      const stride = 4;
       for (let y = 0; y < mask.height; y += stride) {
         for (let x = 0; x < mask.width; x += stride) {
           if (pixels[(y * mask.width + x) * 4 + 3] > 100) {
@@ -84,7 +81,7 @@ export function GreekStarfield() {
         fromY: Math.random() * height,
         targetX: point.x,
         targetY: point.y,
-        size: 0.8 + Math.random() * 1.25,
+        size: 1 + Math.random() * 1.35,
         phase: Math.random() * Math.PI * 2,
       }));
       ambientStars = Array.from(

@@ -705,3 +705,19 @@
     margin-top: 220px;
   }
 }
+
+
+/* Preserve the gold call-to-action against the black gateway background. */
+:root[data-theme="light"] body .kerygma-gateway .kerygma-enter-button,
+:root:not([data-theme="light"]) body .kerygma-gateway .kerygma-enter-button {
+  border-color: rgba(255, 236, 188, .9) !important;
+  background-color: #d4a956 !important;
+  background-image: linear-gradient(145deg, #f5dda4, #d4a956) !important;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, .38), inset 0 0 0 3px rgba(255, 255, 255, .16) !important;
+  color: #171b25 !important;
+}
+
+:root[data-theme="light"] body .kerygma-gateway .kerygma-enter-button:hover,
+:root:not([data-theme="light"]) body .kerygma-gateway .kerygma-enter-button:hover {
+  background-image: linear-gradient(145deg, #fff0bc, #e4bc70) !important;
+}
