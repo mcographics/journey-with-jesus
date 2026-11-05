@@ -765,8 +765,8 @@
 
 
 /* The gateway stands alone; site controls return on every interior route. */
-body:has(> .kerygma-gateway) > .site-header,
-body:has(> .kerygma-gateway) > .site-footer {
+body:has(.kerygma-gateway) .site-header,
+body:has(.kerygma-gateway) .site-footer {
   display: none !important;
 }
 
