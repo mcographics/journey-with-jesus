@@ -8,6 +8,7 @@ export type AccessibilityPreferences = {
   relaxedLineSpacing: boolean;
   underlineLinks: boolean;
   highContrast: boolean;
+  colorVisionFriendly: boolean;
   enhancedFocus: boolean;
   reduceMotion: boolean;
 };
@@ -19,6 +20,7 @@ export function defaultAccessibilityPreferences(reduceMotion = false): Accessibi
     relaxedLineSpacing: false,
     underlineLinks: false,
     highContrast: false,
+    colorVisionFriendly: false,
     enhancedFocus: false,
     reduceMotion,
   };
@@ -44,6 +46,7 @@ export function normalizeAccessibilityPreferences(
     relaxedLineSpacing: typeof input.relaxedLineSpacing === "boolean" ? input.relaxedLineSpacing : fallback.relaxedLineSpacing,
     underlineLinks: typeof input.underlineLinks === "boolean" ? input.underlineLinks : fallback.underlineLinks,
     highContrast: typeof input.highContrast === "boolean" ? input.highContrast : fallback.highContrast,
+    colorVisionFriendly: typeof input.colorVisionFriendly === "boolean" ? input.colorVisionFriendly : fallback.colorVisionFriendly,
     enhancedFocus: typeof input.enhancedFocus === "boolean" ? input.enhancedFocus : fallback.enhancedFocus,
     reduceMotion: typeof input.reduceMotion === "boolean" ? input.reduceMotion : fallback.reduceMotion,
   };
@@ -56,6 +59,7 @@ export function applyAccessibilityPreferences(preferences: AccessibilityPreferen
   root.dataset.accessibilityLineSpacing = String(preferences.relaxedLineSpacing);
   root.dataset.accessibilityUnderlineLinks = String(preferences.underlineLinks);
   root.dataset.accessibilityContrast = preferences.highContrast ? "high" : "standard";
+  root.dataset.accessibilityColorVision = String(preferences.colorVisionFriendly);
   root.dataset.accessibilityEnhancedFocus = String(preferences.enhancedFocus);
   root.dataset.accessibilityReduceMotion = String(preferences.reduceMotion);
   root.dataset.accessibilityBrightness = String(preferences.brightness);

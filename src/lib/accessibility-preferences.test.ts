@@ -13,6 +13,7 @@ afterEach(() => {
   document.documentElement.removeAttribute("data-accessibility-line-spacing");
   document.documentElement.removeAttribute("data-accessibility-underline-links");
   document.documentElement.removeAttribute("data-accessibility-contrast");
+  document.documentElement.removeAttribute("data-accessibility-color-vision");
   document.documentElement.removeAttribute("data-accessibility-enhanced-focus");
   document.documentElement.removeAttribute("data-accessibility-reduce-motion");
   document.documentElement.style.removeProperty("--light-mode-overlay-opacity");
@@ -27,6 +28,7 @@ describe("accessibility preferences", () => {
       relaxedLineSpacing: false,
       underlineLinks: false,
       highContrast: false,
+      colorVisionFriendly: false,
       enhancedFocus: false,
       reduceMotion: true,
     });
@@ -39,6 +41,7 @@ describe("accessibility preferences", () => {
       relaxedLineSpacing: false,
       underlineLinks: false,
       highContrast: true,
+      colorVisionFriendly: false,
       enhancedFocus: false,
       reduceMotion: false,
     });

@@ -41,7 +41,7 @@ export function VideoPlayer({ episode }: VideoPlayerProps) {
         <div className={"video-frame" + (isPortrait ? " is-portrait" : "")}>
           {hasYoutube ? (
             <iframe key={episode.youtubeId}
-              src={"https://www.youtube-nocookie.com/embed/" + encodeURIComponent(episode.youtubeId!) + "?rel=0&modestbranding=1"}
+              src={"https://www.youtube-nocookie.com/embed/" + encodeURIComponent(episode.youtubeId!) + "?rel=0&modestbranding=1&cc_load_policy=1"}
               title={episode.title} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowFullScreen referrerPolicy="strict-origin-when-cross-origin" />
           ) : selectedSource ? (
@@ -91,7 +91,7 @@ export function VideoPlayer({ episode }: VideoPlayerProps) {
       <section className="episode-accessibility-resources" aria-label="Accessibility resources">
         <h3>Accessibility resources</h3>
         <p><strong>Captions:</strong> {hasYoutube
-          ? "Use the caption controls in the YouTube player when captions are available for this video."
+          ? "Captions are enabled automatically in the YouTube player when a caption track is available. Use the player’s CC controls to change or turn them off."
           : episode.captions?.length && selectedSource
             ? "Choose a caption track in the video controls or the Captions menu."
             : episode.captions?.length

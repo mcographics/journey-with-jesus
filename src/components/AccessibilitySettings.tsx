@@ -141,10 +141,11 @@ export function AccessibilitySettings() {
           <label><input type="checkbox" checked={preferences.relaxedLineSpacing} onChange={(event) => updatePreferences({ relaxedLineSpacing: event.target.checked })} /> More line spacing</label>
           <label><input type="checkbox" checked={preferences.underlineLinks} onChange={(event) => updatePreferences({ underlineLinks: event.target.checked })} /> Underline links</label>
           <label><input type="checkbox" checked={preferences.highContrast} onChange={(event) => updatePreferences({ highContrast: event.target.checked })} /> High contrast colors</label>
+          <label><input type="checkbox" checked={preferences.colorVisionFriendly} onChange={(event) => updatePreferences({ colorVisionFriendly: event.target.checked })} /> Color-vision-friendly palette</label>
           <label><input type="checkbox" checked={preferences.enhancedFocus} onChange={(event) => updatePreferences({ enhancedFocus: event.target.checked })} /> Extra visible keyboard focus</label>
           <label><input type="checkbox" checked={preferences.reduceMotion} onChange={(event) => updatePreferences({ reduceMotion: event.target.checked })} /> Reduce interface motion</label>
         </fieldset>
-        <p className="accessibility-help">High contrast can make boundaries easier to distinguish. It is not a color-vision correction or simulation.</p>
+        <p className="accessibility-help">The color-vision-friendly palette uses distinct blue and amber accents, with links underlined and status labels kept in text. It does not simulate or correct color vision. High contrast can also make boundaries easier to distinguish.</p>
         <button className="accessibility-reset" type="button" onClick={resetPreferences}>Reset to defaults</button>
       </section>
     </div>
