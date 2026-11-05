@@ -2,23 +2,28 @@
 
 import { useEffect, useRef } from "react";
 
-const GREEK_TEXT = "Ἐν ἀρχῇ ἦν ὁ λόγος";
-
-type Particle = {
-  fromX: number;
-  fromY: number;
-  targetX: number;
-  targetY: number;
-  size: number;
-  phase: number;
-};
-
 type AmbientStar = {
-  x: number;
-  y: number;
+  directionX: number;
+  directionY: number;
+  depth: number;
+  speed: number;
   size: number;
   phase: number;
+  isBlue: boolean;
 };
+
+function createAmbientStar(): AmbientStar {
+  const angle = Math.random() * Math.PI * 2;
+  return {
+    directionX: Math.cos(angle),
+    directionY: Math.sin(angle),
+    depth: Math.random(),
+    speed: 0.004 + Math.random() * 0.009,
+    size: 0.65 + Math.random() * 1.1,
+    phase: Math.random() * Math.PI * 2,
+    isBlue: Math.random() < 0.24,
+  };
+}
 
 export function GreekStarfield() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -28,13 +33,14 @@ export function GreekStarfield() {
     const context = canvas?.getContext("2d");
     if (!canvas || !context) return;
 
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const reduceMotionPreference = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const prefersReducedMotion = () =>
+      reduceMotionPreference.matches || document.documentElement.dataset.accessibilityReduceMotion === "true";
+    let reduceMotion = prefersReducedMotion();
     let width = 0;
     let height = 0;
-    let particles: Particle[] = [];
     let ambientStars: AmbientStar[] = [];
     let animationFrame = 0;
-    let animationStart = performance.now();
 
     const resize = () => {
       const bounds = canvas.getBoundingClientRect();
@@ -44,112 +50,116 @@ export function GreekStarfield() {
       canvas.width = Math.round(width * ratio);
       canvas.height = Math.round(height * ratio);
       context.setTransform(ratio, 0, 0, ratio, 0, 0);
-
-      const mask = document.createElement("canvas");
-      mask.width = Math.ceil(width);
-      mask.height = 92;
-      const maskContext = mask.getContext("2d", { willReadFrequently: true });
-      if (!maskContext) return;
-
-      let fontSize = Math.min(44, Math.max(22, width * 0.036));
-      maskContext.font = "600 " + fontSize + "px Georgia, 'Times New Roman', serif";
-      const maxTextWidth = Math.max(180, width - 44);
-      const measured = maskContext.measureText(GREEK_TEXT).width;
-      if (measured > maxTextWidth) {
-        fontSize *= maxTextWidth / measured;
-        maskContext.font = "600 " + fontSize + "px Georgia, 'Times New Roman', serif";
-      }
-      maskContext.fillStyle = "#fff";
-      maskContext.textAlign = "center";
-      maskContext.textBaseline = "middle";
-      maskContext.fillText(GREEK_TEXT, width / 2, 46);
-
-      const pixels = maskContext.getImageData(0, 0, mask.width, mask.height).data;
-      const textCenterY = Math.max(142, Math.min(height * 0.15, 170));
-      const targets: Array<{ x: number; y: number }> = [];
-      const stride = 4;
-      for (let y = 0; y < mask.height; y += stride) {
-        for (let x = 0; x < mask.width; x += stride) {
-          if (pixels[(y * mask.width + x) * 4 + 3] > 100) {
-            targets.push({ x, y: textCenterY + y - 46 });
-          }
-        }
-      }
-
-      particles = targets.map((point) => ({
-        fromX: Math.random() * width,
-        fromY: Math.random() * height,
-        targetX: point.x,
-        targetY: point.y,
-        size: 1 + Math.random() * 1.35,
-        phase: Math.random() * Math.PI * 2,
-      }));
-      ambientStars = Array.from(
-        { length: Math.round(Math.min(150, Math.max(80, (width * height) / 8500))) },
-        () => ({
-          x: Math.random() * width,
-          y: Math.random() * height,
-          size: 0.35 + Math.random() * 1.2,
-          phase: Math.random() * Math.PI * 2,
-        }),
-      );
-      animationStart = performance.now();
+      ambientStars = Array.from({ length: 145 }, createAmbientStar);
     };
 
     const draw = (now: number) => {
+      reduceMotion = prefersReducedMotion();
       context.clearRect(0, 0, width, height);
+      const centerX = width / 2;
+      const centerY = height / 2;
+      const travelRadius = Math.hypot(width, height) * 0.58;
 
       for (const star of ambientStars) {
-        const twinkle = reduceMotion ? 0.5 : 0.35 + (Math.sin(now * 0.001 + star.phase) + 1) * 0.24;
-        context.fillStyle = "rgba(190, 211, 245, " + twinkle.toFixed(2) + ")";
-        context.beginPath();
-        context.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-        context.fill();
-      }
+        const previousDepth = star.depth;
+        if (!reduceMotion) {
+          star.depth += star.speed;
+          if (star.depth > 1.04) {
+            star.depth = 0.01 + Math.random() * 0.09;
+          }
+        }
 
-      const progress = reduceMotion ? 1 : Math.min(1, (now - animationStart) / 2600);
-      for (let index = 0; index < particles.length; index += 1) {
-        const star = particles[index];
-        const stagger = reduceMotion ? 1 : Math.min(1, Math.max(0, (progress - (index % 13) * 0.006) / 0.94));
-        const settle = 1 - Math.pow(1 - stagger, 3);
-        const drift = progress >= 1 && !reduceMotion ? Math.sin(now * 0.0012 + star.phase) * 0.45 : 0;
-        const x = star.fromX + (star.targetX - star.fromX) * settle + drift;
-        const y = star.fromY + (star.targetY - star.fromY) * settle + drift;
-        const alpha = 0.52 + (Math.sin(now * 0.0015 + star.phase) + 1) * 0.16;
-        context.fillStyle = index % 6 === 0
-          ? "rgba(117, 169, 255, " + alpha.toFixed(2) + ")"
-          : "rgba(255, 229, 164, " + alpha.toFixed(2) + ")";
+        const endX = centerX + star.directionX * star.depth * travelRadius;
+        const endY = centerY + star.directionY * star.depth * travelRadius;
+        const tailDepth = reduceMotion ? star.depth : Math.max(0, star.depth - star.speed * 5);
+        const startX = centerX + star.directionX * tailDepth * travelRadius;
+        const startY = centerY + star.directionY * tailDepth * travelRadius;
+        const flicker = 0.62 + (Math.sin(now * 0.0017 + star.phase) + 1) * 0.16;
+        const brightness = flicker * (0.3 + star.depth * 0.7);
+        const color = star.isBlue ? "125, 175, 255" : "255, 232, 178";
+
+        if (!reduceMotion && star.depth > 0.1) {
+          context.beginPath();
+          context.moveTo(startX, startY);
+          context.lineTo(endX, endY);
+          context.strokeStyle = "rgba(" + color + ", " + (brightness * 0.6).toFixed(2) + ")";
+          context.lineWidth = 0.35 + star.depth * 1.05;
+          context.stroke();
+        }
+
         context.beginPath();
-        context.arc(x, y, star.size, 0, Math.PI * 2);
+        context.arc(endX, endY, star.size * (0.55 + star.depth * 0.9), 0, Math.PI * 2);
+        context.fillStyle = "rgba(" + color + ", " + brightness.toFixed(2) + ")";
         context.fill();
+
+        if (reduceMotion) star.depth = previousDepth;
       }
 
       if (!reduceMotion) animationFrame = window.requestAnimationFrame(draw);
     };
 
-    const resizeObserver = typeof ResizeObserver !== "undefined"
-      ? new ResizeObserver(() => {
-          resize();
-          if (reduceMotion) draw(performance.now());
-        })
-      : null;
+    const handleMotionPreference = () => {
+      reduceMotion = prefersReducedMotion();
+      window.cancelAnimationFrame(animationFrame);
+      if (reduceMotion) draw(performance.now());
+      else animationFrame = window.requestAnimationFrame(draw);
+    };
 
     resize();
     if (reduceMotion) draw(performance.now());
     else animationFrame = window.requestAnimationFrame(draw);
+
+    const resizeObserver = typeof ResizeObserver !== "undefined"
+      ? new ResizeObserver(resize)
+      : null;
     resizeObserver?.observe(canvas);
     window.addEventListener("resize", resize);
+    reduceMotionPreference.addEventListener("change", handleMotionPreference);
 
     return () => {
       window.cancelAnimationFrame(animationFrame);
       resizeObserver?.disconnect();
       window.removeEventListener("resize", resize);
+      reduceMotionPreference.removeEventListener("change", handleMotionPreference);
     };
   }, []);
 
   return (
     <div aria-hidden="true" className="kerygma-starfield">
       <canvas ref={canvasRef} />
+      <svg
+        className="kerygma-starfield-scripture"
+        preserveAspectRatio="xMidYMid meet"
+        viewBox="0 0 1000 100"
+      >
+        <defs>
+          <pattern height="22" id="kerygma-scripture-stars" patternUnits="userSpaceOnUse" width="24">
+            <circle cx="3" cy="4" fill="#fff0bf" r="2" />
+            <circle cx="14" cy="8" fill="#8eb8ff" r="1.45" />
+            <circle cx="8" cy="18" fill="#fff" r="1.15" />
+            <circle cx="21" cy="17" fill="#e5c66f" r="1.65" />
+          </pattern>
+          <filter height="160%" id="kerygma-scripture-glow" width="120%" x="-10%" y="-30%">
+            <feGaussianBlur result="softGlow" stdDeviation="2.1" />
+            <feMerge>
+              <feMergeNode in="softGlow" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+        <text
+          fill="url(#kerygma-scripture-stars)"
+          filter="url(#kerygma-scripture-glow)"
+          fontFamily="Georgia, 'Times New Roman', serif"
+          fontSize="54"
+          fontWeight="600"
+          textAnchor="middle"
+          x="500"
+          y="66"
+        >
+          Ἐν ἀρχῇ ἦν ὁ λόγος
+        </text>
+      </svg>
     </div>
   );
 }

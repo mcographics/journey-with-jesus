@@ -721,3 +721,46 @@
 :root:not([data-theme="light"]) body .kerygma-gateway .kerygma-enter-button:hover {
   background-image: linear-gradient(145deg, #fff0bc, #e4bc70) !important;
 }
+
+
+/* A star-filled Greek verse appears above its plain English translation. */
+.kerygma-starfield-scripture {
+  position: absolute;
+  z-index: 0;
+  top: clamp(114px, 12.5vh, 132px);
+  left: 50%;
+  width: min(900px, calc(100% - 32px));
+  height: 52px;
+  overflow: visible;
+  opacity: 0;
+  filter: drop-shadow(0 0 10px rgba(136, 176, 255, .3));
+  pointer-events: none;
+  transform: translateX(-50%);
+  animation: kerygma-constellation-appear 2.2s ease-out .25s forwards;
+}
+
+@keyframes kerygma-constellation-appear {
+  0% {
+    opacity: 0;
+    filter: blur(5px) drop-shadow(0 0 22px rgba(255, 221, 133, .8));
+    transform: translateX(-50%) scale(.94);
+  }
+  68% {
+    opacity: 1;
+    filter: blur(.4px) drop-shadow(0 0 16px rgba(136, 176, 255, .42));
+    transform: translateX(-50%) scale(1.015);
+  }
+  100% {
+    opacity: .94;
+    filter: drop-shadow(0 0 10px rgba(136, 176, 255, .3));
+    transform: translateX(-50%) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kerygma-starfield-scripture {
+    opacity: 1;
+    animation: none;
+    filter: drop-shadow(0 0 8px rgba(136, 176, 255, .25));
+  }
+}
