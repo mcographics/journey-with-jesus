@@ -206,6 +206,16 @@ button { color: inherit; }
 .quality-control { display: flex; align-items: center; gap: 8px; color: #aaa; font-size: 11px; }
 .quality-control select { padding: 8px 25px 8px 10px; color: var(--ink); background: #192438; border: 1px solid rgba(238, 221, 174, .2); border-radius: 3px; }
 .episode-description { color: #b6b8bc; font-size: 13px; line-height: 1.8; margin: 16px 0 24px; }
+.caption-control { display: flex; align-items: center; gap: 8px; color: #aaa; font-size: 11px; }
+.caption-control select { max-width: 190px; min-height: 40px; padding: 8px 26px 8px 10px; color: var(--ink); background: #192438; border: 1px solid rgba(238, 221, 174, .2); border-radius: 3px; }
+.episode-accessibility-resources { margin: 0 0 24px; padding: 16px 18px; border: 1px solid rgba(238, 221, 174, .16); border-radius: 4px; background: rgba(18, 27, 43, .54); }
+.episode-accessibility-resources h3 { margin: 0 0 10px; color: var(--ink); font: 19px/1.3 var(--serif); }
+.episode-accessibility-resources p { margin: 8px 0; color: var(--muted); font-size: 12px; line-height: 1.65; }
+.episode-accessibility-resources a { color: var(--gold-bright); text-decoration: underline; text-underline-offset: .16em; }
+.episode-transcript { margin-top: 10px; color: var(--muted); font-size: 12px; }
+.episode-transcript summary { width: fit-content; min-height: 40px; display: flex; align-items: center; cursor: pointer; color: var(--gold-bright); }
+.episode-transcript-body { max-height: 440px; overflow: auto; margin: 8px 0 10px; padding: 12px; border-left: 2px solid var(--gold); color: var(--ink); line-height: 1.75; white-space: pre-wrap; overflow-wrap: anywhere; }
+.transcript-download { display: inline-flex; min-height: 40px; align-items: center; }
 .playlist-panel { min-width: 0; border: 1px solid rgba(238, 221, 174, .15); background: rgba(18, 27, 43, .78); border-radius: 5px; overflow: hidden; }
 .playlist-header { padding: 17px 18px 13px; border-bottom: 1px solid rgba(238, 221, 174, .12); }
 .playlist-header-top { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; }
@@ -219,6 +229,7 @@ button { color: inherit; }
 .episode-card { width: 100%; display: grid; grid-template-columns: 104px minmax(0, 1fr); gap: 12px; align-items: center; text-align: left; padding: 11px; border: 0; border-bottom: 1px solid rgba(238, 221, 174, .09); cursor: pointer; background: transparent; transition: background .15s; }
 .episode-card:hover, .episode-card.is-selected { background: rgba(228, 188, 112, .09); }
 .episode-card.is-selected { box-shadow: inset 2px 0 var(--gold); }
+.episode-current-label { display: inline-flex; width: fit-content; min-height: 22px; align-items: center; margin-top: 5px; padding: 2px 7px; border: 1px solid currentColor; border-radius: 3px; color: var(--gold-bright); font-size: 9px; font-weight: 700; letter-spacing: .04em; }
 .episode-art { aspect-ratio: 16 / 9; display: grid; place-items: center; position: relative; overflow: hidden; border-radius: 3px; color: #efce8f; background: radial-gradient(circle at 70% 25%, rgba(246, 216, 160, .6), transparent 23%), linear-gradient(145deg, #3e4651, #192638 65%, #131827); }
 .episode-art.is-portrait { aspect-ratio: 9 / 16; }
 .episode-art::after { content: ""; position: absolute; inset: 55% 0 0; background: linear-gradient(transparent, rgba(5, 8, 14, .75)); }
@@ -347,7 +358,7 @@ button { color: inherit; }
   .mobile-navigation:focus-within { opacity: 1; pointer-events: auto; }
 }
 @media (max-width: 768px) and (hover: none) and (pointer: coarse) and (prefers-reduced-motion: reduce) {
-  .mobile-navigation { transition-duration: .01ms; }
+  :root:not([data-accessibility-reduce-motion="false"]) .mobile-navigation { transition-duration: .01ms; }
 }
 @media (max-width: 700px) and (prefers-reduced-motion: no-preference) {
   .storybook-seal { animation: storybook-heartbeat 2.15s ease-in-out infinite; }
@@ -367,12 +378,16 @@ button { color: inherit; }
   .virtue-line { font-size: 15px; gap: 7px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .masthead-ticker-window { overflow-x: auto; scrollbar-width: none; }
-  .masthead-ticker-window::-webkit-scrollbar { display: none; }
-  .masthead-ticker-track { width: max-content; animation: none; }
-  .masthead-ticker-cycle + .masthead-ticker-cycle { display: none; }
-  .masthead-ticker-item { padding-inline: 14px; }
-  *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+  :root:not([data-accessibility-reduce-motion="false"]) .masthead-ticker-window { overflow-x: auto; scrollbar-width: none; }
+  :root:not([data-accessibility-reduce-motion="false"]) .masthead-ticker-window::-webkit-scrollbar { display: none; }
+  :root:not([data-accessibility-reduce-motion="false"]) .masthead-ticker-track { width: max-content; animation: none; }
+  :root:not([data-accessibility-reduce-motion="false"]) .masthead-ticker-cycle + .masthead-ticker-cycle { display: none; }
+  :root:not([data-accessibility-reduce-motion="false"]) .masthead-ticker-item { padding-inline: 14px; }
+  :root:not([data-accessibility-reduce-motion="false"]) *,
+  :root:not([data-accessibility-reduce-motion="false"]) *::before,
+  :root:not([data-accessibility-reduce-motion="false"]) *::after {
+    scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important;
+  }
 }
 
 
@@ -578,6 +593,13 @@ button { color: inherit; }
   background: #f7f9fc;
 }
 :root[data-theme="light"] .episode-description { color: #566171; }
+:root[data-theme="light"] .caption-control { color: #3d4858; }
+:root[data-theme="light"] .caption-control select { border-color: rgba(178, 133, 36, .3); background: #f7f9fc; color: #202b3b; }
+:root[data-theme="light"] .episode-accessibility-resources { border-color: rgba(83, 105, 131, .24); background: rgba(247, 249, 252, .86); }
+:root[data-theme="light"] .episode-accessibility-resources p { color: #414c5a; }
+:root[data-theme="light"] .episode-accessibility-resources a,
+:root[data-theme="light"] .episode-transcript summary { color: #684b1c; }
+:root[data-theme="light"] .episode-transcript-body { color: #202b3b; }
 :root[data-theme="light"] .playlist-panel {
   border-color: rgba(178, 133, 36, .19);
   background: rgba(247, 249, 252, .92);
@@ -594,6 +616,7 @@ button { color: inherit; }
 :root[data-theme="light"] .episode-card { border-color: rgba(178, 133, 36, .12); }
 :root[data-theme="light"] .episode-card:hover,
 :root[data-theme="light"] .episode-card.is-selected { background: rgba(188, 146, 65, .12); }
+:root[data-theme="light"] .episode-current-label { color: #694a15; }
 :root[data-theme="light"] .episode-copy strong { color: #2b3545; }
 :root[data-theme="light"] .episode-copy small { color: #647080; }
 :root[data-theme="light"] .episode-empty p { color: #5d6775; }

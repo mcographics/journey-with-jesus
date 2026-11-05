@@ -126,6 +126,68 @@ test("desktop media page fits the player and playlist without overflow", async (
   await expect(page.getByRole("complementary", { name: "Story playlist" })).toBeVisible();
 });
 
+test("accessibility preferences persist across routes and light brightness stays scoped to light mode", async ({ page }) => {
+  await page.addInitScript(() => window.localStorage.setItem("journey-with-jesus-theme-mode", "light"));
+  await page.goto("/");
+  const accessibilityButton = page.getByRole("button", { name: "Accessibility settings" });
+  await expect(accessibilityButton).toBeVisible();
+  await accessibilityButton.click();
+
+  const settings = page.getByRole("region", { name: "Accessibility settings" });
+  await expect(settings).toBeVisible();
+  const brightness = page.getByRole("slider", { name: "Light mode brightness" });
+  await brightness.focus();
+  for (let step = 0; step < 3; step += 1) await brightness.press("ArrowLeft");
+  await expect(page.locator("html")).toHaveAttribute("data-accessibility-brightness", "85");
+  await expect(page.locator("body")).toHaveCSS("--light-mode-overlay-opacity", "0.1");
+
+  await page.getByLabel("High contrast colors").check();
+  await expect(page.locator("html")).toHaveAttribute("data-accessibility-contrast", "high");
+  await page.locator(".theme-toggle").click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  expect(await page.locator("body").evaluate((body) => getComputedStyle(body, "::after").opacity)).toBe("0");
+
+  await page.goto("/media/");
+  await expect(page.getByRole("button", { name: "Accessibility settings" })).toBeVisible();
+  await expect(page.locator("html")).toHaveAttribute("data-accessibility-brightness", "85");
+  await expect(page.locator("html")).toHaveAttribute("data-accessibility-contrast", "high");
+  await expect(page.locator(".video-player-section")).toHaveCSS("z-index", "11");
+  await page.reload();
+  await expect(page.locator("html")).toHaveAttribute("data-accessibility-brightness", "85");
+});
+
+test.describe("mobile accessibility controls", () => {
+  test.use({ viewport: { width: 375, height: 812 }, isMobile: true, hasTouch: true });
+
+  test("settings remain labeled, touch-sized, and inside the viewport", async ({ page }) => {
+    await page.goto("/media/");
+    const trigger = page.getByRole("button", { name: "Accessibility settings" });
+    await expect(trigger).toBeVisible();
+    const triggerBounds = await trigger.boundingBox();
+    expect(triggerBounds?.width).toBeGreaterThanOrEqual(40);
+    expect(triggerBounds?.height).toBeGreaterThanOrEqual(40);
+    await trigger.click();
+    const panel = page.getByRole("region", { name: "Accessibility settings" });
+    await expect(panel).toBeVisible();
+    const panelBounds = await panel.boundingBox();
+    expect(panelBounds?.x).toBeGreaterThanOrEqual(0);
+    expect(panelBounds!.x + panelBounds!.width).toBeLessThanOrEqual(375);
+    await expect(page.getByRole("slider", { name: "Light mode brightness" })).toBeVisible();
+  });
+
+  test("reduced motion follows the OS preference until the visitor changes it", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto("/media/");
+    await page.getByRole("button", { name: "Accessibility settings" }).click();
+
+    const reduceMotion = page.getByLabel("Reduce interface motion");
+    await expect(reduceMotion).toBeChecked();
+    await reduceMotion.uncheck();
+    await expect(page.locator("html")).toHaveAttribute("data-accessibility-reduce-motion", "false");
+    await expect(page.locator(".mobile-navigation")).toHaveCSS("transition-duration", "0.24s");
+  });
+});
+
 test("light mode uses muted surfaces and a larger mobile media kicker", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.addInitScript(() => {

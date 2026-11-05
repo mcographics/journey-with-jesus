@@ -15,17 +15,18 @@ import { formatStudioFileSize, freePlanVideoSizeError } from "@/lib/studio-video
 
 type SourceRow = Database["public"]["Tables"]["media_video_sources"]["Row"];
 type EpisodeRow = Database["public"]["Tables"]["media_episodes"]["Row"];
+type CaptionRow = Database["public"]["Tables"]["media_captions"]["Row"];
 type PlaylistRow = Database["public"]["Tables"]["media_playlists"]["Row"];
 type CommentRow = Database["public"]["Tables"]["episode_comments"]["Row"];
-type StudioEpisode = EpisodeRow & { sources: SourceRow[] };
+type StudioEpisode = EpisodeRow & { sources: SourceRow[]; captions: CaptionRow[] };
 type EpisodeForm = {
-  id: string; title: string; description: string; scripture: string; thumbnail: string; youtubeUrl: string;
+  id: string; title: string; description: string; scripture: string; thumbnail: string; youtubeUrl: string; transcript: string; aslUrl: string;
   duration: string; number: string; orientation: "landscape" | "portrait"; published: boolean;
 };
 type PlaylistForm = { id: string; title: string; description: string; order: string; published: boolean; episodeIds: string[] };
 type Section = "episodes" | "playlists" | "comments" | "characters" | "staff";
 const qualities: VideoQuality[] = ["720p", "1080p", "4K"];
-const freshEpisode = (): EpisodeForm => ({ id: "", title: "", description: "", scripture: "", thumbnail: "", youtubeUrl: "", duration: "", number: "1", orientation: "landscape", published: false });
+const freshEpisode = (): EpisodeForm => ({ id: "", title: "", description: "", scripture: "", thumbnail: "", youtubeUrl: "", transcript: "", aslUrl: "", duration: "", number: "1", orientation: "landscape", published: false });
 const freshPlaylist = (): PlaylistForm => ({ id: "", title: "", description: "", order: "0", published: false, episodeIds: [] });
 
 export function StudioExperience() {
@@ -46,6 +47,13 @@ export function StudioExperience() {
   const [episodeForm, setEpisodeForm] = useState<EpisodeForm>(freshEpisode);
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
   const thumbnailFileInput = useRef<HTMLInputElement>(null);
+  const [captionFile, setCaptionFile] = useState<File | null>(null);
+  const captionFileInput = useRef<HTMLInputElement>(null);
+  const [captionLanguage, setCaptionLanguage] = useState("en");
+  const [captionLabel, setCaptionLabel] = useState("English");
+  const [captionKind, setCaptionKind] = useState<"captions" | "subtitles">("captions");
+  const [captionDefault, setCaptionDefault] = useState(true);
+  const [captionBusy, setCaptionBusy] = useState(false);
   const [selectedEpisodeId, setSelectedEpisodeId] = useState("");
   const [files, setFiles] = useState<Record<VideoQuality, File | null>>({ "720p": null, "1080p": null, "4K": null });
   const videoFileInputs = useRef<Partial<Record<VideoQuality, HTMLInputElement>>>({});
@@ -110,20 +118,24 @@ export function StudioExperience() {
     if (!client) return false;
     setLoadingData(true);
     try {
-      const [episodeResult, sourceResult, playlistResult, commentResult] = await Promise.all([
+      const [episodeResult, sourceResult, captionResult, playlistResult, commentResult] = await Promise.all([
         client.from("media_episodes").select("*").order("episode_number"),
         client.from("media_video_sources").select("*"),
+        client.from("media_captions").select("*"),
         client.from("media_playlists").select("*").order("sort_order"),
         client.from("episode_comments").select("id, episode_id, display_name, body, status, created_at").order("created_at", { ascending: false }).limit(200),
       ]);
       if (episodeResult.error) throw episodeResult.error;
       if (sourceResult.error) throw sourceResult.error;
+      if (captionResult.error) throw captionResult.error;
       if (playlistResult.error) throw playlistResult.error;
       if (commentResult.error) throw commentResult.error;
       const sourceRows = sourceResult.data ?? [];
+      const captionRows = captionResult.data ?? [];
       setEpisodes((episodeResult.data ?? []).map((episode) => ({
         ...episode,
         sources: sourceRows.filter((source) => source.episode_id === episode.id),
+        captions: captionRows.filter((caption) => caption.episode_id === episode.id),
       })));
       setPlaylists(playlistResult.data ?? []);
       setComments(commentResult.data ?? []);
@@ -178,12 +190,15 @@ export function StudioExperience() {
     setEpisodeForm({
       id: episode.id, title: episode.title, description: episode.description,
       scripture: episode.scripture_reference ?? "", thumbnail: episode.thumbnail_url ?? "", youtubeUrl: episode.youtube_id ? youtubeWatchUrl(episode.youtube_id) : "",
+      transcript: episode.transcript_text ?? "", aslUrl: episode.asl_interpretation_url ?? "",
       duration: episode.duration_seconds === null ? "" : String(episode.duration_seconds),
       number: String(episode.episode_number), orientation: episode.orientation, published: episode.published,
     });
     setThumbnailFile(null);
     if (thumbnailFileInput.current) thumbnailFileInput.current.value = "";
     clearVideoFileSelections();
+    setCaptionFile(null);
+    if (captionFileInput.current) captionFileInput.current.value = "";
     setUploadStatus("");
   }
 
@@ -191,6 +206,8 @@ export function StudioExperience() {
     setSelectedEpisodeId(""); setEpisodeForm(freshEpisode());
     setThumbnailFile(null);
     if (thumbnailFileInput.current) thumbnailFileInput.current.value = "";
+    setCaptionFile(null);
+    if (captionFileInput.current) captionFileInput.current.value = "";
     clearVideoFileSelections(); setUploadStatus("");
   }
 
@@ -229,7 +246,7 @@ export function StudioExperience() {
   async function deleteEpisode(episode: StudioEpisode) {
     if (!client || busyEpisodeId || savingEpisode || uploadQuality) return;
     const confirmed = window.confirm(
-      'Permanently delete "' + episode.title + '"? This removes the story, its playlist entries, comments, and uploaded media from Journey Studio. This cannot be undone. Videos hosted on YouTube will not be deleted.'
+      'Permanently delete "' + episode.title + '"? This removes the story, its playlist entries, comments, caption files, transcript, and uploaded media from Journey Studio. This cannot be undone. Videos hosted on YouTube will not be deleted.'
     );
     if (!confirmed) return;
     setBusyEpisodeId(episode.id);
@@ -249,6 +266,7 @@ export function StudioExperience() {
 
       // Storage deletes are separate from DB cascades and must be performed explicitly.
       const videoPaths = episode.sources.map((source) => source.storage_path);
+      const captionPaths = episode.captions.map((caption) => caption.storage_path);
       const thumbnailPath = episode.thumbnail_url
         ? getPublicStoragePath(episode.thumbnail_url, "media-thumbnails") : null;
       const cleanupProblems: string[] = [];
@@ -257,6 +275,12 @@ export function StudioExperience() {
           const { error: videoError } = await client.storage.from("media-videos").remove(videoPaths);
           if (videoError) cleanupProblems.push("uploaded video files");
         } catch { cleanupProblems.push("uploaded video files"); }
+      }
+      if (captionPaths.length) {
+        try {
+          const { error: captionError } = await client.storage.from("media-videos").remove(captionPaths);
+          if (captionError) cleanupProblems.push("caption files");
+        } catch { cleanupProblems.push("caption files"); }
       }
       if (thumbnailPath) {
         try {
@@ -286,6 +310,17 @@ export function StudioExperience() {
     if (episodeForm.youtubeUrl.trim() && !youtubeId) {
       setNotice("Enter a valid YouTube video link (youtube.com or youtu.be)."); setNoticeError(true); return;
     }
+    const aslUrl = episodeForm.aslUrl.trim();
+    if (aslUrl) {
+      try {
+        if (new URL(aslUrl).protocol !== "https:") throw new Error("HTTPS required");
+      } catch {
+        setNotice("Enter a valid HTTPS link to the interpreter-produced ASL video."); setNoticeError(true); return;
+      }
+    }
+    if (episodeForm.transcript.length > 100000) {
+      setNotice("Keep the transcript under 100,000 characters."); setNoticeError(true); return;
+    }
     // Saving a draft first gives the direct uploader a story ID to attach its file.
     const publication = resolveStoryPublication(episodeForm.published, Boolean(existing?.sources.length), youtubeId);
     setSavingEpisode(true);
@@ -310,6 +345,8 @@ export function StudioExperience() {
         scripture_reference: episodeForm.scripture.trim() || null,
         thumbnail_url: thumbnailUrl,
         youtube_id: youtubeId,
+        transcript_text: episodeForm.transcript.trim() || null,
+        asl_interpretation_url: aslUrl || null,
         duration_seconds: episodeForm.duration.trim() ? Number(episodeForm.duration) : null,
         episode_number: Number(episodeForm.number) || 1, orientation: episodeForm.orientation,
         published: publication.published,
@@ -356,6 +393,100 @@ export function StudioExperience() {
       setNoticeError(true);
     } finally {
       setSavingEpisode(false);
+    }
+  }
+
+  async function uploadCaption(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!client || !selectedEpisodeId) {
+      setNotice("Save the story details before attaching caption files."); setNoticeError(true); return;
+    }
+    if (!captionFile) {
+      setNotice("Choose a WebVTT caption file first."); setNoticeError(true); return;
+    }
+    if (captionFile.size > 2 * 1024 * 1024) {
+      setNotice("Caption files must be 2 MB or smaller."); setNoticeError(true); return;
+    }
+    const language = captionLanguage.trim();
+    const label = captionLabel.trim();
+    if (!/^[A-Za-z]{2,3}(?:-[A-Za-z0-9]{2,8})*$/.test(language)) {
+      setNotice("Enter a valid language code such as en, fr, or fr-CA."); setNoticeError(true); return;
+    }
+    if (!label || label.length > 80) {
+      setNotice("Add a caption label of up to 80 characters."); setNoticeError(true); return;
+    }
+    const existingTrack = episodes.find((episode) => episode.id === selectedEpisodeId)?.captions
+      .find((caption) => caption.language.toLowerCase() === language.toLowerCase() && caption.kind === captionKind);
+    if (existingTrack) {
+      setNotice(`A ${captionKind} track for ${language} already exists. Remove it before uploading a replacement.`); setNoticeError(true); return;
+    }
+    let webVtt: string;
+    try { webVtt = await captionFile.text(); }
+    catch { setNotice("The selected caption file could not be read."); setNoticeError(true); return; }
+    if (!/^\uFEFF?WEBVTT(?:[ \t].*)?(?:\r?\n|$)/.test(webVtt)
+      || !/^\s*\d{2}:\d{2}(?::\d{2})?\.\d{3}\s+-->\s+\d{2}:\d{2}(?::\d{2})?\.\d{3}(?:\s|$)/m.test(webVtt)) {
+      setNotice("This file must start with WEBVTT and contain at least one timed cue."); setNoticeError(true); return;
+    }
+
+    setCaptionBusy(true);
+    let uploadedPath: string | null = null;
+    try {
+      const path = `${selectedEpisodeId}/captions/${createStorageObjectId()}.vtt`;
+      const { data: uploaded, error: uploadError } = await client.storage.from("media-videos").upload(path, captionFile, {
+        cacheControl: "3600", contentType: "text/vtt", upsert: false,
+      });
+      if (uploadError || !uploaded) throw new Error("Caption upload failed: " + formatStudioError(uploadError, "Storage did not return an uploaded file."));
+      uploadedPath = uploaded.path;
+
+      if (captionDefault) {
+        const { error } = await client.from("media_captions").update({ is_default: false }).eq("episode_id", selectedEpisodeId).eq("is_default", true);
+        if (error) throw error;
+      }
+      const { data, error } = await client.from("media_captions").insert({
+        episode_id: selectedEpisodeId, language, label, kind: captionKind,
+        storage_path: uploaded.path, is_default: captionDefault,
+      }).select("id").single();
+      if (error) throw error;
+      if (!data) throw new Error("Studio did not confirm that the caption file was attached.");
+      uploadedPath = null;
+      setCaptionFile(null);
+      if (captionFileInput.current) captionFileInput.current.value = "";
+      const refreshed = await loadStudioData();
+      setNotice(refreshed ? `The ${label} WebVTT track was attached.` : "The caption file was saved, but the library could not refresh. Reload Studio to confirm it.");
+      setNoticeError(!refreshed);
+    } catch (error) {
+      let cleanupNote = "";
+      if (uploadedPath) {
+        const { error: cleanupError } = await client.storage.from("media-videos").remove([uploadedPath]);
+        if (cleanupError) cleanupNote = " The unlinked upload could not be removed from storage.";
+      }
+      setNotice(formatStudioError(error, "Caption file could not be attached.") + cleanupNote);
+      setNoticeError(true);
+    } finally {
+      setCaptionBusy(false);
+    }
+  }
+
+  async function deleteCaption(caption: CaptionRow) {
+    if (!client || captionBusy) return;
+    const confirmed = window.confirm(`Remove the ${caption.label} caption track from this story?`);
+    if (!confirmed) return;
+    setCaptionBusy(true);
+    try {
+      const { data, error } = await client.from("media_captions").delete().eq("id", caption.id).select("id").single();
+      if (error) throw error;
+      if (!data) throw new Error("Studio did not confirm that the caption track was removed.");
+      const { error: cleanupError } = await client.storage.from("media-videos").remove([caption.storage_path]);
+      const refreshed = await loadStudioData();
+      setNotice(cleanupError
+        ? "The caption record was removed, but its stored file could not be deleted. Check Supabase Storage."
+        : refreshed ? `The ${caption.label} caption track was removed.` : "The caption track was removed, but the library could not refresh.");
+      setNoticeError(Boolean(cleanupError) || !refreshed);
+    } catch (error) {
+      setNotice(formatStudioError(error, "Caption track could not be removed."));
+      setNoticeError(true);
+    } finally {
+      setCaptionBusy(false);
     }
   }
 
@@ -588,10 +719,39 @@ export function StudioExperience() {
                   <label className="studio-span-two studio-upload-field"><span>Or upload a thumbnail image</span><input ref={thumbnailFileInput} type="file" accept="image/jpeg,image/png,image/webp,image/avif" onChange={(event) => setThumbnailFile(event.target.files?.[0] ?? null)} /><small>{thumbnailFile?.name ?? "JPEG, PNG, WebP, or AVIF · up to 10 MB · saved with story details"}</small></label>
                   <label className="studio-span-two">YouTube video link<input type="url" value={episodeForm.youtubeUrl} onChange={(event) => setEpisodeForm({ ...episodeForm, youtubeUrl: event.target.value })} placeholder="https://www.youtube.com/watch?v=..." /><small>Optional. Paste a YouTube watch, share, Shorts, or live link. Save the story to enable YouTube playback without uploading a video file. Clear the link and save to use uploaded video versions instead.</small></label>
                   <label className="studio-span-two">Description<textarea value={episodeForm.description} onChange={(event) => setEpisodeForm({ ...episodeForm, description: event.target.value })} maxLength={5000} rows={4} /></label>
+                  <label className="studio-span-two">Transcript<textarea value={episodeForm.transcript} onChange={(event) => setEpisodeForm({ ...episodeForm, transcript: event.target.value })} maxLength={100000} rows={8} placeholder="Paste an approved transcript. No transcript is generated automatically." /><small>Visitors can read and download this text. Up to 100,000 characters.</small></label>
+                  <label className="studio-span-two">ASL interpretation video link<input type="url" value={episodeForm.aslUrl} onChange={(event) => setEpisodeForm({ ...episodeForm, aslUrl: event.target.value })} placeholder="https://…" /><small>Optional HTTPS link to an interpreter-produced ASL video. The public page will show a viewing link only after you supply one.</small></label>
                   <label className="studio-check"><input type="checkbox" checked={episodeForm.published} onChange={(event) => setEpisodeForm({ ...episodeForm, published: event.target.checked })} />Publish in the public library</label>
                 </div>
                 <button className="button button-gold" type="submit" disabled={savingEpisode || Boolean(uploadQuality)}><Check size={16} />{savingEpisode ? "Saving…" : thumbnailFile ? "Save story and thumbnail" : "Save story details"}</button>
               </form>
+              <section className="studio-panel studio-form" aria-labelledby="studio-caption-heading">
+                <div className="studio-panel-heading"><div><h2 id="studio-caption-heading">Captions and subtitles</h2><p>Attach administrator-prepared WebVTT files to direct video playback. YouTube caption controls remain inside the YouTube player and cannot be managed here.</p></div></div>
+                {!selectedEpisodeId && <p className="studio-file-hint">Save the story details before attaching a caption file.</p>}
+                {selectedEpisodeId && (
+                  <>
+                    <p className="studio-file-hint">Story ID: <strong>{selectedEpisodeId}</strong></p>
+                    <div className="studio-caption-list" aria-label="Attached caption tracks">
+                      {(episodes.find((episode) => episode.id === selectedEpisodeId)?.captions ?? []).length === 0
+                        ? <p className="studio-empty">No caption or subtitle files are attached to this story yet.</p>
+                        : (episodes.find((episode) => episode.id === selectedEpisodeId)?.captions ?? []).map((caption) => (
+                          <div className="studio-caption-row" key={caption.id}>
+                            <span><strong>{caption.label}</strong><small>{caption.language} · {caption.kind}{caption.is_default ? " · Default" : ""}</small></span>
+                            <button type="button" className="studio-video-delete" disabled={captionBusy} onClick={() => void deleteCaption(caption)} aria-label={`Remove ${caption.label} caption track`}><Trash2 size={14} />Remove</button>
+                          </div>
+                        ))}
+                    </div>
+                    <form className="studio-caption-upload" onSubmit={uploadCaption}>
+                      <label className="studio-span-two studio-upload-field"><span>WebVTT file</span><input ref={captionFileInput} type="file" accept=".vtt,text/vtt" onChange={(event) => setCaptionFile(event.target.files?.[0] ?? null)} /><small>{captionFile?.name ?? "Interpreter-prepared .vtt · up to 2 MB"}</small></label>
+                      <label>Language code<input value={captionLanguage} onChange={(event) => setCaptionLanguage(event.target.value)} placeholder="en or fr-CA" maxLength={35} required /></label>
+                      <label>Player label<input value={captionLabel} onChange={(event) => setCaptionLabel(event.target.value)} placeholder="English captions" maxLength={80} required /></label>
+                      <label>Track type<select value={captionKind} onChange={(event) => setCaptionKind(event.target.value as "captions" | "subtitles")}><option value="captions">Captions</option><option value="subtitles">Subtitles</option></select></label>
+                      <label className="studio-check"><input type="checkbox" checked={captionDefault} onChange={(event) => setCaptionDefault(event.target.checked)} />Enable this track by default when available</label>
+                      <button className="button button-outline" type="submit" disabled={captionBusy || !captionFile}><UploadCloud size={16} />{captionBusy ? "Saving caption…" : "Attach caption file"}</button>
+                    </form>
+                  </>
+                )}
+              </section>
               <form className="studio-panel studio-form" onSubmit={uploadSources}>
                 <div className="studio-panel-heading"><div><h2>Video versions</h2><p>For direct videos: save story details as a draft, select a file, upload it, then publish. For YouTube: paste a link above and save directly; no file upload is needed. Large MP4, WebM, and QuickTime uploads resume in chunks.</p></div><UploadCloud size={20} /></div>
                 {selectedEpisodeId && <p className="studio-file-hint">Story ID: <strong>{selectedEpisodeId}</strong></p>}

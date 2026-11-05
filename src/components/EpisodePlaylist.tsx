@@ -65,6 +65,7 @@ export function EpisodePlaylist({ episodes, selectedId, onSelect, playlists = []
               <span className="episode-copy">
                 <strong>{episode.title}</strong>
                 <small>{episode.scriptureReference ?? "Episode " + episode.episodeNumber} · {episode.orientation === "portrait" ? "9:16" : "16:9"}</small>
+                {selectedId === episode.id && <span className="episode-current-label">Now playing</span>}
               </span>
             </button>
           ))}

@@ -2,8 +2,9 @@ import type { Episode, MediaPlaylist } from "@/data/episodes";
 import type { VideoQuality } from "@/lib/database.types";
 import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
 
-type EpisodeRow = { id: string; title: string; description: string; scripture_reference: string | null; thumbnail_url: string | null; youtube_id: string | null; duration_seconds: number | null; episode_number: number; orientation: "landscape" | "portrait" };
+type EpisodeRow = { id: string; title: string; description: string; scripture_reference: string | null; thumbnail_url: string | null; youtube_id: string | null; transcript_text: string | null; asl_interpretation_url: string | null; duration_seconds: number | null; episode_number: number; orientation: "landscape" | "portrait" };
 type SourceRow = { episode_id: string; quality: VideoQuality; storage_path: string };
+type CaptionRow = { id: string; episode_id: string; language: string; label: string; kind: "captions" | "subtitles"; storage_path: string; is_default: boolean };
 type PlaylistRow = { id: string; title: string; description: string; sort_order: number };
 type PlaylistItemRow = { playlist_id: string; episode_id: string; sort_order: number };
 export type PublishedMediaCatalog = { episodes: Episode[]; playlists: MediaPlaylist[] };
@@ -12,7 +13,7 @@ export async function loadPublishedMediaCatalog(): Promise<PublishedMediaCatalog
   const client = createBrowserSupabaseClient();
   if (!client) return { episodes: [], playlists: [] };
   const [episodeResult, playlistResult] = await Promise.all([
-    client.from("media_episodes").select("id, title, description, scripture_reference, thumbnail_url, youtube_id, duration_seconds, episode_number, orientation").eq("published", true).order("episode_number"),
+    client.from("media_episodes").select("id, title, description, scripture_reference, thumbnail_url, youtube_id, transcript_text, asl_interpretation_url, duration_seconds, episode_number, orientation").eq("published", true).order("episode_number"),
     client.from("media_playlists").select("id, title, description, sort_order").eq("published", true).order("sort_order"),
   ]);
   if (episodeResult.error) throw episodeResult.error;
@@ -21,27 +22,39 @@ export async function loadPublishedMediaCatalog(): Promise<PublishedMediaCatalog
   const playlistRows = (playlistResult.data ?? []) as PlaylistRow[];
   const episodeIds = rows.map((item) => item.id);
   const playlistIds = playlistRows.map((item) => item.id);
-  const [sourceResult, itemResult] = await Promise.all([
+  const [sourceResult, itemResult, captionResult] = await Promise.all([
     episodeIds.length ? client.from("media_video_sources").select("episode_id, quality, storage_path").in("episode_id", episodeIds) : Promise.resolve({ data: [], error: null }),
     playlistIds.length ? client.from("media_playlist_items").select("playlist_id, episode_id, sort_order").in("playlist_id", playlistIds).order("sort_order") : Promise.resolve({ data: [], error: null }),
+    episodeIds.length ? client.from("media_captions").select("id, episode_id, language, label, kind, storage_path, is_default").in("episode_id", episodeIds) : Promise.resolve({ data: [], error: null }),
   ]);
   if (sourceResult.error) throw sourceResult.error;
   if (itemResult.error) throw itemResult.error;
+  if (captionResult.error) throw captionResult.error;
   const sources = (sourceResult.data ?? []) as SourceRow[];
-  const paths = sources.map((item) => item.storage_path);
+  const captionRows = (captionResult.data ?? []) as CaptionRow[];
+  const paths = [...sources, ...captionRows].map((item) => item.storage_path);
   const signed = paths.length ? await client.storage.from("media-videos").createSignedUrls(paths, 604800) : { data: [], error: null };
   if (signed.error) throw signed.error;
   const urls = new Map((signed.data ?? []).map((item) => [item.path, item.signedUrl]));
   const byEpisode = new Map<string, { label: string; url: string }[]>();
+  const captionsByEpisode = new Map<string, NonNullable<Episode["captions"]>>();
   for (const source of sources) {
     const url = urls.get(source.storage_path);
     if (url) byEpisode.set(source.episode_id, [...(byEpisode.get(source.episode_id) ?? []), { label: source.quality, url }]);
+  }
+  for (const caption of captionRows) {
+    const url = urls.get(caption.storage_path);
+    if (url) captionsByEpisode.set(caption.episode_id, [...(captionsByEpisode.get(caption.episode_id) ?? []), {
+      id: caption.id, language: caption.language, label: caption.label, kind: caption.kind, url, isDefault: caption.is_default,
+    }]);
   }
   const episodes = rows.map((row): Episode => ({
     id: row.id, title: row.title, description: row.description,
     scriptureReference: row.scripture_reference ?? undefined, thumbnail: row.thumbnail_url ?? undefined,
     duration: formatDuration(row.duration_seconds), episodeNumber: row.episode_number,
-    orientation: row.orientation, youtubeId: row.youtube_id ?? undefined, videoSources: byEpisode.get(row.id) ?? [], published: true,
+    orientation: row.orientation, youtubeId: row.youtube_id ?? undefined, videoSources: byEpisode.get(row.id) ?? [],
+    captions: (captionsByEpisode.get(row.id) ?? []).sort((a, b) => Number(b.isDefault) - Number(a.isDefault)),
+    transcript: row.transcript_text ?? undefined, aslInterpretationUrl: row.asl_interpretation_url ?? undefined, published: true,
   }));
   const items = (itemResult.data ?? []) as PlaylistItemRow[];
   const playlists = playlistRows.map((row): MediaPlaylist => ({
