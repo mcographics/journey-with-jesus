@@ -186,6 +186,18 @@ test.describe("mobile accessibility controls", () => {
     expect(panelBounds?.x).toBeGreaterThanOrEqual(0);
     expect(panelBounds!.x + panelBounds!.width).toBeLessThanOrEqual(375);
     await expect(page.getByRole("slider", { name: "Light mode brightness" })).toBeVisible();
+
+    for (const [size, zoom] of [["large", "1.08"], ["largest", "1.16"]] as const) {
+      await page.getByLabel("Text size").selectOption(size);
+      await expect(page.locator("body")).toHaveCSS("zoom", zoom);
+      const zoomedBounds = await panel.boundingBox();
+      expect(zoomedBounds?.x).toBeGreaterThanOrEqual(0);
+      expect(zoomedBounds!.x + zoomedBounds!.width).toBeLessThanOrEqual(375);
+      expect(zoomedBounds?.y).toBeGreaterThanOrEqual(0);
+      expect(zoomedBounds!.y + zoomedBounds!.height).toBeLessThanOrEqual(812);
+      await page.getByRole("button", { name: "Reset to defaults" }).scrollIntoViewIfNeeded();
+      await expect(page.getByRole("button", { name: "Reset to defaults" })).toBeInViewport();
+    }
   });
 
   test("reduced motion follows the OS preference until the visitor changes it", async ({ page }) => {
