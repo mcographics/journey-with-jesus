@@ -36,7 +36,7 @@ export default function HomePage() {
             height={1086}
             priority
             sizes="(max-width: 700px) 78vw, 390px"
-            src={`${basePath}/images/kerygma-path-gateway-logo.png`}
+            src={`${basePath}/images/kerygma-path-gateway-logo-complete.webp`}
             unoptimized
             width={1448}
           />
