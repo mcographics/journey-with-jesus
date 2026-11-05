@@ -2,6 +2,24 @@ import { expect, test } from "@playwright/test";
 
 test("public destinations are available in the desktop menu, with working story CTA", async ({ page }) => {
   await page.goto("/");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("Kerygma Path");
+  await page.getByRole("link", { name: "Enter Site" }).click();
+  await expect(page).toHaveURL(/\/company\/$/);
+  await expect(page.getByRole("heading", { name: /Faithful to the Word/ })).toBeVisible();
+  await expect(page.getByText("Christian animation studio devoted to sharing the Gospel", { exact: false })).toBeVisible();
+
+  const desktopMenuButton = page.getByRole("button", { name: "Open site menu" });
+  await expect(desktopMenuButton).toBeVisible();
+  await desktopMenuButton.click();
+  const primaryNavigation = page.getByRole("navigation", { name: "Primary navigation" });
+  await expect(primaryNavigation).toBeVisible();
+  await expect(primaryNavigation.getByRole("link")).toHaveCount(7);
+  for (const destination of ["Kerygma Path", "Animation Studio", "Journey with Jesus", "Media", "Meet the Characters", "Meet the Team", "Store"]) {
+    await expect(primaryNavigation.getByRole("link", { name: destination })).toBeVisible();
+  }
+  await primaryNavigation.getByRole("link", { name: "Journey with Jesus" }).click();
+  await expect(page).toHaveURL(/\/projects\/journey-with-jesus\/$/);
+
   const masthead = page.getByRole("img", { name: /Jesus walks with a young man/ });
   await expect(masthead).toBeVisible();
   await expect(masthead).toHaveAttribute("width", "6384");
@@ -22,25 +40,14 @@ test("public destinations are available in the desktop menu, with working story 
   await expect(page.getByRole("heading", { level: 1 })).toContainText("Journey");
   await expect(page.getByText("These are more than themes. They are at the heart of the journey.")).toBeVisible();
   await expect(page.getByText("Journey with Jesus brings biblical narratives to life", { exact: false })).toBeVisible();
-  const desktopMenuButton = page.getByRole("button", { name: "Open site menu" });
-  await expect(desktopMenuButton).toBeVisible();
-  await desktopMenuButton.click();
-  const primaryNavigation = page.getByRole("navigation", { name: "Primary navigation" });
-  await expect(primaryNavigation).toBeVisible();
-  await expect(primaryNavigation.getByRole("link")).toHaveCount(5);
-  for (const destination of ["Home", "Media", "Meet the Characters", "Meet the Team", "Store"]) {
-    await expect(primaryNavigation.getByRole("link", { name: destination })).toBeVisible();
-  }
   await page.getByRole("link", { name: "Watch the Stories" }).click();
   await expect(page).toHaveURL(/\/media\/$/);
   await expect(page.getByRole("heading", { name: "Animated stories of faith." })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Coming Soon" })).toBeVisible();
   await expect(page.locator("video")).toHaveCount(0);
-  const footerBrand = page.getByRole("link", { name: "Journey with Jesus home" });
-  await expect(footerBrand.locator('picture source[type="image/webp"]')).toHaveAttribute("srcSet", /footer-wordmark-transparent-420\.webp/);
-  await expect(footerBrand.locator("img")).toHaveAttribute("src", /footer-wordmark-fallback\.png/);
+  await expect(page.getByRole("link", { name: "Kerygma Path home" })).toBeVisible();
   const footerNavigation = page.getByRole("navigation", { name: "Footer navigation" });
-  await expect(footerNavigation.getByRole("link", { name: "Home" })).toBeVisible();
+  await expect(footerNavigation.getByRole("link", { name: "Kerygma Path" })).toBeVisible();
   await expect(footerNavigation.getByRole("link", { name: "Media" })).toBeVisible();
 });
 
@@ -48,7 +55,7 @@ test.describe("touch mobile navigation", () => {
   test.use({ viewport: { width: 375, height: 812 }, isMobile: true, hasTouch: true });
 
   test("the floating menu auto-hides after scrolling, stays accessible, and opens Home and Media", async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/projects/journey-with-jesus/");
     const masthead = page.getByRole("img", { name: /Jesus walks with a young man/ });
     await expect(masthead).toBeVisible();
     const menuButton = page.locator(".mobile-menu-toggle");
@@ -105,7 +112,7 @@ test.describe("touch mobile navigation", () => {
     await expect(mobileNavigation).toHaveCSS("opacity", "1");
 
     await page.setViewportSize({ width: 375, height: 812 });
-    await page.goto("/");
+    await page.goto("/projects/journey-with-jesus/");
     const storySeal = page.getByRole("link", { name: /Click Me!/ });
     await expect(storySeal).toBeVisible();
     await storySeal.scrollIntoViewIfNeeded();
