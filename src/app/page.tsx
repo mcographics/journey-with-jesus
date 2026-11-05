@@ -31,9 +31,19 @@ export default function HomePage() {
       />
       <div aria-hidden="true" className="kerygma-gateway-shade" />
       <div className="kerygma-gateway-content">
-        <div aria-hidden="true" className="kerygma-emblem">K</div>
         <p className="kerygma-gateway-kicker">A Christian Animation Studio</p>
-        <h1>Kerygma <em>Path</em></h1>
+        <h1 className="kerygma-gateway-logo-heading">
+          <Image
+            alt="Kerygma Path"
+            className="kerygma-gateway-logo"
+            height={567}
+            priority
+            sizes="(max-width: 700px) 78vw, 420px"
+            src={`${basePath}/images/kerygma-path-logo.png`}
+            unoptimized
+            width={756}
+          />
+        </h1>
         <p className="kerygma-gateway-description">
           Scripture-rooted stories, brought to life through animation to share the Gospel.
         </p>

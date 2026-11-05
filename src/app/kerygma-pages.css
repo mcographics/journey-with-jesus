@@ -25,6 +25,19 @@
     linear-gradient(180deg, rgba(5, 10, 20, .3), rgba(5, 10, 20, .25) 52%, rgba(5, 10, 20, .76));
 }
 
+.kerygma-gateway-logo-heading {
+  width: min(420px, 78vw);
+  margin: 18px auto 0;
+  line-height: 0;
+}
+
+.kerygma-gateway-logo {
+  display: block;
+  width: 100%;
+  height: auto;
+  mix-blend-mode: screen;
+}
+
 .kerygma-gateway-content {
   width: min(760px, 100%);
   margin-top: 10px;
@@ -434,4 +447,30 @@
 @media (prefers-reduced-motion: reduce) {
   .kerygma-enter-button,
   .kerygma-button { transition: none; }
+}
+
+
+/* Keep the studio hero copy crisp, white, and static in both themes. */
+:root:not([data-theme="light"]) body .kerygma-company-hero-content :is(.kerygma-eyebrow, h1, h1 em, .kerygma-company-lead, .kerygma-company-supporting, .kerygma-text-link),
+:root[data-theme="light"] body .kerygma-company-hero-content :is(.kerygma-eyebrow, h1, h1 em, .kerygma-company-lead, .kerygma-company-supporting, .kerygma-text-link) {
+  color: #fff !important;
+  background: none !important;
+  background-image: none !important;
+  background-clip: border-box !important;
+  -webkit-background-clip: border-box !important;
+  -webkit-text-fill-color: #fff !important;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, .82) !important;
+  animation: none !important;
+  filter: none !important;
+}
+
+:root:not([data-theme="light"]) body .kerygma-company-hero .kerygma-hero-caption,
+:root[data-theme="light"] body .kerygma-company-hero .kerygma-hero-caption {
+  color: #fff !important;
+  background: none !important;
+  background-image: none !important;
+  -webkit-text-fill-color: #fff !important;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, .82) !important;
+  animation: none !important;
+  filter: none !important;
 }
