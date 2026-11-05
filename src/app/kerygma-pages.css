@@ -474,3 +474,36 @@
   animation: none !important;
   filter: none !important;
 }
+
+
+/* Studio identity accents: cobalt blue and gold around the production-process artwork. */
+.kerygma-company-hero {
+  background:
+    radial-gradient(ellipse at 83% 30%, rgba(48, 110, 231, .14), transparent 45%),
+    #0b1120;
+}
+
+.kerygma-company-hero-image {
+  object-position: 68% center;
+  opacity: .94;
+}
+
+.kerygma-principles-section {
+  background:
+    radial-gradient(ellipse at 82% 0%, rgba(48, 110, 231, .12), transparent 40%),
+    #0b1120;
+}
+
+.kerygma-principle-card {
+  border-color: rgba(110, 157, 245, .24);
+}
+
+.kerygma-principle-card > svg {
+  color: #82adff;
+}
+
+@media (max-width: 700px) {
+  .kerygma-company-hero-image {
+    object-position: 70% center;
+  }
+}

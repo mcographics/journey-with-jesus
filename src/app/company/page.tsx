@@ -8,7 +8,7 @@ const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 export const metadata: Metadata = {
   title: "The Studio",
   description:
-    "Meet Kerygma Path, a Christian animation studio using AI and creative tools to tell Gospel-centered stories.",
+    "Meet Kerygma Path, a Christian animation studio using AI and digital tools to bring Scripture-rooted narratives to life.",
 };
 
 export default function CompanyPage() {
@@ -22,7 +22,7 @@ export default function CompanyPage() {
             fill
             priority
             sizes="(max-width: 800px) 100vw, 52vw"
-            src={`${basePath}/images/scripture-city-story-2560.webp`}
+            src={`${basePath}/images/kerygma-studio-process-hero.webp`}
             unoptimized
           />
         </div>
@@ -37,16 +37,16 @@ export default function CompanyPage() {
             Kerygma Path is a Christian animation studio devoted to sharing the Gospel through powerful, Scripture-rooted storytelling.
           </p>
           <p className="kerygma-company-supporting">
-            We use AI and a range of creative tools to pursue the highest quality storytelling possible—bringing the message of the Gospel to life in animation.
+            We use AI and a range of creative tools to develop Christian narratives from idea to animation, keeping Scripture and the story's message at the center.
           </p>
           <div className="kerygma-hero-actions">
             <Link className="kerygma-button kerygma-button-gold" href="/projects/journey-with-jesus/">
               <span>Explore Our Project</span><ArrowRight aria-hidden="true" size={18} />
             </Link>
-            <a className="kerygma-text-link" href="#our-approach">Our approach</a>
+            <a className="kerygma-text-link" href="#our-approach">Our process</a>
           </div>
         </div>
-        <p className="kerygma-hero-caption">Rooted in Scripture · Created to share the Gospel</p>
+        <p className="kerygma-hero-caption">Scripture · Story · AI-assisted animation</p>
       </section>
 
       <section aria-labelledby="mission-title" className="kerygma-mission-section" id="our-approach">
@@ -69,27 +69,27 @@ export default function CompanyPage() {
       <section aria-labelledby="approach-title" className="kerygma-principles-section">
         <div className="kerygma-section-inner">
           <div className="kerygma-section-heading kerygma-section-heading-centered">
-            <p className="kerygma-eyebrow"><span /> What guides the work</p>
-            <h2 id="approach-title">Technology in service of <em>story.</em></h2>
+            <p className="kerygma-eyebrow"><span /> Our creative process</p>
+            <h2 id="approach-title">From Scripture to <em>screen.</em></h2>
           </div>
           <div className="kerygma-principles-grid">
             <article className="kerygma-principle-card">
               <span className="kerygma-principle-number">01</span>
               <BookOpen aria-hidden="true" size={24} strokeWidth={1.4} />
-              <h3>Scripture at the center</h3>
+              <h3>Story rooted in Scripture</h3>
               <p>Every project begins with the biblical message it is meant to share.</p>
             </article>
             <article className="kerygma-principle-card">
               <span className="kerygma-principle-number">02</span>
               <Sparkles aria-hidden="true" size={24} strokeWidth={1.4} />
-              <h3>Creative tools, carefully used</h3>
-              <p>AI and other tools help us explore new possibilities for visual storytelling.</p>
+              <h3>Visual development</h3>
+              <p>Storyboards, character design, and environments shape each narrative's visual language.</p>
             </article>
             <article className="kerygma-principle-card">
               <span className="kerygma-principle-number">03</span>
               <ArrowRight aria-hidden="true" size={24} strokeWidth={1.4} />
-              <h3>Quality in every story</h3>
-              <p>We aim to make the story engaging, memorable, and worthy of its message.</p>
+              <h3>AI-assisted animation</h3>
+              <p>AI and digital tools help bring each story's visual direction to the screen.</p>
             </article>
           </div>
         </div>
