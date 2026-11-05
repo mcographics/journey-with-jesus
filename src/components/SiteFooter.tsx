@@ -1,34 +1,23 @@
 import Link from "next/link";
-import ResponsivePicture, { type PictureCandidate } from "@/components/ResponsivePicture";
-
-const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
-const wordmarkSources: PictureCandidate[] = [420, 810].map((width) => ({
-  src: `${basePath}/images/footer-wordmark-transparent-${width}.webp`,
-  width,
-}));
 
 export function SiteFooter() {
   return (
     <footer className="site-footer">
       <div className="footer-inner">
-        <Link aria-label="Journey with Jesus home" className="footer-brand" href="/">
-          <ResponsivePicture
-            alt=""
-            className="footer-wordmark"
-            height={778}
-            fallbackSrc={`${basePath}/images/footer-wordmark-fallback.png`}
-            loading="lazy"
-            sizes="(max-width: 700px) 210px, 250px"
-            webpSources={wordmarkSources}
-            width={2020}
-          />
+        <Link aria-label="Kerygma Path home" className="footer-brand kerygma-footer-brand" href="/">
+          <span aria-hidden="true" className="kerygma-footer-emblem">K</span>
+          <span className="kerygma-footer-wordmark">Kerygma <em>Path</em></span>
         </Link>
         <div className="footer-message">
-          <p className="footer-tagline">Bringing the Gospel to Life</p>
-          <p className="footer-note">Faith · Hope · Love · Redemption</p>
+          <p className="footer-tagline">Christian animation with purpose</p>
+          <p className="footer-note">Faith · Scripture · Story</p>
         </div>
         <nav aria-label="Footer navigation" className="footer-links">
-          <Link href="/">Home</Link>
+          <Link href="/">Kerygma Path</Link>
+          <span aria-hidden="true">✦</span>
+          <Link href="/company/">The Studio</Link>
+          <span aria-hidden="true">✦</span>
+          <Link href="/projects/journey-with-jesus/">Journey with Jesus</Link>
           <span aria-hidden="true">✦</span>
           <Link href="/media/">Media</Link>
           <span aria-hidden="true">✦</span>
@@ -44,7 +33,7 @@ export function SiteFooter() {
           <span aria-hidden="true">✦</span>
           <Link href="/policies/copyright/">Copyright</Link>
         </nav>
-        <p className="footer-note">Journey with Jesus — created by Eric Oberhausen · Website by Majestic Creations</p>
+        <p className="footer-note">Kerygma Path · Current project: Journey with Jesus · Website by Majestic Creations</p>
       </div>
     </footer>
   );

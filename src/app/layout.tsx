@@ -5,29 +5,30 @@ import "./globals.css";
 import "./media-studio.css";
 import "./editorial-pages.css";
 import "./character-cards.css";
+import "./kerygma-pages.css";
 import "./accessibility.css";
 
-const siteUrl = "https://mcographics.github.io/journey-with-jesus/";
+const siteUrl = "https://kerygmapath.com/";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Journey with Jesus — Animated Biblical Stories",
-    template: "%s | Journey with Jesus",
+    default: "Kerygma Path — Christian Animation Studio",
+    template: "%s | Kerygma Path",
   },
-  description: "Journey with Jesus brings Scripture-centered animated stories of faith, hope, love, and redemption to life.",
-  applicationName: "Journey with Jesus",
+  description: "Kerygma Path is a Christian animation studio sharing the Gospel through Scripture-rooted animated storytelling.",
+  applicationName: "Kerygma Path",
   openGraph: {
     type: "website",
-    siteName: "Journey with Jesus",
-    title: "Journey with Jesus — Animated Biblical Stories",
-    description: "Experience the Gospel through cinematic, anime-inspired animation and Scripture-centered storytelling.",
+    siteName: "Kerygma Path",
+    title: "Kerygma Path — Christian Animation Studio",
+    description: "Christian animation sharing the Gospel through Scripture-rooted storytelling.",
     url: siteUrl,
   },
   twitter: {
     card: "summary",
-    title: "Journey with Jesus — Animated Biblical Stories",
-    description: "Experience the Gospel through cinematic, anime-inspired animation and Scripture-centered storytelling.",
+    title: "Kerygma Path — Christian Animation Studio",
+    description: "Christian animation sharing the Gospel through Scripture-rooted storytelling.",
   },
 };
 
@@ -40,8 +41,8 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   const websiteStructuredData = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: "Journey with Jesus",
-    description: "Journey with Jesus brings Scripture-centered animated stories of faith, hope, love, and redemption to life.",
+    name: "Kerygma Path",
+    description: "Kerygma Path is a Christian animation studio sharing the Gospel through Scripture-rooted storytelling.",
     url: siteUrl,
   };
 
