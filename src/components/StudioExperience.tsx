@@ -10,6 +10,7 @@ import { createStorageObjectId } from "@/lib/storage-object-id";
 import { StudioCharacters } from "@/components/StudioCharacters";
 import { StudioStaff } from "@/components/StudioStaff";
 import { parseYouTubeId, youtubeWatchUrl } from "@/lib/youtube";
+import { resolveStoryPublication } from "@/lib/studio-publishing";
 
 type SourceRow = Database["public"]["Tables"]["media_video_sources"]["Row"];
 type EpisodeRow = Database["public"]["Tables"]["media_episodes"]["Row"];
@@ -197,12 +198,12 @@ export function StudioExperience() {
     const id = episodeForm.id.trim() || slugify(episodeForm.title);
     if (!id) { setNotice("Add a title so Studio can create a story ID."); setNoticeError(true); return; }
     const existing = episodes.find((episode) => episode.id === id);
-    if (episodeForm.youtubeUrl.trim() && !parseYouTubeId(episodeForm.youtubeUrl)) {
+    const youtubeId = parseYouTubeId(episodeForm.youtubeUrl);
+    if (episodeForm.youtubeUrl.trim() && !youtubeId) {
       setNotice("Enter a valid YouTube video link (youtube.com or youtu.be)."); setNoticeError(true); return;
     }
-    if (episodeForm.published && !(existing?.sources.length) && !parseYouTubeId(episodeForm.youtubeUrl)) {
-      setNotice("Upload a video file or add a YouTube link before publishing this story."); setNoticeError(true); return;
-    }
+    // Saving a draft first gives the direct uploader a story ID to attach its file.
+    const publication = resolveStoryPublication(episodeForm.published, Boolean(existing?.sources.length), youtubeId);
     setSavingEpisode(true);
     let uploadedThumbnailPath: string | null = null;
     try {
@@ -224,10 +225,10 @@ export function StudioExperience() {
         id, title: episodeForm.title.trim(), description: episodeForm.description.trim(),
         scripture_reference: episodeForm.scripture.trim() || null,
         thumbnail_url: thumbnailUrl,
-        youtube_id: parseYouTubeId(episodeForm.youtubeUrl),
+        youtube_id: youtubeId,
         duration_seconds: episodeForm.duration.trim() ? Number(episodeForm.duration) : null,
         episode_number: Number(episodeForm.number) || 1, orientation: episodeForm.orientation,
-        published: episodeForm.published,
+        published: publication.published,
       };
       const { data, error } = await client.from("media_episodes").upsert(payload).select("id").single();
       if (error) throw error;
@@ -238,7 +239,7 @@ export function StudioExperience() {
         ? getPublicStoragePath(previousThumbnail, "media-thumbnails")
         : null;
       uploadedThumbnailPath = null;
-      setEpisodeForm((current) => ({ ...current, id, thumbnail: thumbnailUrl ?? "" }));
+      setEpisodeForm((current) => ({ ...current, id, thumbnail: thumbnailUrl ?? "", published: publication.published }));
       setThumbnailFile(null);
       if (thumbnailFileInput.current) thumbnailFileInput.current.value = "";
       setSelectedEpisodeId(id);
@@ -249,7 +250,12 @@ export function StudioExperience() {
         if (cleanupError) cleanupNote = " The previous thumbnail could not be removed.";
       }
       const refreshed = await loadStudioData();
-      const savedMessage = thumbnailFile ? "Story details and thumbnail saved." : "Story details saved.";
+      const savedMessage = publication.savedAsDraft
+        ? "Story saved as a draft. Choose a video file below and click Upload selected versions. When it finishes, check Publish and save the story again."
+        : youtubeId
+          ? "YouTube link and story saved. No direct video file is required."
+          : thumbnailFile ? "Story details and thumbnail saved." : "Story details saved.";
+      setUploadStatus(publication.savedAsDraft ? "Story saved. Choose a video file and click Upload selected versions." : "");
       setNotice((refreshed ? savedMessage : savedMessage + " The library could not refresh; reload the page to see the latest list.") + cleanupNote);
       setNoticeError(!refreshed || Boolean(cleanupNote));
     } catch (error) {
@@ -271,7 +277,7 @@ export function StudioExperience() {
 
   async function uploadSources(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!client || !selectedEpisodeId) { setUploadStatus("Save the story details before uploading video files."); return; }
+    if (!client || !selectedEpisodeId) { setUploadStatus("Save story details first to enable uploads. You can save a draft without a video, even with Publish checked."); setNoticeError(true); return; }
     const selectedFiles = qualities.flatMap((quality) => files[quality] ? [{ quality, file: files[quality]! }] : []);
     if (selectedFiles.length === 0) { setUploadStatus("Choose one or more video files first."); return; }
     setUploadStatus(""); setNoticeError(false);
@@ -482,7 +488,7 @@ export function StudioExperience() {
                 <button className="button button-gold" type="submit" disabled={savingEpisode || Boolean(uploadQuality)}><Check size={16} />{savingEpisode ? "Saving…" : thumbnailFile ? "Save story and thumbnail" : "Save story details"}</button>
               </form>
               <form className="studio-panel studio-form" onSubmit={uploadSources}>
-                <div className="studio-panel-heading"><div><h2>Video versions</h2><p>Choose the files, then upload them here. Large MP4, WebM, and QuickTime uploads resume in chunks.</p></div><UploadCloud size={20} /></div>
+                <div className="studio-panel-heading"><div><h2>Video versions</h2><p>For direct videos: save story details as a draft, select a file, upload it, then publish. For YouTube: paste a link above and save directly; no file upload is needed. Large MP4, WebM, and QuickTime uploads resume in chunks.</p></div><UploadCloud size={20} /></div>
                 {selectedEpisodeId && <p className="studio-file-hint">Story ID: <strong>{selectedEpisodeId}</strong></p>}
                 {!selectedEpisodeId && <p className="studio-file-hint">Save this story before uploading its files.</p>}
                 <div className="studio-upload-grid">
@@ -494,7 +500,7 @@ export function StudioExperience() {
                 </div>
                 {uploadQuality && <div className="studio-progress"><span>{uploadQuality} upload</span><progress max="100" value={uploadProgress} />{uploadProgress}%</div>}
                 {uploadStatus && <p className={"studio-notice" + (noticeError ? " is-error" : "")} role="status">{uploadStatus}</p>}
-                <button type="submit" className="button button-outline" disabled={!selectedEpisodeId || Boolean(uploadQuality)}><UploadCloud size={16} />{uploadQuality ? "Uploading " + uploadQuality + "…" : "Upload selected versions"}</button>
+                <button type="submit" className="button button-outline" disabled={Boolean(uploadQuality)}><UploadCloud size={16} />{uploadQuality ? "Uploading " + uploadQuality + "…" : "Upload selected versions"}</button>
               </form>
             </div>
           </div>
