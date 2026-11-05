@@ -769,3 +769,19 @@ body:has(> .kerygma-gateway) > .site-header,
 body:has(> .kerygma-gateway) > .site-footer {
   display: none !important;
 }
+
+/* Readable static white copy throughout the studio in dark mode. */
+:root:not([data-theme="light"]) body #main-content.kerygma-company :is(
+  h1, h2, h3, h4, h5, h6, p, li, a, span, strong, b, em, small, label, button
+) {
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+  background-image: none !important;
+  background-clip: border-box !important;
+  -webkit-background-clip: border-box !important;
+  animation: none !important;
+  text-shadow: none !important;
+}
+:root:not([data-theme="light"]) body #main-content.kerygma-company .kerygma-button-gold {
+  background: #172033 !important;
+}

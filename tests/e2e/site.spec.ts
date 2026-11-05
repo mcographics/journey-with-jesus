@@ -405,3 +405,16 @@ test("landing gateway hides site controls and footer until entering, including r
   await expect(page.locator(".site-header")).toBeHidden();
   await expect(page.locator(".site-footer")).toBeHidden();
 });
+
+test("studio dark-mode text is static white throughout the page", async ({ page }) => {
+  await page.addInitScript(() => window.localStorage.setItem("journey-with-jesus-theme-mode", "dark"));
+  await page.goto("/company/");
+  const copy = page.locator(".kerygma-company").locator("h1, h2, h3, p, em, a, .kerygma-principle-number, .kerygma-button span");
+  expect(await copy.count()).toBeGreaterThan(20);
+  for (const element of await copy.all()) {
+    await expect(element).toHaveCSS("color", "rgb(255, 255, 255)");
+    await expect(element).toHaveCSS("-webkit-text-fill-color", "rgb(255, 255, 255)");
+    await expect(element).toHaveCSS("background-image", "none");
+    await expect(element).toHaveCSS("animation-name", "none");
+  }
+});
