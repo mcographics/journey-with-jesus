@@ -16,6 +16,8 @@ export default function CompanyPage() {
     <main className="kerygma-company" id="main-content">
       <section aria-labelledby="studio-title" className="kerygma-company-hero">
         <div aria-hidden="true" className="kerygma-company-hero-art">
+          <picture>
+            <source media="(max-width: 700px)" srcSet={`${basePath}/images/kerygma-studio-mobile-hero.webp`} />
           <Image
             alt=""
             className="kerygma-company-hero-image"
@@ -25,6 +27,7 @@ export default function CompanyPage() {
             src={`${basePath}/images/kerygma-studio-digital-animation.webp`}
             unoptimized
           />
+          </picture>
         </div>
         <div aria-hidden="true" className="kerygma-company-hero-shade" />
         <div className="kerygma-company-hero-content">

@@ -861,7 +861,7 @@ body:has(.kerygma-gateway) .site-footer {
   .kerygma-gateway {
     box-sizing: border-box;
     min-height: 100svh;
-    padding: clamp(170px, 26svh, 220px) 18px max(20px, env(safe-area-inset-bottom));
+    padding: clamp(190px, 26svh, 220px) 18px max(20px, env(safe-area-inset-bottom));
   }
   .kerygma-gateway-content { margin-top: 0; }
   .kerygma-gateway-kicker { font-size: 9px; letter-spacing: .18em; }
@@ -884,4 +884,9 @@ body:has(.kerygma-gateway) .site-footer {
   .kerygma-gateway h1.kerygma-gateway-logo-heading { width: min(160px, 36svh); margin: 5px auto 0; }
   .kerygma-gateway-description { max-width: 480px; margin: 5px auto 10px; font-size: 13px; line-height: 1.45; }
   .kerygma-gateway-note { margin-top: 10px; font-size: 8px; }
+}
+
+/* Portrait artwork selected only for the mobile studio hero. */
+@media (max-width: 700px) {
+  .kerygma-company-hero-image { object-position: center top; }
 }
