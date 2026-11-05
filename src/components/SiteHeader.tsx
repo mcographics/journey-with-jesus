@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { ChevronDown, Crown, Menu, Moon, Sun, X } from "lucide-react";
+import { DesktopMobilePreview } from "@/components/DesktopMobilePreview";
 
 const navigation = [
   { href: "/", label: "Home" },
@@ -242,6 +243,7 @@ export function SiteHeader() {
             })}
           </nav>
         </div>
+        <DesktopMobilePreview />
         <button
           aria-label={themeMode === "auto"
             ? "Automatic theme is active. Activate to use light mode."
