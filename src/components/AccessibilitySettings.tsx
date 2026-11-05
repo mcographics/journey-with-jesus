@@ -135,6 +135,7 @@ export function AccessibilitySettings() {
           <option value="large">Large</option>
           <option value="largest">Largest</option>
         </select>
+        <p className="accessibility-help">The larger settings zoom the page while keeping heading and paragraph sizes in proportion.</p>
 
         <label className="accessibility-select-label" htmlFor="accessibility-color-vision">Color vision palette</label>
         <select

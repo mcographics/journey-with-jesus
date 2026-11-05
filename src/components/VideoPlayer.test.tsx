@@ -53,6 +53,7 @@ describe("VideoPlayer", () => {
       aslInterpretationUrl: "https://media.example.test/story-asl.mp4",
     };
     const { container } = render(<VideoPlayer episode={item} />);
+    expect(container.querySelector("video")?.getAttribute("crossorigin")).toBe("anonymous");
     const track = container.querySelector("track");
     expect(track?.getAttribute("src")).toBe("https://media.example.test/story-en.vtt");
     expect(track?.getAttribute("srclang")).toBe("en");

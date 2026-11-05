@@ -135,6 +135,8 @@ test("accessibility preferences persist across routes and light brightness stays
 
   const settings = page.getByRole("region", { name: "Accessibility settings" });
   await expect(settings).toBeVisible();
+  await page.getByLabel("Text size").selectOption("largest");
+  await expect(page.locator("body")).toHaveCSS("zoom", "1.16");
   const brightness = page.getByRole("slider", { name: "Light mode brightness" });
   await brightness.focus();
   for (let step = 0; step < 3; step += 1) await brightness.press("ArrowLeft");
@@ -143,17 +145,28 @@ test("accessibility preferences persist across routes and light brightness stays
 
   await page.getByLabel("High contrast colors").check();
   await expect(page.locator("html")).toHaveAttribute("data-accessibility-contrast", "high");
+  await page.getByLabel("Color vision palette").selectOption("protanopia");
+  await expect(page.locator("html")).toHaveAttribute("data-accessibility-color-vision", "protanopia");
+  expect(await page.locator("html").evaluate((root) => getComputedStyle(root).getPropertyValue("--accessibility-link-color").trim())).toBe("#005b91");
+  await expect(page.locator(".footer-links a").first()).toHaveCSS("color", "rgb(0, 91, 145)");
   await page.locator(".theme-toggle").click();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   expect(await page.locator("body").evaluate((body) => getComputedStyle(body, "::after").opacity)).toBe("0");
+  expect(await page.locator("html").evaluate((root) => getComputedStyle(root).getPropertyValue("--accessibility-link-color").trim())).toBe("#75c8f4");
+  await expect(page.locator(".footer-links a").first()).toHaveCSS("color", "rgb(117, 200, 244)");
 
   await page.goto("/media/");
   await expect(page.getByRole("button", { name: "Accessibility settings" })).toBeVisible();
   await expect(page.locator("html")).toHaveAttribute("data-accessibility-brightness", "85");
+  await expect(page.locator("html")).toHaveAttribute("data-accessibility-text-size", "largest");
   await expect(page.locator("html")).toHaveAttribute("data-accessibility-contrast", "high");
+  await expect(page.locator("html")).toHaveAttribute("data-accessibility-color-vision", "protanopia");
+  await expect(page.locator("body")).toHaveCSS("zoom", "1.16");
   await expect(page.locator(".video-player-section")).toHaveCSS("z-index", "11");
   await page.reload();
   await expect(page.locator("html")).toHaveAttribute("data-accessibility-brightness", "85");
+  await expect(page.locator("html")).toHaveAttribute("data-accessibility-text-size", "largest");
+  await expect(page.locator("html")).toHaveAttribute("data-accessibility-color-vision", "protanopia");
 });
 
 test.describe("mobile accessibility controls", () => {
@@ -164,8 +177,8 @@ test.describe("mobile accessibility controls", () => {
     const trigger = page.getByRole("button", { name: "Accessibility settings" });
     await expect(trigger).toBeVisible();
     const triggerBounds = await trigger.boundingBox();
-    expect(triggerBounds?.width).toBeGreaterThanOrEqual(40);
-    expect(triggerBounds?.height).toBeGreaterThanOrEqual(40);
+    expect(triggerBounds?.width).toBeGreaterThanOrEqual(44);
+    expect(triggerBounds?.height).toBeGreaterThanOrEqual(44);
     await trigger.click();
     const panel = page.getByRole("region", { name: "Accessibility settings" });
     await expect(panel).toBeVisible();
@@ -186,6 +199,58 @@ test.describe("mobile accessibility controls", () => {
     await expect(page.locator("html")).toHaveAttribute("data-accessibility-reduce-motion", "false");
     await expect(page.locator(".mobile-navigation")).toHaveCSS("transition-duration", "0.24s");
   });
+});
+
+test("cross-origin WebVTT captions load with anonymous CORS on the native video player", async ({ page }) => {
+  const captionsUrl = "https://media.example.test/story-en.vtt";
+  await page.route(captionsUrl, (route) => route.fulfill({
+    status: 200,
+    contentType: "text/vtt",
+    headers: { "access-control-allow-origin": "*" },
+    body: "WEBVTT\n\n00:00:00.000 --> 00:00:02.000\nCaption loaded cross-origin",
+  }));
+  await page.goto("/");
+  await page.evaluate((src) => {
+    const video = document.createElement("video");
+    video.crossOrigin = "anonymous";
+    const track = document.createElement("track");
+    track.kind = "captions";
+    track.default = true;
+    track.src = src;
+    video.appendChild(track);
+    track.track.mode = "showing";
+    document.body.appendChild(video);
+  }, captionsUrl);
+  await page.waitForFunction(() => {
+    const track = document.querySelector("video track") as HTMLTrackElement | null;
+    const cue = track?.track.cues?.[0] as VTTCue | undefined;
+    return track?.readyState === 2 && cue?.text === "Caption loaded cross-origin";
+  });
+});
+
+test("accessibility settings are available on every site route", async ({ page }) => {
+  for (const route of ["/", "/media/", "/characters/", "/team/", "/store/", "/studio/", "/policies/privacy/"]) {
+    await page.goto(route);
+    await expect(page.getByRole("button", { name: "Accessibility settings" })).toBeVisible();
+  }
+});
+
+test("monochromacy keeps light-mode filled action buttons readable", async ({ page }) => {
+  await page.addInitScript(() => {
+    window.localStorage.setItem("journey-with-jesus-theme-mode", "light");
+    window.localStorage.setItem("journey-with-jesus-accessibility", JSON.stringify({ colorVisionMode: "monochromacy" }));
+  });
+  await page.goto("/media/");
+  await expect(page.locator("html")).toHaveAttribute("data-accessibility-color-vision", "monochromacy");
+  const button = await page.evaluate(() => {
+    const control = document.createElement("button");
+    control.className = "button button-gold";
+    control.textContent = "Submit for review";
+    document.querySelector(".media-page")?.appendChild(control);
+    const style = getComputedStyle(control);
+    return { color: style.color, background: style.backgroundColor };
+  });
+  expect(button).toEqual({ color: "rgb(255, 255, 255)", background: "rgb(69, 69, 69)" });
 });
 
 test("light mode uses muted surfaces and a larger mobile media kicker", async ({ page }) => {
