@@ -161,6 +161,50 @@ test("Media, Characters, Team, and Store dark mode use soft-white text", async (
   }
 });
 
+test("all five policy pages use flat theme-specific text colors", async ({ page }) => {
+  await page.addInitScript(() => {
+    window.localStorage.setItem("journey-with-jesus-theme-mode", "dark");
+  });
+
+  const policySlugs = ["privacy", "terms", "community-guidelines", "cookies", "copyright"];
+  for (const slug of policySlugs) {
+    await page.goto(`/policies/${slug}/`);
+    const policy = page.locator("#main-content.legal-policy-page");
+    const title = policy.locator("h1");
+    const sectionTitle = policy.locator("h2").first();
+    const bodyCopy = policy.locator("section p").first();
+    const subordinateText = [bodyCopy, policy.locator("strong").first(), policy.locator("a").first()];
+
+    await expect(title).toBeVisible();
+    await expect(sectionTitle).toBeVisible();
+    for (const heading of [title, sectionTitle]) {
+      await expect(heading).toHaveCSS("color", "rgb(255, 255, 255)");
+      await expect(heading).toHaveCSS("-webkit-text-fill-color", "rgb(255, 255, 255)");
+      await expect(heading).toHaveCSS("text-shadow", "none");
+      await expect(heading).toHaveCSS("background-image", "none");
+      await expect(heading).toHaveCSS("animation-name", "none");
+    }
+    for (const copy of subordinateText) {
+      await expect(copy).toHaveCSS("color", "rgb(255, 255, 0)");
+      await expect(copy).toHaveCSS("-webkit-text-fill-color", "rgb(255, 255, 0)");
+      await expect(copy).toHaveCSS("text-shadow", "none");
+      await expect(copy).toHaveCSS("background-image", "none");
+      await expect(copy).toHaveCSS("animation-name", "none");
+    }
+
+    await page.evaluate(() => {
+      document.documentElement.dataset.theme = "light";
+    });
+    for (const text of [title, sectionTitle, ...subordinateText]) {
+      await expect(text).toHaveCSS("color", "rgb(0, 0, 0)");
+      await expect(text).toHaveCSS("-webkit-text-fill-color", "rgb(0, 0, 0)");
+      await expect(text).toHaveCSS("text-shadow", "none");
+      await expect(text).toHaveCSS("background-image", "none");
+      await expect(text).toHaveCSS("animation-name", "none");
+    }
+  }
+});
+
 test("Meet the Team credits the founder and editor/webmaster accurately", async ({ page }) => {
   await page.goto("/team/");
   const teamCards = page.locator(".team-card");
