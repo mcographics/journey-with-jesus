@@ -278,9 +278,9 @@
   background-repeat: no-repeat, no-repeat;
 }
 :root[data-theme="light"] body .media-page {
-  background-color: #edf3f9;
+  background-color: #e9edef;
   background-image:
-    linear-gradient(180deg, rgba(246, 249, 253, .28) 0%, rgba(246, 249, 253, .76) 50%, rgba(237, 243, 249, .98) 100%),
+    linear-gradient(180deg, rgba(232, 236, 234, .24) 0%, rgba(232, 236, 235, .68) 50%, rgba(231, 237, 241, .95) 100%),
     var(--media-background-image);
   background-position: center top, center top;
   background-size: 100% 100%, 100% auto;
