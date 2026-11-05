@@ -11,6 +11,7 @@ import { StudioCharacters } from "@/components/StudioCharacters";
 import { StudioStaff } from "@/components/StudioStaff";
 import { parseYouTubeId, youtubeWatchUrl } from "@/lib/youtube";
 import { resolveStoryPublication } from "@/lib/studio-publishing";
+import { formatStudioFileSize, freePlanVideoSizeError } from "@/lib/studio-video-size";
 
 type SourceRow = Database["public"]["Tables"]["media_video_sources"]["Row"];
 type EpisodeRow = Database["public"]["Tables"]["media_episodes"]["Row"];
@@ -24,7 +25,6 @@ type EpisodeForm = {
 type PlaylistForm = { id: string; title: string; description: string; order: string; published: boolean; episodeIds: string[] };
 type Section = "episodes" | "playlists" | "comments" | "characters" | "staff";
 const qualities: VideoQuality[] = ["720p", "1080p", "4K"];
-const MAX_FREE_VIDEO_BYTES = 50 * 1024 * 1024;
 const freshEpisode = (): EpisodeForm => ({ id: "", title: "", description: "", scripture: "", thumbnail: "", youtubeUrl: "", duration: "", number: "1", orientation: "landscape", published: false });
 const freshPlaylist = (): PlaylistForm => ({ id: "", title: "", description: "", order: "0", published: false, episodeIds: [] });
 
@@ -364,10 +364,9 @@ export function StudioExperience() {
     if (!client || !selectedEpisodeId) { setUploadStatus("Save story details first to enable uploads. You can save a draft without a video, even with Publish checked."); setNoticeError(true); return; }
     const selectedFiles = qualities.flatMap((quality) => files[quality] ? [{ quality, file: files[quality]! }] : []);
     if (selectedFiles.length === 0) { setUploadStatus("Choose one or more video files first."); return; }
-    const tooLarge = selectedFiles.find(({ file }) => file.size > MAX_FREE_VIDEO_BYTES);
-    if (tooLarge) {
-      setUploadStatus('"' + tooLarge.file.name + '" is ' + formatStudioFileSize(tooLarge.file.size) +
-        ". Supabase Free accepts a maximum of 50 MB per file. Export a smaller video or use a YouTube link.");
+    const sizeError = selectedFiles.map(({ file }) => freePlanVideoSizeError(file)).find(Boolean);
+    if (sizeError) {
+      setUploadStatus(sizeError);
       setNoticeError(true);
       return;
     }
@@ -606,11 +605,11 @@ export function StudioExperience() {
                         type="file" accept="video/mp4,video/webm,video/quicktime,.mp4,.webm,.mov"
                         onChange={(event) => {
                           const selected = event.target.files?.[0] ?? null;
-                          if (selected && selected.size > MAX_FREE_VIDEO_BYTES) {
+                          const fileSizeError = selected ? freePlanVideoSizeError(selected) : null;
+                          if (fileSizeError) {
                             setFiles((current) => ({ ...current, [quality]: null }));
                             event.target.value = "";
-                            setUploadStatus('"' + selected.name + '" is ' + formatStudioFileSize(selected.size) +
-                              ". Supabase Free has a 50 MB per-file limit. Export a smaller video in CapCut or use a YouTube link.");
+                            setUploadStatus(fileSizeError);
                             setNoticeError(true);
                             return;
                           }
@@ -703,10 +702,6 @@ export function StudioExperience() {
       </div>
     </main>
   );
-}
-
-function formatStudioFileSize(bytes: number): string {
-  return (bytes / (1024 * 1024)).toFixed(1) + " MB";
 }
 
 function slugify(value: string): string {
