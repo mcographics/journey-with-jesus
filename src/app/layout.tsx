@@ -76,7 +76,11 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
                 root.dataset.accessibilityLineSpacing = String(accessibility.relaxedLineSpacing === true);
                 root.dataset.accessibilityUnderlineLinks = String(accessibility.underlineLinks === true);
                 root.dataset.accessibilityContrast = accessibility.highContrast === true ? "high" : "standard";
-                root.dataset.accessibilityColorVision = String(accessibility.colorVisionFriendly === true);
+                const colorVisionModes = ["standard", "protanopia", "deuteranopia", "tritanopia", "monochromacy"];
+                const colorVisionMode = colorVisionModes.includes(accessibility.colorVisionMode)
+                  ? accessibility.colorVisionMode
+                  : accessibility.colorVisionFriendly === true ? "deuteranopia" : "standard";
+                root.dataset.accessibilityColorVision = colorVisionMode;
                 root.dataset.accessibilityEnhancedFocus = String(accessibility.enhancedFocus === true);
                 root.dataset.accessibilityReduceMotion = String(reduceMotion);
                 root.style.setProperty("--light-mode-overlay-opacity", String(((100 - brightness) / 30) * 0.2));

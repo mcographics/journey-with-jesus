@@ -5,7 +5,12 @@ import { ACCESSIBILITY_PREFERENCES_KEY } from "@/lib/accessibility-preferences";
 
 beforeEach(() => {
   window.localStorage.removeItem(ACCESSIBILITY_PREFERENCES_KEY);
-  document.documentElement.dataset.accessibilityBrightness = "100";
+  for (const attribute of [
+    "accessibilityBrightness", "accessibilityTextSize", "accessibilityLineSpacing",
+    "accessibilityUnderlineLinks", "accessibilityContrast", "accessibilityColorVision",
+    "accessibilityEnhancedFocus", "accessibilityReduceMotion",
+  ]) document.documentElement.removeAttribute("data-" + attribute.replace(/[A-Z]/g, (letter) => "-" + letter.toLowerCase()));
+  document.documentElement.style.removeProperty("--light-mode-overlay-opacity");
 });
 
 describe("AccessibilitySettings", () => {
@@ -21,6 +26,42 @@ describe("AccessibilitySettings", () => {
     await waitFor(() => expect(document.documentElement.dataset.accessibilityBrightness).toBe("85"));
     expect(JSON.parse(window.localStorage.getItem(ACCESSIBILITY_PREFERENCES_KEY) ?? "{}").brightness).toBe(85);
     expect(screen.getByText("85%")).toBeTruthy();
+  });
+
+  it("applies every checkbox and color-vision profile to the whole document", async () => {
+    render(<AccessibilitySettings />);
+    fireEvent.click(screen.getByRole("button", { name: "Accessibility settings" }));
+
+    for (const label of [
+      "More line spacing",
+      "Underline links",
+      "High contrast colors",
+      "Extra visible keyboard focus",
+      "Reduce interface motion",
+    ]) {
+      fireEvent.click(screen.getByRole("checkbox", { name: label }));
+    }
+
+    const palette = screen.getByRole("combobox", { name: "Color vision palette" }) as HTMLSelectElement;
+    for (const mode of ["protanopia", "deuteranopia", "tritanopia", "monochromacy", "standard"]) {
+      fireEvent.change(palette, { target: { value: mode } });
+      expect(document.documentElement.dataset.accessibilityColorVision).toBe(mode);
+    }
+    fireEvent.change(screen.getByRole("combobox", { name: "Text size" }), { target: { value: "largest" } });
+
+    await waitFor(() => {
+      expect(document.documentElement.dataset.accessibilityLineSpacing).toBe("true");
+      expect(document.documentElement.dataset.accessibilityUnderlineLinks).toBe("true");
+      expect(document.documentElement.dataset.accessibilityContrast).toBe("high");
+      expect(document.documentElement.dataset.accessibilityEnhancedFocus).toBe("true");
+      expect(document.documentElement.dataset.accessibilityReduceMotion).toBe("true");
+      expect(document.documentElement.dataset.accessibilityTextSize).toBe("largest");
+    });
+    const saved = JSON.parse(window.localStorage.getItem(ACCESSIBILITY_PREFERENCES_KEY) ?? "{}");
+    expect(saved).toMatchObject({
+      relaxedLineSpacing: true, underlineLinks: true, highContrast: true,
+      enhancedFocus: true, reduceMotion: true, textSize: "largest", colorVisionMode: "standard",
+    });
   });
 
   it("resets preferences and closes with Escape while returning focus to its trigger", () => {

@@ -136,16 +136,28 @@ export function AccessibilitySettings() {
           <option value="largest">Largest</option>
         </select>
 
+        <label className="accessibility-select-label" htmlFor="accessibility-color-vision">Color vision palette</label>
+        <select
+          id="accessibility-color-vision"
+          value={preferences.colorVisionMode}
+          onChange={(event) => updatePreferences({ colorVisionMode: event.target.value as AccessibilityPreferences["colorVisionMode"] })}
+        >
+          <option value="standard">Standard colors</option>
+          <option value="protanopia">Protanopia (red-weak or red-blind)</option>
+          <option value="deuteranopia">Deuteranopia (green-weak or green-blind)</option>
+          <option value="tritanopia">Tritanopia (blue-yellow deficiency)</option>
+          <option value="monochromacy">Monochromacy (little or no color vision)</option>
+        </select>
+
         <fieldset className="accessibility-options">
           <legend>Reading and navigation</legend>
           <label><input type="checkbox" checked={preferences.relaxedLineSpacing} onChange={(event) => updatePreferences({ relaxedLineSpacing: event.target.checked })} /> More line spacing</label>
           <label><input type="checkbox" checked={preferences.underlineLinks} onChange={(event) => updatePreferences({ underlineLinks: event.target.checked })} /> Underline links</label>
           <label><input type="checkbox" checked={preferences.highContrast} onChange={(event) => updatePreferences({ highContrast: event.target.checked })} /> High contrast colors</label>
-          <label><input type="checkbox" checked={preferences.colorVisionFriendly} onChange={(event) => updatePreferences({ colorVisionFriendly: event.target.checked })} /> Color-vision-friendly palette</label>
           <label><input type="checkbox" checked={preferences.enhancedFocus} onChange={(event) => updatePreferences({ enhancedFocus: event.target.checked })} /> Extra visible keyboard focus</label>
           <label><input type="checkbox" checked={preferences.reduceMotion} onChange={(event) => updatePreferences({ reduceMotion: event.target.checked })} /> Reduce interface motion</label>
         </fieldset>
-        <p className="accessibility-help">The color-vision-friendly palette uses distinct blue and amber accents, with links underlined and status labels kept in text. It does not simulate or correct color vision. High contrast can also make boundaries easier to distinguish.</p>
+        <p className="accessibility-help">These site-wide palettes change accent, link, and status colors for the selected color-vision profile. They do not simulate vision or alter video colors. Status messages keep their text labels.</p>
         <button className="accessibility-reset" type="button" onClick={resetPreferences}>Reset to defaults</button>
       </section>
     </div>
