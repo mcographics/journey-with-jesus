@@ -838,3 +838,8 @@ body:has(.kerygma-gateway) .site-footer {
   #site-footer .footer-tagline { font-size: 16px; }
   #site-footer .footer-credits { text-align: center; font-size: 8px; }
 }
+
+/* Respect visitor-selected color-vision link palettes. */
+:root[data-accessibility-color-vision]:not([data-accessibility-color-vision="standard"]) body #site-footer a {
+  color: var(--accessibility-link-color, currentColor) !important;
+}
