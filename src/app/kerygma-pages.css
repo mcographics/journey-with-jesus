@@ -854,3 +854,34 @@ body:has(.kerygma-gateway) .site-footer {
 :root[data-accessibility-color-vision]:not([data-accessibility-color-vision="standard"]) body #site-footer a {
   color: var(--accessibility-link-color, currentColor) !important;
 }
+
+
+/* Keep the mobile gateway compact below a clear area for the star-formed words. */
+@media (max-width: 700px) {
+  .kerygma-gateway {
+    box-sizing: border-box;
+    min-height: 100svh;
+    padding: clamp(170px, 26svh, 220px) 18px max(20px, env(safe-area-inset-bottom));
+  }
+  .kerygma-gateway-content { margin-top: 0; }
+  .kerygma-gateway-kicker { font-size: 9px; letter-spacing: .18em; }
+  .kerygma-gateway h1.kerygma-gateway-logo-heading {
+    width: min(250px, 68vw, 34svh);
+    margin: 8px auto 0;
+  }
+  .kerygma-gateway-description {
+    max-width: 340px;
+    margin: 8px auto 16px;
+    font-size: 14px;
+    line-height: 1.55;
+  }
+  .kerygma-gateway .kerygma-enter-button { min-height: 48px; padding-inline: 22px; font-size: 14px; }
+  .kerygma-gateway-note { margin-top: 14px; font-size: 8px; letter-spacing: .2em; }
+}
+@media (max-width: 950px) and (max-height: 500px) {
+  .kerygma-gateway { box-sizing: border-box; min-height: 100svh; padding: 150px 18px max(14px, env(safe-area-inset-bottom)); }
+  .kerygma-gateway-content { margin-top: 0; }
+  .kerygma-gateway h1.kerygma-gateway-logo-heading { width: min(160px, 36svh); margin: 5px auto 0; }
+  .kerygma-gateway-description { max-width: 480px; margin: 5px auto 10px; font-size: 13px; line-height: 1.45; }
+  .kerygma-gateway-note { margin-top: 10px; font-size: 8px; }
+}
