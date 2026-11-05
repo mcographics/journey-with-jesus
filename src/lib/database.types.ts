@@ -27,9 +27,9 @@ export type Database = {
         Relationships: [];
       };
       media_episodes: {
-        Row: { id: string; title: string; description: string; scripture_reference: string | null; thumbnail_url: string | null; duration_seconds: number | null; episode_number: number; orientation: "landscape" | "portrait"; published: boolean; created_at: string; updated_at: string };
-        Insert: { id: string; title: string; description?: string; scripture_reference?: string | null; thumbnail_url?: string | null; duration_seconds?: number | null; episode_number?: number; orientation?: "landscape" | "portrait"; published?: boolean };
-        Update: { title?: string; description?: string; scripture_reference?: string | null; thumbnail_url?: string | null; duration_seconds?: number | null; episode_number?: number; orientation?: "landscape" | "portrait"; published?: boolean; updated_at?: string };
+        Row: { id: string; title: string; description: string; scripture_reference: string | null; thumbnail_url: string | null; youtube_id: string | null; duration_seconds: number | null; episode_number: number; orientation: "landscape" | "portrait"; published: boolean; created_at: string; updated_at: string };
+        Insert: { id: string; title: string; description?: string; scripture_reference?: string | null; thumbnail_url?: string | null; youtube_id?: string | null; duration_seconds?: number | null; episode_number?: number; orientation?: "landscape" | "portrait"; published?: boolean };
+        Update: { title?: string; description?: string; scripture_reference?: string | null; thumbnail_url?: string | null; youtube_id?: string | null; duration_seconds?: number | null; episode_number?: number; orientation?: "landscape" | "portrait"; published?: boolean; updated_at?: string };
         Relationships: [];
       };
       media_video_sources: {
