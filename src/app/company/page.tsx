@@ -37,7 +37,7 @@ export default function CompanyPage() {
             Kerygma Path is a Christian animation studio devoted to sharing the Gospel through powerful, Scripture-rooted storytelling.
           </p>
           <p className="kerygma-company-supporting">
-            We use AI and a range of creative tools to develop Christian narratives from idea to animation, keeping Scripture and the story's message at the center.
+            We use AI and a range of creative tools to develop Christian narratives from idea to animation, with Scripture and the Gospel message guiding every step.
           </p>
           <div className="kerygma-hero-actions">
             <Link className="kerygma-button kerygma-button-gold" href="/projects/journey-with-jesus/">
@@ -83,13 +83,13 @@ export default function CompanyPage() {
               <span className="kerygma-principle-number">02</span>
               <Sparkles aria-hidden="true" size={24} strokeWidth={1.4} />
               <h3>Visual development</h3>
-              <p>Storyboards, character design, and environments shape each narrative's visual language.</p>
+              <p>Storyboards, character design, and environments shape the visual language for every narrative.</p>
             </article>
             <article className="kerygma-principle-card">
               <span className="kerygma-principle-number">03</span>
               <ArrowRight aria-hidden="true" size={24} strokeWidth={1.4} />
               <h3>AI-assisted animation</h3>
-              <p>AI and digital tools help bring each story's visual direction to the screen.</p>
+              <p>AI and digital tools help bring each visual direction to the screen.</p>
             </article>
           </div>
         </div>
