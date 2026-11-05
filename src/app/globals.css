@@ -817,21 +817,21 @@ body, .home-hero, .mission-section, .site-footer, .media-page {
 }
 
 
-/* Keep light mode mostly white, with a barely blue gradient and stronger dark copy. */
+/* Keep light mode soft and cool, with stronger dark copy. */
 :root[data-theme="light"] body {
   color: #182331;
-  background: linear-gradient(135deg, #ffffff 0%, #fbfdff 48%, #f1f6fb 100%);
+  background: linear-gradient(135deg, #f3f4f1 0%, #f8f9f7 48%, #edf3f7 100%);
   background-attachment: fixed;
 }
 :root[data-theme="light"] .home-hero {
-  background: radial-gradient(ellipse at 72% 78%, rgba(94, 142, 196, .035), transparent 31%), linear-gradient(115deg, #ffffff 0%, #fbfdff 56%, #f1f6fb 100%);
+  background: radial-gradient(ellipse at 72% 78%, rgba(94, 142, 196, .035), transparent 31%), linear-gradient(115deg, #f3f4f1 0%, #f8f9f7 56%, #edf3f7 100%);
 }
 :root[data-theme="light"] .storybook-section,
 :root[data-theme="light"] .invitation-section {
-  background: radial-gradient(ellipse at 12% 0%, rgba(153, 198, 241, .1), transparent 42%), linear-gradient(140deg, #ffffff 0%, #fbfdff 54%, #eef5fd 100%);
+  background: radial-gradient(ellipse at 12% 0%, rgba(153, 198, 241, .1), transparent 42%), linear-gradient(140deg, #f3f4f1 0%, #f8f9f7 54%, #eef4f7 100%);
 }
 :root[data-theme="light"] .mission-section {
-  background: radial-gradient(ellipse at 84% 24%, rgba(153, 198, 241, .09), transparent 42%), linear-gradient(140deg, #ffffff 0%, #fbfdff 53%, #eef5fd 100%);
+  background: radial-gradient(ellipse at 84% 24%, rgba(153, 198, 241, .09), transparent 42%), linear-gradient(140deg, #f3f4f1 0%, #f8f9f7 53%, #eef4f7 100%);
 }
 :root[data-theme="light"] .hero-quote,
 :root[data-theme="light"] .hero-description,
@@ -851,22 +851,22 @@ body, .home-hero, .mission-section, .site-footer, .media-page {
 
 /* Strip the remaining amber background washes from light mode. */
 :root[data-theme="light"] {
-  --night: #ffffff;
-  --night-soft: #f5f9fe;
-  --panel: #fbfdff;
+  --night: #f2f4f2;
+  --night-soft: #e9eef1;
+  --panel: #f6f7f5;
 }
 :root[data-theme="light"] body {
-  background: radial-gradient(ellipse at 18% 8%, rgba(139, 187, 238, .12), transparent 34%), radial-gradient(ellipse at 84% 72%, rgba(170, 207, 242, .1), transparent 44%), linear-gradient(135deg, #ffffff 0%, #fcfdff 52%, #edf5fd 100%);
+  background: radial-gradient(ellipse at 18% 8%, rgba(139, 187, 238, .12), transparent 34%), radial-gradient(ellipse at 84% 72%, rgba(170, 207, 242, .1), transparent 44%), linear-gradient(135deg, #f2f4f2 0%, #f7f8f6 52%, #edf4f8 100%);
   background-attachment: fixed;
 }
 :root[data-theme="light"] .site-footer {
-  background: radial-gradient(ellipse at 14% 6%, rgba(139, 187, 238, .1), transparent 36%), linear-gradient(145deg, #ffffff 0%, #f9fcff 56%, #eef5fd 100%);
+  background: radial-gradient(ellipse at 14% 6%, rgba(139, 187, 238, .1), transparent 36%), linear-gradient(145deg, #f3f5f3 0%, #f8f9f7 56%, #eef4f7 100%);
 }
 :root[data-theme="light"] .media-page {
-  background: radial-gradient(ellipse at 18% 4%, rgba(135, 184, 237, .12), transparent 38%), radial-gradient(ellipse at 88% 73%, rgba(175, 209, 243, .1), transparent 44%), linear-gradient(145deg, #ffffff 0%, #f9fcff 54%, #edf5fd 100%);
+  background: radial-gradient(ellipse at 18% 4%, rgba(135, 184, 237, .12), transparent 38%), radial-gradient(ellipse at 88% 73%, rgba(175, 209, 243, .1), transparent 44%), linear-gradient(145deg, #f2f4f2 0%, #f7f8f6 54%, #edf4f8 100%);
 }
 :root[data-theme="light"] .video-frame {
-  background: radial-gradient(ellipse at 50% 44%, rgba(139, 190, 242, .15), transparent 58%), linear-gradient(145deg, #fbfdff 0%, #eef5fd 100%);
+  background: radial-gradient(ellipse at 50% 44%, rgba(139, 190, 242, .15), transparent 58%), linear-gradient(145deg, #f5f7f6 0%, #eef5f8 100%);
 }
 :root[data-theme="light"] .storybook-seal {
   box-shadow: 0 0 0 8px rgba(106, 153, 205, .055), 0 0 42px rgba(83, 135, 192, .12);
@@ -877,6 +877,13 @@ body, .home-hero, .mission-section, .site-footer, .media-page {
 }
 :root[data-theme="light"] .comments-unavailable {
   background: rgba(126, 171, 220, .09);
+}
+
+@media (max-width: 700px) {
+  :root[data-theme="light"] .media-kicker {
+    font-size: 18px;
+    line-height: 1.4;
+  }
 }
 
 

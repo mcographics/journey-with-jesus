@@ -131,6 +131,17 @@ test("desktop media page fits the player and playlist without overflow", async (
   await expect(page.getByRole("complementary", { name: "Story playlist" })).toBeVisible();
 });
 
+test("light mode uses muted surfaces and a larger mobile media kicker", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.addInitScript(() => {
+    window.localStorage.setItem("journey-with-jesus-theme-mode", "light");
+  });
+  await page.goto("/media/");
+
+  await expect(page.locator(".media-page")).toHaveCSS("--night", "#f2f4f2");
+  await expect(page.locator(".media-kicker")).toHaveCSS("font-size", "18px");
+});
+
 test("desktop mobile preview opens the current page at a phone-sized viewport", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto("/media/");
