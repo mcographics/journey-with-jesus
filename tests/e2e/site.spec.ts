@@ -94,7 +94,9 @@ test.describe("touch mobile navigation", () => {
     await menuButton.evaluate((button) => button.blur());
     await page.waitForTimeout(1100);
     await expect(mobileNavigation).toHaveCSS("opacity", "1");
-    await expect(navigation.getByRole("link", { name: "Home" })).toBeVisible();
+    const homeLink = navigation.getByRole("link", { name: "Kerygma Path" });
+    await expect(homeLink).toBeVisible();
+    await expect(homeLink).toHaveAttribute("href", "/");
     const mediaLink = navigation.getByRole("link", { name: "Media" });
     await expect(mediaLink).toBeVisible();
     await mediaLink.click();
@@ -248,7 +250,7 @@ test("cross-origin WebVTT captions load with anonymous CORS on the native video 
 });
 
 test("accessibility settings are available on every site route", async ({ page }) => {
-  for (const route of ["/", "/media/", "/characters/", "/team/", "/store/", "/studio/", "/policies/privacy/"]) {
+  for (const route of ["/", "/company/", "/projects/journey-with-jesus/", "/media/", "/characters/", "/team/", "/store/", "/studio/", "/policies/privacy/"]) {
     await page.goto(route);
     await expect(page.getByRole("button", { name: "Accessibility settings" })).toBeVisible();
   }
