@@ -28,7 +28,7 @@ describe("accessibility preferences", () => {
       relaxedLineSpacing: false,
       underlineLinks: false,
       highContrast: false,
-      colorVisionFriendly: false,
+      colorVisionMode: "standard",
       enhancedFocus: false,
       reduceMotion: true,
     });
@@ -41,11 +41,17 @@ describe("accessibility preferences", () => {
       relaxedLineSpacing: false,
       underlineLinks: false,
       highContrast: true,
-      colorVisionFriendly: false,
+      colorVisionMode: "standard",
       enhancedFocus: false,
       reduceMotion: false,
     });
     expect(normalizeAccessibilityPreferences({ brightness: 97.5 }).brightness).toBe(100);
+  });
+
+  it("validates selected vision profiles and migrates the former on/off setting", () => {
+    expect(normalizeAccessibilityPreferences({ colorVisionMode: "tritanopia" }).colorVisionMode).toBe("tritanopia");
+    expect(normalizeAccessibilityPreferences({ colorVisionMode: "unknown" }).colorVisionMode).toBe("standard");
+    expect(normalizeAccessibilityPreferences({ colorVisionFriendly: true }).colorVisionMode).toBe("deuteranopia");
   });
 
   it("uses OS reduced motion as the default and safely ignores invalid saved JSON", () => {
@@ -54,12 +60,19 @@ describe("accessibility preferences", () => {
   });
 
   it("applies preferences as document settings without applying a brightness filter", () => {
-    const preferences = normalizeAccessibilityPreferences({ brightness: 85, textSize: "large", underlineLinks: true, reduceMotion: true });
+    const preferences = normalizeAccessibilityPreferences({
+      brightness: 85, textSize: "large", relaxedLineSpacing: true, underlineLinks: true,
+      highContrast: true, colorVisionMode: "tritanopia", enhancedFocus: true, reduceMotion: true,
+    });
     applyAccessibilityPreferences(preferences);
 
     expect(document.documentElement.dataset.accessibilityBrightness).toBe("85");
     expect(document.documentElement.dataset.accessibilityTextSize).toBe("large");
+    expect(document.documentElement.dataset.accessibilityLineSpacing).toBe("true");
     expect(document.documentElement.dataset.accessibilityUnderlineLinks).toBe("true");
+    expect(document.documentElement.dataset.accessibilityContrast).toBe("high");
+    expect(document.documentElement.dataset.accessibilityColorVision).toBe("tritanopia");
+    expect(document.documentElement.dataset.accessibilityEnhancedFocus).toBe("true");
     expect(document.documentElement.dataset.accessibilityReduceMotion).toBe("true");
     expect(document.documentElement.style.getPropertyValue("--light-mode-overlay-opacity")).toBe("0.1");
     expect(document.body.style.filter).toBe("");
