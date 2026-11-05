@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { GreekStarfield } from "@/components/GreekStarfield";
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
@@ -19,17 +20,12 @@ export const metadata: Metadata = {
 export default function HomePage() {
   return (
     <main className="kerygma-gateway" id="main-content">
-      <Image
-        alt=""
-        aria-hidden="true"
-        className="kerygma-gateway-image"
-        fill
-        priority
-        sizes="100vw"
-        src={`${basePath}/images/biblical-sunset-over-unbroken-valley.webp`}
-        unoptimized
-      />
-      <div aria-hidden="true" className="kerygma-gateway-shade" />
+      <GreekStarfield />
+      <div className="kerygma-gateway-scripture">
+        <p className="visually-hidden" lang="grc">Ἐν ἀρχῇ ἦν ὁ λόγος</p>
+        <p className="kerygma-gateway-translation">“In the beginning was the Word.”</p>
+        <cite className="kerygma-gateway-reference">John 1:1</cite>
+      </div>
       <div className="kerygma-gateway-content">
         <p className="kerygma-gateway-kicker">A Christian Animation Studio</p>
         <h1 className="kerygma-gateway-logo-heading">
@@ -39,7 +35,7 @@ export default function HomePage() {
             className="kerygma-gateway-logo"
             height={567}
             priority
-            sizes="(max-width: 700px) 78vw, 420px"
+            sizes="(max-width: 700px) 78vw, 390px"
             src={`${basePath}/images/kerygma-path-logo.png`}
             unoptimized
             width={756}

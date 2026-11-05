@@ -507,3 +507,201 @@
     object-position: 70% center;
   }
 }
+
+
+/* Black studio gateway: keep the Kerygma logo and its copy on one centered axis. */
+.kerygma-gateway {
+  display: flex;
+  min-height: 100svh;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 72px 24px 48px;
+  overflow: hidden;
+  background: #02040a;
+  text-align: center;
+}
+
+.kerygma-starfield {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 50% 22%, rgba(31, 72, 139, .2), transparent 47%),
+    #02040a;
+  pointer-events: none;
+}
+
+.kerygma-starfield canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.kerygma-gateway-scripture {
+  position: absolute;
+  z-index: 1;
+  top: clamp(168px, 18vh, 190px);
+  left: 0;
+  width: 100%;
+  padding-inline: 20px;
+  text-align: center;
+  pointer-events: none;
+}
+
+.kerygma-gateway-scripture p,
+.kerygma-gateway-scripture cite {
+  margin: 0;
+}
+
+.kerygma-gateway-translation {
+  color: #f2ead8;
+  font: 400 15px/1.5 var(--serif);
+  letter-spacing: .015em;
+  text-shadow: 0 1px 14px rgba(150, 181, 234, .35);
+}
+
+.kerygma-gateway-reference {
+  display: block;
+  margin-top: 5px !important;
+  color: #dcb85f;
+  font-size: 9px;
+  font-style: normal;
+  font-weight: 600;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+}
+
+.kerygma-gateway-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  width: min(760px, 100%);
+  flex-direction: column;
+  align-items: center;
+  margin-top: clamp(230px, 29vh, 300px);
+  text-align: center;
+}
+
+.kerygma-gateway-kicker {
+  margin: 0;
+  color: #e5c66f;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .22em;
+  text-shadow: 0 1px 12px rgba(229, 198, 111, .28);
+  text-transform: uppercase;
+}
+
+.kerygma-gateway-logo-heading {
+  display: flex;
+  width: min(390px, 78vw);
+  align-items: center;
+  justify-content: center;
+  margin: 12px auto 0;
+  line-height: 0;
+}
+
+.kerygma-gateway-logo {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  mix-blend-mode: screen;
+}
+
+.kerygma-gateway-description {
+  max-width: 580px;
+  margin: 16px auto 24px;
+  color: #f2f4f8;
+  font-size: clamp(14px, 1.45vw, 17px);
+  line-height: 1.75;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, .9);
+}
+
+.kerygma-gateway-note {
+  margin: 22px 0 0;
+  color: #d5b65f;
+  font-size: 9px;
+  letter-spacing: .24em;
+  text-shadow: 0 1px 12px rgba(213, 182, 95, .28);
+  text-transform: uppercase;
+}
+
+:root[data-theme="light"] body .kerygma-gateway :is(
+  .kerygma-gateway-kicker, .kerygma-gateway-description,
+  .kerygma-gateway-note, .kerygma-gateway-translation,
+  .kerygma-gateway-reference
+),
+:root:not([data-theme="light"]) body .kerygma-gateway :is(
+  .kerygma-gateway-kicker, .kerygma-gateway-description,
+  .kerygma-gateway-note, .kerygma-gateway-translation,
+  .kerygma-gateway-reference
+) {
+  background: none !important;
+  background-image: none !important;
+  background-clip: border-box !important;
+  -webkit-background-clip: border-box !important;
+  -webkit-text-fill-color: currentColor !important;
+  animation: none !important;
+  filter: none !important;
+}
+
+:root[data-theme="light"] body .kerygma-gateway :is(.kerygma-gateway-description, .kerygma-gateway-translation),
+:root:not([data-theme="light"]) body .kerygma-gateway :is(.kerygma-gateway-description, .kerygma-gateway-translation) {
+  color: #f2f4f8 !important;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, .9) !important;
+}
+
+:root[data-theme="light"] body .kerygma-gateway :is(.kerygma-gateway-kicker, .kerygma-gateway-note, .kerygma-gateway-reference),
+:root:not([data-theme="light"]) body .kerygma-gateway :is(.kerygma-gateway-kicker, .kerygma-gateway-note, .kerygma-gateway-reference) {
+  color: #e5c66f !important;
+  text-shadow: 0 1px 12px rgba(229, 198, 111, .28) !important;
+}
+
+:root[data-theme="light"] body .kerygma-gateway .kerygma-enter-button,
+:root:not([data-theme="light"]) body .kerygma-gateway .kerygma-enter-button,
+:root[data-theme="light"] body .kerygma-gateway .kerygma-enter-button :is(span, svg),
+:root:not([data-theme="light"]) body .kerygma-gateway .kerygma-enter-button :is(span, svg) {
+  color: #171b25 !important;
+  -webkit-text-fill-color: currentColor !important;
+  background-image: none !important;
+  text-shadow: none !important;
+  animation: none !important;
+}
+
+@media (max-width: 700px) {
+  .kerygma-gateway {
+    min-height: 100svh;
+    padding: 74px 18px 40px;
+  }
+
+  .kerygma-gateway-scripture {
+    top: clamp(168px, 18vh, 190px);
+    padding-inline: 16px;
+  }
+
+  .kerygma-gateway-content {
+    margin-top: clamp(230px, 29vh, 280px);
+  }
+
+  .kerygma-gateway-logo-heading {
+    width: min(330px, 82vw);
+  }
+
+  .kerygma-gateway-description {
+    max-width: 370px;
+    font-size: 14px;
+  }
+
+  .kerygma-gateway-note {
+    margin-top: 18px;
+  }
+}
+
+@media (max-height: 650px) {
+  .kerygma-gateway-content {
+    margin-top: 220px;
+  }
+}
