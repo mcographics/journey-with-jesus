@@ -185,6 +185,14 @@ body { zoom: var(--accessibility-text-scale); }
   .accessibility-settings-trigger { position: absolute; top: calc(12px + env(safe-area-inset-top, 0px)); right: calc(62px + env(safe-area-inset-right, 0px)); width: 44px; min-height: 44px; padding: 0; }
   .accessibility-settings-trigger span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
   .accessibility-settings-panel { top: calc(62px + env(safe-area-inset-top, 0px)); right: 12px; width: min(390px, calc(100vw - 24px)); max-height: calc(100dvh - 78px - env(safe-area-inset-top, 0px)); padding: 16px; }
+  :root[data-accessibility-text-size="large"] .accessibility-settings-panel {
+    width: min(361px, calc(92.5926vw - 22.222px));
+    max-height: calc(92.5926dvh - 78px - env(safe-area-inset-top, 0px));
+  }
+  :root[data-accessibility-text-size="largest"] .accessibility-settings-panel {
+    width: min(336px, calc(86.2069vw - 20.69px));
+    max-height: calc(86.2069dvh - 78px - env(safe-area-inset-top, 0px));
+  }
 }
 
 :root[data-theme="light"][data-accessibility-contrast="high"] .accessibility-settings-panel { border: 2px solid #111; }
