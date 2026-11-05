@@ -155,7 +155,7 @@ test("desktop mobile preview opens the current page at a phone-sized viewport", 
   await expect(previewDialog).toBeVisible();
   await expect.poll(() => previewFrame.evaluate((element) => {
     const frame = element as HTMLIFrameElement;
-    return frame.contentWindow?.document.documentElement.clientWidth ?? 0;
+    return frame.contentWindow?.document?.documentElement?.clientWidth ?? 0;
   })).toBe(390);
 
   const mobilePage = page.frameLocator(".mobile-preview-frame");
