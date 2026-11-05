@@ -9,6 +9,7 @@ import { uploadVideoResumable } from "@/lib/supabase/resumable-upload";
 import { createStorageObjectId } from "@/lib/storage-object-id";
 import { StudioCharacters } from "@/components/StudioCharacters";
 import { StudioStaff } from "@/components/StudioStaff";
+import { parseYouTubeId, youtubeWatchUrl } from "@/lib/youtube";
 
 type SourceRow = Database["public"]["Tables"]["media_video_sources"]["Row"];
 type EpisodeRow = Database["public"]["Tables"]["media_episodes"]["Row"];
@@ -16,13 +17,13 @@ type PlaylistRow = Database["public"]["Tables"]["media_playlists"]["Row"];
 type CommentRow = Database["public"]["Tables"]["episode_comments"]["Row"];
 type StudioEpisode = EpisodeRow & { sources: SourceRow[] };
 type EpisodeForm = {
-  id: string; title: string; description: string; scripture: string; thumbnail: string;
+  id: string; title: string; description: string; scripture: string; thumbnail: string; youtubeUrl: string;
   duration: string; number: string; orientation: "landscape" | "portrait"; published: boolean;
 };
 type PlaylistForm = { id: string; title: string; description: string; order: string; published: boolean; episodeIds: string[] };
 type Section = "episodes" | "playlists" | "comments" | "characters" | "staff";
 const qualities: VideoQuality[] = ["720p", "1080p", "4K"];
-const freshEpisode = (): EpisodeForm => ({ id: "", title: "", description: "", scripture: "", thumbnail: "", duration: "", number: "1", orientation: "landscape", published: false });
+const freshEpisode = (): EpisodeForm => ({ id: "", title: "", description: "", scripture: "", thumbnail: "", youtubeUrl: "", duration: "", number: "1", orientation: "landscape", published: false });
 const freshPlaylist = (): PlaylistForm => ({ id: "", title: "", description: "", order: "0", published: false, episodeIds: [] });
 
 export function StudioExperience() {
@@ -173,7 +174,7 @@ export function StudioExperience() {
     setSelectedEpisodeId(episode.id);
     setEpisodeForm({
       id: episode.id, title: episode.title, description: episode.description,
-      scripture: episode.scripture_reference ?? "", thumbnail: episode.thumbnail_url ?? "",
+      scripture: episode.scripture_reference ?? "", thumbnail: episode.thumbnail_url ?? "", youtubeUrl: episode.youtube_id ? youtubeWatchUrl(episode.youtube_id) : "",
       duration: episode.duration_seconds === null ? "" : String(episode.duration_seconds),
       number: String(episode.episode_number), orientation: episode.orientation, published: episode.published,
     });
@@ -196,8 +197,11 @@ export function StudioExperience() {
     const id = episodeForm.id.trim() || slugify(episodeForm.title);
     if (!id) { setNotice("Add a title so Studio can create a story ID."); setNoticeError(true); return; }
     const existing = episodes.find((episode) => episode.id === id);
-    if (episodeForm.published && !(existing?.sources.length)) {
-      setNotice("Upload at least one video quality before publishing this story."); setNoticeError(true); return;
+    if (episodeForm.youtubeUrl.trim() && !parseYouTubeId(episodeForm.youtubeUrl)) {
+      setNotice("Enter a valid YouTube video link (youtube.com or youtu.be)."); setNoticeError(true); return;
+    }
+    if (episodeForm.published && !(existing?.sources.length) && !parseYouTubeId(episodeForm.youtubeUrl)) {
+      setNotice("Upload a video file or add a YouTube link before publishing this story."); setNoticeError(true); return;
     }
     setSavingEpisode(true);
     let uploadedThumbnailPath: string | null = null;
@@ -220,6 +224,7 @@ export function StudioExperience() {
         id, title: episodeForm.title.trim(), description: episodeForm.description.trim(),
         scripture_reference: episodeForm.scripture.trim() || null,
         thumbnail_url: thumbnailUrl,
+        youtube_id: parseYouTubeId(episodeForm.youtubeUrl),
         duration_seconds: episodeForm.duration.trim() ? Number(episodeForm.duration) : null,
         episode_number: Number(episodeForm.number) || 1, orientation: episodeForm.orientation,
         published: episodeForm.published,
@@ -453,7 +458,7 @@ export function StudioExperience() {
               <div className="studio-panel-heading"><div><h2>Video library</h2><p>Drafts stay private until published.</p></div><button type="button" className="studio-small-button" onClick={newEpisode}><Plus size={15} />New video</button></div>
               {episodes.length === 0 ? <p className="studio-empty">No videos yet. Create a story to begin.</p> : episodes.map((episode) => (
                 <button key={episode.id} type="button" className={"studio-list-item" + (selectedEpisodeId === episode.id ? " is-selected" : "")} onClick={() => editEpisode(episode)}>
-                  <span><strong>{episode.title}</strong><small>{episode.orientation === "portrait" ? "9:16" : "16:9"} · {episode.sources.map((source) => source.quality).join(", ") || "No video"} · {episode.published ? "Published" : "Draft"}</small></span>
+                  <span><strong>{episode.title}</strong><small>{episode.orientation === "portrait" ? "9:16" : "16:9"} · {(episode.youtube_id ? "YouTube" + (episode.sources.length ? ", " : "") : "") + (episode.sources.map((source) => source.quality).join(", ") || (episode.youtube_id ? "" : "No video"))} · {episode.published ? "Published" : "Draft"}</small></span>
                   <span className={"studio-status" + (episode.published ? " is-live" : "")}>{episode.published ? "LIVE" : "DRAFT"}</span>
                 </button>
               ))}
@@ -470,6 +475,7 @@ export function StudioExperience() {
                   <label className="studio-span-two">Scripture reference<input value={episodeForm.scripture} onChange={(event) => setEpisodeForm({ ...episodeForm, scripture: event.target.value })} maxLength={180} /></label>
                   <label className="studio-span-two">Thumbnail URL<input type="url" value={episodeForm.thumbnail} onChange={(event) => { setEpisodeForm({ ...episodeForm, thumbnail: event.target.value }); setThumbnailFile(null); if (thumbnailFileInput.current) thumbnailFileInput.current.value = ""; }} placeholder="Optional HTTPS image" /></label>
                   <label className="studio-span-two studio-upload-field"><span>Or upload a thumbnail image</span><input ref={thumbnailFileInput} type="file" accept="image/jpeg,image/png,image/webp,image/avif" onChange={(event) => setThumbnailFile(event.target.files?.[0] ?? null)} /><small>{thumbnailFile?.name ?? "JPEG, PNG, WebP, or AVIF · up to 10 MB · saved with story details"}</small></label>
+                  <label className="studio-span-two">YouTube video link<input type="url" value={episodeForm.youtubeUrl} onChange={(event) => setEpisodeForm({ ...episodeForm, youtubeUrl: event.target.value })} placeholder="https://www.youtube.com/watch?v=..." /><small>Optional. Paste a YouTube watch, share, Shorts, or live link. Save the story to enable YouTube playback without uploading a video file. Clear the link and save to use uploaded video versions instead.</small></label>
                   <label className="studio-span-two">Description<textarea value={episodeForm.description} onChange={(event) => setEpisodeForm({ ...episodeForm, description: event.target.value })} maxLength={5000} rows={4} /></label>
                   <label className="studio-check"><input type="checkbox" checked={episodeForm.published} onChange={(event) => setEpisodeForm({ ...episodeForm, published: event.target.checked })} />Publish in the public library</label>
                 </div>
