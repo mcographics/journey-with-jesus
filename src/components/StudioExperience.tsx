@@ -1,6 +1,6 @@
 "use client";
 import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
-import { Check, Film, ListVideo, LoaderCircle, LockKeyhole, LogOut, Mail, MessageCircle, Plus, UploadCloud, Users, X } from "lucide-react";
+import { Check, Eye, EyeOff, Film, ListVideo, LoaderCircle, LockKeyhole, LogOut, Mail, MessageCircle, Plus, Trash2, UploadCloud, Users, X } from "lucide-react";
 import type { Session } from "@supabase/supabase-js";
 import type { Database, VideoContentType, VideoQuality } from "@/lib/database.types";
 import { createBrowserSupabaseClient, isSupabaseConfigured } from "@/lib/supabase/browser";
@@ -11,6 +11,7 @@ import { StudioCharacters } from "@/components/StudioCharacters";
 import { StudioStaff } from "@/components/StudioStaff";
 import { parseYouTubeId, youtubeWatchUrl } from "@/lib/youtube";
 import { resolveStoryPublication } from "@/lib/studio-publishing";
+import { formatStudioFileSize, freePlanVideoSizeError } from "@/lib/studio-video-size";
 
 type SourceRow = Database["public"]["Tables"]["media_video_sources"]["Row"];
 type EpisodeRow = Database["public"]["Tables"]["media_episodes"]["Row"];
@@ -52,6 +53,7 @@ export function StudioExperience() {
   const [uploadQuality, setUploadQuality] = useState<VideoQuality | null>(null);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [savingEpisode, setSavingEpisode] = useState(false);
+  const [busyEpisodeId, setBusyEpisodeId] = useState<string | null>(null);
   const [playlistForm, setPlaylistForm] = useState<PlaylistForm>(freshPlaylist);
   const reportStudioNotice = useCallback((message: string, isError = false) => {
     setNotice(message);
@@ -192,6 +194,88 @@ export function StudioExperience() {
     clearVideoFileSelections(); setUploadStatus("");
   }
 
+
+  async function toggleEpisodeVisibility(episode: StudioEpisode) {
+    if (!client || busyEpisodeId || savingEpisode || uploadQuality) return;
+    if (!episode.published && !episode.youtube_id && episode.sources.length === 0) {
+      setNotice("Add a YouTube link or upload a video before making this story public.");
+      setNoticeError(true);
+      return;
+    }
+    const nextPublished = !episode.published;
+    setBusyEpisodeId(episode.id);
+    try {
+      const { data, error } = await client.from("media_episodes")
+        .update({ published: nextPublished }).eq("id", episode.id)
+        .select("id, published").single();
+      if (error) throw error;
+      if (!data || data.published !== nextPublished) throw new Error("Studio could not verify the visibility change.");
+      setEpisodes((current) => current.map((item) => item.id === episode.id ? { ...item, published: nextPublished } : item));
+      if (selectedEpisodeId === episode.id) {
+        setEpisodeForm((current) => ({ ...current, published: nextPublished }));
+      }
+      setNotice(nextPublished
+        ? '"' + episode.title + '" is public again.'
+        : '"' + episode.title + '" is hidden from the public Media page. Its files and story details are preserved.');
+      setNoticeError(false);
+    } catch (error) {
+      setNotice(formatStudioError(error, "Unable to update story visibility."));
+      setNoticeError(true);
+    } finally {
+      setBusyEpisodeId(null);
+    }
+  }
+
+  async function deleteEpisode(episode: StudioEpisode) {
+    if (!client || busyEpisodeId || savingEpisode || uploadQuality) return;
+    const confirmed = window.confirm(
+      'Permanently delete "' + episode.title + '"? This removes the story, its playlist entries, comments, and uploaded media from Journey Studio. This cannot be undone. Videos hosted on YouTube will not be deleted.'
+    );
+    if (!confirmed) return;
+    setBusyEpisodeId(episode.id);
+    try {
+      // Remove the database story first so a storage failure cannot leave a broken public item.
+      const { data, error } = await client.from("media_episodes")
+        .delete().eq("id", episode.id).select("id").single();
+      if (error) throw error;
+      if (!data) throw new Error("Studio did not confirm the story was deleted.");
+      if (selectedEpisodeId === episode.id) newEpisode();
+      setEpisodes((current) => current.filter((item) => item.id !== episode.id));
+      setPlaylistItems((current) => current.filter((item) => item.episode_id !== episode.id));
+      setPlaylistForm((current) => ({
+        ...current, episodeIds: current.episodeIds.filter((id) => id !== episode.id),
+      }));
+      setComments((current) => current.filter((comment) => comment.episode_id !== episode.id));
+
+      // Storage deletes are separate from DB cascades and must be performed explicitly.
+      const videoPaths = episode.sources.map((source) => source.storage_path);
+      const thumbnailPath = episode.thumbnail_url
+        ? getPublicStoragePath(episode.thumbnail_url, "media-thumbnails") : null;
+      const cleanupProblems: string[] = [];
+      if (videoPaths.length) {
+        try {
+          const { error: videoError } = await client.storage.from("media-videos").remove(videoPaths);
+          if (videoError) cleanupProblems.push("uploaded video files");
+        } catch { cleanupProblems.push("uploaded video files"); }
+      }
+      if (thumbnailPath) {
+        try {
+          const { error: thumbnailError } = await client.storage.from("media-thumbnails").remove([thumbnailPath]);
+          if (thumbnailError) cleanupProblems.push("thumbnail");
+        } catch { cleanupProblems.push("thumbnail"); }
+      }
+      setNotice('Deleted "' + episode.title + '" from the library.' +
+        (cleanupProblems.length ? " The " + cleanupProblems.join(" and ") +
+          " could not be fully cleaned up in Supabase Storage; check the storage dashboard." : ""));
+      setNoticeError(cleanupProblems.length > 0);
+    } catch (error) {
+      setNotice(formatStudioError(error, "Unable to delete this story."));
+      setNoticeError(true);
+    } finally {
+      setBusyEpisodeId(null);
+    }
+  }
+
   async function saveEpisode(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!client || savingEpisode) return;
@@ -280,6 +364,12 @@ export function StudioExperience() {
     if (!client || !selectedEpisodeId) { setUploadStatus("Save story details first to enable uploads. You can save a draft without a video, even with Publish checked."); setNoticeError(true); return; }
     const selectedFiles = qualities.flatMap((quality) => files[quality] ? [{ quality, file: files[quality]! }] : []);
     if (selectedFiles.length === 0) { setUploadStatus("Choose one or more video files first."); return; }
+    const sizeError = selectedFiles.map(({ file }) => freePlanVideoSizeError(file)).find(Boolean);
+    if (sizeError) {
+      setUploadStatus(sizeError);
+      setNoticeError(true);
+      return;
+    }
     setUploadStatus(""); setNoticeError(false);
     const completedQualities: VideoQuality[] = [];
     let pendingUploadPath: string | null = null;
@@ -463,10 +553,25 @@ export function StudioExperience() {
             <section className="studio-panel studio-library">
               <div className="studio-panel-heading"><div><h2>Video library</h2><p>Drafts stay private until published.</p></div><button type="button" className="studio-small-button" onClick={newEpisode}><Plus size={15} />New video</button></div>
               {episodes.length === 0 ? <p className="studio-empty">No videos yet. Create a story to begin.</p> : episodes.map((episode) => (
-                <button key={episode.id} type="button" className={"studio-list-item" + (selectedEpisodeId === episode.id ? " is-selected" : "")} onClick={() => editEpisode(episode)}>
-                  <span><strong>{episode.title}</strong><small>{episode.orientation === "portrait" ? "9:16" : "16:9"} · {(episode.youtube_id ? "YouTube" + (episode.sources.length ? ", " : "") : "") + (episode.sources.map((source) => source.quality).join(", ") || (episode.youtube_id ? "" : "No video"))} · {episode.published ? "Published" : "Draft"}</small></span>
-                  <span className={"studio-status" + (episode.published ? " is-live" : "")}>{episode.published ? "LIVE" : "DRAFT"}</span>
-                </button>
+                <div key={episode.id} className="studio-video-row">
+                  <button type="button" className={"studio-list-item" + (selectedEpisodeId === episode.id ? " is-selected" : "")} onClick={() => editEpisode(episode)}>
+                    <span><strong>{episode.title}</strong><small>{episode.orientation === "portrait" ? "9:16" : "16:9"} · {(episode.youtube_id ? "YouTube" + (episode.sources.length ? ", " : "") : "") + (episode.sources.map((source) => source.quality).join(", ") || (episode.youtube_id ? "" : "No video"))} · {episode.published ? "Published" : "Draft / hidden"}</small></span>
+                    <span className={"studio-status" + (episode.published ? " is-live" : "")}>{episode.published ? "LIVE" : "PRIVATE"}</span>
+                  </button>
+                  <div className="studio-video-actions" aria-label={"Actions for " + episode.title}>
+                    <button type="button" disabled={Boolean(busyEpisodeId) || savingEpisode || Boolean(uploadQuality)}
+                      aria-label={(episode.published ? "Hide " : "Publish ") + episode.title}
+                      onClick={() => void toggleEpisodeVisibility(episode)}>
+                      {episode.published ? <EyeOff size={14} /> : <Eye size={14} />}
+                      {episode.published ? "Hide" : "Show"}
+                    </button>
+                    <button type="button" className="studio-video-delete" disabled={Boolean(busyEpisodeId) || savingEpisode || Boolean(uploadQuality)}
+                      aria-label={"Permanently delete " + episode.title}
+                      onClick={() => void deleteEpisode(episode)}>
+                      <Trash2 size={14} />Delete
+                    </button>
+                  </div>
+                </div>
               ))}
             </section>
             <div className="studio-editor-stack">
@@ -491,10 +596,29 @@ export function StudioExperience() {
                 <div className="studio-panel-heading"><div><h2>Video versions</h2><p>For direct videos: save story details as a draft, select a file, upload it, then publish. For YouTube: paste a link above and save directly; no file upload is needed. Large MP4, WebM, and QuickTime uploads resume in chunks.</p></div><UploadCloud size={20} /></div>
                 {selectedEpisodeId && <p className="studio-file-hint">Story ID: <strong>{selectedEpisodeId}</strong></p>}
                 {!selectedEpisodeId && <p className="studio-file-hint">Save this story before uploading its files.</p>}
+                <p className="studio-upload-limit"><strong>Supabase Free plan:</strong> Maximum video file size is <strong>50 MB per file</strong>. Studio will check and display the file size when you select it. Larger videos can be added by YouTube link instead.</p>
                 <div className="studio-upload-grid">
                   {qualities.map((quality) => (
-                    <label className="studio-upload-field" key={quality}><span>{quality}</span><input ref={(input) => { if (input) videoFileInputs.current[quality] = input; else delete videoFileInputs.current[quality]; }} type="file" accept="video/mp4,video/webm,video/quicktime,.mp4,.webm,.mov" onChange={(event) => setFiles((current) => ({ ...current, [quality]: event.target.files?.[0] ?? null }))} />
-                      <small>{files[quality]?.name ?? episodes.find((episode) => episode.id === selectedEpisodeId)?.sources.find((source) => source.quality === quality)?.storage_path.split("/").at(-1) ?? "No file uploaded"}</small>
+                    <label className="studio-upload-field" key={quality}>
+                      <span>{quality}</span>
+                      <input ref={(input) => { if (input) videoFileInputs.current[quality] = input; else delete videoFileInputs.current[quality]; }}
+                        type="file" accept="video/mp4,video/webm,video/quicktime,.mp4,.webm,.mov"
+                        onChange={(event) => {
+                          const selected = event.target.files?.[0] ?? null;
+                          const fileSizeError = selected ? freePlanVideoSizeError(selected) : null;
+                          if (fileSizeError) {
+                            setFiles((current) => ({ ...current, [quality]: null }));
+                            event.target.value = "";
+                            setUploadStatus(fileSizeError);
+                            setNoticeError(true);
+                            return;
+                          }
+                          setFiles((current) => ({ ...current, [quality]: selected }));
+                          setUploadStatus("");
+                          setNoticeError(false);
+                        }} />
+                      <small>{files[quality] ? files[quality]!.name + " · " + formatStudioFileSize(files[quality]!.size) :
+                        episodes.find((episode) => episode.id === selectedEpisodeId)?.sources.find((source) => source.quality === quality)?.storage_path.split("/").at(-1) ?? "No file uploaded"}</small>
                     </label>
                   ))}
                 </div>
