@@ -1300,11 +1300,6 @@ body, .home-hero, .mission-section, .site-footer, .media-page {
     padding-inline: 13px;
     font-size: 13px;
   }
-  #desktop-mobile-preview-trigger {
-    min-height: 44px;
-    gap: 7px;
-    padding-inline: 12px;
-  }
   .theme-toggle {
     width: 44px;
     height: 44px;

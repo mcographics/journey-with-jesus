@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from "next";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import "./globals.css";
-import "./mobile-preview.css";
 import "./media-studio.css";
 import "./editorial-pages.css";
 import "./character-cards.css";
