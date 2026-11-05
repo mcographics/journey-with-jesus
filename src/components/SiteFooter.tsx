@@ -1,13 +1,24 @@
+import Image from "next/image";
 import Link from "next/link";
+
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
 export function SiteFooter() {
   return (
-    <footer className="site-footer">
+    <footer className="site-footer" id="site-footer">
       <div className="footer-inner">
         <Link aria-label="Kerygma Path home" className="footer-brand kerygma-footer-brand" href="/">
-          <span aria-hidden="true" className="kerygma-footer-emblem">K</span>
-          <span className="kerygma-footer-wordmark">Kerygma <em>Path</em></span>
+          <Image
+            alt=""
+            className="kerygma-footer-logo"
+            height={1086}
+            sizes="(max-width: 580px) 110px, 140px"
+            src={`${basePath}/images/kerygma-path-gateway-logo-complete.webp`}
+            unoptimized
+            width={1448}
+          />
         </Link>
+        <div className="footer-content">
         <div className="footer-message">
           <p className="footer-tagline">Christian animation with purpose</p>
           <p className="footer-note">Faith · Scripture · Story</p>
@@ -33,7 +44,8 @@ export function SiteFooter() {
           <span aria-hidden="true">✦</span>
           <Link href="/policies/copyright/">Copyright</Link>
         </nav>
-        <p className="footer-note">Kerygma Path · Current project: Journey with Jesus · Website by Majestic Creations</p>
+        <p className="footer-note footer-credits">Kerygma Path · Current project: Journey with Jesus · Website by Majestic Creations</p>
+        </div>
       </div>
     </footer>
   );

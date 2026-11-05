@@ -785,3 +785,56 @@ body:has(.kerygma-gateway) .site-footer {
 :root:not([data-theme="light"]) body #main-content.kerygma-company .kerygma-button-gold {
   background: #172033 !important;
 }
+
+
+/* Compact studio footer with the same transparent logo as the gateway. */
+#site-footer .footer-inner {
+  width: min(1160px, calc(100% - 48px));
+  min-height: 0;
+  grid-template-columns: 140px minmax(0, 1fr);
+  gap: 28px;
+  padding-block: 16px;
+  justify-items: stretch;
+}
+#site-footer .kerygma-footer-brand {
+  display: block;
+  width: 140px;
+  min-height: 0;
+  aspect-ratio: 4 / 3;
+  justify-self: start;
+  line-height: 0;
+}
+#site-footer .kerygma-footer-logo { display: block; width: 100%; height: auto; }
+#site-footer .footer-brand:hover { transform: none; filter: none; }
+#site-footer .footer-content { display: grid; min-width: 0; gap: 10px; }
+#site-footer .footer-message { display: flex; flex-wrap: wrap; justify-content: flex-start; align-items: baseline; gap: 8px 18px; text-align: left; }
+#site-footer .footer-tagline { font-size: 18px; }
+#site-footer .footer-note { font-size: 9px; letter-spacing: .1em; line-height: 1.6; }
+#site-footer .footer-links { justify-content: flex-start; gap: 4px 12px; min-height: 0; font-size: 11px; letter-spacing: .025em; text-align: left; }
+#site-footer .footer-links a { padding-block: 5px; }
+#site-footer .footer-links span { font-size: 7px; }
+#site-footer .footer-credits { margin: 0; }
+
+:root body #site-footer :is(p, a, span, strong, b, em, small) {
+  background-image: none !important;
+  background-clip: border-box !important;
+  -webkit-background-clip: border-box !important;
+  -webkit-text-fill-color: currentColor !important;
+  text-shadow: none !important;
+  animation: none !important;
+  filter: none !important;
+}
+:root:not([data-theme="light"]) body #site-footer :is(p, a, span, strong, b, em, small) {
+  color: #f6e58d !important;
+}
+:root:not([data-theme="light"]) body #site-footer a:hover { color: #fff3b4 !important; }
+
+@media (max-width: 580px) {
+  #site-footer .footer-inner { width: calc(100% - 36px); grid-template-columns: minmax(0, 1fr); gap: 8px; padding-block: 16px 20px; }
+  #site-footer .kerygma-footer-brand { width: 110px; justify-self: center; }
+  #site-footer .footer-content { gap: 8px; }
+  #site-footer .footer-message, #site-footer .footer-links { justify-content: center; text-align: center; }
+  #site-footer .footer-message { gap: 3px 12px; }
+  #site-footer .footer-tagline { font-size: 16px; }
+  #site-footer .footer-credits { text-align: center; font-size: 8px; }
+}
