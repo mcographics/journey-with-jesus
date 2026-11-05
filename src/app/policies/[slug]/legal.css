@@ -1,0 +1,23 @@
+/* Scope the plain, high-contrast policy typography to the five legal pages. */
+:root:not([data-theme="light"]) .legal-policy-page,
+:root:not([data-theme="light"]) .legal-policy-page :is(h1,h2,h3,h4,h5,h6,p,strong,a,span) {
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+  text-shadow: none !important;
+  background-image: none !important;
+  background-clip: border-box !important;
+  -webkit-background-clip: border-box !important;
+  filter: none !important;
+  animation: none !important;
+}
+:root[data-theme="light"] .legal-policy-page,
+:root[data-theme="light"] .legal-policy-page :is(h1,h2,h3,h4,h5,h6,p,strong,a,span) {
+  color: #000 !important;
+  -webkit-text-fill-color: #000 !important;
+  text-shadow: none !important;
+  background-image: none !important;
+  background-clip: border-box !important;
+  -webkit-background-clip: border-box !important;
+  filter: none !important;
+  animation: none !important;
+}
