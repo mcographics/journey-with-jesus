@@ -390,19 +390,20 @@ test("Meet the Team credits the founder and editor/webmaster accurately", async 
 
 test("landing gateway hides site controls and footer until entering, including return navigation", async ({ page }) => {
   await page.goto("/");
-  await expect(page.locator(".site-header")).toBeHidden();
+  await expect(page.locator(".site-header")).toHaveCSS("display", "none");
   await expect(page.locator(".site-footer")).toBeHidden();
   await expect(page.locator(".kerygma-gateway-logo")).toHaveAttribute("src", /kerygma-path-gateway-logo\.png$/);
   await expect.poll(() => page.locator(".kerygma-gateway-logo").evaluate((image) => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
   await page.getByRole("link", { name: "Enter Site" }).click();
   await expect(page).toHaveURL(/\/company\/$/);
-  await expect(page.locator(".site-header")).toBeVisible();
+  await expect(page.locator(".site-header")).toHaveCSS("display", "block");
+  await expect(page.getByRole("button", { name: "Open site menu" })).toBeVisible();
   await expect(page.locator(".site-footer")).toBeVisible();
   await expect(page.getByRole("button", { name: "Accessibility settings" })).toBeVisible();
   await expect(page.locator(".theme-toggle")).toBeVisible();
   await page.getByRole("link", { name: "Kerygma Path home" }).click();
   await expect(page).toHaveURL(/\/$/);
-  await expect(page.locator(".site-header")).toBeHidden();
+  await expect(page.locator(".site-header")).toHaveCSS("display", "none");
   await expect(page.locator(".site-footer")).toBeHidden();
 });
 
