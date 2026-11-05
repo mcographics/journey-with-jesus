@@ -770,12 +770,12 @@ body:has(.kerygma-gateway) .site-footer {
   display: none !important;
 }
 
-/* Readable static white copy throughout the studio in dark mode. */
+/* Static white main copy with soft yellow labels and accents in dark mode. */
 :root:not([data-theme="light"]) body #main-content.kerygma-company :is(
   h1, h2, h3, h4, h5, h6, p, li, a, span, strong, b, em, small, label, button
 ) {
   color: #fff !important;
-  -webkit-text-fill-color: #fff !important;
+  -webkit-text-fill-color: currentColor !important;
   background-image: none !important;
   background-clip: border-box !important;
   -webkit-background-clip: border-box !important;
@@ -786,6 +786,17 @@ body:has(.kerygma-gateway) .site-footer {
   background: #172033 !important;
 }
 
+
+:root:not([data-theme="light"]) body #main-content.kerygma-company :is(
+  .kerygma-eyebrow, .kerygma-eyebrow span,
+  h1 em, h2 em, .kerygma-principle-number,
+  .kerygma-text-link, .kerygma-project-secondary, .kerygma-hero-caption,
+  .kerygma-button, .kerygma-button span, .kerygma-button svg,
+  .kerygma-principle-card > svg
+) {
+  color: #f6e58d !important;
+  -webkit-text-fill-color: currentColor !important;
+}
 
 /* Compact studio footer with the same transparent logo as the gateway. */
 #site-footer .footer-inner {
