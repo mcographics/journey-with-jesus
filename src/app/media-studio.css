@@ -371,6 +371,24 @@
 :root[data-theme="light"] .studio-video-actions .studio-video-delete { color: #8b3329; border-color: rgba(159, 57, 49, .28); background: rgba(159, 57, 49, .04); }
 :root[data-theme="light"] .studio-upload-limit { color: #594e36; border-color: rgba(178, 133, 36, .26); background: rgba(178, 133, 36, .045); }
 :root:not([data-theme="light"]) body .studio-page .studio-video-delete { color: #ffb8b0 !important; -webkit-text-fill-color: currentColor !important; }
+.studio-caption-list { display: grid; gap: 8px; }
+.studio-caption-row { display: flex; min-width: 0; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 11px; border: 1px solid rgba(238, 221, 174, .15); background: rgba(6, 12, 22, .2); }
+.studio-caption-row > span { display: grid; min-width: 0; gap: 4px; }
+.studio-caption-row strong { color: #eee8dc; font-size: 12px; overflow-wrap: anywhere; }
+.studio-caption-row small { color: #aeb2b9; font-size: 10px; line-height: 1.4; }
+.studio-caption-row button { display: inline-flex; min-height: 40px; flex: 0 0 auto; align-items: center; gap: 6px; padding: 0 10px; border: 1px solid rgba(230, 130, 122, .35); border-radius: 3px; background: rgba(165, 58, 54, .065); color: #ffb8b0; cursor: pointer; font: inherit; font-size: 11px; }
+.studio-caption-upload { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 13px; padding-top: 4px; }
+.studio-caption-upload .studio-check { align-self: center; }
+.studio-caption-upload > button { justify-self: start; }
+:root[data-theme="light"] .studio-caption-row { border-color: rgba(178, 133, 36, .22); background: rgba(247, 249, 252, .72); }
+:root[data-theme="light"] .studio-caption-row strong { color: #28313d; }
+:root[data-theme="light"] .studio-caption-row small { color: #596574; }
+:root[data-theme="light"] .studio-caption-row button { color: #8b3329; border-color: rgba(159, 57, 49, .28); background: rgba(159, 57, 49, .04); }
+@media (max-width: 650px) {
+  .studio-caption-upload { grid-template-columns: minmax(0, 1fr); }
+  .studio-caption-upload .studio-span-two { grid-column: auto; }
+  .studio-caption-row { align-items: flex-start; }
+}
 @media (max-width: 650px) {
   .studio-video-actions button { min-height: 42px; }
 }

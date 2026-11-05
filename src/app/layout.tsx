@@ -5,6 +5,7 @@ import "./globals.css";
 import "./media-studio.css";
 import "./editorial-pages.css";
 import "./character-cards.css";
+import "./accessibility.css";
 
 const siteUrl = "https://mcographics.github.io/journey-with-jesus/";
 
@@ -61,6 +62,23 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
                   "content",
                   theme === "light" ? "#f2f5f9" : "#0B1120",
                 );
+                const savedAccessibility = localStorage.getItem("journey-with-jesus-accessibility");
+                const accessibility = savedAccessibility ? JSON.parse(savedAccessibility) : {};
+                const brightness = Number.isFinite(accessibility.brightness)
+                  ? Math.max(70, Math.min(100, Math.round(accessibility.brightness / 5) * 5))
+                  : 100;
+                const reduceMotion = typeof accessibility.reduceMotion === "boolean"
+                  ? accessibility.reduceMotion
+                  : window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+                const root = document.documentElement;
+                root.dataset.accessibilityBrightness = String(brightness);
+                root.dataset.accessibilityTextSize = ["large", "largest"].includes(accessibility.textSize) ? accessibility.textSize : "default";
+                root.dataset.accessibilityLineSpacing = String(accessibility.relaxedLineSpacing === true);
+                root.dataset.accessibilityUnderlineLinks = String(accessibility.underlineLinks === true);
+                root.dataset.accessibilityContrast = accessibility.highContrast === true ? "high" : "standard";
+                root.dataset.accessibilityEnhancedFocus = String(accessibility.enhancedFocus === true);
+                root.dataset.accessibilityReduceMotion = String(reduceMotion);
+                root.style.setProperty("--light-mode-overlay-opacity", String(((100 - brightness) / 30) * 0.2));
               } catch {}
             })();`,
           }}
