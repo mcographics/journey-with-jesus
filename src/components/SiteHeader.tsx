@@ -7,7 +7,6 @@ import { ChevronDown, Crown, Menu, Moon, Sun, X } from "lucide-react";
 import { AccessibilitySettings } from "@/components/AccessibilitySettings";
 
 const navigation = [
-  { href: "/", label: "Kerygma Path" },
   { href: "/company/", label: "Animation Studio" },
   { href: "/projects/journey-with-jesus/", label: "Journey with Jesus" },
   { href: "/media/", label: "Media" },
@@ -50,6 +49,13 @@ export function SiteHeader() {
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
   const routePath = basePath && pathname.startsWith(basePath) ? pathname.slice(basePath.length) || "/" : pathname;
   const normalizedPath = routePath.endsWith("/") ? routePath : `${routePath}/`;
+  const isJourneySection = normalizedPath.startsWith("/projects/journey-with-jesus/")
+    || normalizedPath.startsWith("/media/") || normalizedPath.startsWith("/characters/");
+  const visibleNavigation = navigation.filter(({ href }) => {
+    if (href === "/company/") return normalizedPath !== "/company/";
+    if (isJourneySection) return href === "/media/" || href === "/characters/";
+    return href === "/projects/journey-with-jesus/" || href === "/team/" || href === "/store/";
+  });
   const [isDesktopMenuOpen, setIsDesktopMenuOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isAutoHidden, setIsAutoHidden] = useState(false);
@@ -228,7 +234,7 @@ export function SiteHeader() {
             hidden={!isDesktopMenuOpen}
             id="desktop-navigation-options"
           >
-            {navigation.map(({ href, label }) => {
+            {visibleNavigation.map(({ href, label }) => {
               const isCurrent = normalizedPath === href;
               return (
                 <Link
@@ -277,7 +283,7 @@ export function SiteHeader() {
             hidden={!isMobileMenuOpen}
             id="mobile-navigation-options"
           >
-            {navigation.map(({ href, label }) => {
+            {visibleNavigation.map(({ href, label }) => {
               const isCurrent = normalizedPath === href;
               return (
                 <Link

@@ -13,8 +13,8 @@ test("public destinations are available in the desktop menu, with working story 
   await desktopMenuButton.click();
   const primaryNavigation = page.getByRole("navigation", { name: "Primary navigation" });
   await expect(primaryNavigation).toBeVisible();
-  await expect(primaryNavigation.getByRole("link")).toHaveCount(7);
-  for (const destination of ["Kerygma Path", "Animation Studio", "Journey with Jesus", "Media", "Meet the Characters", "Meet the Team", "Store"]) {
+  await expect(primaryNavigation.getByRole("link")).toHaveCount(3);
+  for (const destination of ["Journey with Jesus", "Meet the Team", "Store"]) {
     await expect(primaryNavigation.getByRole("link", { name: destination })).toBeVisible();
   }
   await primaryNavigation.getByRole("link", { name: "Journey with Jesus" }).click();
@@ -94,9 +94,9 @@ test.describe("touch mobile navigation", () => {
     await menuButton.evaluate((button) => button.blur());
     await page.waitForTimeout(1100);
     await expect(mobileNavigation).toHaveCSS("opacity", "1");
-    const homeLink = navigation.getByRole("link", { name: "Kerygma Path" });
+    const homeLink = navigation.getByRole("link", { name: "Animation Studio" });
     await expect(homeLink).toBeVisible();
-    await expect(homeLink).toHaveAttribute("href", "/");
+    await expect(homeLink).toHaveAttribute("href", "/company/");
     const mediaLink = navigation.getByRole("link", { name: "Media" });
     await expect(mediaLink).toBeVisible();
     await mediaLink.click();
@@ -433,3 +433,15 @@ test("studio dark mode uses static yellow labels and white main copy", async ({ 
   await expect(page.locator("#mission-title em")).toHaveCSS("color", "rgb(246, 229, 141)");
   await expect(page.locator(".kerygma-company-lead")).toHaveCSS("color", "rgb(255, 255, 255)");
 });
+
+for (const route of ["/projects/journey-with-jesus/", "/media/", "/characters/", "/team/", "/store/"]) {
+  test(`menu shows section links at ${route}`, async ({ page }) => {
+    await page.goto(route);
+    await page.getByRole("button", { name: "Open site menu", exact: true }).click();
+    const menu = page.getByRole("navigation", { name: "Primary navigation" });
+    const expected = route === "/team/" || route === "/store/"
+      ? ["Animation Studio", "Journey with Jesus", "Meet the Team", "Store"]
+      : ["Animation Studio", "Media", "Meet the Characters"];
+    await expect(menu.getByRole("link")).toHaveText(expected);
+  });
+}

@@ -44,9 +44,9 @@ button { color: inherit; }
 .mobile-menu-toggle { position: relative; display: inline-flex; width: 48px; min-width: 48px; min-height: 48px; align-items: center; justify-content: center; padding: 0; border: 1px solid rgba(255, 226, 165, .88); border-radius: 50%; background: linear-gradient(150deg, rgba(10, 18, 37, .98), rgba(23, 31, 49, .96)); box-shadow: inset 0 0 0 3px rgba(255, 231, 173, .1), 0 8px 24px rgba(2, 6, 15, .45); color: #f8e8c4; cursor: pointer; touch-action: manipulation; }
 .mobile-menu-toggle::before { position: absolute; content: ""; inset: 3px; border: 1px solid rgba(236, 201, 130, .25); border-radius: 50%; pointer-events: none; }
 .mobile-menu-toggle svg { color: #edcf8d; filter: drop-shadow(0 0 5px rgba(249, 218, 152, .35)); }
-.mobile-menu-options { display: grid; width: min(196px, calc(100vw - 32px)); gap: 7px; padding: 9px; border: 1px solid rgba(255, 226, 165, .72); border-radius: 14px; background: linear-gradient(150deg, rgba(10, 18, 37, .98), rgba(23, 31, 49, .98)); box-shadow: inset 0 0 0 3px rgba(255, 231, 173, .07), 0 12px 30px rgba(2, 6, 15, .5); backdrop-filter: blur(12px); }
+.mobile-menu-options { display: grid; width: max-content; max-width: calc(100vw - 88px); gap: 3px; padding: 6px; border: 1px solid rgba(255, 226, 165, .72); border-radius: 14px; background: linear-gradient(150deg, rgba(10, 18, 37, .98), rgba(23, 31, 49, .98)); box-shadow: inset 0 0 0 3px rgba(255, 231, 173, .07), 0 12px 30px rgba(2, 6, 15, .5); backdrop-filter: blur(12px); }
 .mobile-menu-options[hidden] { display: none; }
-.mobile-menu-link { display: flex; min-height: 44px; align-items: center; gap: 10px; padding: 0 12px; border: 1px solid rgba(236, 201, 130, .25); border-radius: 8px; color: #f8e8c4; font-family: var(--serif); font-size: 14px; letter-spacing: .04em; }
+.mobile-menu-link { display: flex; min-height: 44px; align-items: center; gap: 8px; padding: 0 9px; border: 1px solid rgba(236, 201, 130, .25); border-radius: 8px; color: #f8e8c4; font-family: var(--serif); font-size: 14px; letter-spacing: .04em; }
 .mobile-menu-link svg { flex: 0 0 auto; color: #edcf8d; }
 .mobile-menu-link.is-current { border-color: rgba(255, 226, 165, .78); background: linear-gradient(145deg, rgba(255, 240, 188, .98), rgba(184, 132, 54, .98)); color: #171b28; }
 .mobile-menu-link.is-current svg { color: #76551d; }
@@ -687,9 +687,9 @@ body, .home-hero, .mission-section, .site-footer, .media-page {
 .desktop-menu-toggle svg { color: #edcf8d; filter: drop-shadow(0 0 5px rgba(249, 218, 152, .35)); }
 .desktop-menu-chevron { transition: transform .2s ease; }
 .desktop-menu-toggle[aria-expanded="true"] .desktop-menu-chevron { transform: rotate(180deg); }
-.desktop-menu-options { position: absolute; z-index: 50; top: calc(100% + 12px); right: 0; display: grid; width: min(276px, calc(100vw - 32px)); gap: 7px; padding: 9px; border: 1px solid rgba(255, 226, 165, .72); border-radius: 14px; background: linear-gradient(150deg, rgba(10, 18, 37, .98), rgba(23, 31, 49, .98)); box-shadow: inset 0 0 0 3px rgba(255, 231, 173, .07), 0 12px 30px rgba(2, 6, 15, .5); backdrop-filter: blur(12px); }
+.desktop-menu-options { position: absolute; z-index: 50; top: calc(100% + 12px); right: 0; display: grid; width: max-content; max-width: calc(100vw - 32px); gap: 3px; padding: 6px; border: 1px solid rgba(255, 226, 165, .72); border-radius: 14px; background: linear-gradient(150deg, rgba(10, 18, 37, .98), rgba(23, 31, 49, .98)); box-shadow: inset 0 0 0 3px rgba(255, 231, 173, .07), 0 12px 30px rgba(2, 6, 15, .5); backdrop-filter: blur(12px); }
 .desktop-menu-options[hidden] { display: none; }
-.desktop-menu-link { display: flex; min-height: 44px; align-items: center; gap: 10px; padding: 0 12px; border: 1px solid rgba(236, 201, 130, .25); border-radius: 8px; color: #f8e8c4; font-family: var(--serif); font-size: 14px; letter-spacing: .04em; transition: background .18s ease, border-color .18s ease, color .18s ease; }
+.desktop-menu-link { display: flex; min-height: 36px; align-items: center; gap: 8px; padding: 0 9px; border: 1px solid rgba(236, 201, 130, .25); border-radius: 8px; color: #f8e8c4; font-family: var(--serif); font-size: 14px; letter-spacing: .04em; transition: background .18s ease, border-color .18s ease, color .18s ease; }
 .desktop-menu-link svg { flex: 0 0 auto; color: #edcf8d; }
 .desktop-menu-link:hover { border-color: rgba(255, 226, 165, .68); background: rgba(255, 231, 173, .09); color: #fff4d4; }
 .desktop-menu-link.is-current { border-color: rgba(255, 226, 165, .78); background: linear-gradient(145deg, rgba(255, 240, 188, .98), rgba(184, 132, 54, .98)); color: #171b28; }
