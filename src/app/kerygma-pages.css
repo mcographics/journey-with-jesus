@@ -762,3 +762,10 @@
     filter: drop-shadow(0 0 8px rgba(136, 176, 255, .25));
   }
 }
+
+
+/* The gateway stands alone; site controls return on every interior route. */
+body:has(> .kerygma-gateway) > .site-header,
+body:has(> .kerygma-gateway) > .site-footer {
+  display: none !important;
+}

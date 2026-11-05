@@ -33,12 +33,12 @@ export default function HomePage() {
           <Image
             alt=""
             className="kerygma-gateway-logo"
-            height={567}
+            height={1086}
             priority
             sizes="(max-width: 700px) 78vw, 390px"
-            src={`${basePath}/images/kerygma-path-logo.png`}
+            src={`${basePath}/images/kerygma-path-gateway-logo.png`}
             unoptimized
-            width={756}
+            width={1448}
           />
         </h1>
         <p className="kerygma-gateway-description">
