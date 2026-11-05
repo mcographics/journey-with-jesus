@@ -33,8 +33,9 @@ export default function HomePage() {
       <div className="kerygma-gateway-content">
         <p className="kerygma-gateway-kicker">A Christian Animation Studio</p>
         <h1 className="kerygma-gateway-logo-heading">
+          <span className="visually-hidden">Kerygma Path</span>
           <Image
-            alt="Kerygma Path"
+            alt=""
             className="kerygma-gateway-logo"
             height={567}
             priority
