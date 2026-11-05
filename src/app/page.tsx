@@ -21,7 +21,7 @@ export default function HomePage() {
   return (
     <main className="kerygma-gateway" id="main-content">
       <GreekStarfield />
-      <div className="kerygma-gateway-scripture">
+      <div className="visually-hidden">
         <p className="visually-hidden" lang="grc">Ἐν ἀρχῇ ἦν ὁ λόγος</p>
         <p className="kerygma-gateway-translation">“In the beginning was the Word.”</p>
         <cite className="kerygma-gateway-reference">John 1:1</cite>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { createSacredWordAnimation } from "./SacredWordAnimation";
 
 // Ported from Grace-Seek/ui/main_menu.py: Star and Starfield.
 // Preserve the source projection, density, speed, white dots, and twinkle.
@@ -17,6 +18,7 @@ export function GreekStarfield() {
     const canvas = canvasRef.current;
     const context = canvas?.getContext("2d");
     if (!canvas || !context) return;
+    const words = createSacredWordAnimation(context, canvas);
     const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
     const reduced = () => preference.matches || document.documentElement.dataset.accessibilityReduceMotion === "true";
     let width = 1, height = 1, time = 0, last = 0, frame = 0;
@@ -37,6 +39,10 @@ export function GreekStarfield() {
         context.fill();
       }
     };
+    const paintScene = () => {
+      paint();
+      if (!reduced()) words.draw(time, width, height);
+    };
     const resize = () => {
       const bounds = canvas.getBoundingClientRect();
       width = Math.max(1, bounds.width); height = Math.max(1, bounds.height);
@@ -44,7 +50,8 @@ export function GreekStarfield() {
       canvas.width = Math.round(width * ratio); canvas.height = Math.round(height * ratio);
       context.setTransform(ratio, 0, 0, ratio, 0, 0);
       stars = Array.from({ length: Math.min(1400, Math.max(500, Math.floor(width * height / 2600))) }, createStar);
-      paint();
+      words.reset();
+      paintScene();
     };
     const draw = (now: number) => {
       // Source updates every 16 ms; elapsed time keeps that speed on any refresh rate.
@@ -62,7 +69,7 @@ export function GreekStarfield() {
           }
         }
       }
-      paint();
+      paintScene();
       if (!reduced()) frame = requestAnimationFrame(draw);
     };
     const restart = () => {
@@ -84,43 +91,6 @@ export function GreekStarfield() {
   return (
     <div aria-hidden="true" className="kerygma-starfield">
       <canvas ref={canvasRef} />
-      <svg
-        className="kerygma-starfield-scripture"
-        preserveAspectRatio="xMidYMid meet"
-        viewBox="0 0 1000 100"
-      >
-        <defs>
-          <pattern height="22" id="kerygma-scripture-stars" patternUnits="userSpaceOnUse" width="24">
-            <circle cx="3" cy="4" fill="#fff0bf" r="2.3" />
-            <circle cx="14" cy="8" fill="#8eb8ff" r="1.6" />
-            <circle cx="8" cy="18" fill="#fff" r="1.35" />
-            <circle cx="21" cy="17" fill="#e5c66f" r="1.9" />
-          </pattern>
-          <filter height="160%" id="kerygma-scripture-glow" width="120%" x="-10%" y="-30%">
-            <feGaussianBlur result="softGlow" stdDeviation="2.1" />
-            <feMerge>
-              <feMergeNode in="softGlow" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-        </defs>
-        <text
-          fill="url(#kerygma-scripture-stars)"
-          filter="url(#kerygma-scripture-glow)"
-          stroke="#f2d890"
-          strokeOpacity="0.72"
-          strokeWidth="0.8"
-          paintOrder="stroke fill"
-          fontFamily="Georgia, 'Times New Roman', serif"
-          fontSize="68"
-          fontWeight="600"
-          textAnchor="middle"
-          x="500"
-          y="66"
-        >
-          Ἐν ἀρχῇ ἦν ὁ λόγος
-        </text>
-      </svg>
     </div>
   );
 }
