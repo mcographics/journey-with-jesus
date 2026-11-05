@@ -134,10 +134,10 @@ export function GreekStarfield() {
       >
         <defs>
           <pattern height="22" id="kerygma-scripture-stars" patternUnits="userSpaceOnUse" width="24">
-            <circle cx="3" cy="4" fill="#fff0bf" r="2" />
-            <circle cx="14" cy="8" fill="#8eb8ff" r="1.45" />
-            <circle cx="8" cy="18" fill="#fff" r="1.15" />
-            <circle cx="21" cy="17" fill="#e5c66f" r="1.65" />
+            <circle cx="3" cy="4" fill="#fff0bf" r="2.3" />
+            <circle cx="14" cy="8" fill="#8eb8ff" r="1.6" />
+            <circle cx="8" cy="18" fill="#fff" r="1.35" />
+            <circle cx="21" cy="17" fill="#e5c66f" r="1.9" />
           </pattern>
           <filter height="160%" id="kerygma-scripture-glow" width="120%" x="-10%" y="-30%">
             <feGaussianBlur result="softGlow" stdDeviation="2.1" />
@@ -150,8 +150,12 @@ export function GreekStarfield() {
         <text
           fill="url(#kerygma-scripture-stars)"
           filter="url(#kerygma-scripture-glow)"
+          stroke="#f2d890"
+          strokeOpacity="0.72"
+          strokeWidth="0.8"
+          paintOrder="stroke fill"
           fontFamily="Georgia, 'Times New Roman', serif"
-          fontSize="54"
+          fontSize="68"
           fontWeight="600"
           textAnchor="middle"
           x="500"
