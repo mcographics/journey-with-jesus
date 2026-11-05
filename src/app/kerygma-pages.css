@@ -890,3 +890,23 @@ body:has(.kerygma-gateway) .site-footer {
 @media (max-width: 700px) {
   .kerygma-company-hero-image { object-position: center top; }
 }
+
+
+/* Show the full desktop composition with a light neutral shade instead of blue filler. */
+@media (min-width: 701px) {
+  .kerygma-company-hero {
+    min-height: 0;
+    aspect-ratio: 16 / 9;
+    padding-top: clamp(100px, 9vw, 150px);
+    padding-bottom: 80px;
+    background: #030a13;
+  }
+  .kerygma-company-hero-art { inset: 0; width: 100%; opacity: 1; }
+  .kerygma-company-hero-image { object-fit: contain; object-position: center; opacity: 1; }
+  .kerygma-company-hero-shade,
+  :root[data-theme="light"] .kerygma-company-hero-shade {
+    background: linear-gradient(90deg, rgba(0, 0, 0, .48), rgba(0, 0, 0, .2) 35%, transparent 64%);
+  }
+  .kerygma-company-hero h1 { max-width: 660px; font-size: clamp(42px, 4.8vw, 70px); }
+  .kerygma-company-lead, .kerygma-company-supporting { max-width: min(44vw, 580px); }
+}

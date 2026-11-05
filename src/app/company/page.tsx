@@ -24,7 +24,7 @@ export default function CompanyPage() {
             fill
             priority
             sizes="(max-width: 800px) 100vw, 52vw"
-            src={`${basePath}/images/kerygma-studio-digital-animation.webp`}
+            src={`${basePath}/images/kerygma-studio-desktop-hero.webp`}
             unoptimized
           />
           </picture>
