@@ -45,7 +45,7 @@ export function VideoPlayer({ episode }: VideoPlayerProps) {
               title={episode.title} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowFullScreen referrerPolicy="strict-origin-when-cross-origin" />
           ) : selectedSource ? (
-            <video key={episode.id + "-" + selectedSource.url} ref={videoRef} controls playsInline preload="metadata" aria-label={episode.title}>
+            <video key={episode.id + "-" + selectedSource.url} ref={videoRef} crossOrigin="anonymous" controls playsInline preload="metadata" aria-label={episode.title}>
               <source src={selectedSource.url} />
               {episode.captions?.map((caption) => (
                 <track key={caption.id} kind={caption.kind} src={caption.url} srcLang={caption.language}

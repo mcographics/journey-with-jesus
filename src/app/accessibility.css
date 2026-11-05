@@ -51,12 +51,10 @@ body::after { position: fixed; z-index: 10; inset: 0; content: ""; background: #
 :root[data-theme="light"][data-accessibility-brightness]:not([data-accessibility-brightness="100"]) body::after { opacity: var(--light-mode-overlay-opacity, 0); }
 .video-player-section { position: relative; z-index: 11; }
 
+:root { --accessibility-text-scale: 1; }
 :root[data-accessibility-text-size="large"] { --accessibility-text-scale: 1.08; }
 :root[data-accessibility-text-size="largest"] { --accessibility-text-scale: 1.16; }
-:root[data-accessibility-text-size="large"] body :where(h1,h2,h3,h4,h5,h6,p,li,a,button,label,input,textarea,select,small,summary,legend,blockquote,dt,dd,figcaption,caption,th,td),
-:root[data-accessibility-text-size="largest"] body :where(h1,h2,h3,h4,h5,h6,p,li,a,button,label,input,textarea,select,small,summary,legend,blockquote,dt,dd,figcaption,caption,th,td) {
-  font-size: calc(1em * var(--accessibility-text-scale)) !important;
-}
+body { zoom: var(--accessibility-text-scale); }
 :root[data-accessibility-line-spacing="true"] body :where(p,li,dd,blockquote,figcaption) { line-height: 1.85 !important; }
 :root[data-accessibility-underline-links="true"] a:not(.skip-link) { text-decoration: underline; text-underline-offset: .18em; text-decoration-thickness: .08em; }
 :root[data-accessibility-contrast="high"] { --line: currentColor; }
@@ -165,6 +163,13 @@ body::after { position: fixed; z-index: 10; inset: 0; content: ""; background: #
 :root[data-accessibility-color-vision]:not([data-accessibility-color-vision="standard"]) body :is(
   .studio-notice.is-error, .catalog-notice.is-error, .comment-status.is-error
 ) { border-left-width: 3px; padding-left: 9px; }
+:root[data-theme="light"][data-accessibility-color-vision="monochromacy"] {
+  --accessibility-button-foreground: #fff;
+}
+:root[data-theme="light"][data-accessibility-color-vision="monochromacy"] body :is(.studio-page, .media-page) .button-gold {
+  color: var(--accessibility-button-foreground) !important;
+  -webkit-text-fill-color: currentColor !important;
+}
 :root[data-accessibility-color-vision]:not([data-accessibility-color-vision="standard"]) .accessibility-options input {
   accent-color: var(--gold-bright);
 }
@@ -177,7 +182,7 @@ body::after { position: fixed; z-index: 10; inset: 0; content: ""; background: #
 }
 
 @media (max-width: 700px) {
-  .accessibility-settings-trigger { position: absolute; top: calc(12px + env(safe-area-inset-top, 0px)); right: calc(62px + env(safe-area-inset-right, 0px)); width: 40px; min-height: 40px; padding: 0; }
+  .accessibility-settings-trigger { position: absolute; top: calc(12px + env(safe-area-inset-top, 0px)); right: calc(62px + env(safe-area-inset-right, 0px)); width: 44px; min-height: 44px; padding: 0; }
   .accessibility-settings-trigger span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
   .accessibility-settings-panel { top: calc(62px + env(safe-area-inset-top, 0px)); right: 12px; width: min(390px, calc(100vw - 24px)); max-height: calc(100dvh - 78px - env(safe-area-inset-top, 0px)); padding: 16px; }
 }
