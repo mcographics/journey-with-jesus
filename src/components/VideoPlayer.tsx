@@ -125,7 +125,7 @@ export function VideoPlayer({ episode }: VideoPlayerProps) {
                 Your browser does not support video playback.
               </video>
             )}
-            <a href={episode.aslInterpretationUrl} target="_blank" rel="noreferrer">Open ASL interpretation in a new tab</a>
+            <a href={episode.aslInterpretationUrl} target="_blank" rel="noreferrer">Watch the ASL interpretation video (opens in a new tab)</a>
           </div>
         ) : <p><strong>ASL interpretation:</strong> No interpreter-produced ASL video has been supplied for this story yet.</p>}
       </section>
