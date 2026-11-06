@@ -44,7 +44,10 @@ export function SiteFooter() {
           <span aria-hidden="true">✦</span>
           <Link href="/policies/copyright/">Copyright</Link>
         </nav>
-        <p className="footer-note footer-credits">Kerygma Path · Current project: Journey with Jesus · Website by Majestic Creations</p>
+        <p className="footer-note footer-credits">
+          Kerygma Path · Current project: Journey with Jesus · Website by{" "}
+          <a href="https://mcographics.github.io/">Majestic Creations</a>
+        </p>
         </div>
       </div>
     </footer>
