@@ -197,3 +197,18 @@ body { zoom: var(--accessibility-text-scale); }
 
 :root[data-theme="light"][data-accessibility-contrast="high"] .accessibility-settings-panel { border: 2px solid #111; }
 :root[data-theme="dark"][data-accessibility-contrast="high"] .accessibility-settings-panel { border: 2px solid #fff; }
+
+/* Accessibility controls use a plain monochrome text palette. */
+:root:not([data-theme="light"]) body .accessibility-settings-anchor { --accessibility-text: #ffffff; }
+:root[data-theme="light"] body .accessibility-settings-anchor { --accessibility-text: #000000; }
+:root body .accessibility-settings-anchor :is(.accessibility-settings-trigger, .accessibility-settings-panel),
+:root body .accessibility-settings-anchor :is(.accessibility-settings-trigger, .accessibility-settings-panel) * {
+  color: var(--accessibility-text) !important;
+  -webkit-text-fill-color: var(--accessibility-text) !important;
+  text-shadow: none !important;
+  filter: none !important;
+  background-image: none !important;
+  background-clip: border-box !important;
+  -webkit-background-clip: border-box !important;
+  animation: none !important;
+}
