@@ -199,7 +199,7 @@
 /* Portraits open with pointer, touch, or keyboard through native disclosure. */
 .team-grid { align-items: start; }
 .team-card.team-profile { border: 0; background: transparent; box-shadow: none; }
-.team-profile-toggle { display: block; width: min(220px, 100%); margin-inline: auto; cursor: pointer; list-style: none; }
+.team-profile-toggle { display: block; width: min(280px, 100%); margin-inline: auto; cursor: pointer; list-style: none; }
 .team-profile-toggle::-webkit-details-marker { display: none; }
 .team-profile-toggle:focus-visible { outline: 3px solid var(--gold-bright); outline-offset: 5px; border-radius: 50%; }
 .team-profile .team-art { width: 100%; height: auto; aspect-ratio: 1; border-radius: 50%; transition: border-radius .3s ease; }
@@ -209,8 +209,34 @@
 .team-profile[open] .team-profile-toggle { width: 100%; }
 .team-profile[open] .team-profile-toggle:focus-visible { border-radius: 12px; }
 .team-profile[open] .team-art { border-radius: 12px 12px 0 0; }
-.team-profile[open] .team-photo { object-fit: contain; }
+.team-profile[open] .team-photo { object-fit: cover; object-position: center 30%; }
 :root[data-theme="light"] .team-profile[open] { background: #f7f9fc; }
 @media (prefers-reduced-motion: reduce) {
   .team-profile .team-art { transition: none; }
 }
+
+.team-grid:has(.team-profile) {
+  grid-template-columns: repeat(2, minmax(0, 360px));
+  justify-content: center;
+  gap: 28px;
+}
+.team-profile { width: 100%; }
+@media (max-width: 700px) {
+  .team-grid:has(.team-profile) { grid-template-columns: minmax(0, 360px); gap: 22px; }
+}
+
+:root body .team-card.team-profile:not([open]) {
+  width: min(280px, 100%);
+  justify-self: center;
+  aspect-ratio: 1;
+  border: 1px solid var(--gold-bright);
+  border-radius: 50%;
+  background: transparent;
+  box-shadow: none;
+  overflow: hidden;
+}
+.team-profile:not([open]) .team-profile-toggle { width: 100%; height: 100%; border-radius: 50%; }
+.team-profile:not([open]) .team-art { height: 100%; border-radius: 50%; }
+.team-profile:not([open]) .team-art::before,
+.team-profile:not([open]) .team-art::after { display: none; }
+.team-profile[open] .team-art { aspect-ratio: 1; height: auto; }
