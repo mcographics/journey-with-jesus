@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import Image from "next/image";
 import { ArrowRight, BookOpen, Heart, Sparkles } from "lucide-react";
 import MastheadTicker from "@/components/MastheadTicker";
 import XrayReveal from "@/components/XrayReveal";
@@ -40,14 +39,17 @@ export default function HomePage() {
           webpSources={imageSources("journey-with-jesus-header", [512, 768, 1024, 1440, 1920, 2560, 3200, 3840])}
           width={6384}
         />
-        <Image
+        <ResponsivePicture
           alt="Journey with Jesus"
-          className="home-masthead-wordmark"
-          height={1556}
+          className="home-masthead-wordmark-image"
+          height={770}
+          fetchPriority="high"
+          fallbackSrc={`${basePath}/images/journey-with-jesus-wordmark-960.webp`}
           loading="eager"
-          src={`${basePath}/images/journey-with-jesus-wordmark.webp`}
-          unoptimized
-          width={4040}
+          pictureClassName="home-masthead-wordmark"
+          sizes="(max-width: 700px) min(38vw, 154px), min(34vw, 460px)"
+          webpSources={imageSources("journey-with-jesus-wordmark", [320, 640, 960])}
+          width={2000}
         />
         <MastheadTicker />
       </XrayReveal>

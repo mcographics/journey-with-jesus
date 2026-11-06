@@ -601,6 +601,13 @@
   line-height: 0;
 }
 
+.kerygma-gateway-logo-picture {
+  display: block;
+  flex: 0 0 100%;
+  width: 100%;
+  min-width: 0;
+}
+
 .kerygma-gateway-logo {
   display: block;
   width: 100%;
@@ -815,6 +822,7 @@ body:has(.kerygma-gateway) .site-footer {
   justify-self: start;
   line-height: 0;
 }
+#site-footer .kerygma-footer-logo-picture { display: block; width: 100%; }
 #site-footer .kerygma-footer-logo { display: block; width: 100%; height: auto; }
 #site-footer .footer-brand:hover { transform: none; filter: none; }
 #site-footer .footer-content { display: grid; min-width: 0; gap: 10px; }

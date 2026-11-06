@@ -58,7 +58,8 @@ button { color: inherit; }
 .nav-link.is-current svg { color: #76551d; }
 
 .home-masthead { position: relative; width: 100%; overflow: hidden; background: #111827; line-height: 0; touch-action: manipulation; }
-.home-masthead-wordmark { position: absolute; z-index: 2; top: calc(clamp(62px, 6vw, 92px) + 400px); right: clamp(18px, 5vw, 86px); display: block; width: min(34vw, 460px); height: auto; filter: drop-shadow(0 5px 20px rgba(3, 8, 20, .4)); pointer-events: none; }
+.home-masthead-wordmark { position: absolute; z-index: 2; top: calc(clamp(62px, 6vw, 92px) + 400px); right: clamp(18px, 5vw, 86px); display: block; width: min(34vw, 460px); filter: drop-shadow(0 5px 20px rgba(3, 8, 20, .4)); pointer-events: none; }
+.home-masthead-wordmark-image { display: block; width: 100%; height: auto; }
 .responsive-picture { display: block; line-height: 0; }
 .responsive-picture-fill { position: absolute; inset: 0; display: block; }
 .home-masthead-image { display: block; width: 100%; height: auto; }

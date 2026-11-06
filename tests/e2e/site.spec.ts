@@ -3,6 +3,7 @@ import { expect, test } from "@playwright/test";
 test("public destinations are available in the desktop menu, with working story CTA", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByRole("heading", { level: 1 })).toContainText("Kerygma Path");
+  await expect.poll(() => page.locator(".kerygma-gateway-logo").evaluate((image) => (image as HTMLImageElement).currentSrc)).toMatch(/kerygma-path-gateway-logo-complete-480\.webp$/);
   await page.getByRole("link", { name: "Enter Site" }).click();
   await expect(page).toHaveURL(/\/company\/$/);
   await expect(page.getByRole("heading", { name: /Faithful to the Word/ })).toBeVisible();
@@ -19,6 +20,7 @@ test("public destinations are available in the desktop menu, with working story 
   }
   await primaryNavigation.getByRole("link", { name: "Journey with Jesus" }).click();
   await expect(page).toHaveURL(/\/projects\/journey-with-jesus\/$/);
+  await expect.poll(() => page.locator(".home-masthead-wordmark-image").evaluate((image) => (image as HTMLImageElement).currentSrc)).toMatch(/journey-with-jesus-wordmark-640\.webp$/);
 
   const masthead = page.getByRole("img", { name: /Jesus walks with a young man/ });
   await expect(masthead).toBeVisible();
@@ -58,6 +60,7 @@ test.describe("touch mobile navigation", () => {
     await page.goto("/projects/journey-with-jesus/");
     const masthead = page.getByRole("img", { name: /Jesus walks with a young man/ });
     await expect(masthead).toBeVisible();
+    await expect.poll(() => page.locator(".home-masthead-wordmark-image").evaluate((image) => (image as HTMLImageElement).currentSrc)).toMatch(/journey-with-jesus-wordmark-320\.webp$/);
     const menuButton = page.locator(".mobile-menu-toggle");
     await expect(menuButton).toBeVisible();
     await expect(page.locator(".desktop-menu-toggle")).toBeHidden();
@@ -127,6 +130,7 @@ test.describe("touch mobile navigation", () => {
 test("desktop media page fits the player and playlist without overflow", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/media/");
+  await expect.poll(() => page.locator(".media-page").evaluate((element) => getComputedStyle(element).backgroundImage)).toContain("biblical-sunset-over-unbroken-valley-1440.webp");
   const dimensions = await page.evaluate(() => ({
     viewport: document.documentElement.clientWidth,
     content: document.documentElement.scrollWidth,
@@ -183,6 +187,7 @@ test.describe("mobile accessibility controls", () => {
 
   test("settings remain labeled, touch-sized, and inside the viewport", async ({ page }) => {
     await page.goto("/media/");
+    await expect.poll(() => page.locator(".media-page").evaluate((element) => getComputedStyle(element).backgroundImage)).toContain("biblical-sunset-over-unbroken-valley-mobile-1600.webp");
     const trigger = page.getByRole("button", { name: "Accessibility settings" });
     await expect(trigger).toBeVisible();
     const triggerBounds = await trigger.boundingBox();

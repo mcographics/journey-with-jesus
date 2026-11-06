@@ -11,8 +11,14 @@ import { VideoPlayer } from "@/components/VideoPlayer";
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 const mediaPageStyle = {
-  "--media-background-image": `url("${basePath}/images/biblical-sunset-over-unbroken-valley.webp")`,
-} as CSSProperties & { "--media-background-image": string };
+  "--media-background-image-1440": `url("${basePath}/images/biblical-sunset-over-unbroken-valley-1440.webp")`,
+  "--media-background-image-2560": `url("${basePath}/images/biblical-sunset-over-unbroken-valley-2560.webp")`,
+  "--media-background-image-mobile": `url("${basePath}/images/biblical-sunset-over-unbroken-valley-mobile-1600.webp")`,
+} as CSSProperties & {
+  "--media-background-image-1440": string;
+  "--media-background-image-2560": string;
+  "--media-background-image-mobile": string;
+};
 
 function subscribeToNavigation(onStoreChange: () => void) {
   window.addEventListener("popstate", onStoreChange);
