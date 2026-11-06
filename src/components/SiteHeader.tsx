@@ -7,7 +7,7 @@ import { ChevronDown, Crown, Menu, Moon, Sun, X } from "lucide-react";
 import { AccessibilitySettings } from "@/components/AccessibilitySettings";
 
 const navigation = [
-  { href: "/company/", label: "Animation Studio" },
+  { href: "/company/", label: "Studio" },
   { href: "/projects/journey-with-jesus/", label: "Journey with Jesus" },
   { href: "/media/", label: "Media" },
   { href: "/characters/", label: "Meet the Characters" },
