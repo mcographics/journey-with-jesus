@@ -48,7 +48,16 @@ export function TeamDirectory({ fallbackMembers }: Props) {
       {members.map((member) => {
         const initials = member.name.trim().split(/\s+/).slice(0, 2).map((part) => part[0]).join("").toUpperCase();
         return (
-          <details className="team-card team-profile" key={member.id}>
+          <div className="team-profile-slot" key={member.id}>
+            <div className="team-profile-space" aria-hidden="true" inert>
+              <div className="team-profile-photo-space" />
+              <div className="team-card-copy">
+                <p className="team-role">{member.role || "Team member"}</p>
+                <h2>{member.name}</h2>
+                {member.bio && <p>{member.bio}</p>}
+              </div>
+            </div>
+          <details className="team-card team-profile">
             <summary className="team-profile-toggle">
               <span className="visually-hidden">View profile: {member.name}</span>
             <div className={`team-art${member.profile_image_url ? " has-photo" : ""}`}>
@@ -64,6 +73,7 @@ export function TeamDirectory({ fallbackMembers }: Props) {
               {member.bio && <p>{member.bio}</p>}
             </div>
           </details>
+          </div>
         );
       })}
       {loaded && members.length === 0 && <p className="team-empty">Team profiles are being prepared. Please check back soon.</p>}

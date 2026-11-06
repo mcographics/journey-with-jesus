@@ -451,3 +451,21 @@ for (const route of ["/projects/journey-with-jesus/", "/media/", "/characters/",
     await expect(menu.getByRole("link")).toHaveText(expected);
   });
 }
+
+for (const width of [1280, 375]) {
+  test(`team footer stays in place while profiles toggle at ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/team/");
+    await expect(page.locator(".team-grid")).toHaveAttribute("aria-busy", "false");
+    const footerTop = () => page.locator(".site-footer").evaluate(el => el.getBoundingClientRect().top + window.scrollY);
+    const originalTop = await footerTop();
+    const profiles = page.locator(".team-profile");
+    for (let index = 0; index < await profiles.count(); index++) {
+      const toggle = profiles.nth(index).locator("summary");
+      await toggle.click();
+      expect(Math.abs(await footerTop() - originalTop)).toBeLessThan(2);
+      await toggle.click();
+      expect(Math.abs(await footerTop() - originalTop)).toBeLessThan(2);
+    }
+  });
+}

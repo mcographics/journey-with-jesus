@@ -240,3 +240,10 @@
 .team-profile:not([open]) .team-art::before,
 .team-profile:not([open]) .team-art::after { display: none; }
 .team-profile[open] .team-art { aspect-ratio: 1; height: auto; }
+
+/* Keep the expanded profile footprint in normal flow in both disclosure states. */
+.team-profile-slot { position: relative; min-width: 0; }
+.team-profile-space { visibility: hidden; pointer-events: none; border: 1px solid transparent; }
+.team-profile-photo-space { aspect-ratio: 1; }
+.team-profile-space h2 { margin: 0; font-family: var(--serif); font-size: 27px; font-weight: 400; letter-spacing: -.02em; }
+.team-profile-slot > .team-profile { position: absolute; top: 0; left: 0; right: 0; margin-inline: auto; }
