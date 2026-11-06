@@ -910,3 +910,16 @@ body:has(.kerygma-gateway) .site-footer {
   .kerygma-company-hero h1 { max-width: 660px; font-size: clamp(42px, 4.8vw, 70px); }
   .kerygma-company-lead, .kerygma-company-supporting { max-width: min(44vw, 580px); }
 }
+
+/* Center the desktop gateway stack while preserving space for the star words. */
+@media (min-width: 701px) {
+  .kerygma-gateway {
+    box-sizing: border-box;
+    justify-content: center;
+    padding: 160px 24px 80px;
+  }
+  .kerygma-gateway-content {
+    margin-top: 0;
+    margin-inline: auto;
+  }
+}
