@@ -380,10 +380,16 @@ test("Meet the Team credits the founder and editor/webmaster accurately", async 
   await expect(teamCards).toHaveCount(2);
 
   const founderCard = teamCards.nth(0);
+  await expect(founderCard.locator(".team-card-copy")).toBeHidden();
+  await founderCard.locator("summary").click();
   await expect(founderCard.getByRole("heading", { name: "Eric Oberhausen" })).toBeVisible();
   await expect(founderCard.locator(".team-role")).toHaveText("Founder");
 
+  await founderCard.locator("summary").click();
+  await expect(founderCard.locator(".team-card-copy")).toBeHidden();
   const editorCard = teamCards.nth(1);
+  await editorCard.locator("summary").focus();
+  await page.keyboard.press("Enter");
   await expect(editorCard.getByRole("heading", { name: "Kenneth Salmon" })).toBeVisible();
   await expect(editorCard.locator(".team-role")).toHaveText("Editor / Webmaster");
 });
