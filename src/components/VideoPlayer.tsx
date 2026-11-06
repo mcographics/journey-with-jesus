@@ -3,6 +3,7 @@ import { Play, Video } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import type { Episode } from "@/data/episodes";
 import { getDefaultVideoSource } from "@/lib/episode-navigation";
+import { parseYouTubeId } from "@/lib/youtube";
 
 type VideoPlayerProps = { episode: Episode | null };
 export function VideoPlayer({ episode }: VideoPlayerProps) {
@@ -34,6 +35,7 @@ export function VideoPlayer({ episode }: VideoPlayerProps) {
   const selectedSource = sources.find((source) => source.url === selectedUrl) ?? sources[0];
   const hasYoutube = Boolean(episode.youtubeId);
   const isPortrait = episode.orientation === "portrait";
+  const aslYoutubeId = episode.aslInterpretationUrl ? parseYouTubeId(episode.aslInterpretationUrl) : null;
 
   return (
     <section className="video-player-section" aria-label={"Video player for " + episode.title}>
@@ -106,7 +108,25 @@ export function VideoPlayer({ episode }: VideoPlayerProps) {
           </details>
         ) : <p><strong>Transcript:</strong> No transcript has been supplied for this story yet.</p>}
         {episode.aslInterpretationUrl ? (
-          <p><strong>ASL:</strong> <a href={episode.aslInterpretationUrl} target="_blank" rel="noreferrer">Watch the ASL interpretation video (opens in a new tab)</a></p>
+          <div className="asl-interpretation">
+            <p><strong>ASL interpretation:</strong> An interpreter-produced version is available here.</p>
+            {aslYoutubeId ? (
+              <div className="asl-player-embed">
+                <iframe
+                  src={"https://www.youtube-nocookie.com/embed/" + encodeURIComponent(aslYoutubeId) + "?rel=0&modestbranding=1"}
+                  title={"ASL interpretation for " + episode.title}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen referrerPolicy="strict-origin-when-cross-origin" />
+              </div>
+            ) : (
+              <video className="asl-player-video" controls playsInline preload="metadata"
+                aria-label={"ASL interpretation video for " + episode.title}>
+                <source src={episode.aslInterpretationUrl} />
+                Your browser does not support video playback.
+              </video>
+            )}
+            <a href={episode.aslInterpretationUrl} target="_blank" rel="noreferrer">Open ASL interpretation in a new tab</a>
+          </div>
         ) : <p><strong>ASL interpretation:</strong> No interpreter-produced ASL video has been supplied for this story yet.</p>}
       </section>
     </section>
