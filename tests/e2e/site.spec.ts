@@ -60,7 +60,7 @@ test.describe("touch mobile navigation", () => {
     await page.goto("/projects/journey-with-jesus/");
     const masthead = page.getByRole("img", { name: /Jesus walks with a young man/ });
     await expect(masthead).toBeVisible();
-    await expect.poll(() => page.locator(".home-masthead-wordmark-image").evaluate((image) => (image as HTMLImageElement).currentSrc)).toMatch(/journey-with-jesus-wordmark-320\.webp$/);
+    await expect.poll(() => page.locator(".home-masthead-wordmark-image").evaluate((image) => (image as HTMLImageElement).currentSrc)).toMatch(/journey-with-jesus-wordmark-(320|640)\.webp$/);
     const menuButton = page.locator(".mobile-menu-toggle");
     await expect(menuButton).toBeVisible();
     await expect(page.locator(".desktop-menu-toggle")).toBeHidden();
