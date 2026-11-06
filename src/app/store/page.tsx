@@ -2,13 +2,13 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, BookOpen, ShoppingBag, Sparkles } from "lucide-react";
+import { StoreAccessGate } from "@/components/StoreAccessGate";
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
 export const metadata: Metadata = {
-  title: "Kerygma Path Shop — Opening Soon",
-  description:
-    "The Kerygma Path shop is being prepared. Follow our studio and storytelling projects as the first collection takes shape.",
+  title: "Kerygma Path Store — Not Available Yet",
+  description: "The Kerygma Path store is not available to visitors yet.",
 };
 
 const shopSpaces = [
@@ -34,7 +34,8 @@ const shopSpaces = [
 
 export default function StorePage() {
   return (
-    <main className="editorial-page store-page store-page-v2" id="main-content">
+    <StoreAccessGate>
+      <main className="editorial-page store-page store-page-v2" id="main-content">
       <div className="store-landing">
         <section aria-labelledby="store-title" className="store-hero">
           <div className="store-hero-copy">
@@ -51,7 +52,7 @@ export default function StorePage() {
             </p>
             <p aria-live="polite" className="store-status" role="status">
               <span aria-hidden="true" className="store-status-dot" />
-              Opening soon
+              To be decided
             </p>
           </div>
 
@@ -125,6 +126,7 @@ export default function StorePage() {
           </Link>
         </nav>
       </div>
-    </main>
+      </main>
+    </StoreAccessGate>
   );
 }

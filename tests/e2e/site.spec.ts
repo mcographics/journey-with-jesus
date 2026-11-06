@@ -318,7 +318,7 @@ test("Media, Characters, Team, and Store dark mode use soft-white text", async (
     { route: "/media/", selector: ".media-page" },
     { route: "/characters/", selector: ".characters-page" },
     { route: "/team/", selector: ".team-page" },
-    { route: "/store/", selector: ".store-page", copySelector: ".store-lead" },
+    { route: "/store/", selector: ".store-page", copySelector: ".store-unavailable-description" },
   ]) {
     await page.goto(route);
     const title = page.locator(`${selector} h1`).first();
