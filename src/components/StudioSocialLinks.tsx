@@ -38,14 +38,17 @@ export function StudioSocialLinks() {
   const [noticeError, setNoticeError] = useState(false);
 
   useEffect(() => {
-    const supabase = createBrowserSupabaseClient();
-    if (!supabase) {
-      setLoading(false);
-      setNotice("Supabase is not configured for this site.");
-      setNoticeError(true);
-      return;
-    }
-    setClient(supabase);
+    const timer = window.setTimeout(() => {
+      const supabase = createBrowserSupabaseClient();
+      if (!supabase) {
+        setLoading(false);
+        setNotice("Supabase is not configured for this site.");
+        setNoticeError(true);
+        return;
+      }
+      setClient(supabase);
+    }, 0);
+    return () => window.clearTimeout(timer);
   }, []);
 
   const loadLinks = useCallback(async () => {
@@ -70,7 +73,11 @@ export function StudioSocialLinks() {
     setLoading(false);
   }, [client]);
 
-  useEffect(() => { if (client) void loadLinks(); }, [client, loadLinks]);
+  useEffect(() => {
+    if (!client) return;
+    const timer = window.setTimeout(() => { void loadLinks(); }, 0);
+    return () => window.clearTimeout(timer);
+  }, [client, loadLinks]);
 
   function updateDraft(key: string, patch: Partial<SocialLinkDraft>) {
     setLinks((current) => current.map((link) => link.key === key ? { ...link, ...patch } : link));
