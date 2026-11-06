@@ -408,3 +408,19 @@
 @media (max-width: 650px) {
   .studio-video-actions button { min-height: 42px; }
 }
+
+/* Social links management in Journey Studio */
+.studio-social-manager { display: grid; gap: 14px; }
+.studio-social-manager-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+.studio-social-list { display: grid; gap: 12px; }
+.studio-social-card .studio-panel-heading { align-items: center; margin-bottom: 13px; }
+.studio-social-card .studio-form-grid { margin-bottom: 14px; }
+.studio-social-card-actions { display: flex; align-items: center; gap: 8px; }
+.studio-social-card-actions .studio-video-delete { min-height: 34px; }
+.studio-social-order { max-width: 140px; }
+@media (max-width: 680px) {
+  .studio-social-manager-header { align-items: stretch; flex-direction: column; }
+  .studio-social-manager-header .studio-small-button { align-self: flex-start; }
+  .studio-social-card-actions { flex-wrap: wrap; justify-content: flex-end; }
+}
+:root[data-theme="light"] .studio-social-card { border-color: rgba(181,137,39,.22); }

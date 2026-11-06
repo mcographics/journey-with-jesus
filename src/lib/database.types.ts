@@ -1,6 +1,7 @@
 export type CommentStatus = "pending" | "approved" | "rejected";
 export type VideoQuality = "720p" | "1080p" | "4K";
 export type VideoContentType = "video/mp4" | "video/webm" | "video/quicktime";
+export type SocialPlatform = "youtube" | "facebook" | "instagram" | "tiktok" | "x" | "linkedin" | "pinterest" | "twitch" | "discord" | "custom";
 
 export type Database = {
   public: {
@@ -24,6 +25,12 @@ export type Database = {
         Row: { id: string; name: string; role: string; bio: string; profile_image_url: string | null; sort_order: number; published: boolean; created_at: string; updated_at: string };
         Insert: { id: string; name: string; role?: string; bio?: string; profile_image_url?: string | null; sort_order?: number; published?: boolean };
         Update: { name?: string; role?: string; bio?: string; profile_image_url?: string | null; sort_order?: number; published?: boolean; updated_at?: string };
+        Relationships: [];
+      };
+      media_social_links: {
+        Row: { id: string; platform: SocialPlatform; label: string; url: string; sort_order: number; published: boolean; created_at: string; updated_at: string };
+        Insert: { id?: string; platform: SocialPlatform; label: string; url: string; sort_order?: number; published?: boolean; created_at?: string; updated_at?: string };
+        Update: { platform?: SocialPlatform; label?: string; url?: string; sort_order?: number; published?: boolean; updated_at?: string };
         Relationships: [];
       };
       media_episodes: {

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import ResponsivePicture from "@/components/ResponsivePicture";
+import SocialLinks from "@/components/SocialLinks";
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
@@ -7,6 +8,7 @@ export function SiteFooter() {
   return (
     <footer className="site-footer" id="site-footer">
       <div className="footer-inner">
+        <div className="footer-brand-stack">
         <Link aria-label="Kerygma Path home" className="footer-brand kerygma-footer-brand" href="/">
           <ResponsivePicture
             alt=""
@@ -23,6 +25,8 @@ export function SiteFooter() {
             width={2172}
           />
         </Link>
+          <SocialLinks />
+        </div>
         <div className="footer-content">
         <div className="footer-message">
           <p className="footer-tagline">Christian animation with purpose</p>

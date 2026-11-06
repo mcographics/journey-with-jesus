@@ -1,6 +1,6 @@
 "use client";
 import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
-import { Check, Eye, EyeOff, Film, ListVideo, LoaderCircle, LockKeyhole, LogOut, Mail, MessageCircle, Plus, Trash2, UploadCloud, Users, X } from "lucide-react";
+import { Check, Eye, EyeOff, Film, ListVideo, LoaderCircle, LockKeyhole, LogOut, Mail, MessageCircle, Plus, Share2, Trash2, UploadCloud, Users, X } from "lucide-react";
 import type { Session } from "@supabase/supabase-js";
 import type { Database, VideoContentType, VideoQuality } from "@/lib/database.types";
 import { createBrowserSupabaseClient, isSupabaseConfigured } from "@/lib/supabase/browser";
@@ -9,6 +9,7 @@ import { uploadVideoResumable } from "@/lib/supabase/resumable-upload";
 import { createStorageObjectId } from "@/lib/storage-object-id";
 import { StudioCharacters } from "@/components/StudioCharacters";
 import { StudioStaff } from "@/components/StudioStaff";
+import { StudioSocialLinks } from "@/components/StudioSocialLinks";
 import { parseYouTubeId, youtubeWatchUrl } from "@/lib/youtube";
 import { resolveStoryPublication } from "@/lib/studio-publishing";
 import { formatStudioFileSize, freePlanVideoSizeError } from "@/lib/studio-video-size";
@@ -24,7 +25,7 @@ type EpisodeForm = {
   duration: string; number: string; orientation: "landscape" | "portrait"; published: boolean;
 };
 type PlaylistForm = { id: string; title: string; description: string; order: string; published: boolean; episodeIds: string[] };
-type Section = "episodes" | "playlists" | "comments" | "characters" | "staff";
+type Section = "episodes" | "playlists" | "comments" | "characters" | "staff" | "socials";
 const qualities: VideoQuality[] = ["720p", "1080p", "4K"];
 const freshEpisode = (): EpisodeForm => ({ id: "", title: "", description: "", scripture: "", thumbnail: "", youtubeUrl: "", transcript: "", aslUrl: "", duration: "", number: "1", orientation: "landscape", published: false });
 const freshPlaylist = (): PlaylistForm => ({ id: "", title: "", description: "", order: "0", published: false, episodeIds: [] });
@@ -676,6 +677,7 @@ export function StudioExperience() {
           <button type="button" role="tab" aria-selected={section === "comments"} onClick={() => setSection("comments")}><MessageCircle size={16} />Comments <span>{comments.filter((item) => item.status === "pending").length}</span></button>
           <button type="button" role="tab" aria-selected={section === "characters"} onClick={() => setSection("characters")}><Users size={16} />Characters</button>
           <button type="button" role="tab" aria-selected={section === "staff"} onClick={() => setSection("staff")}><Users size={16} />Staff</button>
+          <button type="button" role="tab" aria-selected={section === "socials"} onClick={() => setSection("socials")}><Share2 size={16} />Social Links</button>
         </div>
         {loadingData && <p className="studio-loading" role="status"><LoaderCircle className="studio-spin" size={16} />Loading Studio…</p>}
 
@@ -859,6 +861,7 @@ export function StudioExperience() {
 
         {section === "characters" && <StudioCharacters client={client} onNotice={reportStudioNotice} />}
         {section === "staff" && <StudioStaff client={client} onNotice={reportStudioNotice} />}
+        {section === "socials" && <StudioSocialLinks />}
       </div>
     </main>
   );
