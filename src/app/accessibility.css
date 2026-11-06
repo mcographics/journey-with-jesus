@@ -9,23 +9,23 @@
 .accessibility-settings-trigger:hover { border-color: #fff0bd; }
 .accessibility-settings-trigger svg { flex: 0 0 auto; color: #edcf8d; }
 .accessibility-settings-panel {
-  position: fixed; z-index: 100; top: calc(78px + env(safe-area-inset-top, 0px)); right: max(20px, calc((100vw - 1280px) / 2));
-  width: min(390px, calc(100vw - 32px)); max-height: min(78vh, 720px); overflow-y: auto; overscroll-behavior: contain;
-  padding: 19px; border: 1px solid rgba(255, 226, 165, .72); border-radius: 12px;
+  position: absolute; z-index: 100; top: calc(100% + 8px); right: 0;
+  width: min(340px, calc(100vw - 32px)); max-height: min(78vh, 720px); overflow-y: auto; overscroll-behavior: contain;
+  padding: 13px; border: 1px solid rgba(255, 226, 165, .72); border-radius: 12px;
   background: #111a2b; color: #f4efe3; box-shadow: 0 16px 48px rgba(0, 0, 0, .48);
 }
 .accessibility-settings-panel[hidden] { display: none; }
 .accessibility-panel-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .accessibility-panel-heading h2 { margin: 0; color: inherit; font: 400 21px/1.25 var(--serif); }
 .accessibility-close { display: grid; width: 40px; height: 40px; flex: 0 0 auto; place-items: center; border: 1px solid currentColor; border-radius: 50%; background: transparent; color: inherit; font: 24px/1 var(--sans); cursor: pointer; }
-.accessibility-panel-intro { margin: 10px 0 18px; color: #c5c8cd; font-size: 12px; line-height: 1.6; }
+.accessibility-panel-intro { margin: 6px 0 10px; color: #c5c8cd; font-size: 12px; line-height: 1.6; }
 .accessibility-range-label { display: flex; justify-content: space-between; gap: 12px; color: inherit; font-size: 13px; font-weight: 600; }
 .accessibility-range-label output { color: #f3d595; font-variant-numeric: tabular-nums; }
 .accessibility-range { display: block; width: 100%; min-height: 36px; margin: 3px 0 0; accent-color: #e4bc70; cursor: pointer; }
-.accessibility-help { margin: 5px 0 16px; color: #b9bdc4; font-size: 11px; line-height: 1.55; }
-.accessibility-select-label { display: block; margin: 14px 0 7px; color: inherit; font-size: 13px; font-weight: 600; }
+.accessibility-help { margin: 4px 0 9px; color: #b9bdc4; font-size: 11px; line-height: 1.55; }
+.accessibility-select-label { display: block; margin: 9px 0 5px; color: inherit; font-size: 13px; font-weight: 600; }
 .accessibility-settings-panel select { width: 100%; min-height: 44px; padding: 8px 10px; border: 1px solid rgba(238, 221, 174, .38); border-radius: 5px; background: #0b1120; color: inherit; font: inherit; }
-.accessibility-options { display: grid; gap: 10px; margin: 17px 0 11px; padding: 12px; border: 1px solid rgba(238, 221, 174, .24); }
+.accessibility-options { display: grid; gap: 4px; margin: 10px 0 8px; padding: 8px; border: 1px solid rgba(238, 221, 174, .24); }
 .accessibility-options legend { padding: 0 6px; color: #f3d595; font-size: 12px; }
 .accessibility-options label { display: flex; min-height: 32px; align-items: center; gap: 10px; color: inherit; font-size: 12px; line-height: 1.45; cursor: pointer; }
 .accessibility-options input { width: 18px; height: 18px; flex: 0 0 auto; accent-color: #d9ad5f; }
@@ -184,13 +184,13 @@ body { zoom: var(--accessibility-text-scale); }
 @media (max-width: 700px) {
   .accessibility-settings-trigger { position: absolute; top: calc(12px + env(safe-area-inset-top, 0px)); right: calc(62px + env(safe-area-inset-right, 0px)); width: 44px; min-height: 44px; padding: 0; }
   .accessibility-settings-trigger span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-  .accessibility-settings-panel { top: calc(62px + env(safe-area-inset-top, 0px)); right: 12px; width: min(390px, calc(100vw - 24px)); max-height: calc(100dvh - 78px - env(safe-area-inset-top, 0px)); padding: 16px; }
+  .accessibility-settings-panel { position: fixed; top: calc(64px + env(safe-area-inset-top, 0px)); right: calc(62px + env(safe-area-inset-right, 0px)); width: min(340px, calc(100vw - 74px - env(safe-area-inset-right, 0px))); max-height: calc(100dvh - 78px - env(safe-area-inset-top, 0px)); padding: 13px; }
   :root[data-accessibility-text-size="large"] .accessibility-settings-panel {
-    width: min(361px, calc(92.5926vw - 22.222px));
+    width: min(361px, calc(92.5926vw - 74px - env(safe-area-inset-right, 0px)));
     max-height: calc(92.5926dvh - 78px - env(safe-area-inset-top, 0px));
   }
   :root[data-accessibility-text-size="largest"] .accessibility-settings-panel {
-    width: min(336px, calc(86.2069vw - 20.69px));
+    width: min(336px, calc(86.2069vw - 74px - env(safe-area-inset-right, 0px)));
     max-height: calc(86.2069dvh - 78px - env(safe-area-inset-top, 0px));
   }
 }
