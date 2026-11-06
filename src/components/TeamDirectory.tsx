@@ -48,19 +48,22 @@ export function TeamDirectory({ fallbackMembers }: Props) {
       {members.map((member) => {
         const initials = member.name.trim().split(/\s+/).slice(0, 2).map((part) => part[0]).join("").toUpperCase();
         return (
-          <article className="team-card" key={member.id}>
+          <details className="team-card team-profile" key={member.id}>
+            <summary className="team-profile-toggle">
+              <span className="visually-hidden">View profile: {member.name}</span>
             <div className={`team-art${member.profile_image_url ? " has-photo" : ""}`}>
               {!member.profile_image_url && <span className="team-art-label">{member.role || "Journey with Jesus"}</span>}
               {!member.profile_image_url && <span className="team-monogram" aria-hidden="true">{initials}</span>}
               {!member.profile_image_url && <Sparkles className="team-art-mark" size={27} strokeWidth={1.2} aria-hidden="true" />}
               {member.profile_image_url && <Image className="team-photo" src={member.profile_image_url} alt={"Portrait of " + member.name} fill sizes="(max-width: 700px) 100vw, (max-width: 900px) 50vw, 34vw" unoptimized onError={(event) => { event.currentTarget.style.display = "none"; }} />}
             </div>
+            </summary>
             <div className="team-card-copy">
               <p className="team-role">{member.role || "Team member"}</p>
               <h2>{member.name}</h2>
               {member.bio && <p>{member.bio}</p>}
             </div>
-          </article>
+          </details>
         );
       })}
       {loaded && members.length === 0 && <p className="team-empty">Team profiles are being prepared. Please check back soon.</p>}

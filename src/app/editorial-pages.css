@@ -195,3 +195,22 @@
   background-image: none !important;
   animation: none !important;
 }
+
+/* Portraits open with pointer, touch, or keyboard through native disclosure. */
+.team-grid { align-items: start; }
+.team-card.team-profile { border: 0; background: transparent; box-shadow: none; }
+.team-profile-toggle { display: block; width: min(220px, 100%); margin-inline: auto; cursor: pointer; list-style: none; }
+.team-profile-toggle::-webkit-details-marker { display: none; }
+.team-profile-toggle:focus-visible { outline: 3px solid var(--gold-bright); outline-offset: 5px; border-radius: 50%; }
+.team-profile .team-art { width: 100%; height: auto; aspect-ratio: 1; border-radius: 50%; transition: border-radius .3s ease; }
+.team-profile:not([open]) .team-photo { object-fit: cover; object-position: center 30%; }
+.team-profile:not([open]) .team-art-label { display: none; }
+.team-profile[open] { border: 1px solid rgba(238, 221, 174, .25); border-radius: 12px; background: #111a2b; }
+.team-profile[open] .team-profile-toggle { width: 100%; }
+.team-profile[open] .team-profile-toggle:focus-visible { border-radius: 12px; }
+.team-profile[open] .team-art { border-radius: 12px 12px 0 0; }
+.team-profile[open] .team-photo { object-fit: contain; }
+:root[data-theme="light"] .team-profile[open] { background: #f7f9fc; }
+@media (prefers-reduced-motion: reduce) {
+  .team-profile .team-art { transition: none; }
+}
