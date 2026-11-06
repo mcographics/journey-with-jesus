@@ -130,7 +130,7 @@ export const legalPolicies = [
         "body": "You can clear cookies and local storage or restrict third-party cookies using your browser settings. Some features may behave differently afterward."
       },
       {
-        "heading": "Before publication",
+        "heading": "Third-party technologies",
         "body": "An exact inventory of cookies, local storage, analytics, and embeds has not been established. This policy describes known uses and does not guarantee that tracking or other data collection is absent. Third-party services may use additional technologies under their own policies."
       }
     ]
