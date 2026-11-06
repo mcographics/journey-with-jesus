@@ -1,7 +1,6 @@
 /*
- * Keep the five policy pages independent of the site's animated global type.
- * The ID-scoped selectors intentionally outrank the late global !important
- * rules in globals.css.
+ * Keep policy text plain, high contrast, and independent of the site's animated
+ * global typography. The ID-scoped selectors outrank global theme effects.
  */
 :root:not([data-theme="light"]) body #main-content.legal-policy-page,
 :root:not([data-theme="light"]) body #main-content.legal-policy-page *,
@@ -15,22 +14,21 @@
   animation: none !important;
 }
 
-/* Dark mode: solid white headings and bright yellow supporting text. */
+/* Dark mode: every policy heading, paragraph, and link uses solid white. */
 :root:not([data-theme="light"]) body #main-content.legal-policy-page,
 :root:not([data-theme="light"]) body #main-content.legal-policy-page * {
-  color: #ffff00 !important;
-  -webkit-text-fill-color: #ffff00 !important;
-}
-
-:root:not([data-theme="light"]) body #main-content.legal-policy-page :is(h1, h2, h3, h4, h5, h6),
-:root:not([data-theme="light"]) body #main-content.legal-policy-page :is(h1, h2, h3, h4, h5, h6) * {
   color: #fff !important;
   -webkit-text-fill-color: #fff !important;
 }
 
-/* Light mode: retain the requested solid black typography throughout. */
+/* Light mode: every policy heading, paragraph, and link uses solid black. */
 :root[data-theme="light"] body #main-content.legal-policy-page,
 :root[data-theme="light"] body #main-content.legal-policy-page * {
   color: #000 !important;
   -webkit-text-fill-color: #000 !important;
+}
+
+#main-content.legal-policy-page a {
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
 }

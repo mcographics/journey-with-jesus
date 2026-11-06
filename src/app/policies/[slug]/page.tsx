@@ -9,5 +9,21 @@ export default async function LegalPage({ params }: { params: Promise<{ slug: st
  const { slug } = await params;
  const policy = legalPolicies.find((item) => item.slug === slug);
  if (!policy) notFound();
- return <main id="main-content" className="page-width legal-policy-page" style={{padding:"5rem 1rem",maxWidth:"850px",lineHeight:1.75}}><p><Link href="/">Journey with Jesus</Link> / Policies</p><h1>{policy.title}</h1><p><strong>Draft for owner review — not yet a finalized legal notice.</strong></p>{policy.sections.map(section=><section key={section.heading} style={{marginTop:"2rem"}}><h2>{section.heading}</h2><p>{section.body}</p></section>)}</main>;
+ return (
+  <main
+   id="main-content"
+   className="page-width legal-policy-page"
+   style={{ padding: "5rem 1rem", maxWidth: "850px", lineHeight: 1.75 }}
+  >
+   <p><Link href="/">Journey with Jesus</Link> / Policies</p>
+   <h1>{policy.title}</h1>
+   <p className="legal-policy-date">Last updated: November 6, 2026</p>
+   {policy.sections.map((section) => (
+    <section key={section.heading} style={{ marginTop: "2rem" }}>
+     <h2>{section.heading}</h2>
+     <p>{section.body}</p>
+    </section>
+   ))}
+  </main>
+ );
 }

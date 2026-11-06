@@ -347,10 +347,12 @@ test("all five policy pages use flat theme-specific text colors", async ({ page 
     const title = policy.locator("h1");
     const sectionTitle = policy.locator("h2").first();
     const bodyCopy = policy.locator("section p").first();
-    const subordinateText = [bodyCopy, policy.locator("strong").first(), policy.locator("a").first()];
+    const updatedDate = policy.locator(".legal-policy-date");
+    const subordinateText = [bodyCopy, updatedDate, policy.locator("a").first()];
 
     await expect(title).toBeVisible();
     await expect(sectionTitle).toBeVisible();
+    await expect(updatedDate).toHaveText("Last updated: November 6, 2026");
     for (const heading of [title, sectionTitle]) {
       await expect(heading).toHaveCSS("color", "rgb(255, 255, 255)");
       await expect(heading).toHaveCSS("-webkit-text-fill-color", "rgb(255, 255, 255)");
@@ -359,8 +361,8 @@ test("all five policy pages use flat theme-specific text colors", async ({ page 
       await expect(heading).toHaveCSS("animation-name", "none");
     }
     for (const copy of subordinateText) {
-      await expect(copy).toHaveCSS("color", "rgb(255, 255, 0)");
-      await expect(copy).toHaveCSS("-webkit-text-fill-color", "rgb(255, 255, 0)");
+      await expect(copy).toHaveCSS("color", "rgb(255, 255, 255)");
+      await expect(copy).toHaveCSS("-webkit-text-fill-color", "rgb(255, 255, 255)");
       await expect(copy).toHaveCSS("text-shadow", "none");
       await expect(copy).toHaveCSS("background-image", "none");
       await expect(copy).toHaveCSS("animation-name", "none");
