@@ -11,11 +11,11 @@ export function SiteFooter() {
           <Image
             alt=""
             className="kerygma-footer-logo"
-            height={1086}
+            height={724}
             sizes="(max-width: 580px) 110px, 140px"
             src={`${basePath}/images/kerygma-path-gateway-logo-complete.webp`}
             unoptimized
-            width={1448}
+            width={2172}
           />
         </Link>
         <div className="footer-content">
