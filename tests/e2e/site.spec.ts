@@ -314,15 +314,15 @@ test("Media, Characters, Team, and Store dark mode use soft-white text", async (
     window.localStorage.setItem("journey-with-jesus-theme-mode", "dark");
   });
 
-  for (const { route, selector } of [
+  for (const { route, selector, copySelector } of [
     { route: "/media/", selector: ".media-page" },
     { route: "/characters/", selector: ".characters-page" },
     { route: "/team/", selector: ".team-page" },
-    { route: "/store/", selector: ".store-page" },
+    { route: "/store/", selector: ".store-page", copySelector: ".store-lead" },
   ]) {
     await page.goto(route);
     const title = page.locator(`${selector} h1`).first();
-    const copy = page.locator(`${selector} p`).first();
+    const copy = page.locator(copySelector ? `${selector} ${copySelector}` : `${selector} p`).first();
     await expect(title).toBeVisible();
     await expect(title).toHaveCSS("color", "rgb(229, 231, 235)");
     await expect(title).toHaveCSS("text-shadow", "none");
