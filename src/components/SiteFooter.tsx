@@ -1,5 +1,5 @@
-import Image from "next/image";
 import Link from "next/link";
+import ResponsivePicture from "@/components/ResponsivePicture";
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
@@ -8,13 +8,18 @@ export function SiteFooter() {
     <footer className="site-footer" id="site-footer">
       <div className="footer-inner">
         <Link aria-label="Kerygma Path home" className="footer-brand kerygma-footer-brand" href="/">
-          <Image
+          <ResponsivePicture
             alt=""
             className="kerygma-footer-logo"
             height={724}
+            fallbackSrc={`${basePath}/images/kerygma-path-gateway-logo-complete-840.webp`}
+            loading="lazy"
+            pictureClassName="kerygma-footer-logo-picture"
             sizes="(max-width: 580px) 110px, 140px"
-            src={`${basePath}/images/kerygma-path-gateway-logo-complete.webp`}
-            unoptimized
+            webpSources={[480, 840].map((width) => ({
+              src: `${basePath}/images/kerygma-path-gateway-logo-complete-${width}.webp`,
+              width,
+            }))}
             width={2172}
           />
         </Link>

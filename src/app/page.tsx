@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { GreekStarfield } from "@/components/GreekStarfield";
+import ResponsivePicture from "@/components/ResponsivePicture";
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
@@ -30,14 +30,19 @@ export default function HomePage() {
         <p className="kerygma-gateway-kicker">A Christian Animation Studio</p>
         <h1 className="kerygma-gateway-logo-heading">
           <span className="visually-hidden">Kerygma Path</span>
-          <Image
+          <ResponsivePicture
             alt=""
             className="kerygma-gateway-logo"
             height={724}
-            priority
-            sizes="(max-width: 700px) 78vw, 420px"
-            src={`${basePath}/images/kerygma-path-gateway-logo-complete.webp`}
-            unoptimized
+            fetchPriority="high"
+            fallbackSrc={`${basePath}/images/kerygma-path-gateway-logo-complete-840.webp`}
+            loading="eager"
+            pictureClassName="kerygma-gateway-logo-picture"
+            sizes="(max-width: 700px) min(68vw, 250px), 390px"
+            webpSources={[480, 840].map((width) => ({
+              src: `${basePath}/images/kerygma-path-gateway-logo-complete-${width}.webp`,
+              width,
+            }))}
             width={2172}
           />
         </h1>
