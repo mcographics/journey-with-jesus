@@ -25,7 +25,7 @@ export const legalPolicies = [
       },
       {
         "heading": "Retention and requests",
-        "body": "Comment records may remain in the moderation system after being hidden or rejected. A specific retention period has not yet been established. Visitors may request review, correction, or removal of a comment through the contact method published on the website once established."
+        "body": "Comment records may remain in the moderation system after being hidden or rejected. A specific retention period has not yet been established. Requests to review, correct, or remove a comment may be sent through a public contact method if one is published on the website."
       },
       {
         "heading": "Your choices",
@@ -33,7 +33,7 @@ export const legalPolicies = [
       },
       {
         "heading": "Contact and changes",
-        "body": "A dedicated privacy contact method must be confirmed before final publication. This policy may be updated when website features or data practices change."
+        "body": "A dedicated privacy contact method is not currently listed on the website. This policy may be updated when website features or data practices change."
       }
     ]
   },
@@ -75,7 +75,7 @@ export const legalPolicies = [
       },
       {
         "heading": "Updates and contact",
-        "body": "These terms may change as the website develops. A public contact channel and effective date should be confirmed before final publication."
+        "body": "These terms may change as the website develops. The website does not currently list a dedicated contact channel for questions about these terms."
       }
     ]
   },
@@ -105,7 +105,7 @@ export const legalPolicies = [
       },
       {
         "heading": "Reporting concerns",
-        "body": "A public reporting or contact method should be added before final publication. If someone is in immediate danger, contact local emergency services."
+        "body": "The website does not currently list a dedicated reporting method for moderation concerns. If someone is in immediate danger, contact local emergency services."
       }
     ]
   },
@@ -131,7 +131,7 @@ export const legalPolicies = [
       },
       {
         "heading": "Before publication",
-        "body": "The precise list of cookies, analytics, embeds, and consent requirements should be audited against the deployed website. Do not interpret this draft as confirmation that no tracking occurs."
+        "body": "An exact inventory of cookies, local storage, analytics, and embeds has not been established. This policy describes known uses and does not guarantee that tracking or other data collection is absent. Third-party services may use additional technologies under their own policies."
       }
     ]
   },
@@ -157,7 +157,7 @@ export const legalPolicies = [
       },
       {
         "heading": "Copyright concerns",
-        "body": "A designated rights-contact method should be published. Notices should identify the material, the location of the alleged infringement, and a way to respond. Applicable legal procedures will be respected."
+        "body": "The website does not currently list a dedicated rights-contact method. A notice should identify the material, the location of the alleged infringement, and a way to respond. Applicable legal procedures will be respected."
       }
     ]
   }
