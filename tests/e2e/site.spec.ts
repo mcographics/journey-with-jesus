@@ -314,7 +314,7 @@ test("Media, Characters, Team, and Store dark mode use soft-white text", async (
     window.localStorage.setItem("journey-with-jesus-theme-mode", "dark");
   });
 
-  for (const { route, selector } of [
+  for (const { route, selector, copySelector } of [
     { route: "/media/", selector: ".media-page" },
     { route: "/characters/", selector: ".characters-page" },
     { route: "/team/", selector: ".team-page" },
