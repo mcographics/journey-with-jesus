@@ -125,9 +125,10 @@ export function AccessibilitySettings() {
           value={preferences.brightness}
           aria-label="Light mode brightness"
           aria-valuetext={`${preferences.brightness}% light mode brightness`}
+          onInput={(event) => updatePreferences({ brightness: Number(event.currentTarget.value) })}
           onChange={(event) => updatePreferences({ brightness: Number(event.target.value) })}
         />
-        <p className="accessibility-help">Only the site interface is dimmed in light mode. Video playback keeps its original brightness.</p>
+        <p className="accessibility-help">Softens white backgrounds in light mode. Photos, videos, and other colors keep their original brightness.</p>
 
         <label className="accessibility-select-label" htmlFor="accessibility-text-size">Text size</label>
         <select id="accessibility-text-size" value={preferences.textSize} onChange={(event) => updatePreferences({ textSize: event.target.value as AccessibilityPreferences["textSize"] })}>

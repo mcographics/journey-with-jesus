@@ -128,7 +128,7 @@
 .character-collapse-button:hover { text-decoration: underline; }
 
 :root[data-theme="light"] .character-portrait-trigger {
-  background: radial-gradient(ellipse at center, rgba(181, 137, 39, .12), transparent 60%), #eef5fd;
+  background: radial-gradient(ellipse at center, rgba(181, 137, 39, .12), transparent 60%), color-mix(in srgb, #eef5fd calc(100% - var(--light-surface-mix, 0%)), #aeb6c2 var(--light-surface-mix, 0%));
 }
 
 :root[data-theme="light"] .character-portrait-placeholder,

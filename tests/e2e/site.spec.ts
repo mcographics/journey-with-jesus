@@ -150,7 +150,7 @@ test("accessibility preferences persist across routes and light brightness stays
   await brightness.focus();
   for (let step = 0; step < 3; step += 1) await brightness.press("ArrowLeft");
   await expect(page.locator("html")).toHaveAttribute("data-accessibility-brightness", "85");
-  await expect(page.locator("body")).toHaveCSS("--light-mode-overlay-opacity", "0.1");
+  await expect(page.locator("body")).toHaveCSS("--light-mode-overlay-opacity", "0");
 
   await page.getByLabel("High contrast colors").check();
   await expect(page.locator("html")).toHaveAttribute("data-accessibility-contrast", "high");
@@ -469,3 +469,24 @@ for (const width of [1280, 375]) {
     }
   });
 }
+
+test.describe("mobile light surface brightness", () => {
+  test.use({ viewport: { width: 375, height: 812 }, isMobile: true, hasTouch: true });
+  test("touch changes white surfaces without a page dimming layer", async ({ page }) => {
+    await page.addInitScript(() => localStorage.setItem("journey-with-jesus-theme-mode", "light"));
+    await page.goto("/media/");
+    const surface = page.locator(".accessibility-settings-panel");
+    await page.getByRole("button", { name: "Accessibility settings", exact: true }).click();
+    const before = await surface.evaluate(el => getComputedStyle(el).backgroundColor);
+    const slider = page.getByRole("slider", { name: "Light mode brightness" });
+    const rect = await slider.boundingBox();
+    await page.touchscreen.tap(rect!.x + 12, rect!.y + rect!.height / 2);
+    await expect(slider).not.toHaveValue("100");
+    await expect.poll(() => surface.evaluate(el => getComputedStyle(el).backgroundColor)).not.toBe(before);
+    expect(await page.locator("body").evaluate(el => getComputedStyle(el, "::after").opacity)).toBe("0");
+    const value = await slider.inputValue();
+    await page.reload();
+    await page.getByRole("button", { name: "Accessibility settings", exact: true }).click();
+    await expect(slider).toHaveValue(value);
+  });
+});

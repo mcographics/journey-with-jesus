@@ -84,7 +84,8 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
                 root.dataset.accessibilityColorVision = colorVisionMode;
                 root.dataset.accessibilityEnhancedFocus = String(accessibility.enhancedFocus === true);
                 root.dataset.accessibilityReduceMotion = String(reduceMotion);
-                root.style.setProperty("--light-mode-overlay-opacity", String(((100 - brightness) / 30) * 0.2));
+                root.style.setProperty("--light-mode-overlay-opacity", "0");
+                root.style.setProperty("--light-surface-mix", String(((100 - brightness) / 30) * 45) + "%");
               } catch {}
             })();`,
           }}

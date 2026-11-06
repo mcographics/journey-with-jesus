@@ -69,8 +69,8 @@ export function applyAccessibilityPreferences(preferences: AccessibilityPreferen
   root.dataset.accessibilityEnhancedFocus = String(preferences.enhancedFocus);
   root.dataset.accessibilityReduceMotion = String(preferences.reduceMotion);
   root.dataset.accessibilityBrightness = String(preferences.brightness);
-  const overlayOpacity = ((100 - preferences.brightness) / 30) * 0.2;
-  root.style.setProperty("--light-mode-overlay-opacity", String(overlayOpacity));
+  root.style.setProperty("--light-mode-overlay-opacity", "0");
+  root.style.setProperty("--light-surface-mix", `${((100 - preferences.brightness) / 30) * 45}%`);
 }
 
 export function readAccessibilityPreferences(

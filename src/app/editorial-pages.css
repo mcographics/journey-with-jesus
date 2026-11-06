@@ -45,7 +45,7 @@
 .store-intro { max-width: 330px; margin: 12px 0 24px; color: #b9bbc1; font-size: 13px; line-height: 1.75; }
 .store-home-link { display: inline-flex; min-height: 44px; align-items: center; gap: 10px; padding: 0 17px; border: 1px solid rgba(228, 188, 112, .4); border-radius: 999px; color: #f3d595; font-size: 11px; letter-spacing: .06em; transition: background .2s ease, border-color .2s ease; }
 .store-home-link:hover { border-color: rgba(243, 213, 149, .8); background: rgba(243, 213, 149, .08); }
-:root[data-theme="light"] .editorial-page { background: radial-gradient(ellipse at 78% 0%, rgba(164, 120, 43, .1), transparent 32%), linear-gradient(180deg, #f2f5f9 0%, #e6edf4 100%); }
+:root[data-theme="light"] .editorial-page { background: radial-gradient(ellipse at 78% 0%, rgba(164, 120, 43, .1), transparent 32%), linear-gradient(180deg, color-mix(in srgb, #f2f5f9 calc(100% - var(--light-surface-mix, 0%)), #aeb6c2 var(--light-surface-mix, 0%)) 0%, color-mix(in srgb, #e6edf4 calc(100% - var(--light-surface-mix, 0%)), #aeb6c2 var(--light-surface-mix, 0%)) 100%); }
 :root[data-theme="light"] .editorial-heading h1,
 :root[data-theme="light"] .store-card h1 { color: #202b3b; }
 :root[data-theme="light"] .editorial-heading h1 em { color: #936b27; }
@@ -64,7 +64,7 @@
 :root[data-theme="light"] .character-passages span { color: #4e5967; }
 :root[data-theme="light"] .character-note,
 :root[data-theme="light"] .team-note { color: #687281; }
-:root[data-theme="light"] .team-art { background: radial-gradient(ellipse at center, rgba(164, 120, 43, .12), transparent 49%), linear-gradient(145deg, #e4ebf3, #f1f5fa); }
+:root[data-theme="light"] .team-art { background: radial-gradient(ellipse at center, rgba(164, 120, 43, .12), transparent 49%), linear-gradient(145deg, color-mix(in srgb, #e4ebf3 calc(100% - var(--light-surface-mix, 0%)), #aeb6c2 var(--light-surface-mix, 0%)), color-mix(in srgb, #f1f5fa calc(100% - var(--light-surface-mix, 0%)), #aeb6c2 var(--light-surface-mix, 0%))); }
 :root[data-theme="light"] .team-art-label,
 :root[data-theme="light"] .team-animator-caption { color: #715725; }
 :root[data-theme="light"] .team-art::before { border-color: rgba(181, 137, 39, .22); }
@@ -139,19 +139,19 @@
 
 /* Keep editorial pages and cards cool in light mode; gold stays on accents. */
 :root[data-theme="light"] .editorial-page {
-  background: radial-gradient(ellipse at 14% 6%, rgba(139, 187, 238, .11), transparent 37%), radial-gradient(ellipse at 88% 72%, rgba(175, 209, 243, .08), transparent 42%), linear-gradient(145deg, #f2f4f2 0%, #f7f8f6 52%, #edf4f8 100%);
+  background: radial-gradient(ellipse at 14% 6%, rgba(139, 187, 238, .11), transparent 37%), radial-gradient(ellipse at 88% 72%, rgba(175, 209, 243, .08), transparent 42%), linear-gradient(145deg, color-mix(in srgb, #f2f4f2 calc(100% - var(--light-surface-mix, 0%)), #aeb6c2 var(--light-surface-mix, 0%)) 0%, color-mix(in srgb, #f7f8f6 calc(100% - var(--light-surface-mix, 0%)), #aeb6c2 var(--light-surface-mix, 0%)) 52%, color-mix(in srgb, #edf4f8 calc(100% - var(--light-surface-mix, 0%)), #aeb6c2 var(--light-surface-mix, 0%)) 100%);
 }
 :root[data-theme="light"] .character-card,
 :root[data-theme="light"] .team-card {
   border-color: rgba(112, 149, 190, .2);
-  background: radial-gradient(ellipse at 88% 10%, rgba(159, 199, 239, .1), transparent 42%), linear-gradient(145deg, #f4f6f4 0%, #f0f5f7 100%);
+  background: radial-gradient(ellipse at 88% 10%, rgba(159, 199, 239, .1), transparent 42%), linear-gradient(145deg, color-mix(in srgb, #f4f6f4 calc(100% - var(--light-surface-mix, 0%)), #aeb6c2 var(--light-surface-mix, 0%)) 0%, color-mix(in srgb, #f0f5f7 calc(100% - var(--light-surface-mix, 0%)), #aeb6c2 var(--light-surface-mix, 0%)) 100%);
 }
 :root[data-theme="light"] .team-art {
-  background: radial-gradient(ellipse at center, rgba(139, 190, 242, .16), transparent 50%), linear-gradient(145deg, #f9fcff, #eef5fd);
+  background: radial-gradient(ellipse at center, rgba(139, 190, 242, .16), transparent 50%), linear-gradient(145deg, color-mix(in srgb, #f9fcff calc(100% - var(--light-surface-mix, 0%)), #aeb6c2 var(--light-surface-mix, 0%)), color-mix(in srgb, #eef5fd calc(100% - var(--light-surface-mix, 0%)), #aeb6c2 var(--light-surface-mix, 0%)));
 }
 :root[data-theme="light"] .store-card {
   border-color: rgba(112, 149, 190, .22);
-  background: radial-gradient(ellipse at 82% 8%, rgba(159, 199, 239, .1), transparent 44%), linear-gradient(145deg, #f4f6f4 0%, #eff4f8 100%);
+  background: radial-gradient(ellipse at 82% 8%, rgba(159, 199, 239, .1), transparent 44%), linear-gradient(145deg, color-mix(in srgb, #f4f6f4 calc(100% - var(--light-surface-mix, 0%)), #aeb6c2 var(--light-surface-mix, 0%)) 0%, color-mix(in srgb, #eff4f8 calc(100% - var(--light-surface-mix, 0%)), #aeb6c2 var(--light-surface-mix, 0%)) 100%);
 }
 :root[data-theme="light"] .store-home-link:hover {
   background: rgba(126, 171, 220, .1);
@@ -210,7 +210,7 @@
 .team-profile[open] .team-profile-toggle:focus-visible { border-radius: 12px; }
 .team-profile[open] .team-art { border-radius: 12px 12px 0 0; }
 .team-profile[open] .team-photo { object-fit: cover; object-position: center 30%; }
-:root[data-theme="light"] .team-profile[open] { background: #f7f9fc; }
+:root[data-theme="light"] .team-profile[open] { background: color-mix(in srgb, #f7f9fc calc(100% - var(--light-surface-mix, 0%)), #aeb6c2 var(--light-surface-mix, 0%)); }
 @media (prefers-reduced-motion: reduce) {
   .team-profile .team-art { transition: none; }
 }

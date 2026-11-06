@@ -37,18 +37,18 @@
   box-shadow: inset 0 0 0 2px rgba(193, 151, 50, .1), 0 5px 18px rgba(18, 31, 47, .16); color: #263244;
 }
 :root[data-theme="light"] .accessibility-settings-trigger svg { color: #76551d; }
-:root[data-theme="light"] .accessibility-settings-panel { border-color: rgba(115, 83, 28, .48); background: #f7f9fc; color: #202b3b; box-shadow: 0 16px 48px rgba(18, 31, 47, .24); }
+:root[data-theme="light"] .accessibility-settings-panel { border-color: rgba(115, 83, 28, .48); background: color-mix(in srgb, #f7f9fc calc(100% - var(--light-surface-mix, 0%)), #aeb6c2 var(--light-surface-mix, 0%)); color: #202b3b; box-shadow: 0 16px 48px rgba(18, 31, 47, .24); }
 :root[data-theme="light"] .accessibility-panel-intro,
 :root[data-theme="light"] .accessibility-help { color: #4e5967; }
 :root[data-theme="light"] .accessibility-range-label output,
 :root[data-theme="light"] .accessibility-options legend { color: #674911; }
-:root[data-theme="light"] .accessibility-settings-panel select { border-color: #7b663d; background: #fff; color: #202b3b; }
+:root[data-theme="light"] .accessibility-settings-panel select { border-color: #7b663d; background: color-mix(in srgb, #fff calc(100% - var(--light-surface-mix, 0%)), #aeb6c2 var(--light-surface-mix, 0%)); color: #202b3b; }
 :root[data-theme="light"] .accessibility-options { border-color: #8d7952; }
 :root[data-theme="light"] .accessibility-reset { border-color: #73551f; color: #503b16; }
 
 /* The dimming layer only affects the site interface in light mode; the media player sits above it. */
-body::after { position: fixed; z-index: 10; inset: 0; content: ""; background: #000; mix-blend-mode: multiply; opacity: 0; pointer-events: none; }
-:root[data-theme="light"][data-accessibility-brightness]:not([data-accessibility-brightness="100"]) body::after { opacity: var(--light-mode-overlay-opacity, 0); }
+body::after { position: fixed; z-index: 10; inset: 0; content: ""; background: #000; mix-blend-mode: normal; opacity: 0; pointer-events: none; }
+:root[data-theme="light"][data-accessibility-brightness]:not([data-accessibility-brightness="100"]) body::after { opacity: 0; }
 .video-player-section { position: relative; z-index: 11; }
 
 :root { --accessibility-text-scale: 1; }
@@ -212,3 +212,5 @@ body { zoom: var(--accessibility-text-scale); }
   -webkit-background-clip: border-box !important;
   animation: none !important;
 }
+
+.accessibility-range { min-height: 44px; touch-action: none; }

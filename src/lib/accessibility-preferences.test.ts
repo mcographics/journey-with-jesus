@@ -74,7 +74,7 @@ describe("accessibility preferences", () => {
     expect(document.documentElement.dataset.accessibilityColorVision).toBe("tritanopia");
     expect(document.documentElement.dataset.accessibilityEnhancedFocus).toBe("true");
     expect(document.documentElement.dataset.accessibilityReduceMotion).toBe("true");
-    expect(document.documentElement.style.getPropertyValue("--light-mode-overlay-opacity")).toBe("0.1");
+    expect(document.documentElement.style.getPropertyValue("--light-mode-overlay-opacity")).toBe("0");
     expect(document.body.style.filter).toBe("");
   });
 });
