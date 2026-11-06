@@ -94,7 +94,7 @@ test.describe("touch mobile navigation", () => {
     await menuButton.evaluate((button) => button.blur());
     await page.waitForTimeout(1100);
     await expect(mobileNavigation).toHaveCSS("opacity", "1");
-    const homeLink = navigation.getByRole("link", { name: "Animation Studio" });
+    const homeLink = navigation.getByRole("link", { name: "Studio" });
     await expect(homeLink).toBeVisible();
     await expect(homeLink).toHaveAttribute("href", "/company/");
     const mediaLink = navigation.getByRole("link", { name: "Media" });
@@ -446,8 +446,8 @@ for (const route of ["/projects/journey-with-jesus/", "/media/", "/characters/",
     await page.getByRole("button", { name: "Open site menu", exact: true }).click();
     const menu = page.getByRole("navigation", { name: "Primary navigation" });
     const expected = route === "/team/" || route === "/store/"
-      ? ["Animation Studio", "Journey with Jesus", "Meet the Team", "Store"]
-      : ["Animation Studio", "Media", "Meet the Characters"];
+      ? ["Studio", "Journey with Jesus", "Meet the Team", "Store"]
+      : ["Studio", "Media", "Meet the Characters"];
     await expect(menu.getByRole("link")).toHaveText(expected);
   });
 }
