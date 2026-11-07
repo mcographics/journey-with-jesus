@@ -15,7 +15,10 @@ export function VideoPlayer({ episode }: VideoPlayerProps) {
   const [aspectRatio, setAspectRatio] = useState(() => episode?.orientation === "portrait" ? 9 / 16 : 16 / 9);
   const [frameSize, setFrameSize] = useState<{ width: number; height: number } | null>(null);
   const isPortrait = aspectRatio < 1;
-  const shellStyle = { overflow: "visible", background: "transparent", border: "none" } as const;
+  const shellStyle = {
+    overflow: "visible", background: "transparent", border: "none",
+    width: frameSize ? `${frameSize.width}px` : "100%", maxWidth: "100%", marginInline: "auto",
+  } as const;
   const frameStyle = {
     aspectRatio: String(aspectRatio),
     ...(frameSize ? { width: `${frameSize.width}px`, height: `${frameSize.height}px` } : {}),
@@ -23,9 +26,10 @@ export function VideoPlayer({ episode }: VideoPlayerProps) {
 
   useEffect(() => {
     const shell = shellRef.current;
-    if (!shell) return;
+    const widthBoundary = shell?.parentElement;
+    if (!shell || !widthBoundary) return;
     const updateFrameSize = () => {
-      const availableWidth = shell.clientWidth;
+      const availableWidth = widthBoundary.clientWidth;
       if (!availableWidth) return;
       const maxHeight = Math.min(window.innerHeight * (isPortrait ? 0.78 : 0.68), isPortrait ? 690 : 620);
       const width = Math.min(availableWidth, isPortrait ? 390 : 1102, maxHeight * aspectRatio);
@@ -36,7 +40,7 @@ export function VideoPlayer({ episode }: VideoPlayerProps) {
     };
     updateFrameSize();
     const observer = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(updateFrameSize);
-    observer?.observe(shell);
+    observer?.observe(widthBoundary);
     window.addEventListener("resize", updateFrameSize);
     return () => {
       observer?.disconnect();
