@@ -178,7 +178,7 @@ button { color: inherit; }
 .footer-brand-stack { display: flex; flex-direction: column; align-items: center; gap: 0; min-width: 0; }
 .kerygma-footer-logo-picture { display: block; width: 100%; }
 .kerygma-footer-logo { display: block; width: 100%; height: auto; }
-.footer-social-links { position: relative; z-index: 2; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; min-height: 38px; margin-top: -50px; }
+.footer-social-links { position: relative; z-index: 2; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; min-height: 38px; margin-top: 8px; }
 .footer-social-link { display: grid; width: 38px; height: 38px; place-items: center; border: 1px solid rgba(228, 188, 112, .38); border-radius: 50%; color: #e7d3a4; background: rgba(255,255,255,.025); transition: color .2s ease, border-color .2s ease, background .2s ease, transform .2s ease; }
 .footer-social-link:hover { transform: translateY(-2px); border-color: var(--gold-bright); color: var(--gold-bright); background: rgba(228, 188, 112, .08); }
 .footer-social-link:focus-visible { outline: 2px solid var(--gold-bright); outline-offset: 3px; }
