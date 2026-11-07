@@ -114,6 +114,11 @@
 :root[data-theme="light"] .word-page .word-search-results-heading h2,
 :root[data-theme="light"] .word-page .word-reading-heading h2 { color: #000; }
 
+html:root body .word-page :is(h1, h2, h3, h4, h5, h6, p, li, span, strong, b, em, small, label, legend, dt, dd, time, figcaption, blockquote, summary, a, button, input, select, textarea, option) {
+  color: var(--word-ink) !important;
+}
+html:root body .word-page .word-christ-words { color: var(--word-christ-red) !important; }
+
 @media (max-width: 760px) {
   .word-page { padding-top: 106px; padding-bottom: 64px; }
   .word-container { width: min(100% - 36px, 620px); }
