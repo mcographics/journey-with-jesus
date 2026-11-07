@@ -60,7 +60,8 @@ export function StudioSocialLinks({ client }: { client: BrowserSupabaseClient })
   }, [client]);
 
   useEffect(() => {
-    void loadLinks();
+    const timer = window.setTimeout(() => { void loadLinks(); }, 0);
+    return () => window.clearTimeout(timer);
   }, [loadLinks]);
 
   function updateDraft(key: string, patch: Partial<SocialLinkDraft>) {
