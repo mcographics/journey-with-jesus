@@ -6,7 +6,7 @@ import { createBrowserSupabaseClient, isSupabaseConfigured } from "@/lib/supabas
 import type { Database } from "@/lib/database.types";
 
 type CommentRow = Database["public"]["Tables"]["episode_comments"]["Row"];
-export function CommentSection({ episode, general = false }: { episode: Episode | null; general?: boolean }) {
+export function CommentSection({ episode, general = false, title }: { episode: Episode | null; general?: boolean; title?: string }) {
   const episodeId = general ? "media-community" : episode?.id ?? null;
   const [comments, setComments] = useState<CommentRow[]>([]);
   const [name, setName] = useState("");
@@ -29,7 +29,10 @@ export function CommentSection({ episode, general = false }: { episode: Episode 
         if (error) { setIsError(true); setStatus("Comments are temporarily unavailable. Please try again later."); return; }
         setComments(data ?? []);
       });
-    return () => { active = false; };
+    const heading = general ? "Media community" : title ?? "Story comments";
+  const headingId = general ? "media-community-title" : "episode-comments-title";
+
+  return () => { active = false; };
   }, [episodeId, configured]);
 
   async function submitComment(event: FormEvent<HTMLFormElement>) {
@@ -60,11 +63,11 @@ export function CommentSection({ episode, general = false }: { episode: Episode 
   }
 
   return (
-    <section className="comment-section" aria-labelledby={general ? "media-community-title" : "story-comments-title"}>
-      <h2 id={general ? "media-community-title" : "story-comments-title"}>{general ? "Media community" : "Story comments"}</h2>
+    <section className="comment-section" aria-labelledby={headingId}>
+      <h2 id={headingId}>{heading}</h2>
       <p className="comment-intro">{general
         ? "Share a reflection, a word of encouragement, or what you hope to see on Journey with Jesus. No account is needed. Comments are reviewed before they appear."
-        : "Share a thoughtful reflection on this story. No account is needed. Comments are reviewed before they appear."}</p>
+        : "Share a thoughtful reflection on this video or story. No account is needed. Comments are reviewed before they appear."}</p>
       {!episodeId ? (
         <p className="comment-status">Choose a story to see its community conversation.</p>
       ) : !configured ? (

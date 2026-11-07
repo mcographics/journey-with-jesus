@@ -424,3 +424,85 @@
   .studio-social-card-actions { flex-wrap: wrap; justify-content: flex-end; }
 }
 :root[data-theme="light"] .studio-social-card { border-color: rgba(181,137,39,.22); }
+
+
+/* Media browser layout: the artwork retains its source proportions behind a contained player grid. */
+.media-page-width { min-width: 0; }
+.media-layout, .media-main, .media-main > *, .playlist-panel { min-width: 0; max-width: 100%; }
+.media-layout { grid-template-columns: minmax(0, 1fr) minmax(270px, 320px); }
+.video-shell { width: 100%; max-width: 100%; min-width: 0; display: grid; place-items: center; }
+.video-frame { max-width: 100%; }
+.video-frame.is-portrait { max-width: min(100%, 388px, 43.875vh); }
+.player-meta { min-width: 0; flex-wrap: wrap; overflow-wrap: anywhere; }
+.episode-description, .episode-accessibility-resources { overflow-wrap: anywhere; }
+
+/* Keep the artwork at its natural responsive height, with the media controls layered over it. */
+:root body .media-page,
+:root[data-theme="light"] body .media-page {
+  min-height: max(calc(100vw * .429), calc(100vh - 200px));
+  background-size: 100% 100%, 100% auto;
+}
+@media (max-width: 850px) {
+  :root body .media-page,
+  :root[data-theme="light"] body .media-page {
+    background-size: 100% 100%, 100% auto;
+    min-height: max(calc(100vw * 1.028), calc(100vh - 150px));
+  }
+}
+
+.media-kind-tabs {
+  display: flex; gap: 10px; margin: 0 0 22px; padding: 0 0 14px;
+  border-bottom: 1px solid rgba(238, 221, 174, .16);
+}
+.media-kind-tabs button {
+  display: inline-flex; min-height: 44px; align-items: center; gap: 10px;
+  padding: 0 15px; border: 1px solid rgba(238, 221, 174, .17); border-radius: 4px;
+  color: #d9d7d1; background: rgba(18, 27, 43, .62); cursor: pointer;
+  font: 14px/1 var(--serif); transition: background .18s ease, border-color .18s ease;
+}
+.media-kind-tabs button:hover, .media-kind-tabs button[aria-pressed="true"] {
+  border-color: rgba(228, 188, 112, .56); color: #f2d79e; background: rgba(228, 188, 112, .1);
+}
+.media-kind-tabs button small {
+  display: inline-grid; min-width: 22px; height: 22px; place-items: center; padding: 0 5px;
+  border-radius: 12px; color: #c5c0b3; background: rgba(255,255,255,.07); font: 10px/1 sans-serif;
+}
+.media-discussion-tabs {
+  display: flex; flex-wrap: wrap; gap: 8px; margin: 24px 0 0;
+  padding: 0 0 13px; border-bottom: 1px solid rgba(238, 221, 174, .14);
+}
+.media-discussion-tabs button {
+  display: inline-flex; min-height: 40px; align-items: center; gap: 8px;
+  padding: 0 12px; border: 1px solid rgba(238, 221, 174, .18); border-radius: 3px;
+  color: #c9c7c0; background: rgba(18, 27, 43, .55); cursor: pointer; font-size: 11px;
+}
+.media-discussion-tabs button[aria-pressed="true"] {
+  color: #f0d89f; border-color: rgba(228, 188, 112, .5); background: rgba(228, 188, 112, .09);
+}
+.media-discussion-tabs button:disabled { opacity: .5; cursor: not-allowed; }
+.media-main > .comment-section { padding-top: 20px; border-top: 0; }
+.media-comment-prompt { padding: 18px 0 0; }
+
+:root[data-theme="light"] .media-kind-tabs { border-color: rgba(178, 133, 36, .18); }
+:root[data-theme="light"] .media-kind-tabs button,
+:root[data-theme="light"] .media-discussion-tabs button {
+  color: #4b5667; border-color: rgba(178, 133, 36, .2); background: rgba(247, 249, 252, .84);
+}
+:root[data-theme="light"] .media-kind-tabs button[aria-pressed="true"],
+:root[data-theme="light"] .media-discussion-tabs button[aria-pressed="true"] {
+  color: #6f5120; border-color: rgba(178, 133, 36, .48); background: rgba(188, 146, 65, .12);
+}
+:root[data-theme="light"] .media-kind-tabs button small { color: #566171; background: rgba(62,76,96,.09); }
+:root[data-theme="light"] .media-discussion-tabs { border-color: rgba(178, 133, 36, .18); }
+
+@media (max-width: 700px) {
+  .media-page { overflow-x: clip; }
+  .media-layout { grid-template-columns: minmax(0, 1fr); }
+  .media-kind-tabs { gap: 7px; }
+  .media-kind-tabs button { min-height: 43px; flex: 1 1 auto; justify-content: center; padding-inline: 9px; }
+  .media-discussion-tabs { gap: 7px; }
+  .media-discussion-tabs button { min-height: 44px; flex: 1 1 auto; justify-content: center; }
+  .video-shell { overflow: hidden; }
+  .video-frame { width: 100%; }
+  .video-frame.is-portrait { max-width: min(100%, 388px, 43.875vh); }
+}
