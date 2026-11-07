@@ -11,6 +11,43 @@ export function VideoPlayer({ episode }: VideoPlayerProps) {
   const [selectedCaptionOverride, setSelectedCaptionOverride] = useState<string | null>(null);
   const selectedCaptionId = selectedCaptionOverride ?? episode?.captions?.find((caption) => caption.isDefault)?.id ?? episode?.captions?.[0]?.id ?? "off";
   const videoRef = useRef<HTMLVideoElement>(null);
+  const shellRef = useRef<HTMLDivElement>(null);
+  const [aspectRatio, setAspectRatio] = useState(() => episode?.orientation === "portrait" ? 9 / 16 : 16 / 9);
+  const [frameSize, setFrameSize] = useState<{ width: number; height: number } | null>(null);
+  const isPortrait = aspectRatio < 1;
+  const shellStyle = { overflow: "visible", background: "transparent", border: "none" } as const;
+  const frameStyle = {
+    aspectRatio: String(aspectRatio),
+    ...(frameSize ? { width: `${frameSize.width}px`, height: `${frameSize.height}px` } : {}),
+  };
+
+  useEffect(() => {
+    setAspectRatio(episode?.orientation === "portrait" ? 9 / 16 : 16 / 9);
+    setFrameSize(null);
+  }, [episode?.id, episode?.orientation]);
+
+  useEffect(() => {
+    const shell = shellRef.current;
+    if (!shell) return;
+    const updateFrameSize = () => {
+      const availableWidth = shell.clientWidth;
+      if (!availableWidth) return;
+      const maxHeight = Math.min(window.innerHeight * (isPortrait ? 0.78 : 0.68), isPortrait ? 690 : 620);
+      const width = Math.min(availableWidth, isPortrait ? 390 : 1102, maxHeight * aspectRatio);
+      const height = width / aspectRatio;
+      setFrameSize((current) =>
+        current?.width === width && current.height === height ? current : { width, height },
+      );
+    };
+    updateFrameSize();
+    const observer = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(updateFrameSize);
+    observer?.observe(shell);
+    window.addEventListener("resize", updateFrameSize);
+    return () => {
+      observer?.disconnect();
+      window.removeEventListener("resize", updateFrameSize);
+    };
+  }, [aspectRatio, isPortrait]);
 
   useEffect(() => {
     const tracks = videoRef.current?.textTracks;
@@ -21,7 +58,7 @@ export function VideoPlayer({ episode }: VideoPlayerProps) {
   }, [episode?.captions, selectedCaptionId, selectedUrl]);
 
   if (!episode) return (
-    <section className="video-player-section" aria-label="Video player"><div className="video-shell"><div className="video-frame">
+    <section className="video-player-section" aria-label="Video player"><div className="video-shell" ref={shellRef} style={shellStyle}><div className={"video-frame" + (isPortrait ? " is-portrait" : "")} style={frameStyle}>
       <div className="player-empty">
         <span className="player-symbol"><Play size={23} fill="currentColor" aria-hidden="true" /></span>
         <h2>Your next story awaits</h2><p>Choose a story from the library to begin watching. New animated journeys are on the way.</p>
@@ -34,20 +71,23 @@ export function VideoPlayer({ episode }: VideoPlayerProps) {
     : episode.videoUrl ? [{ label: "Original", url: episode.videoUrl }] : [];
   const selectedSource = sources.find((source) => source.url === selectedUrl) ?? sources[0];
   const hasYoutube = Boolean(episode.youtubeId);
-  const isPortrait = episode.orientation === "portrait";
   const aslYoutubeId = episode.aslInterpretationUrl ? parseYouTubeId(episode.aslInterpretationUrl) : null;
 
   return (
     <section className="video-player-section" aria-label={"Video player for " + episode.title}>
-      <div className="video-shell">
-        <div className={"video-frame" + (isPortrait ? " is-portrait" : "")}>
+      <div className="video-shell" ref={shellRef} style={shellStyle}>
+        <div className={"video-frame" + (isPortrait ? " is-portrait" : "")} style={frameStyle}>
           {hasYoutube ? (
             <iframe key={episode.youtubeId}
               src={"https://www.youtube-nocookie.com/embed/" + encodeURIComponent(episode.youtubeId!) + "?rel=0&modestbranding=1&cc_load_policy=1"}
               title={episode.title} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowFullScreen referrerPolicy="strict-origin-when-cross-origin" />
           ) : selectedSource ? (
-            <video key={episode.id + "-" + selectedSource.url} ref={videoRef} crossOrigin="anonymous" controls playsInline preload="metadata" aria-label={episode.title}>
+            <video key={episode.id + "-" + selectedSource.url} ref={videoRef} crossOrigin="anonymous" controls playsInline preload="metadata" aria-label={episode.title}
+              onLoadedMetadata={(event) => {
+                const { videoWidth, videoHeight } = event.currentTarget;
+                if (videoWidth > 0 && videoHeight > 0) setAspectRatio(videoWidth / videoHeight);
+              }}>
               <source src={selectedSource.url} />
               {episode.captions?.map((caption) => (
                 <track key={caption.id} kind={caption.kind} src={caption.url} srcLang={caption.language}
