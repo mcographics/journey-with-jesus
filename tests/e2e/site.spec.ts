@@ -130,7 +130,7 @@ test.describe("touch mobile navigation", () => {
 test("desktop media page fits the player and playlist without overflow", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/media/");
-  await expect.poll(() => page.locator(".media-page").evaluate((element) => getComputedStyle(element).backgroundImage)).toContain("biblical-sunset-over-unbroken-valley-1440.webp");
+  await expect.poll(() => page.locator(".media-page").evaluate((element) => getComputedStyle(element).backgroundImage)).toContain("media-page-background.webp");
   const dimensions = await page.evaluate(() => ({
     viewport: document.documentElement.clientWidth,
     content: document.documentElement.scrollWidth,
@@ -187,7 +187,7 @@ test.describe("mobile accessibility controls", () => {
 
   test("settings remain labeled, touch-sized, and inside the viewport", async ({ page }) => {
     await page.goto("/media/");
-    await expect.poll(() => page.locator(".media-page").evaluate((element) => getComputedStyle(element).backgroundImage)).toContain("biblical-sunset-over-unbroken-valley-mobile-1600.webp");
+    await expect.poll(() => page.locator(".media-page").evaluate((element) => getComputedStyle(element).backgroundImage)).toContain("media-page-background.webp");
     const trigger = page.getByRole("button", { name: "Accessibility settings" });
     await expect(trigger).toBeVisible();
     const triggerBounds = await trigger.boundingBox();
