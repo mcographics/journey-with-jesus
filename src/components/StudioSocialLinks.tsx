@@ -40,7 +40,6 @@ export function StudioSocialLinks({ client }: { client: BrowserSupabaseClient })
 
   const loadLinks = useCallback(async () => {
     if (!client) return;
-    setLoading(true);
     const { data, error } = await client.from("media_social_links").select("*").order("sort_order").order("label");
     if (error) {
       setNotice(error.message || "Social links could not be loaded.");
