@@ -22,11 +22,6 @@ export function VideoPlayer({ episode }: VideoPlayerProps) {
   };
 
   useEffect(() => {
-    setAspectRatio(episode?.orientation === "portrait" ? 9 / 16 : 16 / 9);
-    setFrameSize(null);
-  }, [episode?.id, episode?.orientation]);
-
-  useEffect(() => {
     const shell = shellRef.current;
     if (!shell) return;
     const updateFrameSize = () => {
