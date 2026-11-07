@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, BookOpen, Clapperboard, Compass, Sparkles } from "lucide-react";
+import { ArrowRight, BookOpen, Clapperboard, Compass, Sparkles, Users } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Blog",
@@ -52,6 +52,25 @@ export default function BlogPage() {
           </div>
         </article>
 
+        <article aria-labelledby="blog-community-title" className="blog-welcome blog-community-post">
+          <div aria-hidden="true" className="blog-welcome-mark"><Users size={25} strokeWidth={1.5} /></div>
+          <div className="blog-welcome-copy">
+            <p className="blog-post-kicker">Community update</p>
+            <h2 id="blog-community-title">Growing a community together</h2>
+            <p>
+              Kerygma Path now has a Facebook Group: a place for people who care about faith-centered animation and storytelling to connect, follow studio updates, and be part of the journey as our projects grow. We’re building this community so the conversation can grow alongside the creative work.
+            </p>
+            <a
+              className="blog-studio-link"
+              href="https://www.facebook.com/groups/kerygmapath"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Visit the Kerygma Path Facebook Group <ArrowRight aria-hidden="true" size={17} />
+            </a>
+          </div>
+        </article>
+
         <section aria-labelledby="blog-topics-title" className="blog-topics-section">
           <div className="blog-section-heading">
             <p className="blog-eyebrow"><span /> Follow the journey</p>
@@ -71,7 +90,7 @@ export default function BlogPage() {
 
         <div className="blog-next-note">
           <p className="blog-post-kicker">More updates are on the way</p>
-          <p>We’re preparing the first project updates now. Check back here to follow the work as it grows.</p>
+          <p>Keep checking back for studio news, project progress, and community updates as Kerygma Path grows.</p>
           <Link className="blog-studio-link" href="/company/">
             <span>Explore the Studio</span><ArrowRight aria-hidden="true" size={17} />
           </Link>
