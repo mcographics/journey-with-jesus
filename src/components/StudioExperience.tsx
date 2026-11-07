@@ -861,7 +861,7 @@ export function StudioExperience() {
 
         {section === "characters" && <StudioCharacters client={client} onNotice={reportStudioNotice} />}
         {section === "staff" && <StudioStaff client={client} onNotice={reportStudioNotice} />}
-        {section === "socials" && <StudioSocialLinks />}
+        {section === "socials" && client && <StudioSocialLinks client={client} />}
       </div>
     </main>
   );

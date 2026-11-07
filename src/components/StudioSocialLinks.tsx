@@ -6,6 +6,7 @@ import type { Database, SocialPlatform } from "@/lib/database.types";
 import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
 
 type SocialLinkRow = Database["public"]["Tables"]["media_social_links"]["Row"];
+type BrowserSupabaseClient = NonNullable<ReturnType<typeof createBrowserSupabaseClient>>;
 type SocialLinkDraft = {
   key: string;
   id: string | null;
@@ -29,27 +30,13 @@ const platformLabels: Record<SocialPlatform, string> = {
   custom: "Custom link",
 };
 
-export function StudioSocialLinks() {
-  const [client, setClient] = useState<ReturnType<typeof createBrowserSupabaseClient>>(null);
+export function StudioSocialLinks({ client }: { client: BrowserSupabaseClient }) {
   const [links, setLinks] = useState<SocialLinkDraft[]>([]);
   const [loading, setLoading] = useState(true);
   const [busyKey, setBusyKey] = useState<string | null>(null);
   const [notice, setNotice] = useState("");
   const [noticeError, setNoticeError] = useState(false);
 
-  useEffect(() => {
-    const timer = window.setTimeout(() => {
-      const supabase = createBrowserSupabaseClient();
-      if (!supabase) {
-        setLoading(false);
-        setNotice("Supabase is not configured for this site.");
-        setNoticeError(true);
-        return;
-      }
-      setClient(supabase);
-    }, 0);
-    return () => window.clearTimeout(timer);
-  }, []);
 
   const loadLinks = useCallback(async () => {
     if (!client) return;
@@ -74,10 +61,8 @@ export function StudioSocialLinks() {
   }, [client]);
 
   useEffect(() => {
-    if (!client) return;
-    const timer = window.setTimeout(() => { void loadLinks(); }, 0);
-    return () => window.clearTimeout(timer);
-  }, [client, loadLinks]);
+    void loadLinks();
+  }, [loadLinks]);
 
   function updateDraft(key: string, patch: Partial<SocialLinkDraft>) {
     setLinks((current) => current.map((link) => link.key === key ? { ...link, ...patch } : link));
