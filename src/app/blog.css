@@ -126,28 +126,32 @@
 }
 .blog-studio-link:hover { color: #fff0bd; text-decoration-color: currentColor; }
 
+/* Keep white titles and yellow-gold accents readable on the light-theme blog page. */
 :root[data-theme="light"] body .blog-eyebrow,
-:root[data-theme="light"] body .blog-post-kicker { color: #795b2c !important; }
+:root[data-theme="light"] body .blog-post-kicker,
+:root[data-theme="light"] body .blog-welcome-mark,
+:root[data-theme="light"] body .blog-topic-card > svg,
+:root[data-theme="light"] body .blog-topic-number,
+:root[data-theme="light"] body .blog-studio-link { color: #ffd700 !important; }
 :root[data-theme="light"] body .blog-hero h1,
+:root[data-theme="light"] body .blog-hero h1 em,
 :root[data-theme="light"] body .blog-welcome h2,
 :root[data-theme="light"] body .blog-section-heading h2,
-:root[data-theme="light"] body .blog-topic-card h3 { color: #273346 !important; }
-:root[data-theme="light"] body .blog-hero h1 em { color: #936b27 !important; }
+:root[data-theme="light"] body .blog-topic-card h3 { color: #fff !important; }
 :root[data-theme="light"] body .blog-intro,
 :root[data-theme="light"] body .blog-welcome-copy > p:not(.blog-post-kicker),
 :root[data-theme="light"] body .blog-topic-card p,
-:root[data-theme="light"] body .blog-next-note > p:not(.blog-post-kicker) { color: #566171 !important; }
+:root[data-theme="light"] body .blog-next-note > p:not(.blog-post-kicker) { color: #c8cbd2 !important; }
 :root[data-theme="light"] body .blog-welcome,
 :root[data-theme="light"] body .blog-topic-card {
-  border-color: rgba(178, 133, 36, .2);
-  background: linear-gradient(145deg, rgba(247, 249, 252, .97), rgba(234, 240, 247, .97));
-  box-shadow: 0 14px 30px rgba(18, 31, 47, .08);
+  border-color: rgba(238, 221, 174, .18);
+  background: linear-gradient(145deg, rgba(21, 31, 50, .94), rgba(13, 21, 36, .98));
+  box-shadow: 0 20px 48px rgba(2, 6, 15, .22);
 }
-:root[data-theme="light"] body .blog-welcome-mark { border-color: rgba(181, 137, 39, .48); color: #8e6828; }
-:root[data-theme="light"] body .blog-topic-card > svg,
-:root[data-theme="light"] body .blog-topic-number { color: #8e6828; }
-:root[data-theme="light"] body .blog-next-note { border-left-color: #a57b32; background: rgba(31, 62, 94, .045); }
-:root[data-theme="light"] body .blog-studio-link { color: #75551f !important; }
+:root[data-theme="light"] body .blog-welcome-mark { border-color: rgba(255, 215, 0, .48); }
+:root[data-theme="light"] body .blog-next-note { border-left-color: #ffd700; background: rgba(255, 255, 255, .025); }
+:root[data-theme="light"] body .blog-studio-link { text-decoration-color: rgba(255, 215, 0, .56); }
+:root[data-theme="light"] body .blog-studio-link:hover { color: #fff0bd !important; }
 
 @media (max-width: 720px) {
   .blog-container { width: min(100% - 36px, 560px); }
