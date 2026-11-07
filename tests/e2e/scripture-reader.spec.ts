@@ -4,7 +4,7 @@ test("the Spanish Reina-Valera 1909 translation can be selected and read", async
   await page.goto("/word/");
 
   const translation = page.getByRole("combobox", { name: "Bible translation" });
-  await expect(translation.locator("option")).toHaveCount(14);
+  await expect(translation.locator("option")).toHaveCount(28);
   await translation.selectOption("RV1909");
 
   await expect(page.locator(".word-reading-heading > p")).toHaveText("Reina-Valera 1909 (Spanish)");
@@ -16,4 +16,11 @@ test("the Spanish Reina-Valera 1909 translation can be selected and read", async
   const verseSixteen = page.locator("#word-verse-16");
   await expect(verseSixteen).toContainText("Porque de tal manera amó Dios al mundo");
   await expect(verseSixteen.locator(".word-christ-words")).toContainText("Porque de tal manera amó Dios al mundo");
+
+  await translation.selectOption("ARBVD");
+  await expect(page.locator(".word-reading-heading > p")).toHaveText("Arabic Van Dyck Bible");
+  await expect(page.locator(".word-verses")).toHaveAttribute("dir", "rtl");
+  await expect(page.locator("#word-verse-16 .word-christ-words")).toBeVisible();
+  await expect(page.locator(".word-source-note").getByRole("link", { name: "eBible.org" }))
+    .toHaveAttribute("href", "https://ebible.org/details.php?id=arb-vd");
 });

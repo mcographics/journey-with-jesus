@@ -8,9 +8,19 @@ type BibleBook = {
   chapters: string[][];
 };
 
+type BibleSource = {
+  name: string;
+  url: string;
+  license: string;
+  attribution?: string;
+};
+
 type BibleData = {
   translation: string;
-  sourceNote?: string;
+  language?: string;
+  languageCode?: string;
+  direction?: "ltr" | "rtl";
+  source?: BibleSource;
   books: BibleBook[];
   redLetterSegments: Record<string, Array<[number, number]>>;
 };
@@ -31,21 +41,36 @@ type SavedLocation = {
 const readingLocationKey = "journey-with-jesus-word-location";
 const maximumSearchResults = 50;
 const translations = [
-  { id: "KJV", label: "King James Version", file: "kjv.json" },
-  { id: "RV1909", label: "Reina-Valera 1909 (Spanish)", file: "rv1909.json" },
-  { id: "AKJV", label: "American King James Version", file: "akjv.json" },
-  { id: "ASV", label: "American Standard Version", file: "asv.json" },
-  { id: "DBT", label: "Darby Translation", file: "dbt.json" },
-  { id: "DRB", label: "Douay-Rheims Bible", file: "drb.json" },
-  { id: "ERV", label: "English Revised Version", file: "erv.json" },
-  { id: "GEN", label: "Geneva Bible (1560)", file: "geneva-1560.json" },
-  { id: "JPS", label: "JPS Tanakh 1917 (Old Testament)", file: "jps.json" },
-  { id: "SLT", label: "Smith's Literal Translation", file: "slt.json" },
-  { id: "WBT", label: "Webster's Bible Translation", file: "wbt.json" },
-  { id: "YLT", label: "Young's Literal Translation", file: "ylt.json" },
-  { id: "BLB", label: "Berean Literal Bible (New Testament)", file: "blb.json" },
-  { id: "BIB", label: "Berean Interlinear Bible (New Testament)", file: "bib.json" },
+  { id: "KJV", label: "King James Version", language: "English", file: "kjv.json" },
+  { id: "AKJV", label: "American King James Version", language: "English", file: "akjv.json" },
+  { id: "ASV", label: "American Standard Version", language: "English", file: "asv.json" },
+  { id: "DBT", label: "Darby Translation", language: "English", file: "dbt.json" },
+  { id: "DRB", label: "Douay-Rheims Bible", language: "English", file: "drb.json" },
+  { id: "ERV", label: "English Revised Version", language: "English", file: "erv.json" },
+  { id: "GEN", label: "Geneva Bible (1560)", language: "English", file: "geneva-1560.json" },
+  { id: "JPS", label: "JPS Tanakh 1917 (Old Testament)", language: "English", file: "jps.json" },
+  { id: "SLT", label: "Smith's Literal Translation", language: "English", file: "slt.json" },
+  { id: "WBT", label: "Webster's Bible Translation", language: "English", file: "wbt.json" },
+  { id: "YLT", label: "Young's Literal Translation", language: "English", file: "ylt.json" },
+  { id: "BLB", label: "Berean Literal Bible (New Testament)", language: "English", file: "blb.json" },
+  { id: "BIB", label: "Berean Interlinear Bible (New Testament)", language: "English", file: "bib.json" },
+  { id: "WEBU", label: "World English Bible Updated", language: "English", file: "web-updated.json" },
+  { id: "BBE", label: "Bible in Basic English", language: "English", file: "bbe.json" },
+  { id: "RV1909", label: "Reina-Valera 1909", language: "Spanish", file: "rv1909.json" },
+  { id: "SBLM", label: "Spanish Free Bible for the World (draft)", language: "Spanish", file: "spablm.json" },
+  { id: "SPBES", label: "La Biblia en Español Sencillo (2026)", language: "Spanish", file: "spabes.json" },
+  { id: "SPBLL", label: "Spanish BLL (draft, 2026)", language: "Spanish", file: "spabll.json" },
+  { id: "FLSG", label: "Louis Segond 1910", language: "French", file: "louis-segond-1910.json" },
+  { id: "DEU1912", label: "Lutherbibel 1912", language: "German", file: "luther-1912.json" },
+  { id: "NLD1917", label: "De Heilige Schrift 1917", language: "Dutch", file: "dutch-1917.json" },
+  { id: "RUSSY", label: "Russian Synodal Bible", language: "Russian", file: "russian-synodal.json" },
+  { id: "ARBVD", label: "Arabic Van Dyck Bible", language: "Arabic", file: "arabic-van-dyck.json" },
+  { id: "PORBPM", label: "Bíblia Portuguesa Mundial (draft)", language: "Portuguese", file: "portuguese-world.json" },
+  { id: "UKR1905", label: "Ukrainian Bible by Kulish and Pulyui (1905)", language: "Ukrainian", file: "ukrainian-1905.json" },
+  { id: "ITADIO", label: "Diodati Bibbia 1885", language: "Italian", file: "diodati-1885.json" },
+  { id: "ITARIV", label: "Riveduta Bibbia 1927", language: "Italian", file: "riveduta-1927.json" },
 ];
+const translationLanguages = [...new Set(translations.map((translation) => translation.language))];
 
 function ScriptureText({ text, segments }: { text: string; segments: Array<[number, number]> }) {
   if (!segments.length) return text;
@@ -302,8 +327,12 @@ export function ScriptureReader({ scriptureBaseUrl }: { scriptureBaseUrl: string
                   onChange={(event) => selectTranslation(event.target.value)}
                   value={translationId}
                 >
-                  {translations.map((translation) => (
-                    <option key={translation.id} value={translation.id}>{translation.label}</option>
+                  {translationLanguages.map((language) => (
+                    <optgroup key={language} label={language}>
+                      {translations.filter((translation) => translation.language === language).map((translation) => (
+                        <option key={translation.id} value={translation.id}>{translation.label}</option>
+                      ))}
+                    </optgroup>
                   ))}
                 </select>
               </label>
@@ -441,7 +470,12 @@ export function ScriptureReader({ scriptureBaseUrl }: { scriptureBaseUrl: string
                 <p>{bible.translation}</p>
                 <h2 id="word-reader-title">{activeBook.name} <em>{chapterNumber}</em></h2>
               </header>
-              <div aria-label={`${activeBook.name} chapter ${chapterNumber}`} className="word-verses">
+              <div
+                aria-label={`${activeBook.name} chapter ${chapterNumber}`}
+                className="word-verses"
+                dir={bible.direction ?? "ltr"}
+                lang={bible.languageCode}
+              >
                 {activeVerses.map((verse, index) => {
                   const verseNumber = index + 1;
                   return (
@@ -487,7 +521,14 @@ export function ScriptureReader({ scriptureBaseUrl }: { scriptureBaseUrl: string
             </article>
           </section>
         )}
-        <p className="word-source-note">Some source editions omit individual verse text. Red-letter highlights in other translations follow the same verse references as the King James Version. {bible?.sourceNote}</p>
+        <p className="word-source-note">
+          Some source editions have blank verse entries. Source-marked Christ speech is highlighted when available; otherwise, red-letter highlights follow the King James Version’s verse references.
+          {bible?.source && (
+            <>
+              {" "}Source: <a href={bible.source.url} rel="noreferrer" target="_blank">{bible.source.name}</a> ({bible.source.license}). {bible.source.attribution}
+            </>
+          )}
+        </p>
       </div>
     </main>
   );
