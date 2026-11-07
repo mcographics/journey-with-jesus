@@ -14,8 +14,8 @@ test("public destinations are available in the desktop menu, with working story 
   await desktopMenuButton.click();
   const primaryNavigation = page.getByRole("navigation", { name: "Primary navigation" });
   await expect(primaryNavigation).toBeVisible();
-  await expect(primaryNavigation.getByRole("link")).toHaveCount(3);
-  for (const destination of ["Journey with Jesus", "Meet the Team", "Store"]) {
+  await expect(primaryNavigation.getByRole("link")).toHaveCount(4);
+  for (const destination of ["The Word", "Journey with Jesus", "Meet the Team", "Store"]) {
     await expect(primaryNavigation.getByRole("link", { name: destination })).toBeVisible();
   }
   await primaryNavigation.getByRole("link", { name: "Journey with Jesus" }).click();
@@ -453,8 +453,8 @@ for (const route of ["/projects/journey-with-jesus/", "/media/", "/characters/",
     await page.getByRole("button", { name: "Open site menu", exact: true }).click();
     const menu = page.getByRole("navigation", { name: "Primary navigation" });
     const expected = route === "/team/" || route === "/store/"
-      ? ["Studio", "Journey with Jesus", "Meet the Team", "Store"]
-      : ["Studio", "Media", "Meet the Characters"];
+      ? ["Studio", "The Word", "Journey with Jesus", "Meet the Team", "Store"]
+      : ["Studio", "The Word", "Media", "Meet the Characters"];
     await expect(menu.getByRole("link")).toHaveText(expected);
   });
 }

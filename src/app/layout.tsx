@@ -7,6 +7,7 @@ import "./editorial-pages.css";
 import "./character-cards.css";
 import "./kerygma-pages.css";
 import "./accessibility.css";
+import "./scripture.css";
 
 const siteUrl = "https://kerygmapath.com/";
 

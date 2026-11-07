@@ -3,11 +3,12 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { ChevronDown, Crown, Menu, Moon, Sun, X } from "lucide-react";
+import { BookOpen, ChevronDown, Crown, Menu, Moon, Sun, X } from "lucide-react";
 import { AccessibilitySettings } from "@/components/AccessibilitySettings";
 
 const navigation = [
   { href: "/company/", label: "Studio" },
+  { href: "/word/", label: "The Word" },
   { href: "/projects/journey-with-jesus/", label: "Journey with Jesus" },
   { href: "/media/", label: "Media" },
   { href: "/characters/", label: "Meet the Characters" },
@@ -52,6 +53,7 @@ export function SiteHeader() {
   const isJourneySection = normalizedPath.startsWith("/projects/journey-with-jesus/")
     || normalizedPath.startsWith("/media/") || normalizedPath.startsWith("/characters/");
   const visibleNavigation = navigation.filter(({ href }) => {
+    if (href === "/word/") return true;
     if (href === "/company/") return normalizedPath !== "/company/";
     if (isJourneySection) return href === "/media/" || href === "/characters/";
     return href === "/projects/journey-with-jesus/" || href === "/team/" || href === "/store/";
@@ -244,7 +246,9 @@ export function SiteHeader() {
                   key={href}
                   onClick={() => setIsDesktopMenuOpen(false)}
                 >
-                  <Crown aria-hidden="true" size={15} strokeWidth={1.7} />
+                  {href === "/word/"
+                    ? <BookOpen aria-hidden="true" size={15} strokeWidth={1.7} />
+                    : <Crown aria-hidden="true" size={15} strokeWidth={1.7} />}
                   <span>{label}</span>
                 </Link>
               );
@@ -293,7 +297,9 @@ export function SiteHeader() {
                   key={href}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  <Crown aria-hidden="true" size={15} strokeWidth={1.7} />
+                  {href === "/word/"
+                    ? <BookOpen aria-hidden="true" size={15} strokeWidth={1.7} />
+                    : <Crown aria-hidden="true" size={15} strokeWidth={1.7} />}
                   <span>{label}</span>
                 </Link>
               );
