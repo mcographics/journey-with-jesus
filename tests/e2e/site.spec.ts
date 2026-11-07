@@ -452,7 +452,7 @@ for (const route of ["/projects/journey-with-jesus/", "/media/", "/characters/",
     await page.goto(route);
     await page.getByRole("button", { name: "Open site menu", exact: true }).click();
     const menu = page.getByRole("navigation", { name: "Primary navigation" });
-    const expected = route === "/team/" || route === "/store/"
+    const expected = route === "/team/" || route === "/store/" || route === "/blog/"
       ? ["Studio", "Blog", "The Word", "Journey with Jesus", "Meet the Team", "Store"]
       : ["Studio", "Blog", "The Word", "Media", "Meet the Characters"];
     await expect(menu.getByRole("link")).toHaveText(expected);
