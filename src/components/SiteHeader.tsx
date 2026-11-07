@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { BookOpen, ChevronDown, Crown, Menu, Moon, Newspaper, Sun, X } from "lucide-react";
 import { AccessibilitySettings } from "@/components/AccessibilitySettings";
+import { SiteLanguageSwitcher } from "@/components/SiteLanguageSwitcher";
 
 const navigation = [
   { href: "/company/", label: "Studio" },
@@ -217,6 +218,7 @@ export function SiteHeader() {
   return (
     <header className="site-header">
       <div className="header-inner">
+        <SiteLanguageSwitcher />
         <div className="desktop-navigation" ref={desktopNavigationRef}>
           <button
             aria-controls="desktop-navigation-options"
