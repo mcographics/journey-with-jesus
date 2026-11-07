@@ -32,11 +32,28 @@
 .word-tool-heading h2, .word-search-results-heading h2 { margin: 0; color: var(--word-ink); font: 400 20px/1.2 var(--serif); }
 .word-tool-heading p, .word-search-results-heading p { margin: 5px 0 0; color: var(--word-muted); font-size: 11px; line-height: 1.5; }
 .word-selects { display: grid; grid-template-columns: minmax(0, 1fr) minmax(100px, .62fr); gap: 12px; }
-.word-selects label:first-child { grid-column: 1 / -1; }
+.word-selects > .word-translation-control { grid-column: 1 / -1; }
+.word-translation-control { display: grid; min-width: 0; gap: 7px; }
 .word-selects label, .word-search > label { display: grid; gap: 7px; color: var(--word-muted); font-size: 10px; font-weight: 600; letter-spacing: .09em; text-transform: uppercase; }
 .word-selects select, .word-search input { width: 100%; min-height: 44px; padding: 0 12px; border: 1px solid var(--word-line); border-radius: 8px; background: var(--word-input); color: var(--word-ink); font-size: 13px; letter-spacing: normal; text-transform: none; }
 .word-selects select:disabled { opacity: .6; }
 .word-selects select option { background: #111a2b; color: #fff; }
+.word-translation-mobile { display: none; position: relative; min-width: 0; }
+.word-translation-mobile summary { display: flex; width: 100%; min-height: 44px; align-items: center; justify-content: space-between; gap: 10px; padding: 0 12px; border: 1px solid var(--word-line); border-radius: 8px; background: var(--word-input); color: var(--word-ink); font-size: 13px; font-weight: 400; letter-spacing: normal; line-height: 1.4; list-style: none; text-transform: none; cursor: pointer; }
+.word-translation-mobile summary::-webkit-details-marker { display: none; }
+.word-translation-mobile summary > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.word-translation-mobile summary > svg { flex: 0 0 auto; transition: transform .18s ease; }
+.word-translation-mobile[open] summary > svg { transform: rotate(180deg); }
+.word-translation-dropdown { position: absolute; z-index: 20; top: calc(100% + 6px); right: 0; left: 0; max-height: min(360px, 55dvh); padding: 6px; overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; border: 1px solid var(--word-line); border-radius: 10px; background: #111a2b; box-shadow: 0 16px 30px rgba(0, 0, 0, .38); }
+.word-translation-language { min-width: 0; }
+.word-translation-language + .word-translation-language { margin-top: 7px; }
+.word-translation-language h3 { position: sticky; z-index: 1; top: -6px; margin: 0; padding: 9px 10px 7px; background: #111a2b; color: var(--word-muted); font: 700 10px/1.4 var(--sans); letter-spacing: .1em; text-transform: uppercase; }
+.word-translation-choice { display: flex; width: 100%; min-height: 44px; align-items: center; justify-content: space-between; gap: 10px; padding: 10px; border: 0; border-radius: 6px; background: transparent; color: var(--word-ink); font: 400 13px/1.45 var(--sans); text-align: left; cursor: pointer; }
+.word-translation-choice + .word-translation-choice { margin-top: 2px; }
+.word-translation-choice > span { min-width: 0; overflow-wrap: anywhere; white-space: normal; }
+.word-translation-choice > svg { flex: 0 0 auto; }
+.word-translation-choice:hover, .word-translation-choice[aria-current="true"] { background: var(--word-highlight); }
+.word-translation-mobile summary:focus-visible, .word-translation-choice:focus-visible { outline: 2px solid var(--gold-bright); outline-offset: 2px; }
 .word-search { min-width: 0; }
 .word-search-row { display: flex; gap: 8px; margin-top: 7px; }
 .word-search input { min-width: 0; }
@@ -114,6 +131,8 @@
 }
 :root[data-theme="light"] .word-page .word-tool-icon { border-color: rgba(139, 103, 41, .28); background: rgba(228, 188, 112, .13); color: #000; }
 :root[data-theme="light"] .word-page .word-selects select option { background: #f8fafb; color: #000; }
+:root[data-theme="light"] .word-page .word-translation-dropdown,
+:root[data-theme="light"] .word-page .word-translation-language h3 { background: #f8fafb; }
 :root[data-theme="light"] .word-page .word-font-controls button,
 :root[data-theme="light"] .word-page .word-chapter-nav button { color: #000; }
 :root[data-theme="light"] .word-page .word-tool-heading h2,
@@ -138,6 +157,8 @@ html:root body .word-page .word-christ-words { color: var(--word-christ-red) !im
   .word-heading { margin-bottom: 28px; }
   .word-tools { grid-template-columns: 1fr; gap: 22px; padding: 17px; }
   .word-browse { padding-bottom: 18px; border-bottom: 1px solid var(--word-line); }
+  .word-translation-native { display: none; }
+  .word-translation-mobile { display: block; }
   .word-result-list { grid-template-columns: 1fr; max-height: 340px; }
   .word-reading-paper { padding: 30px 18px 18px; }
   .word-reader-toolbar { align-items: flex-start; }
@@ -159,5 +180,5 @@ html:root body .word-page .word-christ-words { color: var(--word-christ-red) !im
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .word-result, .word-verse { transition: none; }
+  .word-result, .word-verse, .word-translation-mobile summary > svg { transition: none; }
 }
