@@ -10,6 +10,7 @@ type BibleBook = {
 
 type BibleData = {
   translation: string;
+  sourceNote?: string;
   books: BibleBook[];
   redLetterSegments: Record<string, Array<[number, number]>>;
 };
@@ -31,6 +32,7 @@ const readingLocationKey = "journey-with-jesus-word-location";
 const maximumSearchResults = 50;
 const translations = [
   { id: "KJV", label: "King James Version", file: "kjv.json" },
+  { id: "RV1909", label: "Reina-Valera 1909 (Spanish)", file: "rv1909.json" },
   { id: "AKJV", label: "American King James Version", file: "akjv.json" },
   { id: "ASV", label: "American Standard Version", file: "asv.json" },
   { id: "DBT", label: "Darby Translation", file: "dbt.json" },
@@ -485,7 +487,7 @@ export function ScriptureReader({ scriptureBaseUrl }: { scriptureBaseUrl: string
             </article>
           </section>
         )}
-        <p className="word-source-note">Some source editions omit individual verse text. Red-letter highlights in other translations follow the same verse references as the King James Version.</p>
+        <p className="word-source-note">Some source editions omit individual verse text. Red-letter highlights in other translations follow the same verse references as the King James Version. {bible?.sourceNote}</p>
       </div>
     </main>
   );
