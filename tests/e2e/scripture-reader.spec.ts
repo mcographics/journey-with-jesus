@@ -4,7 +4,7 @@ test("the Spanish Reina-Valera 1909 translation can be selected and read", async
   await page.goto("/word/");
 
   const translation = page.getByRole("combobox", { name: "Bible translation" });
-  await expect(translation.locator("option")).toHaveCount(28);
+  await expect(translation.locator("option")).toHaveCount(33);
   await translation.selectOption("RV1909");
 
   await expect(page.locator(".word-reading-heading > p")).toHaveText("Reina-Valera 1909 (Spanish)");

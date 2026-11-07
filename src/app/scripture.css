@@ -81,7 +81,8 @@
 .word-verses { max-width: 800px; margin-inline: auto; }
 .word-verse { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 6px; margin: 0; padding: 9px 9px 9px 0; border-radius: 7px; color: var(--word-ink); font: 400 calc(clamp(16px, 1.55vw, 20px) * var(--word-font-scale))/1.9 var(--serif); transition: background .25s ease, box-shadow .25s ease; }
 .word-verse sup { padding-top: .45em; color: var(--word-ink); font: 600 10px/1 var(--sans); text-align: right; }
-.word-verses[dir="rtl"] .word-verse { font-family: "Noto Naskh Arabic", "Noto Sans Arabic", "Arabic Typesetting", serif; line-height: 2.2; text-align: right; }
+.word-verses[dir="rtl"][lang="ar"] .word-verse { font-family: "Noto Naskh Arabic", "Noto Sans Arabic", "Arabic Typesetting", serif; line-height: 2.2; text-align: right; }
+.word-verses[dir="rtl"][lang="he"] .word-verse { font-family: "Noto Serif Hebrew", "Times New Roman", serif; line-height: 2.25; text-align: right; }
 .word-verses[dir="rtl"] .word-verse sup { text-align: left; }
 .word-verse-missing { font-size: .78em; font-style: italic; opacity: .78; }
 .word-christ-words { color: var(--word-christ-red); }

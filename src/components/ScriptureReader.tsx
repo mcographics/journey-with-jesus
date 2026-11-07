@@ -69,6 +69,11 @@ const translations = [
   { id: "UKR1905", label: "Ukrainian Bible by Kulish and Pulyui (1905)", language: "Ukrainian", file: "ukrainian-1905.json" },
   { id: "ITADIO", label: "Diodati Bibbia 1885", language: "Italian", file: "diodati-1885.json" },
   { id: "ITARIV", label: "Riveduta Bibbia 1927", language: "Italian", file: "riveduta-1927.json" },
+  { id: "HEBDEL", label: "Modern Hebrew Bible (Delitzsch)", language: "Hebrew", file: "hebrew-delitzsch.json" },
+  { id: "HEBWLC", label: "Hebrew Old Testament (WLC)", language: "Hebrew", file: "hebrew-wlc.json" },
+  { id: "ELVAM", label: "Vamvas Modern Greek Bible (1850)", language: "Modern Greek", file: "greek-vamvas.json" },
+  { id: "GRCLXX", label: "Septuagint (LXX, Old Testament)", language: "Ancient Greek", file: "greek-septuagint.json" },
+  { id: "GRCMT", label: "Greek Majority Text (New Testament)", language: "Ancient Greek", file: "greek-majority-nt.json" },
 ];
 const translationLanguages = [...new Set(translations.map((translation) => translation.language))];
 
