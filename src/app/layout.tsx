@@ -6,6 +6,7 @@ import "./media-studio.css";
 import "./editorial-pages.css";
 import "./character-cards.css";
 import "./kerygma-pages.css";
+import "./blog.css";
 import "./accessibility.css";
 import "./scripture.css";
 
