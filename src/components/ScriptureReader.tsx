@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState, type CSSProperties, type FormEvent, type ReactNode } from "react";
-import { BookOpen, ChevronLeft, ChevronRight, Minus, Plus, Search } from "lucide-react";
+import { useEffect, useRef, useState, type CSSProperties, type FormEvent, type ReactNode } from "react";
+import { BookOpen, Check, ChevronDown, ChevronLeft, ChevronRight, Minus, Plus, Search } from "lucide-react";
 
 type BibleBook = {
   name: string;
@@ -75,7 +75,11 @@ const translations = [
   { id: "GRCLXX", label: "Septuagint (LXX, Old Testament)", language: "Ancient Greek", file: "greek-septuagint.json" },
   { id: "GRCMT", label: "Greek Majority Text (New Testament)", language: "Ancient Greek", file: "greek-majority-nt.json" },
 ];
-const translationLanguages = [...new Set(translations.map((translation) => translation.language))];
+const originalLanguageGroups = ["Hebrew", "Ancient Greek", "Modern Greek"];
+const translationLanguages = [
+  ...originalLanguageGroups,
+  ...new Set(translations.map((translation) => translation.language).filter((language) => !originalLanguageGroups.includes(language))),
+];
 
 function ScriptureText({ text, segments }: { text: string; segments: Array<[number, number]> }) {
   if (!segments.length) return text;
@@ -103,6 +107,7 @@ export function ScriptureReader({ scriptureBaseUrl }: { scriptureBaseUrl: string
   const [loadError, setLoadError] = useState<string | null>(null);
   const [loadAttempt, setLoadAttempt] = useState(0);
   const [translationId, setTranslationId] = useState("KJV");
+  const mobileTranslationMenuRef = useRef<HTMLDetailsElement>(null);
   const [bookIndex, setBookIndex] = useState(0);
   const [chapterNumber, setChapterNumber] = useState(1);
   const [readyToRemember, setReadyToRemember] = useState(false);
@@ -198,10 +203,20 @@ export function ScriptureReader({ scriptureBaseUrl }: { scriptureBaseUrl: string
     }
   }, [bible, bookIndex, chapterNumber, readyToRemember]);
 
+  useEffect(() => {
+    const closeTranslationMenu = (event: PointerEvent) => {
+      const menu = mobileTranslationMenuRef.current;
+      if (menu?.open && !menu.contains(event.target as Node)) menu.open = false;
+    };
+    document.addEventListener("pointerdown", closeTranslationMenu);
+    return () => document.removeEventListener("pointerdown", closeTranslationMenu);
+  }, []);
+
   const activeBook = bible?.books[bookIndex];
   const activeVerses = activeBook?.chapters[chapterNumber - 1] ?? [];
 
   const selectTranslation = (nextTranslationId: string) => {
+    if (mobileTranslationMenuRef.current) mobileTranslationMenuRef.current.open = false;
     if (nextTranslationId === translationId) return;
     setPendingLocation(activeBook ? { bookName: activeBook.name, chapter: chapterNumber } : null);
     setReadyToRemember(false);
@@ -325,10 +340,12 @@ export function ScriptureReader({ scriptureBaseUrl }: { scriptureBaseUrl: string
               </div>
             </div>
             <div className="word-selects">
-              <label>
-                <span>Translation</span>
+              <div className="word-translation-control">
+                <label htmlFor="word-translation-select">Translation</label>
                 <select
                   aria-label="Bible translation"
+                  className="word-translation-native"
+                  id="word-translation-select"
                   onChange={(event) => selectTranslation(event.target.value)}
                   value={translationId}
                 >
@@ -340,7 +357,32 @@ export function ScriptureReader({ scriptureBaseUrl }: { scriptureBaseUrl: string
                     </optgroup>
                   ))}
                 </select>
-              </label>
+                <details className="word-translation-mobile" ref={mobileTranslationMenuRef}>
+                  <summary aria-label={"Choose Bible translation, selected " + selectedTranslation.label}>
+                    <span>{selectedTranslation.label}</span>
+                    <ChevronDown aria-hidden="true" size={16} />
+                  </summary>
+                  <div aria-label="Available Bible translations" className="word-translation-dropdown">
+                    {translationLanguages.map((language) => (
+                      <section className="word-translation-language" key={language}>
+                        <h3>{language}</h3>
+                        {translations.filter((translation) => translation.language === language).map((translation) => (
+                          <button
+                            aria-current={translation.id === translationId ? "true" : undefined}
+                            className="word-translation-choice"
+                            key={translation.id}
+                            onClick={() => selectTranslation(translation.id)}
+                            type="button"
+                          >
+                            <span>{translation.label}</span>
+                            {translation.id === translationId && <Check aria-hidden="true" size={15} />}
+                          </button>
+                        ))}
+                      </section>
+                    ))}
+                  </div>
+                </details>
+              </div>
               <label>
                 <span>Book</span>
                 <select
