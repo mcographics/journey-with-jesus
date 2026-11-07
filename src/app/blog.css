@@ -48,6 +48,7 @@
     linear-gradient(145deg, rgba(21, 31, 50, .97), rgba(13, 21, 36, .99));
   box-shadow: 0 20px 48px rgba(2, 6, 15, .22);
 }
+.blog-community-post { margin-top: 18px; }
 .blog-welcome-mark {
   display: grid;
   width: 50px;
