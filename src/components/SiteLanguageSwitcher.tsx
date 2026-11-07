@@ -137,13 +137,14 @@ export function SiteLanguageSwitcher() {
   const previousPathRef = useRef(pathname);
   const [isOpen, setIsOpen] = useState(false);
   const [languageCode, setLanguageCode] = useState("en");
+  const [pendingLanguage, setPendingLanguage] = useState<string | null>(null);
   const [widgetReady, setWidgetReady] = useState(false);
   const [widgetFailed, setWidgetFailed] = useState(false);
 
   useEffect(() => {
-    const savedLanguage = readSavedLanguage();
-    setLanguageCode(savedLanguage);
-    document.documentElement.lang = savedLanguage === "iw" ? "he" : savedLanguage;
+    const savedLanguageFrame = window.requestAnimationFrame(() => {
+      setLanguageCode(readSavedLanguage());
+    });
 
     window.gtranslateSettings = {
       default_language: "en",
@@ -183,8 +184,44 @@ export function SiteLanguageSwitcher() {
       }
     }, 250);
 
-    return () => window.clearInterval(interval);
+    return () => {
+      window.clearInterval(interval);
+      window.cancelAnimationFrame(savedLanguageFrame);
+    };
   }, []);
+
+  useEffect(() => {
+    document.documentElement.lang = languageCode === "iw" ? "he" : languageCode;
+  }, [languageCode]);
+
+  useEffect(() => {
+    if (pendingLanguage === null) return;
+
+    const code = pendingLanguage;
+    document.documentElement.lang = code === "iw" ? "he" : code;
+    if (code === "en") {
+      document.cookie = "googtrans=; Max-Age=0; Path=/; SameSite=Lax";
+      document.cookie = "googtrans=; Max-Age=0; Path=/; Domain=.kerygmapath.com; SameSite=Lax";
+      try {
+        window.localStorage.removeItem("kerygmapath-language");
+      } catch {}
+    } else {
+      try {
+        window.localStorage.setItem("kerygmapath-language", code);
+      } catch {}
+      document.cookie = `googtrans=/en/${code}; Max-Age=31536000; Path=/; SameSite=Lax`;
+      document.cookie = `googtrans=/en/${code}; Max-Age=31536000; Path=/; Domain=.kerygmapath.com; SameSite=Lax`;
+      const selector = rootRef.current?.querySelector<HTMLSelectElement>("select.gt_selector")
+        ?? rootRef.current?.querySelector<HTMLSelectElement>("select");
+      if (selector) {
+        selector.value = code;
+        selector.dispatchEvent(new Event("change", { bubbles: true }));
+      }
+    }
+
+    const reloadTimer = window.setTimeout(() => window.location.reload(), 350);
+    return () => window.clearTimeout(reloadTimer);
+  }, [pendingLanguage]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -224,21 +261,7 @@ export function SiteLanguageSwitcher() {
     setIsOpen(false);
     setWidgetFailed(false);
     setLanguageCode(code);
-    document.documentElement.lang = code === "iw" ? "he" : code;
-
-    if (code === "en") {
-      document.cookie = "googtrans=; Max-Age=0; Path=/; SameSite=Lax";
-      document.cookie = "googtrans=; Max-Age=0; Path=/; Domain=.kerygmapath.com; SameSite=Lax";
-      window.localStorage.removeItem("kerygmapath-language");
-    } else {
-      window.localStorage.setItem("kerygmapath-language", code);
-      document.cookie = `googtrans=/en/${code}; Max-Age=31536000; Path=/; SameSite=Lax`;
-      document.cookie = `googtrans=/en/${code}; Max-Age=31536000; Path=/; Domain=.kerygmapath.com; SameSite=Lax`;
-      selector.value = code;
-      selector.dispatchEvent(new Event("change", { bubbles: true }));
-    }
-
-    window.setTimeout(() => window.location.reload(), 350);
+    setPendingLanguage(code);
   };
 
   const selectedName = languages.find(({ code }) => code === languageCode)?.name ?? "English";
