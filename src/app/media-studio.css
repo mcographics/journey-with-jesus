@@ -439,14 +439,14 @@
 /* Keep the artwork at its natural responsive height, with the media controls layered over it. */
 :root body .media-page,
 :root[data-theme="light"] body .media-page {
-  min-height: max(calc(100vw * .429), calc(100vh - 200px));
+  min-height: calc(100vw * .429);
   background-size: 100% 100%, 100% auto;
 }
 @media (max-width: 850px) {
   :root body .media-page,
   :root[data-theme="light"] body .media-page {
     background-size: 100% 100%, 100% auto;
-    min-height: max(calc(100vw * 1.028), calc(100vh - 150px));
+    min-height: calc(100vw * 1.028);
   }
 }
 
@@ -506,3 +506,18 @@
   .video-frame { width: 100%; }
   .video-frame.is-portrait { max-width: min(100%, 388px, 43.875vh); }
 }
+
+
+/* Studio provides separate upload shelves and keeps each playlist to one orientation. */
+.studio-media-kind-tabs { display: flex; gap: 8px; margin: 0 0 12px; }
+.studio-media-kind-tabs button {
+  display: inline-flex; min-height: 38px; align-items: center; gap: 8px;
+  padding: 0 11px; border: 1px solid rgba(238, 221, 174, .16);
+  border-radius: 3px; color: #b9bbc0; background: transparent; cursor: pointer; font-size: 11px;
+}
+.studio-media-kind-tabs button[aria-pressed="true"] {
+  color: #f0d89f; border-color: rgba(228, 188, 112, .46); background: rgba(228, 188, 112, .08);
+}
+.studio-media-kind-tabs button span { color: #989da6; font-size: 9px; }
+:root[data-theme="light"] .studio-media-kind-tabs button { color: #596574; border-color: rgba(178, 133, 36, .19); }
+:root[data-theme="light"] .studio-media-kind-tabs button[aria-pressed="true"] { color: #725424; background: rgba(188, 146, 65, .1); }

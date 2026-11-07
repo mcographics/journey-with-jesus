@@ -40,6 +40,7 @@ export function StudioExperience() {
   const [noticeError, setNoticeError] = useState(false);
   const [sendingLink, setSendingLink] = useState(false);
   const [section, setSection] = useState<Section>("episodes");
+  const [studioMediaKind, setStudioMediaKind] = useState<"landscape" | "portrait">("landscape");
   const [episodes, setEpisodes] = useState<StudioEpisode[]>([]);
   const [playlists, setPlaylists] = useState<PlaylistRow[]>([]);
   const [comments, setComments] = useState<CommentRow[]>([]);
@@ -187,6 +188,7 @@ export function StudioExperience() {
   }
 
   function editEpisode(episode: StudioEpisode) {
+    setStudioMediaKind(episode.orientation);
     setSelectedEpisodeId(episode.id);
     setEpisodeForm({
       id: episode.id, title: episode.title, description: episode.description,
@@ -204,7 +206,7 @@ export function StudioExperience() {
   }
 
   function newEpisode() {
-    setSelectedEpisodeId(""); setEpisodeForm(freshEpisode());
+    setSelectedEpisodeId(""); setEpisodeForm({ ...freshEpisode(), orientation: studioMediaKind });
     setThumbnailFile(null);
     if (thumbnailFileInput.current) thumbnailFileInput.current.value = "";
     setCaptionFile(null);
@@ -663,6 +665,14 @@ export function StudioExperience() {
     </main>
   );
 
+  const visibleEpisodes = episodes.filter((episode) => episode.orientation === studioMediaKind);
+  const selectedPlaylistOrientation = playlistForm.episodeIds
+    .map((id) => episodes.find((episode) => episode.id === id)?.orientation)
+    .find((orientation): orientation is "landscape" | "portrait" => Boolean(orientation));
+  const playlistChoices = episodes.filter((episode) => episode.published && (
+    !selectedPlaylistOrientation || episode.orientation === selectedPlaylistOrientation || playlistForm.episodeIds.includes(episode.id)
+  ));
+
   return (
     <main id="main-content" className="studio-page">
       <div className="page-width">
@@ -684,8 +694,12 @@ export function StudioExperience() {
         {section === "episodes" && (
           <div className="studio-content-grid">
             <section className="studio-panel studio-library">
-              <div className="studio-panel-heading"><div><h2>Video library</h2><p>Drafts stay private until published.</p></div><button type="button" className="studio-small-button" onClick={newEpisode}><Plus size={15} />New video</button></div>
-              {episodes.length === 0 ? <p className="studio-empty">No videos yet. Create a story to begin.</p> : episodes.map((episode) => (
+              <div className="studio-panel-heading"><div><h2>{studioMediaKind === "portrait" ? "Story library" : "Video library"}</h2><p>Drafts stay private until published.</p></div><button type="button" className="studio-small-button" onClick={newEpisode}><Plus size={15} />New {studioMediaKind === "portrait" ? "story" : "video"}</button></div>
+              <div className="studio-media-kind-tabs" role="group" aria-label="Choose a Studio upload collection">
+                <button type="button" aria-pressed={studioMediaKind === "landscape"} onClick={() => { setStudioMediaKind("landscape"); setSelectedEpisodeId(""); setEpisodeForm({ ...freshEpisode(), orientation: "landscape" }); }}>Videos <span>16:9</span></button>
+                <button type="button" aria-pressed={studioMediaKind === "portrait"} onClick={() => { setStudioMediaKind("portrait"); setSelectedEpisodeId(""); setEpisodeForm({ ...freshEpisode(), orientation: "portrait" }); }}>Stories <span>9:16</span></button>
+              </div>
+              {visibleEpisodes.length === 0 ? <p className="studio-empty">{episodes.length === 0 ? "No media yet. Create a video or story to begin." : studioMediaKind === "portrait" ? "No portrait stories in this collection yet." : "No landscape videos in this collection yet."}</p> : visibleEpisodes.map((episode) => (
                 <div key={episode.id} className="studio-video-row">
                   <button type="button" className={"studio-list-item" + (selectedEpisodeId === episode.id ? " is-selected" : "")} onClick={() => editEpisode(episode)}>
                     <span><strong>{episode.title}</strong><small>{episode.orientation === "portrait" ? "9:16" : "16:9"} · {(episode.youtube_id ? "YouTube" + (episode.sources.length ? ", " : "") : "") + (episode.sources.map((source) => source.quality).join(", ") || (episode.youtube_id ? "" : "No video"))} · {episode.published ? "Published" : "Draft / hidden"}</small></span>
@@ -709,12 +723,12 @@ export function StudioExperience() {
             </section>
             <div className="studio-editor-stack">
               <form className="studio-panel studio-form" onSubmit={saveEpisode}>
-                <div className="studio-panel-heading"><div><h2>{episodeForm.id ? "Edit story" : "New story"}</h2><p>Set details and player shape.</p></div></div>
+                <div className="studio-panel-heading"><div><h2>{episodeForm.id ? "Edit " + (episodeForm.orientation === "portrait" ? "story" : "video") : "New " + (episodeForm.orientation === "portrait" ? "story" : "video")}</h2><p>Set details and player shape.</p></div></div>
                 <div className="studio-form-grid">
                   <label className="studio-span-two">Title<input value={episodeForm.title} onChange={(event) => setEpisodeForm({ ...episodeForm, title: event.target.value })} maxLength={180} required /></label>
                   <label>Story ID<input value={episodeForm.id} onChange={(event) => setEpisodeForm({ ...episodeForm, id: event.target.value.toLocaleLowerCase().replace(/[^a-z0-9-]/g, "") })} placeholder="created-from-title" /></label>
                   <label>Episode number<input type="number" min="1" value={episodeForm.number} onChange={(event) => setEpisodeForm({ ...episodeForm, number: event.target.value })} required /></label>
-                  <label>Aspect ratio<select value={episodeForm.orientation} onChange={(event) => setEpisodeForm({ ...episodeForm, orientation: event.target.value as EpisodeForm["orientation"] })}><option value="landscape">16:9 landscape</option><option value="portrait">9:16 portrait</option></select></label>
+                  <label>Collection and aspect ratio<select value={episodeForm.orientation} onChange={(event) => { const orientation = event.target.value as EpisodeForm["orientation"]; setEpisodeForm({ ...episodeForm, orientation }); setStudioMediaKind(orientation); }}><option value="landscape">Videos · 16:9 landscape</option><option value="portrait">Stories · 9:16 portrait</option></select></label>
                   <label>Duration, seconds<input type="number" min="0" value={episodeForm.duration} onChange={(event) => setEpisodeForm({ ...episodeForm, duration: event.target.value })} placeholder="Optional" /></label>
                   <label className="studio-span-two">Scripture reference<input value={episodeForm.scripture} onChange={(event) => setEpisodeForm({ ...episodeForm, scripture: event.target.value })} maxLength={180} /></label>
                   <label className="studio-span-two">Thumbnail URL<input type="url" value={episodeForm.thumbnail} onChange={(event) => { setEpisodeForm({ ...episodeForm, thumbnail: event.target.value }); setThumbnailFile(null); if (thumbnailFileInput.current) thumbnailFileInput.current.value = ""; }} placeholder="Optional HTTPS image" /></label>
@@ -808,8 +822,8 @@ export function StudioExperience() {
               <label>Playlist title<input value={playlistForm.title} onChange={(event) => setPlaylistForm({ ...playlistForm, title: event.target.value })} maxLength={120} required /></label>
               <label>Description<textarea value={playlistForm.description} onChange={(event) => setPlaylistForm({ ...playlistForm, description: event.target.value })} maxLength={2000} rows={3} /></label>
               <label>Sort order<input type="number" value={playlistForm.order} onChange={(event) => setPlaylistForm({ ...playlistForm, order: event.target.value })} /></label>
-              <fieldset className="studio-episode-choices"><legend>Stories in this playlist</legend>
-                {episodes.filter((episode) => episode.published).length === 0 ? <p>Publish a video before adding it to a public playlist.</p> : episodes.filter((episode) => episode.published).map((episode) => (
+              <fieldset className="studio-episode-choices"><legend>{selectedPlaylistOrientation === "portrait" ? "Stories in this playlist" : "Videos in this playlist"}</legend>
+                {playlistChoices.length === 0 ? <p>Publish a video or story before adding it to a public playlist.</p> : playlistChoices.map((episode) => (
                   <label key={episode.id}><input type="checkbox" checked={playlistForm.episodeIds.includes(episode.id)} onChange={(event) => setPlaylistForm((current) => ({ ...current, episodeIds: event.target.checked ? [...current.episodeIds, episode.id] : current.episodeIds.filter((id) => id !== episode.id) }))} /><span>{episode.title}</span></label>
                 ))}
               </fieldset>
