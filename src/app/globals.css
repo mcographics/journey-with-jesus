@@ -955,6 +955,8 @@ body, .home-hero, .mission-section, .site-footer, .media-page {
   --quiet: #d4c384;
   --gold: #e8c24e;
   --gold-bright: #ffe792;
+  --gold-text: #ffd700;
+  --gold-text-bright: #ffd700;
 }
 :root[data-theme="light"] body,
 :root[data-theme="light"] body :is(
@@ -1031,18 +1033,13 @@ body, .home-hero, .mission-section, .site-footer, .media-page {
   .character-passages span, .footer-note, .footer-links span,
   .comment-card strong, .comments-unavailable strong
 ) {
-  background-image: linear-gradient(105deg, #ffd400 0%, #ffeb3b 23%, #fff59d 42%, #ffe000 59%, #fff176 77%, #ffd400 100%) !important;
-  background-size: 220% 100% !important;
-  background-position: 0% 50%;
-  background-clip: text !important;
-  -webkit-background-clip: text !important;
-  -webkit-text-fill-color: transparent !important;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, .66), 0 0 7px rgba(255, 218, 111, .2) !important;
-  animation: gold-type-shimmer 7s ease-in-out infinite !important;
-}
-@keyframes gold-type-shimmer {
-  0%, 68%, 100% { background-position: 0% 50%; }
-  82% { background-position: 100% 50%; }
+  color: var(--gold-text-bright) !important;
+  background-image: none !important;
+  background-clip: border-box !important;
+  -webkit-background-clip: border-box !important;
+  -webkit-text-fill-color: currentColor !important;
+  text-shadow: none !important;
+  animation: none !important;
 }
 :root:not([data-theme="light"]) body :is(.button-gold, .nav-link.is-current, .mobile-menu-link.is-current, .desktop-menu-link.is-current, .skip-link) {
   color: #171b23 !important;

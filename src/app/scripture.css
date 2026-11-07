@@ -116,6 +116,13 @@
 
 html:root body .word-page :is(h1, h2, h3, h4, h5, h6, p, li, span, strong, b, em, small, label, legend, dt, dd, time, figcaption, blockquote, summary, a, button, input, select, textarea, option) {
   color: var(--word-ink) !important;
+  background-image: none !important;
+  background-clip: border-box !important;
+  -webkit-background-clip: border-box !important;
+  -webkit-text-fill-color: currentColor !important;
+  text-shadow: none !important;
+  animation: none !important;
+  filter: none !important;
 }
 html:root body .word-page .word-christ-words { color: var(--word-christ-red) !important; }
 
