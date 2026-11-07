@@ -14,8 +14,8 @@ test("public destinations are available in the desktop menu, with working story 
   await desktopMenuButton.click();
   const primaryNavigation = page.getByRole("navigation", { name: "Primary navigation" });
   await expect(primaryNavigation).toBeVisible();
-  await expect(primaryNavigation.getByRole("link")).toHaveCount(4);
-  for (const destination of ["The Word", "Journey with Jesus", "Meet the Team", "Store"]) {
+  await expect(primaryNavigation.getByRole("link")).toHaveCount(5);
+  for (const destination of ["Blog", "The Word", "Journey with Jesus", "Meet the Team", "Store"]) {
     await expect(primaryNavigation.getByRole("link", { name: destination })).toBeVisible();
   }
   await primaryNavigation.getByRole("link", { name: "Journey with Jesus" }).click();
@@ -447,14 +447,14 @@ test("studio dark mode uses static yellow labels and white main copy", async ({ 
   await expect(page.locator(".kerygma-company-lead")).toHaveCSS("color", "rgb(255, 255, 255)");
 });
 
-for (const route of ["/projects/journey-with-jesus/", "/media/", "/characters/", "/team/", "/store/"]) {
+for (const route of ["/projects/journey-with-jesus/", "/media/", "/characters/", "/team/", "/store/", "/blog/"]) {
   test(`menu shows section links at ${route}`, async ({ page }) => {
     await page.goto(route);
     await page.getByRole("button", { name: "Open site menu", exact: true }).click();
     const menu = page.getByRole("navigation", { name: "Primary navigation" });
     const expected = route === "/team/" || route === "/store/"
-      ? ["Studio", "The Word", "Journey with Jesus", "Meet the Team", "Store"]
-      : ["Studio", "The Word", "Media", "Meet the Characters"];
+      ? ["Studio", "Blog", "The Word", "Journey with Jesus", "Meet the Team", "Store"]
+      : ["Studio", "Blog", "The Word", "Media", "Meet the Characters"];
     await expect(menu.getByRole("link")).toHaveText(expected);
   });
 }
