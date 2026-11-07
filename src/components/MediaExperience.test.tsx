@@ -28,28 +28,35 @@ const episodes: Episode[] = [
 afterEach(() => window.history.replaceState({}, "", "/media/"));
 
 describe("MediaExperience", () => {
-  it("shows the general Media community before any videos are published", () => {
+  it("opens Media community as a separate view when the library is empty", () => {
     render(<MediaExperience episodes={[]} />);
+    fireEvent.click(screen.getByRole("button", { name: /Media community/ }));
     expect(screen.getByRole("heading", { name: "Media community" })).toBeTruthy();
     expect(screen.queryByText("Choose a story to see its community conversation.")).toBeNull();
   });
 
-  it("keeps the general conversation separate from episode comments", () => {
+  it("keeps item comments separate from the Media community", () => {
     render(<MediaExperience episodes={episodes} />);
+    fireEvent.click(screen.getByRole("button", { name: /A Story of Mercy/ }));
+    expect(screen.getByRole("heading", { name: "Video comments" })).toBeTruthy();
+
+    fireEvent.click(screen.getByRole("button", { name: /Media community/ }));
     expect(screen.getByRole("heading", { name: "Media community" })).toBeTruthy();
-    expect(screen.getByRole("heading", { name: "Story comments" })).toBeTruthy();
+    expect(screen.queryByRole("heading", { name: "Video comments" })).toBeNull();
   });
 
-  it("opens the requested story from a direct episode URL", () => {
+  it("opens the requested portrait story and selects the Stories collection", () => {
     window.history.replaceState({}, "", "/media/?episode=hope-two");
     render(<MediaExperience episodes={episodes} />);
+    expect(screen.getByRole("button", { name: /Stories/ }).getAttribute("aria-pressed")).toBe("true");
     expect(screen.getByRole("heading", { name: "A Story of Hope" })).toBeTruthy();
     expect(screen.getByTitle("A Story of Hope")).toBeTruthy();
     expect(window.location.search).toBe("?episode=hope-two");
   });
 
-  it("updates the shareable URL and responds to browser back/forward", () => {
+  it("updates the shareable URL and responds to browser back and forward", () => {
     render(<MediaExperience episodes={episodes} />);
+    fireEvent.click(screen.getByRole("button", { name: /Stories/ }));
     fireEvent.click(screen.getByRole("button", { name: /A Story of Hope/ }));
     expect(window.location.search).toBe("?episode=hope-two");
     expect(screen.getByRole("heading", { name: "A Story of Hope" })).toBeTruthy();
@@ -57,5 +64,6 @@ describe("MediaExperience", () => {
     window.history.replaceState({}, "", "/media/?episode=parable-one");
     fireEvent(window, new PopStateEvent("popstate"));
     expect(screen.getByRole("heading", { name: "A Story of Mercy" })).toBeTruthy();
+    expect(screen.getByRole("button", { name: /Videos/ }).getAttribute("aria-pressed")).toBe("true");
   });
 });
