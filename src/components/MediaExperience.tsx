@@ -38,7 +38,7 @@ export function MediaExperience({ episodes: initialEpisodes }: { episodes: Episo
   const [episodes, setEpisodes] = useState(initialEpisodes);
   const [playlists, setPlaylists] = useState<MediaPlaylist[]>([]);
   const [playlistId, setPlaylistId] = useState("all");
-  const [mediaKind, setMediaKind] = useState<MediaKind>("videos");
+  const [mediaKind, setMediaKind] = useState<MediaKind>("stories");
   const [discussion, setDiscussion] = useState<DiscussionKind>("comments");
   const [catalogStatus, setCatalogStatus] = useState<"loading" | "ready" | "unconfigured" | "error">(() =>
     initialEpisodes.length ? "ready" : isSupabaseConfigured() ? "loading" : "unconfigured",

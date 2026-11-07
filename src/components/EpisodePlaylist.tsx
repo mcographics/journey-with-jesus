@@ -27,7 +27,7 @@ export function EpisodePlaylist({ episodes, selectedId, onSelect, playlists = []
   }, [playlistEpisodes, query]);
 
   return (
-    <aside className="playlist-panel" aria-label={isStories ? "Story library" : "Video library"}>
+    <aside className="playlist-panel" aria-label={isStories ? "Story playlist" : "Video playlist"}>
       <div className="playlist-header">
         <div className="playlist-header-top">
           <h2>{playlist?.title ?? (isStories ? "Stories" : "Videos")}</h2>
