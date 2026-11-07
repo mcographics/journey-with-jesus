@@ -1364,3 +1364,24 @@ body, .home-hero, .mission-section, .site-footer, .media-page {
     letter-spacing: .16em;
   }
 }
+
+
+/* Keep the footer logo's click target within the visible logo height. */
+.footer-brand {
+  height: 52px;
+  aspect-ratio: auto;
+}
+.footer-brand .kerygma-footer-logo-picture {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+.footer-brand .kerygma-footer-logo {
+  pointer-events: none;
+}
+.footer-social-links {
+  margin-top: 0;
+}
