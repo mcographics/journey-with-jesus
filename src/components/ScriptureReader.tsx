@@ -23,12 +23,27 @@ type SearchResult = {
 };
 
 type SavedLocation = {
-  bookIndex: number;
+  bookName: string;
   chapter: number;
 };
 
 const readingLocationKey = "journey-with-jesus-word-location";
 const maximumSearchResults = 50;
+const translations = [
+  { id: "KJV", label: "King James Version", file: "kjv.json" },
+  { id: "AKJV", label: "American King James Version", file: "akjv.json" },
+  { id: "ASV", label: "American Standard Version", file: "asv.json" },
+  { id: "DBT", label: "Darby Translation", file: "dbt.json" },
+  { id: "DRB", label: "Douay-Rheims Bible", file: "drb.json" },
+  { id: "ERV", label: "English Revised Version", file: "erv.json" },
+  { id: "GEN", label: "Geneva Bible (1560)", file: "geneva-1560.json" },
+  { id: "JPS", label: "JPS Tanakh 1917 (Old Testament)", file: "jps.json" },
+  { id: "SLT", label: "Smith's Literal Translation", file: "slt.json" },
+  { id: "WBT", label: "Webster's Bible Translation", file: "wbt.json" },
+  { id: "YLT", label: "Young's Literal Translation", file: "ylt.json" },
+  { id: "BLB", label: "Berean Literal Bible (New Testament)", file: "blb.json" },
+  { id: "BIB", label: "Berean Interlinear Bible (New Testament)", file: "bib.json" },
+];
 
 function ScriptureText({ text, segments }: { text: string; segments: Array<[number, number]> }) {
   if (!segments.length) return text;
@@ -51,24 +66,29 @@ function ScriptureText({ text, segments }: { text: string; segments: Array<[numb
   return <>{parts}</>;
 }
 
-export function ScriptureReader({ dataUrl }: { dataUrl: string }) {
+export function ScriptureReader({ scriptureBaseUrl }: { scriptureBaseUrl: string }) {
   const [bible, setBible] = useState<BibleData | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [loadAttempt, setLoadAttempt] = useState(0);
+  const [translationId, setTranslationId] = useState("KJV");
   const [bookIndex, setBookIndex] = useState(0);
   const [chapterNumber, setChapterNumber] = useState(1);
   const [readyToRemember, setReadyToRemember] = useState(false);
+  const [pendingLocation, setPendingLocation] = useState<{ bookName: string; chapter: number } | null>(null);
   const [fontScale, setFontScale] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [searchMessage, setSearchMessage] = useState("");
   const [highlightedVerse, setHighlightedVerse] = useState<number | null>(null);
   const [jumpNumber, setJumpNumber] = useState(0);
+  const selectedTranslation = translations.find((translation) => translation.id === translationId) ?? translations[0];
 
   useEffect(() => {
     let cancelled = false;
 
-    fetch(dataUrl)
+    const bibleUrl = `${scriptureBaseUrl.replace(/\/+$/, "")}/${selectedTranslation.file}`;
+
+    fetch(bibleUrl)
       .then(async (response) => {
         if (!response.ok) throw new Error(`The Bible text could not be loaded (${response.status}).`);
         return response.json() as Promise<BibleData>;
@@ -76,7 +96,14 @@ export function ScriptureReader({ dataUrl }: { dataUrl: string }) {
       .then((data) => {
         if (
           !Array.isArray(data.books)
-          || data.books.length !== 66
+          || data.books.length === 0
+          || data.books.length > 66
+          || !data.books.every((book) => (
+            typeof book.name === "string"
+            && Array.isArray(book.chapters)
+            && book.chapters.length > 0
+            && book.chapters.every((chapter) => Array.isArray(chapter) && chapter.every((verse) => typeof verse === "string"))
+          ))
           || !data.redLetterSegments
           || typeof data.redLetterSegments !== "object"
         ) {
@@ -92,34 +119,48 @@ export function ScriptureReader({ dataUrl }: { dataUrl: string }) {
     return () => {
       cancelled = true;
     };
-  }, [dataUrl, loadAttempt]);
+  }, [loadAttempt, scriptureBaseUrl, selectedTranslation.file]);
 
   useEffect(() => {
     if (!bible) return;
 
     const timeout = window.setTimeout(() => {
       try {
-        const saved = window.localStorage.getItem(readingLocationKey);
-        if (saved) {
-          const location = JSON.parse(saved) as SavedLocation;
-          const book = bible.books[location.bookIndex];
-          if (book && Number.isInteger(location.chapter) && location.chapter >= 1 && location.chapter <= book.chapters.length) {
-            setBookIndex(location.bookIndex);
-            setChapterNumber(location.chapter);
+        if (pendingLocation) {
+          const matchIndex = bible.books.findIndex((book) => book.name === pendingLocation.bookName);
+          const nextBookIndex = matchIndex >= 0 ? matchIndex : 0;
+          const nextBook = bible.books[nextBookIndex];
+          setBookIndex(nextBookIndex);
+          setChapterNumber(matchIndex >= 0 ? Math.min(pendingLocation.chapter, nextBook.chapters.length) : 1);
+          setPendingLocation(null);
+        } else {
+          const saved = window.localStorage.getItem(readingLocationKey);
+          if (saved) {
+            const location = JSON.parse(saved) as SavedLocation & { bookIndex?: number };
+            const savedBookName = typeof location.bookName === "string"
+              ? location.bookName
+              : bible.books[location.bookIndex ?? -1]?.name;
+            const nextBookIndex = bible.books.findIndex((book) => book.name === savedBookName);
+            const book = bible.books[nextBookIndex];
+            if (book && Number.isInteger(location.chapter) && location.chapter >= 1 && location.chapter <= book.chapters.length) {
+              setBookIndex(nextBookIndex);
+              setChapterNumber(location.chapter);
+            }
           }
         }
       } catch {
-        // Continue at Genesis 1 when browser storage is unavailable or invalid.
+        // Continue at the first book when browser storage is unavailable or invalid.
       }
       setReadyToRemember(true);
     }, 0);
     return () => window.clearTimeout(timeout);
-  }, [bible]);
+  }, [bible, pendingLocation]);
 
   useEffect(() => {
     if (!bible || !readyToRemember) return;
     try {
-      window.localStorage.setItem(readingLocationKey, JSON.stringify({ bookIndex, chapter: chapterNumber }));
+      const bookName = bible.books[bookIndex]?.name;
+      if (bookName) window.localStorage.setItem(readingLocationKey, JSON.stringify({ bookName, chapter: chapterNumber }));
     } catch {
       // Reading remains available when browser storage is disabled.
     }
@@ -127,6 +168,18 @@ export function ScriptureReader({ dataUrl }: { dataUrl: string }) {
 
   const activeBook = bible?.books[bookIndex];
   const activeVerses = activeBook?.chapters[chapterNumber - 1] ?? [];
+
+  const selectTranslation = (nextTranslationId: string) => {
+    if (nextTranslationId === translationId) return;
+    setPendingLocation(activeBook ? { bookName: activeBook.name, chapter: chapterNumber } : null);
+    setReadyToRemember(false);
+    setTranslationId(nextTranslationId);
+    setBible(null);
+    setLoadError(null);
+    setSearchResults([]);
+    setSearchMessage("");
+    clearHighlight();
+  };
 
   useEffect(() => {
     if (highlightedVerse === null) return;
@@ -227,7 +280,7 @@ export function ScriptureReader({ dataUrl }: { dataUrl: string }) {
         <header className="word-heading">
           <p className="word-eyebrow"><BookOpen aria-hidden="true" size={16} /> Open Scripture</p>
           <h1 id="word-title">The <em>Word</em></h1>
-          <p>Read the King James Version, find a passage, and continue where you left off.</p>
+          <p>Choose a translation, find a passage, and continue reading.</p>
         </header>
 
         <section aria-label="Bible navigation and search" className="word-tools">
@@ -236,10 +289,22 @@ export function ScriptureReader({ dataUrl }: { dataUrl: string }) {
               <span className="word-tool-icon"><BookOpen aria-hidden="true" size={18} /></span>
               <div>
                 <h2>Choose a passage</h2>
-                <p>Browse all 66 books of the King James Version.</p>
+                <p>Browse the books available in your selected translation.</p>
               </div>
             </div>
             <div className="word-selects">
+              <label>
+                <span>Translation</span>
+                <select
+                  aria-label="Bible translation"
+                  onChange={(event) => selectTranslation(event.target.value)}
+                  value={translationId}
+                >
+                  {translations.map((translation) => (
+                    <option key={translation.id} value={translation.id}>{translation.label}</option>
+                  ))}
+                </select>
+              </label>
               <label>
                 <span>Book</span>
                 <select
@@ -281,7 +346,7 @@ export function ScriptureReader({ dataUrl }: { dataUrl: string }) {
                 <span>Search</span>
               </button>
             </div>
-            <p className="word-search-hint">Search is case-insensitive and checks the complete King James text.</p>
+            <p className="word-search-hint">Search is case-insensitive and checks the selected translation.</p>
           </form>
         </section>
 
@@ -371,7 +436,7 @@ export function ScriptureReader({ dataUrl }: { dataUrl: string }) {
 
             <article className="word-reading-paper" style={{ "--word-font-scale": fontScale } as CSSProperties}>
               <header className="word-reading-heading">
-                <p>King James Version</p>
+                <p>{bible.translation}</p>
                 <h2 id="word-reader-title">{activeBook.name} <em>{chapterNumber}</em></h2>
               </header>
               <div aria-label={`${activeBook.name} chapter ${chapterNumber}`} className="word-verses">
@@ -385,10 +450,14 @@ export function ScriptureReader({ dataUrl }: { dataUrl: string }) {
                     >
                       <sup>{verseNumber}</sup>
                       <span>
-                        <ScriptureText
-                          segments={bible.redLetterSegments[`${activeBook.name}|${chapterNumber}|${verseNumber}`] ?? []}
-                          text={verse}
-                        />
+                        {verse ? (
+                          <ScriptureText
+                            segments={bible.redLetterSegments[`${activeBook.name}|${chapterNumber}|${verseNumber}`] ?? []}
+                            text={verse}
+                          />
+                        ) : (
+                          <span className="word-verse-missing">Verse text unavailable in this source.</span>
+                        )}
                       </span>
                     </p>
                   );
@@ -416,7 +485,7 @@ export function ScriptureReader({ dataUrl }: { dataUrl: string }) {
             </article>
           </section>
         )}
-        <p className="word-source-note">Scripture text: King James Version.</p>
+        <p className="word-source-note">Some source editions omit individual verse text. Red-letter highlights in other translations follow the same verse references as the King James Version.</p>
       </div>
     </main>
   );
