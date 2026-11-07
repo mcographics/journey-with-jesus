@@ -83,53 +83,58 @@ export function MediaExperience({ episodes: initialEpisodes }: { episodes: Episo
   const currentMediaKind = selectedEpisode ? getMediaKind(selectedEpisode) : mediaKind;
   const kindEpisodes = episodes.filter((episode) => getMediaKind(episode) === currentMediaKind);
   const kindEpisodeIds = new Set(kindEpisodes.map((episode) => episode.id));
-  const kindPlaylists = playlists.filter((playlist) => playlist.episodeIds.some((id) => kindEpisodeIds.has(id)));
+  const kindPlaylists = playlists.filter((playlist) => playlist.episodeIds.length > 0 && playlist.episodeIds.every((id) => kindEpisodeIds.has(id)));
   const commentTitle = currentMediaKind === "stories" ? "Story comments" : "Video comments";
 
   return (
     <main id="main-content" className="media-page" style={mediaPageStyle}>
-      <div className="page-width media-page-width">
-        <header className="media-heading">
-          <p className="media-kicker">FAITH · HOPE · STORY</p>
-          <h1>Animated stories of faith.</h1>
-          <p>Explore the life and teachings of Jesus through Scripture-inspired animation. Choose a full-length video or a portrait story, then follow its conversation. Watching and commenting are open to everyone.</p>
-        </header>
-        {catalogStatus === "loading" && episodes.length === 0 && <p className="catalog-notice" role="status">Loading the media library…</p>}
-        {catalogStatus === "unconfigured" && episodes.length === 0 && <p className="catalog-notice" role="status">The public media library is being prepared. Please check back soon.</p>}
-        {catalogStatus === "error" && <p className="catalog-notice is-error" role="status">The media library could not be reached. Please refresh to try again.</p>}
+      <section className="media-stage" aria-label="Media library">
+        <div className="page-width media-page-width">
+          <header className="media-heading">
+            <p className="media-kicker">FAITH · HOPE · STORY</p>
+            <h1>Animated stories of faith.</h1>
+            <p>Explore the life and teachings of Jesus through Scripture-inspired animation. Choose a full-length video or a portrait story, then follow its conversation. Watching and commenting are open to everyone.</p>
+          </header>
+          {catalogStatus === "loading" && episodes.length === 0 && <p className="catalog-notice" role="status">Loading the media library…</p>}
+          {catalogStatus === "unconfigured" && episodes.length === 0 && <p className="catalog-notice" role="status">The public media library is being prepared. Please check back soon.</p>}
+          {catalogStatus === "error" && <p className="catalog-notice is-error" role="status">The media library could not be reached. Please refresh to try again.</p>}
 
-        <nav className="media-kind-tabs" aria-label="Choose a media collection">
-          <button type="button" aria-pressed={currentMediaKind === "videos"} onClick={() => switchMediaKind("videos")}>
-            <Film size={17} aria-hidden="true" /><span>Videos</span><small>{episodes.filter((episode) => getMediaKind(episode) === "videos").length}</small>
+          <nav className="media-kind-tabs" aria-label="Choose a media collection">
+            <button type="button" aria-pressed={currentMediaKind === "videos"} onClick={() => switchMediaKind("videos")}>
+              <Film size={17} aria-hidden="true" /><span>Videos</span><small>{episodes.filter((episode) => getMediaKind(episode) === "videos").length}</small>
+            </button>
+            <button type="button" aria-pressed={currentMediaKind === "stories"} onClick={() => switchMediaKind("stories")}>
+              <Smartphone size={17} aria-hidden="true" /><span>Stories</span><small>{episodes.filter((episode) => getMediaKind(episode) === "stories").length}</small>
+            </button>
+          </nav>
+
+          <div className="media-layout">
+            <div className="media-main">
+              <VideoPlayer key={"player-" + (selectedEpisode?.id ?? "none")} episode={selectedEpisode} />
+            </div>
+            <EpisodePlaylist episodes={kindEpisodes} playlists={kindPlaylists} selectedPlaylistId={playlistId}
+              onPlaylistChange={setPlaylistId} selectedId={selectedId} onSelect={selectEpisode} mediaKind={currentMediaKind} />
+          </div>
+        </div>
+      </section>
+
+      <section className="media-discussion page-width media-page-width" aria-label="Media discussion">
+        <nav className="media-discussion-tabs" aria-label="Choose a discussion">
+          <button type="button" aria-pressed={discussion === "comments"} disabled={!selectedEpisode}
+            onClick={() => setDiscussion("comments")}>
+            <MessageCircle size={16} aria-hidden="true" />{commentTitle}
           </button>
-          <button type="button" aria-pressed={currentMediaKind === "stories"} onClick={() => switchMediaKind("stories")}>
-            <Smartphone size={17} aria-hidden="true" /><span>Stories</span><small>{episodes.filter((episode) => getMediaKind(episode) === "stories").length}</small>
+          <button type="button" aria-pressed={discussion === "community"}
+            onClick={() => setDiscussion("community")}>
+            <Users size={16} aria-hidden="true" />Media community
           </button>
         </nav>
-
-        <div className="media-layout">
-          <div className="media-main">
-            <VideoPlayer key={"player-" + (selectedEpisode?.id ?? "none")} episode={selectedEpisode} />
-            <nav className="media-discussion-tabs" aria-label="Choose a discussion">
-              <button type="button" aria-pressed={discussion === "comments"} disabled={!selectedEpisode}
-                onClick={() => setDiscussion("comments")}>
-                <MessageCircle size={16} aria-hidden="true" />{commentTitle}
-              </button>
-              <button type="button" aria-pressed={discussion === "community"}
-                onClick={() => setDiscussion("community")}>
-                <Users size={16} aria-hidden="true" />Media community
-              </button>
-            </nav>
-            {discussion === "community"
-              ? <CommentSection episode={null} general />
-              : selectedEpisode
-                ? <CommentSection key={"comments-" + selectedEpisode.id} episode={selectedEpisode} title={commentTitle} />
-                : <p className="comment-status media-comment-prompt">Choose a {currentMediaKind === "stories" ? "story" : "video"} to open its comments, or join the Media community.</p>}
-          </div>
-          <EpisodePlaylist episodes={kindEpisodes} playlists={kindPlaylists} selectedPlaylistId={playlistId}
-            onPlaylistChange={setPlaylistId} selectedId={selectedId} onSelect={selectEpisode} mediaKind={mediaKind} />
-        </div>
-      </div>
+        {discussion === "community"
+          ? <CommentSection episode={null} general />
+          : selectedEpisode
+            ? <CommentSection key={"comments-" + selectedEpisode.id} episode={selectedEpisode} title={commentTitle} />
+            : <p className="comment-status media-comment-prompt">Choose a {currentMediaKind === "stories" ? "story" : "video"} to open its comments, or join the Media community.</p>}
+      </section>
     </main>
   );
 }
