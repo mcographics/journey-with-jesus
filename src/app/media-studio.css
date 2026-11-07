@@ -410,7 +410,7 @@
 }
 
 /* Social links management in Journey Studio */
-.studio-social-manager { display: grid; gap: 14px; }
+.studio-social-manager { display: grid; gap: 14px; min-height: clamp(520px, 68vh, 820px); }
 .studio-social-manager-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
 .studio-social-list { display: grid; gap: 12px; }
 .studio-social-card .studio-panel-heading { align-items: center; margin-bottom: 13px; }

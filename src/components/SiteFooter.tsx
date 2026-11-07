@@ -17,7 +17,7 @@ export function SiteFooter() {
             fallbackSrc={`${basePath}/images/kerygma-path-gateway-logo-complete-840.webp`}
             loading="lazy"
             pictureClassName="kerygma-footer-logo-picture"
-            sizes="(max-width: 580px) 110px, 140px"
+            sizes="(max-width: 700px) 260px, 340px"
             webpSources={[480, 840].map((width) => ({
               src: `${basePath}/images/kerygma-path-gateway-logo-complete-${width}.webp`,
               width,
