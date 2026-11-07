@@ -29,10 +29,7 @@ export function CommentSection({ episode, general = false, title }: { episode: E
         if (error) { setIsError(true); setStatus("Comments are temporarily unavailable. Please try again later."); return; }
         setComments(data ?? []);
       });
-    const heading = general ? "Media community" : title ?? "Story comments";
-  const headingId = general ? "media-community-title" : "episode-comments-title";
-
-  return () => { active = false; };
+    return () => { active = false; };
   }, [episodeId, configured]);
 
   async function submitComment(event: FormEvent<HTMLFormElement>) {
@@ -61,6 +58,9 @@ export function CommentSection({ episode, general = false, title }: { episode: E
       setStatus(error instanceof Error ? error.message : "Your comment could not be submitted right now.");
     } finally { setSending(false); }
   }
+
+  const heading = general ? "Media community" : title ?? "Story comments";
+  const headingId = general ? "media-community-title" : "episode-comments-title";
 
   return (
     <section className="comment-section" aria-labelledby={headingId}>

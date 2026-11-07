@@ -60,10 +60,6 @@ export function MediaExperience({ episodes: initialEpisodes }: { episodes: Episo
 
   const selectedId = resolveEpisodeId(search, episodes);
   const selectedEpisode = episodes.find((episode) => episode.id === selectedId) ?? null;
-  useEffect(() => {
-    if (selectedEpisode) setMediaKind(getMediaKind(selectedEpisode));
-  }, [selectedEpisode?.id]);
-
   const selectEpisode = (episode: Episode) => {
     setDiscussion("comments");
     window.history.pushState({}, "", episodeHref(window.location.href, episode.id));
@@ -84,10 +80,11 @@ export function MediaExperience({ episodes: initialEpisodes }: { episodes: Episo
     else clearSelection();
   };
 
-  const kindEpisodes = episodes.filter((episode) => getMediaKind(episode) === mediaKind);
+  const currentMediaKind = selectedEpisode ? getMediaKind(selectedEpisode) : mediaKind;
+  const kindEpisodes = episodes.filter((episode) => getMediaKind(episode) === currentMediaKind);
   const kindEpisodeIds = new Set(kindEpisodes.map((episode) => episode.id));
   const kindPlaylists = playlists.filter((playlist) => playlist.episodeIds.some((id) => kindEpisodeIds.has(id)));
-  const commentTitle = mediaKind === "stories" ? "Story comments" : "Video comments";
+  const commentTitle = currentMediaKind === "stories" ? "Story comments" : "Video comments";
 
   return (
     <main id="main-content" className="media-page" style={mediaPageStyle}>
@@ -102,10 +99,10 @@ export function MediaExperience({ episodes: initialEpisodes }: { episodes: Episo
         {catalogStatus === "error" && <p className="catalog-notice is-error" role="status">The media library could not be reached. Please refresh to try again.</p>}
 
         <nav className="media-kind-tabs" aria-label="Choose a media collection">
-          <button type="button" aria-pressed={mediaKind === "videos"} onClick={() => switchMediaKind("videos")}>
+          <button type="button" aria-pressed={currentMediaKind === "videos"} onClick={() => switchMediaKind("videos")}>
             <Film size={17} aria-hidden="true" /><span>Videos</span><small>{episodes.filter((episode) => getMediaKind(episode) === "videos").length}</small>
           </button>
-          <button type="button" aria-pressed={mediaKind === "stories"} onClick={() => switchMediaKind("stories")}>
+          <button type="button" aria-pressed={currentMediaKind === "stories"} onClick={() => switchMediaKind("stories")}>
             <Smartphone size={17} aria-hidden="true" /><span>Stories</span><small>{episodes.filter((episode) => getMediaKind(episode) === "stories").length}</small>
           </button>
         </nav>
@@ -127,7 +124,7 @@ export function MediaExperience({ episodes: initialEpisodes }: { episodes: Episo
               ? <CommentSection episode={null} general />
               : selectedEpisode
                 ? <CommentSection key={"comments-" + selectedEpisode.id} episode={selectedEpisode} title={commentTitle} />
-                : <p className="comment-status media-comment-prompt">Choose a {mediaKind === "stories" ? "story" : "video"} to open its comments, or join the Media community.</p>}
+                : <p className="comment-status media-comment-prompt">Choose a {currentMediaKind === "stories" ? "story" : "video"} to open its comments, or join the Media community.</p>}
           </div>
           <EpisodePlaylist episodes={kindEpisodes} playlists={kindPlaylists} selectedPlaylistId={playlistId}
             onPlaylistChange={setPlaylistId} selectedId={selectedId} onSelect={selectEpisode} mediaKind={mediaKind} />
