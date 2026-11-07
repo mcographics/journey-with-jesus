@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, type CSSProperties, type FormEvent } from "react";
+import { useEffect, useState, type CSSProperties, type FormEvent, type ReactNode } from "react";
 import { BookOpen, ChevronLeft, ChevronRight, Minus, Plus, Search } from "lucide-react";
 
 type BibleBook = {
@@ -11,6 +11,7 @@ type BibleBook = {
 type BibleData = {
   translation: string;
   books: BibleBook[];
+  redLetterSegments: Record<string, Array<[number, number]>>;
 };
 
 type SearchResult = {
@@ -18,6 +19,7 @@ type SearchResult = {
   chapter: number;
   verse: number;
   text: string;
+  redSegments: Array<[number, number]>;
 };
 
 type SavedLocation = {
@@ -27,6 +29,27 @@ type SavedLocation = {
 
 const readingLocationKey = "journey-with-jesus-word-location";
 const maximumSearchResults = 50;
+
+function ScriptureText({ text, segments }: { text: string; segments: Array<[number, number]> }) {
+  if (!segments.length) return text;
+
+  const parts: ReactNode[] = [];
+  let cursor = 0;
+  segments.forEach(([rawStart, rawEnd], index) => {
+    const start = Math.max(cursor, Math.min(text.length, rawStart));
+    const end = Math.max(start, Math.min(text.length, rawEnd));
+    if (end <= start) return;
+    if (start > cursor) parts.push(text.slice(cursor, start));
+    parts.push(
+      <span className="word-christ-words" key={`${start}-${index}`}>
+        {text.slice(start, end)}
+      </span>,
+    );
+    cursor = end;
+  });
+  if (cursor < text.length) parts.push(text.slice(cursor));
+  return <>{parts}</>;
+}
 
 export function ScriptureReader({ dataUrl }: { dataUrl: string }) {
   const [bible, setBible] = useState<BibleData | null>(null);
@@ -51,7 +74,12 @@ export function ScriptureReader({ dataUrl }: { dataUrl: string }) {
         return response.json() as Promise<BibleData>;
       })
       .then((data) => {
-        if (!Array.isArray(data.books) || data.books.length !== 66) {
+        if (
+          !Array.isArray(data.books)
+          || data.books.length !== 66
+          || !data.redLetterSegments
+          || typeof data.redLetterSegments !== "object"
+        ) {
           throw new Error("The Bible text file is incomplete.");
         }
         if (!cancelled) setBible(data);
@@ -165,11 +193,13 @@ export function ScriptureReader({ dataUrl }: { dataUrl: string }) {
           if (!text.toLocaleLowerCase().includes(term)) return;
           matchCount += 1;
           if (results.length < maximumSearchResults) {
+            const reference = `${book.name}|${chapterIndex + 1}|${verseIndex + 1}`;
             results.push({
               bookIndex: currentBookIndex,
               chapter: chapterIndex + 1,
               verse: verseIndex + 1,
               text,
+              redSegments: bible.redLetterSegments[reference] ?? [],
             });
           }
         });
@@ -297,7 +327,7 @@ export function ScriptureReader({ dataUrl }: { dataUrl: string }) {
                         type="button"
                       >
                         <strong>{reference}</strong>
-                        <span>{result.text}</span>
+                        <span><ScriptureText segments={result.redSegments} text={result.text} /></span>
                       </button>
                     </li>
                   );
@@ -354,7 +384,12 @@ export function ScriptureReader({ dataUrl }: { dataUrl: string }) {
                       key={verseNumber}
                     >
                       <sup>{verseNumber}</sup>
-                      <span>{verse}</span>
+                      <span>
+                        <ScriptureText
+                          segments={bible.redLetterSegments[`${activeBook.name}|${chapterNumber}|${verseNumber}`] ?? []}
+                          text={verse}
+                        />
+                      </span>
                     </p>
                   );
                 })}
