@@ -771,10 +771,23 @@
 }
 
 
-/* The gateway stands alone; site controls return on every interior route. */
-body:has(.kerygma-gateway) .site-header,
+/* The gateway keeps only the language control so visitors can choose before entering. */
+body:has(.kerygma-gateway) .site-header {
+  display: block !important;
+}
 body:has(.kerygma-gateway) .site-footer {
   display: none !important;
+}
+body:has(.kerygma-gateway) .site-header .header-inner > :not(.site-language-switcher) {
+  display: none !important;
+}
+body:has(.kerygma-gateway) .site-header .header-inner {
+  width: min(1280px, calc(100% - 36px)) !important;
+  justify-content: flex-end;
+  padding-top: max(14px, env(safe-area-inset-top));
+}
+body:has(.kerygma-gateway) .site-header .site-language-switcher {
+  pointer-events: auto;
 }
 
 /* Static white main copy with soft yellow labels and accents in dark mode. */
