@@ -319,9 +319,9 @@
 
 /* Important: keep photo-backed areas clear, including portrait images and
    the restored full-color Media Library image in both desktop and mobile. */
-:root:not([data-theme="light"]) body :is(
-  .mission-art::after, .store-hero-art::after, .episode-art::after
-) {
+:root:not([data-theme="light"]) body .mission-art::after,
+:root:not([data-theme="light"]) body .store-hero-art::after,
+:root:not([data-theme="light"]) body .episode-art::after {
   background: rgba(0, 0, 0, .2) !important;
 }
 :root:not([data-theme="light"]) body .media-page .media-stage {
@@ -358,4 +358,30 @@
     -webkit-backdrop-filter: none !important;
     backdrop-filter: none !important;
   }
+}
+
+/* Respect accessibility overrides rather than replacing user-selected
+   contrast and colour-vision palette variables with decorative defaults. */
+:root[data-accessibility-contrast="high"]:not([data-theme="light"]) {
+  --ink: #fff;
+  --muted: #f1f1f1;
+  --quiet: #d0d0d0;
+  --gold: #ffe27a;
+  --gold-bright: #ffe27a;
+}
+:root:not([data-theme="light"])[data-accessibility-color-vision="protanopia"] {
+  --gold: #e69f00;
+  --gold-bright: #f0d55e;
+}
+:root:not([data-theme="light"])[data-accessibility-color-vision="deuteranopia"] {
+  --gold: #ff986c;
+  --gold-bright: #ffb28e;
+}
+:root:not([data-theme="light"])[data-accessibility-color-vision="tritanopia"] {
+  --gold: #a64b16;
+  --gold-bright: #803300;
+}
+:root:not([data-theme="light"])[data-accessibility-color-vision="monochromacy"] {
+  --gold: #e1e1e1;
+  --gold-bright: #fff;
 }
