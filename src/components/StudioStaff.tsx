@@ -17,13 +17,17 @@ type StaffForm = {
   name: string;
   role: string;
   bio: string;
+  role_fr: string;
+  bio_fr: string;
+  role_es: string;
+  bio_es: string;
   profile_image_url: string;
   sort_order: string;
   published: boolean;
 };
 
 const blankForm = (): StaffForm => ({
-  name: "", role: "", bio: "", profile_image_url: "", sort_order: "0", published: false,
+  name: "", role: "", bio: "", role_fr: "", bio_fr: "", role_es: "", bio_es: "", profile_image_url: "", sort_order: "0", published: false,
 });
 
 export function StudioStaff({ client, onNotice }: Props) {
@@ -61,6 +65,10 @@ export function StudioStaff({ client, onNotice }: Props) {
       name: member.name,
       role: member.role,
       bio: member.bio,
+      role_fr: member.role_fr,
+      bio_fr: member.bio_fr,
+      role_es: member.role_es,
+      bio_es: member.bio_es,
       profile_image_url: member.profile_image_url ?? "",
       sort_order: String(member.sort_order),
       published: member.published,
@@ -121,6 +129,10 @@ export function StudioStaff({ client, onNotice }: Props) {
         name,
         role: form.role.trim(),
         bio: form.bio.trim(),
+        role_fr: form.role_fr.trim(),
+        bio_fr: form.bio_fr.trim(),
+        role_es: form.role_es.trim(),
+        bio_es: form.bio_es.trim(),
         profile_image_url: profileImageUrl,
         sort_order: Number.parseInt(form.sort_order, 10) || 0,
         published: form.published,
@@ -195,6 +207,10 @@ export function StudioStaff({ client, onNotice }: Props) {
           <label className="studio-span-two">Name<input value={form.name} onChange={(event) => setForm({ ...form, name: event.target.value })} maxLength={160} required /></label>
           <label className="studio-span-two">Role or title<input value={form.role} onChange={(event) => setForm({ ...form, role: event.target.value })} maxLength={240} placeholder="e.g. Editor / Webmaster" /></label>
           <label className="studio-span-two">About<textarea value={form.bio} onChange={(event) => setForm({ ...form, bio: event.target.value })} maxLength={3000} rows={5} placeholder="A short introduction for the public team page." /></label>
+          <label className="studio-span-two">Role or title (French)<input value={form.role_fr} onChange={(event) => setForm({ ...form, role_fr: event.target.value })} maxLength={240} /></label>
+          <label className="studio-span-two">About (French)<textarea value={form.bio_fr} onChange={(event) => setForm({ ...form, bio_fr: event.target.value })} maxLength={3000} rows={4} /></label>
+          <label className="studio-span-two">Role or title (Spanish)<input value={form.role_es} onChange={(event) => setForm({ ...form, role_es: event.target.value })} maxLength={240} /></label>
+          <label className="studio-span-two">About (Spanish)<textarea value={form.bio_es} onChange={(event) => setForm({ ...form, bio_es: event.target.value })} maxLength={3000} rows={4} /></label>
           <label>Display order<input type="number" value={form.sort_order} onChange={(event) => setForm({ ...form, sort_order: event.target.value })} /></label>
           <label className="studio-check"><input type="checkbox" checked={form.published} onChange={(event) => setForm({ ...form, published: event.target.checked })} />Publish on Meet the Team</label>
           <label className="studio-span-two studio-upload-field"><span>Profile image</span><input ref={imageInput} type="file" accept="image/jpeg,image/png,image/webp,image/avif" onChange={(event) => { setImageFile(event.target.files?.[0] ?? null); setRemoveImage(false); }} /><small>{imageFile?.name ?? (form.profile_image_url ? "A profile image is saved. Choose another to replace it." : "JPEG, PNG, WebP, or AVIF · up to 10 MB")}</small></label>

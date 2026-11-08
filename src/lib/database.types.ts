@@ -22,9 +22,9 @@ export type Database = {
         Relationships: [];
       };
       media_team_members: {
-        Row: { id: string; name: string; role: string; bio: string; profile_image_url: string | null; sort_order: number; published: boolean; created_at: string; updated_at: string };
-        Insert: { id: string; name: string; role?: string; bio?: string; profile_image_url?: string | null; sort_order?: number; published?: boolean };
-        Update: { name?: string; role?: string; bio?: string; profile_image_url?: string | null; sort_order?: number; published?: boolean; updated_at?: string };
+        Row: { id: string; name: string; role: string; bio: string; role_fr: string; bio_fr: string; role_es: string; bio_es: string; profile_image_url: string | null; sort_order: number; published: boolean; created_at: string; updated_at: string };
+        Insert: { id: string; name: string; role?: string; bio?: string; role_fr?: string; bio_fr?: string; role_es?: string; bio_es?: string; profile_image_url?: string | null; sort_order?: number; published?: boolean };
+        Update: { name?: string; role?: string; bio?: string; role_fr?: string; bio_fr?: string; role_es?: string; bio_es?: string; profile_image_url?: string | null; sort_order?: number; published?: boolean; updated_at?: string };
         Relationships: [];
       };
       media_social_links: {

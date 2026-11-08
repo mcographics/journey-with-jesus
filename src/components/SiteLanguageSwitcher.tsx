@@ -116,6 +116,7 @@ export function SiteLanguageSwitcher() {
     } catch {
       // Keep the selected language active for this page view.
     }
+    window.dispatchEvent(new Event("site-language-change"));
   }, [languageCode, languageReady, pathname]);
 
   useEffect(() => {
