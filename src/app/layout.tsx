@@ -9,6 +9,7 @@ import "./kerygma-pages.css";
 import "./blog.css";
 import "./accessibility.css";
 import "./scripture.css";
+import "./dark-mode.css";
 
 const siteUrl = "https://kerygmapath.com/";
 
