@@ -1,0 +1,204 @@
+/*
+ * Royal-sapphire gradients and restrained architectural glass.
+ *
+ * Apply gradients to page surfaces, never to the media photograph, image
+ * elements, the Media stage, or an image-wide scrim. Cards and controls
+ * receive the glass finish; imagery retains its original colour.
+ */
+:root:not([data-theme="light"]) {
+  --royal-glass: linear-gradient(
+    140deg,
+    rgba(91, 144, 212, .25) 0%,
+    rgba(22, 60, 119, .74) 36%,
+    rgba(9, 29, 65, .86) 100%
+  );
+  --royal-glass-line: rgba(173, 206, 250, .34);
+  --royal-glass-shadow: inset 0 1px 0 rgba(232, 242, 255, .21),
+    0 18px 44px rgba(1, 9, 27, .28);
+  --gold-outline: rgba(155, 194, 246, .35);
+  --gold-outline-flash: rgba(226, 239, 255, .72);
+  --gold-glow: rgba(104, 154, 221, .16);
+}
+
+/* The glow is part of the blue surface, not an overlay on artwork. */
+:root:not([data-theme="light"]) body :is(
+  .kerygma-gateway, .editorial-page, .blog-page, .word-page,
+  .studio-page, .kerygma-principles-section
+),
+:root:not([data-theme="light"]) body .editorial-page.store-page-v2 {
+  background-color: #071a3d !important;
+  background-image:
+    radial-gradient(ellipse at 82% 13%, rgba(45, 104, 190, .21), transparent 52%),
+    linear-gradient(128deg, #06152f 0%, #0a2653 41%, #113b73 70%, #071b40 100%) !important;
+  background-repeat: no-repeat !important;
+}
+
+:root:not([data-theme="light"]) body :is(
+  .site-footer, .kerygma-mission-section, .kerygma-project-section
+) {
+  background-color: #0a2148 !important;
+  background-image: linear-gradient(
+    155deg, #081b3d 0%, #103566 56%, #071a3b 100%
+  ) !important;
+}
+
+/* Glass appears on discrete panels; portrait and video assets stay clear. */
+:root:not([data-theme="light"]) body :is(
+  .blog-welcome, .blog-topic-card, .blog-next-note,
+  .kerygma-principle-card, .character-card,
+  .team-card:not(.team-profile), .team-profile[open],
+  .store-card, .store-preparing, .store-space-card, .store-unavailable-card,
+  .word-tools, .word-reading-paper, .word-search-results,
+  .playlist-panel, .episode-card, .comment-card, .comment-form,
+  .studio-panel, .studio-gate, .media-invitation
+) {
+  background: var(--royal-glass) !important;
+  border-color: var(--royal-glass-line) !important;
+  box-shadow: var(--royal-glass-shadow) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(135%);
+  backdrop-filter: blur(16px) saturate(135%);
+  outline-color: rgba(159, 197, 244, .25) !important;
+  animation: none !important;
+}
+
+/* A lightly illuminated rim on the glass, without blue photo masks. */
+:root:not([data-theme="light"]) body :is(
+  .blog-welcome, .blog-topic-card, .kerygma-principle-card,
+  .character-card, .store-card, .store-space-card,
+  .playlist-panel, .word-tools
+):hover {
+  border-color: rgba(199, 225, 255, .55) !important;
+  box-shadow: inset 0 1px 0 rgba(244, 249, 255, .27),
+    0 20px 48px rgba(1, 10, 33, .35) !important;
+}
+
+/* Navigation reads as cut sapphire glass, rather than glossy gold. */
+:root:not([data-theme="light"]) body :is(
+  .nav-link, .mobile-menu-toggle, .desktop-menu-toggle, .theme-toggle,
+  .site-language-toggle, .accessibility-settings-trigger,
+  .mobile-menu-options, .desktop-menu-options,
+  .site-language-options, .accessibility-settings-panel
+) {
+  background: linear-gradient(
+    145deg, rgba(49, 105, 173, .86), rgba(11, 42, 91, .9)
+  ) !important;
+  border-color: rgba(173, 210, 250, .44) !important;
+  box-shadow: inset 0 1px 0 rgba(241, 247, 255, .22),
+    0 10px 25px rgba(1, 11, 30, .24) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(145%);
+  backdrop-filter: blur(16px) saturate(145%);
+  outline-color: rgba(159, 197, 244, .25) !important;
+  animation: none !important;
+}
+
+:root:not([data-theme="light"]) body :is(
+  .nav-link:hover, .nav-link.is-current,
+  .desktop-menu-toggle:hover, .mobile-menu-toggle:hover,
+  .theme-toggle:hover, .site-language-toggle:hover,
+  .accessibility-settings-trigger:hover
+) {
+  background: linear-gradient(
+    140deg, rgba(66, 126, 198, .94), rgba(21, 65, 125, .93)
+  ) !important;
+}
+
+/* Subtle frost in the light theme: bright surfaces and legible dark text. */
+:root[data-theme="light"] body :is(
+  .blog-page, .editorial-page, .word-page, .studio-page,
+  .kerygma-principles-section
+) {
+  background-color: #f2f6fa !important;
+  background-image:
+    radial-gradient(ellipse at 85% 9%, rgba(157, 200, 249, .19), transparent 47%),
+    linear-gradient(135deg, #f8fbff 0%, #ebf3fd 62%, #f7faff 100%) !important;
+}
+
+:root[data-theme="light"] body .site-footer {
+  background-color: #edf4fc !important;
+  background-image: linear-gradient(150deg, #f7faff, #e8f1fc 60%, #f6faff) !important;
+}
+
+:root[data-theme="light"] body :is(
+  .blog-welcome, .blog-topic-card, .blog-next-note,
+  .kerygma-principle-card, .character-card,
+  .team-card:not(.team-profile), .team-profile[open],
+  .store-card, .store-preparing, .store-space-card, .store-unavailable-card,
+  .word-tools, .word-reading-paper, .word-search-results,
+  .playlist-panel, .episode-card, .comment-card, .comment-form,
+  .studio-panel, .studio-gate
+) {
+  background: linear-gradient(
+    142deg, rgba(255, 255, 255, .97), rgba(234, 244, 255, .91)
+  ) !important;
+  border-color: rgba(129, 164, 205, .38) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .98),
+    0 14px 36px rgba(34, 67, 111, .11) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(110%);
+  backdrop-filter: blur(14px) saturate(110%);
+}
+
+/* Media artwork is intentionally excluded from the page gradients. */
+:root body .media-page .media-stage {
+  background: transparent !important;
+  background-image: none !important;
+}
+:root:not([data-theme="light"]) body .media-page,
+:root[data-theme="light"] body .media-page {
+  background-image: var(--media-background-image, none) !important;
+  background-blend-mode: normal !important;
+}
+
+@media (max-width: 700px) {
+  :root body :is(
+    .blog-welcome, .blog-topic-card, .kerygma-principle-card,
+    .character-card, .playlist-panel, .word-tools,
+    .nav-link, .desktop-menu-options, .mobile-menu-options
+  ) {
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+  }
+}
+
+/* Keep opaque alternatives for people who request stronger contrast or
+ * reduced transparency, and for browsers without background blur support. */
+:root[data-accessibility-contrast="high"]:not([data-theme="light"]) body :is(
+  .blog-welcome, .blog-topic-card, .blog-next-note,
+  .kerygma-principle-card, .character-card, .team-profile[open],
+  .store-card, .word-tools, .word-reading-paper, .playlist-panel,
+  .studio-panel, .nav-link, .theme-toggle, .desktop-menu-options,
+  .mobile-menu-options, .site-language-options, .accessibility-settings-panel
+) {
+  background: #0c2855 !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+:root[data-accessibility-contrast="high"][data-theme="light"] body :is(
+  .blog-welcome, .blog-topic-card, .kerygma-principle-card,
+  .character-card, .word-tools, .word-reading-paper, .playlist-panel
+) {
+  background: #fff !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  :root:not([data-theme="light"]) body :is(
+    .blog-welcome, .blog-topic-card, .kerygma-principle-card,
+    .character-card, .word-tools, .playlist-panel, .studio-panel,
+    .nav-link, .theme-toggle, .desktop-menu-options, .mobile-menu-options
+  ) {
+    background: #0c2855 !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  :root:not([data-theme="light"]) body :is(
+    .blog-welcome, .blog-topic-card, .kerygma-principle-card,
+    .character-card, .word-tools, .playlist-panel, .studio-panel,
+    .nav-link, .theme-toggle, .desktop-menu-options, .mobile-menu-options
+  ) {
+    background: #0e2d5a !important;
+  }
+}
