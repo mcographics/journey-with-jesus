@@ -62,6 +62,7 @@ export function SiteHeader() {
   });
   const [isDesktopMenuOpen, setIsDesktopMenuOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobileMenuIdle, setIsMobileMenuIdle] = useState(false);
   const [themeMode, setThemeMode] = useState<ThemeMode>("auto");
   const desktopNavigationRef = useRef<HTMLDivElement>(null);
   const desktopMenuButtonRef = useRef<HTMLButtonElement>(null);
@@ -128,6 +129,39 @@ export function SiteHeader() {
     } catch {}
     setThemeColor(nextTheme);
   };
+
+  // Keep the menu at the viewport's right centre; let its glow recede when
+  // scrolling stops. Leave a faint, tappable handle for easy rediscovery.
+  useEffect(() => {
+    const mobileViewport = window.matchMedia("(max-width: 768px)");
+    let idleTimer: number | undefined;
+
+    const clearIdleTimer = () => {
+      if (idleTimer !== undefined) {
+        window.clearTimeout(idleTimer);
+        idleTimer = undefined;
+      }
+    };
+
+    const revealAndScheduleFade = () => {
+      clearIdleTimer();
+      setIsMobileMenuIdle(false);
+      if (!mobileViewport.matches || isMobileMenuOpen) return;
+      idleTimer = window.setTimeout(() => setIsMobileMenuIdle(true), 1400);
+    };
+
+    const onViewportChange = () => revealAndScheduleFade();
+
+    window.addEventListener("scroll", revealAndScheduleFade, { passive: true });
+    mobileViewport.addEventListener("change", onViewportChange);
+    revealAndScheduleFade();
+
+    return () => {
+      clearIdleTimer();
+      window.removeEventListener("scroll", revealAndScheduleFade);
+      mobileViewport.removeEventListener("change", onViewportChange);
+    };
+  }, [isMobileMenuOpen]);
 
   useEffect(() => {
     if (!isDesktopMenuOpen) return;
@@ -254,7 +288,7 @@ export function SiteHeader() {
           </span>
         </button>
         <div
-          className="mobile-navigation"
+          className={`mobile-navigation${isMobileMenuIdle && !isMobileMenuOpen ? " is-idle" : ""}`}
           ref={mobileNavigationRef}
         >
           <nav
