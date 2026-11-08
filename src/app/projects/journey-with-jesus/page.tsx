@@ -107,8 +107,8 @@ export default function HomePage() {
               fallbackSrc={`${basePath}/images/mission-garden-fallback.jpg`}
               loading="lazy"
               pictureClassName="responsive-picture-fill"
-              sizes="(max-width: 700px) calc(100vw - 36px), 390px"
-              webpSources={imageSources("mission-garden", [480, 640, 900])}
+              sizes="(max-width: 1180px) min(100vw, 816px), min(61vw, 1200px)"
+              webpSources={imageSources("mission-garden", [480, 640, 900, 1280, 1600, 1920, 2560])}
             />
             <span className="mission-art-frame" aria-hidden="true" />
             <Sparkles className="mission-sparkle mission-sparkle-one" aria-hidden="true" size={19} />
