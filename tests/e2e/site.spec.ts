@@ -72,6 +72,47 @@ test("public destinations are available in the desktop menu, with working story 
 test.describe("mobile header controls and translations", () => {
   test.use({ viewport: { width: 375, height: 812 }, isMobile: true, hasTouch: true });
 
+
+  test("floating menu remains visible at right centre through scrolling and opens leftward", async ({ page }) => {
+    await page.goto("/company/");
+    const floating = page.locator(".mobile-navigation");
+    const toggle = floating.locator(".mobile-menu-toggle");
+    await expect(floating).toHaveCSS("position", "fixed");
+    await expect(toggle).toBeVisible();
+    const before = await toggle.boundingBox();
+    expect(before).not.toBeNull();
+    expect(before!.x + before!.width).toBeCloseTo(375 - 14, 0);
+    expect(before!.y + before!.height / 2).toBeCloseTo(406, 0);
+
+    await page.evaluate(() => {
+      document.documentElement.style.scrollBehavior = "auto";
+      window.scrollTo(0, document.body.scrollHeight);
+    });
+    await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(100);
+    const after = await toggle.boundingBox();
+    expect(after).not.toBeNull();
+    expect(after!.x).toBeCloseTo(before!.x, 0);
+    expect(after!.y).toBeCloseTo(before!.y, 0);
+
+    // The menu must not vanish after scrolling stops.
+    await page.waitForTimeout(1250);
+    await expect(toggle).toBeVisible();
+    await expect(floating).toHaveCSS("opacity", "1");
+
+    await toggle.click();
+    const options = floating.locator(".mobile-menu-options");
+    await expect(options).toBeVisible();
+    const menuBox = await options.boundingBox();
+    expect(menuBox).not.toBeNull();
+    expect(menuBox!.x).toBeGreaterThanOrEqual(0);
+    expect(menuBox!.x + menuBox!.width).toBeLessThan(before!.x);
+    expect(menuBox!.y).toBeGreaterThanOrEqual(0);
+    expect(menuBox!.y + menuBox!.height).toBeLessThanOrEqual(812);
+    await expect(options.getByRole("link", { name: "Blog" })).toBeVisible();
+    await toggle.click();
+    await expect(options).toBeHidden();
+  });
+
   test("the selected language is applied across all public and policy routes", async ({ page }) => {
     await page.goto("/company/");
     await page.locator(".site-language-toggle").click();
@@ -108,7 +149,6 @@ test.describe("mobile header controls and translations", () => {
       page.locator(".site-language-toggle"),
       page.locator(".accessibility-settings-trigger"),
       page.locator(".theme-toggle"),
-      page.locator(".mobile-menu-toggle"),
     ];
     const boxes: Array<{ x: number; y: number; width: number; height: number }> = [];
     for (const selector of selectors) {
@@ -122,6 +162,13 @@ test.describe("mobile header controls and translations", () => {
       expect(boxes[index].y).toBeCloseTo(boxes[0].y, 0);
       expect(boxes[index].x).toBeGreaterThanOrEqual(boxes[index - 1].x + boxes[index - 1].width);
     }
+    // The hamburger is a separate floating control at the screen's right centre.
+    const floatingMenu = page.locator(".mobile-menu-toggle");
+    await expect(floatingMenu).toBeVisible();
+    const floatingBox = await floatingMenu.boundingBox();
+    expect(floatingBox).not.toBeNull();
+    expect(floatingBox!.x + floatingBox!.width).toBeCloseTo(375 - 14, 0);
+    expect(floatingBox!.y + floatingBox!.height / 2).toBeCloseTo(812 / 2, 0);
 
     const accessibilityButton = page.getByRole("button", { name: "Accessibility settings" });
     await accessibilityButton.click();
