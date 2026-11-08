@@ -67,13 +67,13 @@ function translateElementAttributes(element: Element, locale: SiteLocale) {
 
 function translateNode(node: Node, locale: SiteLocale) {
   if (node instanceof Text) {
-    if (!node.parentElement?.closest(".site-language-switcher,script,style,noscript,[translate='no']")) {
+    if (!node.parentElement?.closest("script,style,noscript,[translate='no']")) {
       translateTextNode(node, locale);
     }
     return;
   }
 
-  if (!(node instanceof Element) || node.closest(".site-language-switcher,script,style,noscript,[translate='no']")) return;
+  if (!(node instanceof Element) || node.closest("script,style,noscript,[translate='no']")) return;
   translateElementAttributes(node, locale);
   node.childNodes.forEach((child) => translateNode(child, locale));
 }
@@ -81,6 +81,7 @@ function translateNode(node: Node, locale: SiteLocale) {
 function applySiteLanguage(locale: SiteLocale) {
   if (typeof document === "undefined") return;
   document.documentElement.lang = locale;
+  translateNode(document.head, locale);
   translateNode(document.body, locale);
 }
 
