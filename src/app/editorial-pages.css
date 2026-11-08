@@ -223,12 +223,33 @@
 }
 .team-profile { width: 100%; }
 .team-profile-mobile-caption { display: none; }
+.team-grid-mobile-footprint { display: none; }
+.team-profile-list { display: contents; }
 @media (max-width: 700px) {
-  .team-grid:has(.team-profile) { grid-template-columns: minmax(0, 360px); gap: 20px; }
+  .team-grid:has(.team-profile) { grid-template-columns: minmax(0, 360px); gap: 0; }
 
-  /* Collapsed portraits should occupy only their visible size, not a full expanded profile. */
-  .team-profile-slot:has(> .team-profile:not([open])) > .team-profile-space { display: none; }
-  .team-profile-slot > .team-profile:not([open]) { position: relative; inset: auto; margin-inline: auto; }
+  /* Layer the compact visible list over an invisible, fully expanded-size reserve.
+     The reserve fixes total page height without separating the two collapsed portraits. */
+  .team-grid-mobile-footprint,
+  .team-profile-list { grid-column: 1; grid-row: 1; }
+  .team-grid-mobile-footprint {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+    align-content: start;
+    visibility: hidden;
+    pointer-events: none;
+  }
+  .team-grid-mobile-footprint > .team-profile-space { display: block; padding-bottom: 12px; }
+  .team-profile-list {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+    align-content: start;
+    min-width: 0;
+  }
+  .team-profile-slot > .team-profile-space { display: none; }
+  .team-profile-slot > .team-profile { position: relative; inset: auto; margin-inline: auto; }
   .team-profile-slot:has(> .team-profile:not([open])) > .team-profile-mobile-caption {
     display: grid;
     gap: 5px;
