@@ -1453,7 +1453,7 @@ body, .home-hero, .mission-section, .site-footer, .media-page {
   top: calc(100% + 9px);
   left: 0;
   display: grid;
-  width: min(310px, calc(100vw - 32px));
+  width: min(174px, calc(100vw - 32px));
   max-height: min(68vh, 540px);
   gap: 2px;
   overflow-y: auto;
@@ -1471,8 +1471,8 @@ body, .home-hero, .mission-section, .site-footer, .media-page {
   display: flex;
   min-height: 38px;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+  justify-content: flex-start;
+  gap: 8px;
   padding: 6px 10px;
   border: 1px solid transparent;
   border-radius: 7px;
@@ -1545,7 +1545,7 @@ body, .home-hero, .mission-section, .site-footer, .media-page {
     top: calc(64px + env(safe-area-inset-top, 0px));
     left: auto;
     right: calc(12px + env(safe-area-inset-right, 0px));
-    width: min(260px, calc(100vw - 24px));
+    width: min(168px, calc(100vw - 24px));
   }
 }
 
@@ -1679,7 +1679,7 @@ body, .home-hero, .mission-section, .site-footer, .media-page {
     top: calc(58px + env(safe-area-inset-top, 0px));
     right: calc(12px + env(safe-area-inset-right, 0px));
     left: auto;
-    width: min(260px, calc(100vw - 24px));
+    width: min(168px, calc(100vw - 24px));
     max-width: calc(100vw - 24px);
   }
 }
