@@ -16,7 +16,7 @@ const languages: Language[] = [
 type SavedText = { source: string; lastApplied: string };
 const originalText = new WeakMap<Text, SavedText>();
 const originalAttributes = new WeakMap<Element, Map<string, SavedText>>();
-const translatableAttributes = ["alt", "aria-label", "aria-description", "placeholder", "title"];
+const translatableAttributes = ["alt", "aria-label", "aria-description", "placeholder", "title", "content"];
 
 function getTextSource(node: Text) {
   const current = node.nodeValue ?? "";
@@ -128,13 +128,15 @@ export function SiteLanguageSwitcher() {
         record.addedNodes.forEach((node) => translateNode(node, languageCode));
       }
     });
-    observer.observe(document.body, {
+    const observerOptions: MutationObserverInit = {
       subtree: true,
       childList: true,
       characterData: true,
       attributes: true,
       attributeFilter: translatableAttributes,
-    });
+    };
+    observer.observe(document.head, observerOptions);
+    observer.observe(document.body, observerOptions);
     return () => observer.disconnect();
   }, [languageCode]);
 
