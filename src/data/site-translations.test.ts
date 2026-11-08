@@ -8,6 +8,12 @@ describe("site language translations", () => {
 
     expect(translateSiteText("Buch 1", "fr")).toBe("Genèse");
     expect(translateSiteText("Buch 66", "es")).toBe("Apocalipsis");
+
+    registerBibleBookNameAliases(Array.from({ length: 39 }, (_, index) => `Tanakh ${index + 1}`));
+    expect(translateSiteText("Tanakh 39", "fr")).toBe("Malachie");
+
+    registerBibleBookNameAliases(Array.from({ length: 27 }, (_, index) => `Nuevo Testamento ${index + 1}`));
+    expect(translateSiteText("Nuevo Testamento 1", "fr")).toBe("Matthieu");
   });
 
   it("keeps search result notices in the selected site language", () => {
