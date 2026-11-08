@@ -2,7 +2,6 @@ export type SiteLocale = "en" | "fr" | "es";
 
 const translations: Array<[string, string, string]> = [
   ["Studio", "Studio", "Estudio"],
-  ["The Studio", "Le studio", "El estudio"],
   ["John 1:1", "Jean 1:1", "Juan 1:1"],
   ["Blog", "Blog", "Blog"],
   ["The Word", "La Parole", "La Palabra"],
@@ -37,10 +36,8 @@ const translations: Array<[string, string, string]> = [
   ["Our process", "Notre démarche", "Nuestro proceso"],
   ["Scripture · Story · AI-assisted animation", "Écriture · Récit · Animation assistée par l’IA", "Escritura · Historia · Animación asistida por IA"],
   ["Our purpose", "Notre mission", "Nuestro propósito"],
-  ["Stories can help the message", "Les histoires peuvent aider le message", "Las historias pueden ayudar a que el mensaje"],
   ["reach the heart.", "toucher le cœur.", "llegue al corazón."],
   ["Our creative process", "Notre processus créatif", "Nuestro proceso creativo"],
-  ["From Scripture to", "De l’Écriture à l’", "De la Escritura a la"],
   ["screen.", "écran.", "pantalla."],
   ["Story rooted in Scripture", "Un récit enraciné dans l’Écriture", "Una historia arraigada en la Escritura"],
   ["Every project begins with the biblical message it is meant to share.", "Chaque projet commence par le message biblique qu’il souhaite transmettre.", "Cada proyecto comienza con el mensaje bíblico que busca compartir."],
@@ -600,7 +597,6 @@ const translations: Array<[string, string, string]> = [
   ["Save story details first to enable uploads. You can save a draft without a video, even with Publish checked.","Enregistrez d’abord les détails du récit pour activer les téléversements. Vous pouvez enregistrer un brouillon sans vidéo, même si Publier est coché.","Guarda primero los detalles de la historia para habilitar las cargas. Puedes guardar un borrador sin video, incluso si Publicar está marcado."],
   ["Add a YouTube link or upload a video before making this story public.","Ajoutez un lien YouTube ou téléversez une vidéo avant de rendre ce récit public.","Añade un enlace de YouTube o sube un video antes de hacer pública esta historia."],
   ["Enter a valid YouTube video link (youtube.com or youtu.be).","Saisissez un lien vidéo YouTube valide (youtube.com ou youtu.be).","Introduce un enlace válido de video de YouTube (youtube.com o youtu.be)."],
-  ["Enter a valid HTTPS link to the interpreter-produced ASL video.","Saisissez un lien HTTPS valide vers la vidéo en ASL produite par l’interprète.","Introduce un enlace HTTPS válido al video en ASL producido por el intérprete."],
   ["Enter a valid language code such as en, fr, or fr-CA.","Saisissez un code de langue valide, comme en, fr ou fr-CA.","Introduce un código de idioma válido, como en, fr o fr-CA."],
   ["Choose one or more video files first.","Choisissez d’abord un ou plusieurs fichiers vidéo.","Primero elige uno o más archivos de video."],
   ["Choose an MP4, WebM, or QuickTime video file.","Choisissez un fichier vidéo MP4, WebM ou QuickTime.","Elige un archivo de video MP4, WebM o QuickTime."],
@@ -669,7 +665,6 @@ const translations: Array<[string, string, string]> = [
   ["Interpreter-prepared .vtt · up to 2 MB","Fichier .vtt préparé par l’interprète · jusqu’à 2 Mo","Archivo .vtt preparado por el intérprete · hasta 2 MB"],
   ["Stories in this playlist","Récits dans cette liste de lecture","Historias en esta lista de reproducción"],
   ["Videos in this playlist","Vidéos dans cette liste de lecture","Videos en esta lista de reproducción"],
-  ["Media community · General discussion","Communauté média · discussion générale","Comunidad multimedia · debate general"],
   ["Supabase blocked the Studio redirect. The site administrator must add this site's Studio URL to the Supabase Auth redirect allow list.","Supabase a bloqué la redirection vers Studio. L’administrateur du site doit ajouter l’URL de Studio à la liste des redirections autorisées de Supabase Auth.","Supabase bloqueó la redirección a Studio. El administrador del sitio debe añadir la URL de Studio a la lista de redirecciones permitidas de Supabase Auth."],
   ["Enter a display name for this social link.","Saisissez un nom d’affichage pour ce lien social.","Introduce un nombre visible para este enlace social."],
   ["Enter a valid HTTPS link.","Saisissez un lien HTTPS valide.","Introduce un enlace HTTPS válido."],
@@ -718,6 +713,7 @@ const translations: Array<[string, string, string]> = [
   ["JPEG, PNG, WebP, or AVIF · up to 10 MB","JPEG, PNG, WebP ou AVIF · jusqu’à 10 Mo","JPEG, PNG, WebP o AVIF · hasta 10 MB"],
   ["Studio did not confirm that the caption file was attached.","Studio n’a pas confirmé que le fichier de sous-titres était joint.","Studio no confirmó que se adjuntara el archivo de subtítulos."],
   ["Studio did not confirm that the caption track was removed.","Studio n’a pas confirmé la suppression de la piste de sous-titres.","Studio no confirmó que se eliminara la pista de subtítulos."],
+  ["Journey with Jesus ticker.", "Bandeau Journey with Jesus.", "Cinta de Journey with Jesus."],
 ];
 
 const dictionaries: Record<Exclude<SiteLocale, "en">, Record<string, string>> = {
