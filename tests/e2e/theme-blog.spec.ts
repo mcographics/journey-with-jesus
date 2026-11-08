@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-test("blog dark mode uses white headings, royal-blue gradients and glass surfaces", async ({ page }) => {
+test("blog dark mode uses white headings, deep royal-blue gradients and gold-rimmed glass", async ({ page }) => {
   await page.addInitScript(() => {
     window.localStorage.setItem("journey-with-jesus-theme-mode", "dark");
   });
@@ -12,11 +12,11 @@ test("blog dark mode uses white headings, royal-blue gradients and glass surface
   const cardTitle = page.locator(".blog-welcome h2").first();
 
   for (const heading of [hero, emphasizedTitle, sectionTitle, cardTitle]) {
-    await expect(heading).toHaveCSS("color", "rgb(247, 250, 255)");
+    await expect(heading).toHaveCSS("color", "rgb(249, 251, 255)");
     await expect(heading).toHaveCSS("background-image", "none");
   }
 
-  await expect(page.locator(".blog-page")).toHaveCSS("background-color", "rgb(7, 26, 61)");
+  await expect(page.locator(".blog-page")).toHaveCSS("background-color", "rgb(6, 21, 49)");
   const background = await page.locator(".blog-page").evaluate((node) => getComputedStyle(node).backgroundImage);
   expect(background).toContain("linear-gradient(");
   expect(background).toContain("radial-gradient(");
@@ -25,6 +25,10 @@ test("blog dark mode uses white headings, royal-blue gradients and glass surface
   expect(cardGradient).toContain("linear-gradient(");
   await expect(glassCard).toHaveCSS("backdrop-filter", "blur(16px) saturate(1.35)");
   await expect(page.locator(".blog-topic-card").first()).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
+  await expect(page.locator(".blog-eyebrow").first()).toHaveCSS("color", "rgb(255, 220, 118)");
+  await expect(page.locator(".blog-next-note")).toHaveCSS("border-left-color", "rgb(255, 220, 118)");
+  const border = await glassCard.evaluate((node) => getComputedStyle(node).borderTopColor);
+  expect(border).toContain("247, 204, 112");
 });
 
 test("blog light mode uses light cards and dark readable headings", async ({ page }) => {
@@ -111,4 +115,51 @@ test("high-contrast preference replaces translucent glass with solid legible pan
   await page.goto("/blog/");
   await expect(page.locator(".blog-welcome").first()).toHaveCSS("background-color", "rgb(12, 40, 85)");
   await expect(page.locator(".blog-welcome").first()).toHaveCSS("background-image", "none");
+});
+
+test("dark mode uses real gold CTAs with dark readable labels", async ({ page }) => {
+  await page.addInitScript(() => {
+    localStorage.setItem("journey-with-jesus-theme-mode", "dark");
+  });
+  await page.goto("/");
+  const enter = page.locator(".kerygma-enter-button");
+  expect(await enter.evaluate((node) => getComputedStyle(node).backgroundImage))
+    .toContain("linear-gradient(");
+  await expect(enter).toHaveCSS("color", "rgb(6, 20, 47)");
+  await expect(enter).toHaveCSS("border-top-color", "rgba(255, 245, 199, 0.85)");
+
+  await page.goto("/company/");
+  const studioAction = page.locator(".kerygma-button-gold").first();
+  await expect(studioAction).toHaveCSS("color", "rgb(6, 20, 47)");
+  expect(await studioAction.evaluate((node) => getComputedStyle(node).backgroundImage))
+    .toContain("linear-gradient(");
+  await expect(page.locator(".kerygma-company .kerygma-eyebrow").first())
+    .toHaveCSS("color", "rgb(255, 218, 112)");
+});
+
+test("dark mode keeps original media imagery and excludes gold from photo overlays", async ({ page }) => {
+  await page.addInitScript(() => {
+    localStorage.setItem("journey-with-jesus-theme-mode", "dark");
+  });
+  await page.goto("/media/");
+  const media = page.locator(".media-page");
+  const image = await media.evaluate((node) => getComputedStyle(node).backgroundImage);
+  expect(image).toContain("media-page-background.webp");
+  expect(image).not.toContain("gradient(");
+  await expect(media).toHaveCSS("background-blend-mode", "normal");
+  await expect(page.locator(".media-stage")).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
+  await page.goto("/company/");
+  await expect(page.locator(".kerygma-company-hero-shade"))
+    .toHaveCSS("background-color", "rgba(0, 0, 0, 0.2)");
+});
+
+test("royal gold is scoped to dark mode and respects high contrast", async ({ page }) => {
+  await page.addInitScript(() => {
+    localStorage.setItem("journey-with-jesus-theme-mode", "dark");
+    localStorage.setItem("journey-with-jesus-accessibility", JSON.stringify({ highContrast: true }));
+  });
+  await page.goto("/blog/");
+  await expect(page.locator(".blog-welcome").first()).toHaveCSS("background-color", "rgb(12, 40, 85)");
+  await expect(page.locator(".blog-welcome").first()).toHaveCSS("background-image", "none");
+  await expect(page.locator("html")).toHaveCSS("--gold-bright", "#ffe27a");
 });
