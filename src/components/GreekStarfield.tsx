@@ -53,6 +53,10 @@ export function GreekStarfield() {
     let stars: Star[] = [];
     let shootingStar: ShootingStar | null = null;
     let nextMeteorAt = nextShootingStarDelay();
+    // A restrained navy-blue haze drawn behind every star. Colours echo the
+    // studio's #071321 / #0d2744 / #0b1b30 palette at much lower intensity.
+    let spaceBase: CanvasGradient;
+    let spaceBlueHaze: CanvasGradient;
 
     const paintShootingStar = () => {
       if (!shootingStar) return;
@@ -93,7 +97,10 @@ export function GreekStarfield() {
     };
 
     const paint = () => {
-      context.fillStyle = "#000";
+      // The canvas is opaque, so its own backdrop needs the subtle blue blend.
+      context.fillStyle = spaceBase;
+      context.fillRect(0, 0, width, height);
+      context.fillStyle = spaceBlueHaze;
       context.fillRect(0, 0, width, height);
       const scale = Math.min(width, height) * 0.55;
       for (const star of stars) {
@@ -146,6 +153,19 @@ export function GreekStarfield() {
       const ratio = Math.min(window.devicePixelRatio || 1, 2);
       canvas.width = Math.round(width * ratio); canvas.height = Math.round(height * ratio);
       context.setTransform(ratio, 0, 0, ratio, 0, 0);
+      spaceBase = context.createLinearGradient(0, 0, width, height);
+      spaceBase.addColorStop(0, "#010306");
+      spaceBase.addColorStop(0.47, "#050c18");
+      spaceBase.addColorStop(0.72, "#07101c");
+      spaceBase.addColorStop(1, "#010306");
+
+      spaceBlueHaze = context.createRadialGradient(
+        width * 0.77, height * 0.30, 0,
+        width * 0.77, height * 0.30, Math.max(width, height) * 0.81,
+      );
+      spaceBlueHaze.addColorStop(0, "rgba(24, 76, 142, 0.11)");
+      spaceBlueHaze.addColorStop(0.52, "rgba(13, 39, 68, 0.07)");
+      spaceBlueHaze.addColorStop(1, "rgba(5, 14, 30, 0)");
       stars = Array.from({ length: Math.min(1400, Math.max(500, Math.floor(width * height / 2600))) }, createStar);
       words.reset();
       paintScene();
