@@ -64,8 +64,8 @@ function TickerSequence({ items }: { items: TickerItem[] }) {
               item.text
             ) : (
               <>
-                <span className="masthead-ticker-words">“{item.words}”</span>
-                <span className="masthead-ticker-reference"> — {item.reference}</span>
+                <span className="masthead-ticker-words" translate="no">“{item.words}”</span>
+                <span className="masthead-ticker-reference" translate="no"> — {item.reference}</span>
               </>
             )}
           </span>
@@ -81,7 +81,15 @@ export default function MastheadTicker() {
 
   return (
     <div className="masthead-ticker">
-      <p className="visually-hidden">Journey with Jesus ticker. {tickerItems.map(describeItem).join(". ")}.</p>
+      <p className="visually-hidden">
+        Journey with Jesus ticker.{" "}
+        {tickerItems.map((item, index) => (
+          <Fragment key={item.id}>
+            {item.kind === "verse" ? <span translate="no">{describeItem(item)}</span> : item.text}
+            {index < tickerItems.length - 1 ? ". " : "."}
+          </Fragment>
+        ))}
+      </p>
       <div className="masthead-ticker-window" aria-hidden="true">
         <div className="masthead-ticker-track">
           <TickerSequence items={items} />
