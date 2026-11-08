@@ -45,15 +45,18 @@ export function LanguageAwareLogo(props: LanguageAwareLogoProps) {
     : language === "es"
       ? "kerygma-path-gateway-logo-es"
       : "kerygma-path-gateway-logo-complete";
+  const imageFormat = language === "en" ? "webp" : "png";
+  const logoSources = [480, 840].map((width) => ({
+    src: `${basePath}/images/${imagePrefix}-${width}.${imageFormat}`,
+    width,
+  }));
 
   return (
     <ResponsivePicture
       {...props}
-      fallbackSrc={`${basePath}/images/${imagePrefix}-840.webp`}
-      webpSources={[480, 840].map((width) => ({
-        src: `${basePath}/images/${imagePrefix}-${width}.webp`,
-        width,
-      }))}
+      fallbackSrc={`${basePath}/images/${imagePrefix}-840.${imageFormat}`}
+      pngSources={imageFormat === "png" ? logoSources : undefined}
+      webpSources={imageFormat === "webp" ? logoSources : undefined}
     />
   );
 }

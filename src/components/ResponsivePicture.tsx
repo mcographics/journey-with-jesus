@@ -7,7 +7,8 @@ export type PictureCandidate = {
 
 type ResponsivePictureProps = Omit<ImageProps, "src" | "srcSet" | "unoptimized"> & {
   fallbackSrc: string;
-  webpSources: PictureCandidate[];
+  pngSources?: PictureCandidate[];
+  webpSources?: PictureCandidate[];
   mobileWebpSources?: PictureCandidate[];
   pictureClassName?: string;
 };
@@ -18,6 +19,7 @@ function toSrcSet(candidates: PictureCandidate[]) {
 
 export default function ResponsivePicture({
   fallbackSrc,
+  pngSources,
   webpSources,
   mobileWebpSources,
   pictureClassName,
@@ -35,11 +37,12 @@ export default function ResponsivePicture({
           sizes="100vw"
         />
       ) : null}
-      <source
-        type="image/webp"
-        srcSet={toSrcSet(webpSources)}
-        sizes={sizes}
-      />
+      {pngSources?.length ? (
+        <source type="image/png" srcSet={toSrcSet(pngSources)} sizes={sizes} />
+      ) : null}
+      {webpSources?.length ? (
+        <source type="image/webp" srcSet={toSrcSet(webpSources)} sizes={sizes} />
+      ) : null}
       <Image {...imageProps} alt={alt} sizes={sizes} src={fallbackSrc} unoptimized />
     </picture>
   );

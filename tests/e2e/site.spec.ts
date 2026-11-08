@@ -9,7 +9,7 @@ for (const language of [
     await page.locator(".site-language-toggle").click();
     await page.getByRole("option", { name: language.option }).click();
 
-    const expectedLogo = `kerygma-path-gateway-logo-${language.code}-840.webp`;
+    const expectedLogo = `kerygma-path-gateway-logo-${language.code}-840.png`;
     await expect(page.locator("html")).toHaveAttribute("lang", language.code);
     await expect(page.locator(".kerygma-gateway-logo")).toHaveAttribute("src", new RegExp(expectedLogo));
     await expect(page.locator(".kerygma-footer-logo")).toHaveAttribute("src", new RegExp(expectedLogo));
