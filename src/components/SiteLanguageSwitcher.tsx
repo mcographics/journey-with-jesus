@@ -3,222 +3,135 @@
 import { useEffect, useRef, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { translateSiteText, type SiteLocale } from "@/data/site-translations";
 
-type Language = { code: string; name: string };
+type Language = { code: SiteLocale; name: string; label: string };
 
 const languages: Language[] = [
-  { code: "en", name: "English" },
-  { code: "ar", name: "Arabic" },
-  { code: "bg", name: "Bulgarian" },
-  { code: "zh-CN", name: "Chinese (Simplified)" },
-  { code: "zh-TW", name: "Chinese (Traditional)" },
-  { code: "hr", name: "Croatian" },
-  { code: "cs", name: "Czech" },
-  { code: "da", name: "Danish" },
-  { code: "nl", name: "Dutch" },
-  { code: "fi", name: "Finnish" },
-  { code: "fr", name: "French" },
-  { code: "de", name: "German" },
-  { code: "el", name: "Greek" },
-  { code: "hi", name: "Hindi" },
-  { code: "it", name: "Italian" },
-  { code: "ja", name: "Japanese" },
-  { code: "ko", name: "Korean" },
-  { code: "no", name: "Norwegian" },
-  { code: "pl", name: "Polish" },
-  { code: "pt", name: "Portuguese" },
-  { code: "ro", name: "Romanian" },
-  { code: "ru", name: "Russian" },
-  { code: "es", name: "Spanish" },
-  { code: "sv", name: "Swedish" },
-  { code: "ca", name: "Catalan" },
-  { code: "tl", name: "Filipino" },
-  { code: "iw", name: "Hebrew" },
-  { code: "id", name: "Indonesian" },
-  { code: "lv", name: "Latvian" },
-  { code: "lt", name: "Lithuanian" },
-  { code: "sr", name: "Serbian" },
-  { code: "sk", name: "Slovak" },
-  { code: "sl", name: "Slovenian" },
-  { code: "uk", name: "Ukrainian" },
-  { code: "vi", name: "Vietnamese" },
-  { code: "sq", name: "Albanian" },
-  { code: "et", name: "Estonian" },
-  { code: "gl", name: "Galician" },
-  { code: "hu", name: "Hungarian" },
-  { code: "mt", name: "Maltese" },
-  { code: "th", name: "Thai" },
-  { code: "tr", name: "Turkish" },
-  { code: "fa", name: "Persian" },
-  { code: "af", name: "Afrikaans" },
-  { code: "ms", name: "Malay" },
-  { code: "sw", name: "Swahili" },
-  { code: "ga", name: "Irish" },
-  { code: "cy", name: "Welsh" },
-  { code: "be", name: "Belarusian" },
-  { code: "is", name: "Icelandic" },
-  { code: "mk", name: "Macedonian" },
-  { code: "yi", name: "Yiddish" },
-  { code: "hy", name: "Armenian" },
-  { code: "az", name: "Azerbaijani" },
-  { code: "eu", name: "Basque" },
-  { code: "ka", name: "Georgian" },
-  { code: "ht", name: "Haitian Creole" },
-  { code: "ur", name: "Urdu" },
-  { code: "bn", name: "Bengali" },
-  { code: "bs", name: "Bosnian" },
-  { code: "ceb", name: "Cebuano" },
-  { code: "eo", name: "Esperanto" },
-  { code: "gu", name: "Gujarati" },
-  { code: "ha", name: "Hausa" },
-  { code: "hmn", name: "Hmong" },
-  { code: "ig", name: "Igbo" },
-  { code: "jw", name: "Javanese" },
-  { code: "kn", name: "Kannada" },
-  { code: "km", name: "Khmer" },
-  { code: "lo", name: "Lao" },
-  { code: "la", name: "Latin" },
-  { code: "mi", name: "Maori" },
-  { code: "mr", name: "Marathi" },
-  { code: "mn", name: "Mongolian" },
-  { code: "ne", name: "Nepali" },
-  { code: "pa", name: "Punjabi" },
-  { code: "so", name: "Somali" },
-  { code: "ta", name: "Tamil" },
-  { code: "te", name: "Telugu" },
-  { code: "yo", name: "Yoruba" },
-  { code: "zu", name: "Zulu" },
-  { code: "my", name: "Myanmar (Burmese)" },
-  { code: "ny", name: "Chichewa" },
-  { code: "kk", name: "Kazakh" },
-  { code: "mg", name: "Malagasy" },
-  { code: "ml", name: "Malayalam" },
-  { code: "si", name: "Sinhala" },
-  { code: "st", name: "Sesotho" },
-  { code: "su", name: "Sundanese" },
-  { code: "tg", name: "Tajik" },
-  { code: "uz", name: "Uzbek" },
-  { code: "am", name: "Amharic" },
-  { code: "co", name: "Corsican" },
-  { code: "haw", name: "Hawaiian" },
-  { code: "ku", name: "Kurdish (Kurmanji)" },
-  { code: "ky", name: "Kyrgyz" },
-  { code: "lb", name: "Luxembourgish" },
-  { code: "ps", name: "Pashto" },
-  { code: "sm", name: "Samoan" },
-  { code: "gd", name: "Scottish Gaelic" },
-  { code: "sn", name: "Shona" },
-  { code: "sd", name: "Sindhi" },
-  { code: "fy", name: "Frisian" },
-  { code: "xh", name: "Xhosa" },
+  { code: "en", name: "English", label: "EN" },
+  { code: "fr", name: "Français", label: "FR" },
+  { code: "es", name: "Español", label: "ES" },
 ];
 
-declare global {
-  interface Window {
-    gtranslateSettings?: {
-      default_language: string;
-      languages: string[];
-      wrapper_selector: string;
-    };
+type SavedText = { source: string; lastApplied: string };
+const originalText = new WeakMap<Text, SavedText>();
+const originalAttributes = new WeakMap<Element, Map<string, SavedText>>();
+const translatableAttributes = ["alt", "aria-label", "aria-description", "placeholder", "title"];
+
+function getTextSource(node: Text) {
+  const current = node.nodeValue ?? "";
+  let saved = originalText.get(node);
+  if (!saved) {
+    saved = { source: current, lastApplied: current };
+    originalText.set(node, saved);
+  } else if (current !== saved.lastApplied && current !== saved.source) {
+    // React may replace a text value after a component updates.
+    saved.source = current;
+  }
+  return saved;
+}
+
+function translateTextNode(node: Text, locale: SiteLocale) {
+  const saved = getTextSource(node);
+  const source = saved.source;
+  const match = source.match(/^(\s*)([\s\S]*?)(\s*)$/);
+  if (!match) return;
+  const translated = translateSiteText(match[2].replace(/\s+/g, " ").trim(), locale);
+  const value = `${match[1]}${translated}${match[3]}`;
+  if (node.nodeValue !== value) node.nodeValue = value;
+  saved.lastApplied = value;
+}
+
+function translateElementAttributes(element: Element, locale: SiteLocale) {
+  let savedAttributes = originalAttributes.get(element);
+  if (!savedAttributes) {
+    savedAttributes = new Map();
+    originalAttributes.set(element, savedAttributes);
+  }
+
+  for (const attribute of translatableAttributes) {
+    if (!element.hasAttribute(attribute)) continue;
+    const current = element.getAttribute(attribute) ?? "";
+    let saved = savedAttributes.get(attribute);
+    if (!saved) {
+      saved = { source: current, lastApplied: current };
+      savedAttributes.set(attribute, saved);
+    } else if (current !== saved.lastApplied && current !== saved.source) {
+      saved.source = current;
+    }
+    const translated = translateSiteText(saved.source.trim(), locale);
+    if (current !== translated) element.setAttribute(attribute, translated);
+    saved.lastApplied = translated;
   }
 }
 
-function readSavedLanguage() {
-  if (typeof document === "undefined") return "en";
-  const match = document.cookie.match(/(?:^|;\s*)googtrans=\/en\/([^;]+)/);
-  const code = match?.[1] ?? window.localStorage.getItem("kerygmapath-language") ?? "en";
-  return languages.some((language) => language.code === code) ? code : "en";
+function translateNode(node: Node, locale: SiteLocale) {
+  if (node instanceof Text) {
+    if (!node.parentElement?.closest(".site-language-switcher,script,style,noscript,[translate='no']")) {
+      translateTextNode(node, locale);
+    }
+    return;
+  }
+
+  if (!(node instanceof Element) || node.closest(".site-language-switcher,script,style,noscript,[translate='no']")) return;
+  translateElementAttributes(node, locale);
+  node.childNodes.forEach((child) => translateNode(child, locale));
+}
+
+function applySiteLanguage(locale: SiteLocale) {
+  if (typeof document === "undefined") return;
+  document.documentElement.lang = locale;
+  translateNode(document.body, locale);
 }
 
 export function SiteLanguageSwitcher() {
   const pathname = usePathname() ?? "/";
   const rootRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
-  const previousPathRef = useRef(pathname);
   const [isOpen, setIsOpen] = useState(false);
-  const [languageCode, setLanguageCode] = useState("en");
-  const [pendingLanguage, setPendingLanguage] = useState<string | null>(null);
-  const [widgetReady, setWidgetReady] = useState(false);
-  const [widgetFailed, setWidgetFailed] = useState(false);
+  const [languageCode, setLanguageCode] = useState<SiteLocale>("en");
 
   useEffect(() => {
-    const savedLanguageFrame = window.requestAnimationFrame(() => {
-      setLanguageCode(readSavedLanguage());
-    });
-
-    window.gtranslateSettings = {
-      default_language: "en",
-      languages: languages.map(({ code }) => code),
-      wrapper_selector: ".gtranslate_wrapper",
-    };
-
-    const existingScript = document.getElementById("gtranslate-language-widget") as HTMLScriptElement | null;
-    const script = existingScript ?? document.createElement("script");
-    let attempts = 0;
-    let interval = 0;
-
-    const findWidget = () => {
-      const selector = rootRef.current?.querySelector("select.gt_selector")
-        ?? rootRef.current?.querySelector("select");
-      if (selector) {
-        setWidgetReady(true);
-        window.clearInterval(interval);
-        return true;
-      }
-      return false;
-    };
-
-    if (!existingScript) {
-      script.id = "gtranslate-language-widget";
-      script.src = "https://cdn.gtranslate.net/widgets/latest/dropdown.js";
-      script.async = true;
-      document.body.appendChild(script);
+    try {
+      const saved = window.localStorage.getItem("kerygmapath-language");
+      if (saved === "fr" || saved === "es") setLanguageCode(saved);
+    } catch {
+      // The switcher still works for this visit if browser storage is unavailable.
     }
-
-    interval = window.setInterval(() => {
-      attempts += 1;
-      if (findWidget()) return;
-      if (attempts >= 40) {
-        window.clearInterval(interval);
-        setWidgetFailed(true);
-      }
-    }, 250);
-
-    return () => {
-      window.clearInterval(interval);
-      window.cancelAnimationFrame(savedLanguageFrame);
-    };
   }, []);
 
   useEffect(() => {
-    if (pendingLanguage === null) return;
-
-    const code = pendingLanguage;
-    // Keep <html lang="en"> as the translation source language. GTranslate
-    // reads it when applying the saved googtrans target-language cookie.
-    if (code === "en") {
-      document.cookie = "googtrans=; Max-Age=0; Path=/; SameSite=Lax";
-      document.cookie = "googtrans=; Max-Age=0; Path=/; Domain=.kerygmapath.com; SameSite=Lax";
-      try {
-        window.localStorage.removeItem("kerygmapath-language");
-      } catch {}
-    } else {
-      try {
-        window.localStorage.setItem("kerygmapath-language", code);
-      } catch {}
-      document.cookie = `googtrans=/en/${code}; Max-Age=31536000; Path=/; SameSite=Lax`;
-      document.cookie = `googtrans=/en/${code}; Max-Age=31536000; Path=/; Domain=.kerygmapath.com; SameSite=Lax`;
-      const selector = rootRef.current?.querySelector<HTMLSelectElement>("select.gt_selector")
-        ?? rootRef.current?.querySelector<HTMLSelectElement>("select");
-      if (selector) {
-        selector.value = code;
-        selector.dispatchEvent(new Event("change", { bubbles: true }));
-      }
+    applySiteLanguage(languageCode);
+    try {
+      window.localStorage.setItem("kerygmapath-language", languageCode);
+    } catch {
+      // Keep the selected language active for this page view.
     }
+  }, [languageCode, pathname]);
 
-    const reloadTimer = window.setTimeout(() => window.location.reload(), 350);
-    return () => window.clearTimeout(reloadTimer);
-  }, [pendingLanguage]);
+  useEffect(() => {
+    const observer = new MutationObserver((records) => {
+      for (const record of records) {
+        if (record.type === "attributes") {
+          translateNode(record.target, languageCode);
+          continue;
+        }
+        if (record.type === "characterData") {
+          translateNode(record.target, languageCode);
+          continue;
+        }
+        record.addedNodes.forEach((node) => translateNode(node, languageCode));
+      }
+    });
+    observer.observe(document.body, {
+      subtree: true,
+      childList: true,
+      characterData: true,
+      attributes: true,
+      attributeFilter: translatableAttributes,
+    });
+    return () => observer.disconnect();
+  }, [languageCode]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -240,28 +153,7 @@ export function SiteLanguageSwitcher() {
     };
   }, [isOpen]);
 
-  useEffect(() => {
-    if (previousPathRef.current === pathname) return;
-    previousPathRef.current = pathname;
-    const selectedLanguage = readSavedLanguage();
-    if (selectedLanguage !== "en") window.location.reload();
-  }, [pathname]);
-
-  const chooseLanguage = (code: string) => {
-    const selector = rootRef.current?.querySelector<HTMLSelectElement>("select.gt_selector")
-      ?? rootRef.current?.querySelector<HTMLSelectElement>("select");
-    if (!selector) {
-      setWidgetFailed(true);
-      return;
-    }
-
-    setIsOpen(false);
-    setWidgetFailed(false);
-    setLanguageCode(code);
-    setPendingLanguage(code);
-  };
-
-  const selectedName = languages.find(({ code }) => code === languageCode)?.name ?? "English";
+  const selected = languages.find(({ code }) => code === languageCode) ?? languages[0];
 
   return (
     <div className="site-language-switcher" ref={rootRef}>
@@ -269,13 +161,16 @@ export function SiteLanguageSwitcher() {
         aria-controls="site-language-options"
         aria-expanded={isOpen}
         aria-haspopup="listbox"
-        aria-label={`Website language: ${selectedName}`}
+        aria-label={languageCode === "en"
+          ? "Website language: English"
+          : languageCode === "fr"
+            ? "Website language: French"
+            : "Website language: Spanish"}
         className="site-language-toggle"
-        disabled={!widgetReady}
         onClick={() => setIsOpen((open) => !open)}
         type="button"
       >
-        <span>{languageCode.toUpperCase()}</span>
+        <span>{selected.label}</span>
         <span className="site-language-bracket" aria-hidden="true">[</span>
         <ChevronDown aria-hidden="true" size={14} />
         <span className="site-language-bracket" aria-hidden="true">]</span>
@@ -288,31 +183,25 @@ export function SiteLanguageSwitcher() {
           id="site-language-options"
           ref={menuRef}
           role="listbox"
-          translate="no"
         >
-          {languages.map(({ code, name }) => (
+          {languages.map(({ code, name, label }) => (
             <button
               aria-selected={code === languageCode}
               className={`site-language-option${code === languageCode ? " is-selected" : ""}`}
               key={code}
-              onClick={() => chooseLanguage(code)}
+              onClick={() => {
+                setIsOpen(false);
+                setLanguageCode(code);
+              }}
               role="option"
               type="button"
             >
               <span>{name}</span>
-              <span className="site-language-option-code">[{code.toUpperCase()}]</span>
+              <span className="site-language-option-code">[{label}]</span>
             </button>
           ))}
         </div>
       )}
-
-      {widgetFailed && (
-        <span className="site-language-error" role="status">
-          The translation service could not load. Please try again.
-        </span>
-      )}
-
-      <div aria-hidden="true" className="gtranslate_wrapper site-language-engine" translate="no" />
     </div>
   );
 }
