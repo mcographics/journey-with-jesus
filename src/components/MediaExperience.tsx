@@ -3,6 +3,7 @@ import { useEffect, useState, useSyncExternalStore } from "react";
 import type { CSSProperties } from "react";
 import { Film, MessageCircle, Smartphone, Users } from "lucide-react";
 import type { Episode, MediaPlaylist } from "@/data/episodes";
+import type { SiteLocale } from "@/data/site-translations";
 import { episodeHref, resolveEpisodeId } from "@/lib/episode-navigation";
 import { loadPublishedMediaCatalog } from "@/lib/media-catalog";
 import { isSupabaseConfigured } from "@/lib/supabase/browser";
@@ -36,6 +37,7 @@ function getMediaKind(episode: Episode): MediaKind {
 export function MediaExperience({ episodes: initialEpisodes }: { episodes: Episode[] }) {
   const search = useSyncExternalStore(subscribeToNavigation, getSearch, getServerSearch);
   const [episodes, setEpisodes] = useState(initialEpisodes);
+  const [locale, setLocale] = useState<SiteLocale>("en");
   const [playlists, setPlaylists] = useState<MediaPlaylist[]>([]);
   const [playlistId, setPlaylistId] = useState("all");
   const [mediaKind, setMediaKind] = useState<MediaKind>("stories");
@@ -58,8 +60,27 @@ export function MediaExperience({ episodes: initialEpisodes }: { episodes: Episo
     return () => { active = false; };
   }, [initialEpisodes]);
 
-  const selectedId = resolveEpisodeId(search, episodes);
-  const selectedEpisode = episodes.find((episode) => episode.id === selectedId) ?? null;
+  useEffect(() => {
+    const updateLanguage = () => {
+      try {
+        const saved = window.localStorage.getItem("kerygmapath-language");
+        setLocale(saved === "fr" || saved === "es" ? saved : "en");
+      } catch {
+        setLocale("en");
+      }
+    };
+    updateLanguage();
+    window.addEventListener("site-language-change", updateLanguage);
+    window.addEventListener("storage", updateLanguage);
+    return () => {
+      window.removeEventListener("site-language-change", updateLanguage);
+      window.removeEventListener("storage", updateLanguage);
+    };
+  }, []);
+
+  const languageEpisodes = episodes.filter((episode) => (episode.audioLanguage ?? "en") === locale);
+  const selectedId = resolveEpisodeId(search, languageEpisodes);
+  const selectedEpisode = languageEpisodes.find((episode) => episode.id === selectedId) ?? null;
   const selectEpisode = (episode: Episode) => {
     setDiscussion("comments");
     window.history.pushState({}, "", episodeHref(window.location.href, episode.id));
@@ -75,15 +96,18 @@ export function MediaExperience({ episodes: initialEpisodes }: { episodes: Episo
     setMediaKind(nextKind);
     setPlaylistId("all");
     setDiscussion("comments");
-    const nextEpisode = episodes.find((episode) => getMediaKind(episode) === nextKind);
+    const nextEpisode = languageEpisodes.find((episode) => getMediaKind(episode) === nextKind);
     if (nextEpisode) selectEpisode(nextEpisode);
     else clearSelection();
   };
 
   const currentMediaKind = selectedEpisode ? getMediaKind(selectedEpisode) : mediaKind;
-  const kindEpisodes = episodes.filter((episode) => getMediaKind(episode) === currentMediaKind);
+  const kindEpisodes = languageEpisodes.filter((episode) => getMediaKind(episode) === currentMediaKind);
   const kindEpisodeIds = new Set(kindEpisodes.map((episode) => episode.id));
-  const kindPlaylists = playlists.filter((playlist) => playlist.episodeIds.length > 0 && playlist.episodeIds.every((id) => kindEpisodeIds.has(id)));
+  const kindPlaylists = playlists
+    .map((playlist) => ({ ...playlist, episodeIds: playlist.episodeIds.filter((id) => kindEpisodeIds.has(id)) }))
+    .filter((playlist) => playlist.episodeIds.length > 0);
+  const localeName = locale === "fr" ? "French" : locale === "es" ? "Spanish" : "English";
   const commentTitle = currentMediaKind === "stories" ? "Story comments" : "Video comments";
 
   return (
@@ -101,13 +125,16 @@ export function MediaExperience({ episodes: initialEpisodes }: { episodes: Episo
 
           <nav className="media-kind-tabs" aria-label="Choose a media collection">
             <button type="button" aria-pressed={currentMediaKind === "videos"} onClick={() => switchMediaKind("videos")}>
-              <Film size={17} aria-hidden="true" /><span>Videos</span><small>{episodes.filter((episode) => getMediaKind(episode) === "videos").length}</small>
+              <Film size={17} aria-hidden="true" /><span>Videos</span><small>{languageEpisodes.filter((episode) => getMediaKind(episode) === "videos").length}</small>
             </button>
             <button type="button" aria-pressed={currentMediaKind === "stories"} onClick={() => switchMediaKind("stories")}>
-              <Smartphone size={17} aria-hidden="true" /><span>Stories</span><small>{episodes.filter((episode) => getMediaKind(episode) === "stories").length}</small>
+              <Smartphone size={17} aria-hidden="true" /><span>Stories</span><small>{languageEpisodes.filter((episode) => getMediaKind(episode) === "stories").length}</small>
             </button>
           </nav>
 
+          {catalogStatus === "ready" && kindEpisodes.length === 0 && (
+            <p className="catalog-notice" role="status">No {localeName.toLowerCase()} {currentMediaKind} are available yet.</p>
+          )}
           <div className="media-layout">
             <div className="media-main">
               <VideoPlayer key={"player-" + (selectedEpisode?.id ?? "none")} episode={selectedEpisode} />
