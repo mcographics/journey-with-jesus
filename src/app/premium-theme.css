@@ -500,6 +500,8 @@
 }
 
 /* Dark homepage mission art expands to the left and fades into its blue section surface. */
+/* Desktop and tablet only: preserve the original mobile mission image layout. */
+@media (min-width: 701px) {
 :root:not([data-theme="light"]) body:has(.home-hero) .mission-inner {
   --mission-page-gutter: max(28px, calc((100vw - 1160px) / 2));
   grid-template-columns: minmax(0, 1.4fr) minmax(460px, 1fr);
@@ -534,7 +536,9 @@
     linear-gradient(125deg, rgba(255, 221, 154, .12), transparent 28%, transparent 58%) !important;
 }
 
-@media (max-width: 1320px) {
+}
+
+@media (min-width: 701px) and (max-width: 1320px) {
   :root:not([data-theme="light"]) body:has(.home-hero) .mission-inner {
     --mission-page-gutter: max(18px, calc((100vw - 1160px) / 2));
     width: min(1160px, calc(100% - 36px));
