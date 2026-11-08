@@ -215,3 +215,55 @@ test("the mockup gold button has both specular and metal gradients", async ({ pa
   expect(image.match(/linear-gradient\(/g)?.length).toBeGreaterThanOrEqual(2);
   await expect(action).toHaveCSS("color", "rgb(9, 27, 48)");
 });
+
+
+test("light mode language control and opened list use pale glass and dark text on landing", async ({ page }) => {
+  await page.addInitScript(() => {
+    localStorage.setItem("journey-with-jesus-theme-mode", "light");
+  });
+  await page.goto("/");
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  const toggle = page.locator(".site-language-toggle");
+  await expect(toggle).toHaveCSS("color", "rgb(22, 52, 81)");
+  const background = await toggle.evaluate((node) => getComputedStyle(node).backgroundImage);
+  expect(background).toContain("linear-gradient(");
+  expect(background).toContain("255, 255, 255");
+  await expect(toggle).toHaveCSS("border-top-color", "rgba(126, 163, 205, 0.78)");
+  await toggle.click();
+  await expect(toggle).toHaveCSS("color", "rgb(16, 45, 74)");
+  const options = page.locator(".site-language-options");
+  await expect(options).toBeVisible();
+  await expect(options).toHaveCSS("color", "rgb(25, 56, 84)");
+  expect(await options.evaluate((node) => getComputedStyle(node).backgroundImage)).toContain("rgb(255, 255, 255)");
+  await expect(options.locator(".site-language-option-code").first()).toHaveCSS("color", "rgb(134, 96, 27)");
+  await options.getByRole("option", { name: "Français [FR]" }).click();
+  await expect(page.locator("html")).toHaveAttribute("lang", "fr");
+  await expect(toggle).toHaveCSS("color", "rgb(22, 52, 81)");
+});
+
+test("mobile language control stays light in light mode and retains dark crystal palette in dark mode", async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.addInitScript(() => {
+    localStorage.setItem("journey-with-jesus-theme-mode", "light");
+  });
+  await page.goto("/company/");
+  const toggle = page.locator(".site-language-toggle");
+  await expect(toggle).toHaveCSS("color", "rgb(22, 52, 81)");
+  await expect(toggle).toHaveCSS("min-height", "44px");
+  await toggle.click();
+  const menu = page.locator(".site-language-options");
+  await expect(menu).toHaveCSS("color", "rgb(25, 56, 84)");
+  const bounds = await menu.boundingBox();
+  expect(bounds).not.toBeNull();
+  expect(bounds!.x).toBeGreaterThanOrEqual(0);
+  expect(bounds!.x + bounds!.width).toBeLessThanOrEqual(375);
+
+  // Switch themes through the real UI. The test's initial light-mode
+  // script runs on every navigation, so a reload would force light again.
+  await page.locator(".theme-toggle").click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await expect(toggle).toHaveCSS("color", "rgb(255, 248, 231)");
+  expect(await toggle.evaluate((node) => getComputedStyle(node).backgroundImage)).toContain("32, 76, 127");
+  await toggle.click();
+  await expect(menu).toHaveCSS("color", "rgb(255, 248, 231)");
+});
