@@ -63,10 +63,11 @@ test("dark mode avoids gradient washes across navigation and key site pages", as
 
 test("media page restores its original photograph in dark and light modes", async ({ page }) => {
   for (const mode of ["dark", "light"] as const) {
-    await page.addInitScript((value) => {
+    await page.goto("/media/");
+    await page.evaluate((value) => {
       window.localStorage.setItem("journey-with-jesus-theme-mode", value);
     }, mode);
-    await page.goto("/media/");
+    await page.reload();
 
     const media = page.locator(".media-page");
     const backgroundImage = await media.evaluate((node) => getComputedStyle(node).backgroundImage);
