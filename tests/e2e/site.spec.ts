@@ -470,7 +470,12 @@ test("studio dark mode uses luminous gold accents, strong actions and white main
     const color = await element.evaluate((node) => getComputedStyle(node).color);
     expect(["rgb(255, 255, 255)", "rgb(255, 218, 112)", "rgb(6, 20, 47)"]).toContain(color);
     await expect(element).toHaveCSS("-webkit-text-fill-color", color);
-    await expect(element).toHaveCSS("background-image", "none");
+    const isGoldAction = await element.evaluate((node) => node.classList.contains("kerygma-button-gold"));
+    if (isGoldAction) {
+      expect(await element.evaluate((node) => getComputedStyle(node).backgroundImage)).toContain("linear-gradient(");
+    } else {
+      await expect(element).toHaveCSS("background-image", "none");
+    }
     await expect(element).toHaveCSS("animation-name", "none");
   }
   for (const label of await page.locator(".kerygma-company .kerygma-eyebrow").all()) {
