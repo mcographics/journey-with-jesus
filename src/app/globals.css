@@ -386,7 +386,6 @@ button { color: inherit; }
   .desktop-navigation { display: none; }
   .mobile-navigation { position: fixed; z-index: 40; top: 50%; right: calc(16px + env(safe-area-inset-right, 0px)); bottom: auto; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; opacity: 1; pointer-events: auto; transform: translateY(-50%); transition: opacity .24s ease; }
   .mobile-menu-options { position: absolute; top: 50%; right: calc(100% + 10px); transform: translateY(-50%); }
-  .mobile-navigation.is-autohidden { opacity: 0; pointer-events: none; }
   .mobile-navigation:focus-within { opacity: 1; pointer-events: auto; }
 }
 @media (max-width: 768px) and (hover: none) and (pointer: coarse) and (prefers-reduced-motion: reduce) {
@@ -1622,31 +1621,45 @@ body, .home-hero, .mission-section, .site-footer, .media-page {
     clip-path: inset(50%);
     white-space: nowrap;
   }
+  /* Floating mobile menu: fixed to the viewport, not the header row.
+     This must come after the compact-control rules above. */
+  .site-header { z-index: 80; }
+  .desktop-navigation { display: none; }
   .mobile-navigation {
-    position: relative;
+    position: fixed;
     inset: auto;
-    z-index: 40;
+    top: 50%;
+    right: calc(14px + env(safe-area-inset-right, 0px));
+    bottom: auto;
+    left: auto;
+    z-index: 80;
     display: flex;
     flex: 0 0 44px;
     width: 44px;
     height: 44px;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
+    justify-content: center;
     gap: 0;
     opacity: 1;
     pointer-events: auto;
-    transform: none;
+    transform: translateY(-50%);
     transition: opacity .24s ease;
   }
   .mobile-navigation:focus-within { opacity: 1; pointer-events: auto; }
+  /* Open leftward, centred on the floating trigger and constrained to
+     the visible viewport on compact and landscape mobile screens. */
   .mobile-menu-options {
     position: absolute;
-    top: calc(100% + 8px);
-    right: 0;
+    top: 50%;
+    right: calc(100% + 10px);
     left: auto;
     width: max-content;
-    max-width: min(280px, calc(100vw - 24px));
-    transform: none;
+    max-width: min(280px, calc(100vw - 84px));
+    max-height: calc(100dvh - 32px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    transform: translateY(-50%);
   }
   .site-language-options,
   .site-language-error {
