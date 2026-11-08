@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
 import { Check, Eye, EyeOff, Film, ListVideo, LoaderCircle, LockKeyhole, LogOut, Mail, MessageCircle, Plus, Share2, Trash2, UploadCloud, Users, X } from "lucide-react";
 import type { Session } from "@supabase/supabase-js";
-import type { Database, VideoContentType, VideoQuality } from "@/lib/database.types";
+import type { Database, MediaAudioLanguage, VideoContentType, VideoQuality } from "@/lib/database.types";
 import { createBrowserSupabaseClient, isSupabaseConfigured } from "@/lib/supabase/browser";
 import { formatStudioError, getImageUploadInfo, getPublicStoragePath } from "@/lib/supabase/studio-upload";
 import { uploadVideoResumable } from "@/lib/supabase/resumable-upload";
@@ -22,12 +22,12 @@ type CommentRow = Database["public"]["Tables"]["episode_comments"]["Row"];
 type StudioEpisode = EpisodeRow & { sources: SourceRow[]; captions: CaptionRow[] };
 type EpisodeForm = {
   id: string; title: string; description: string; scripture: string; thumbnail: string; youtubeUrl: string; transcript: string; aslUrl: string;
-  duration: string; number: string; orientation: "landscape" | "portrait"; published: boolean;
+  duration: string; number: string; orientation: "landscape" | "portrait"; audioLanguage: MediaAudioLanguage; published: boolean;
 };
 type PlaylistForm = { id: string; title: string; description: string; order: string; published: boolean; episodeIds: string[] };
 type Section = "episodes" | "playlists" | "comments" | "characters" | "staff" | "socials";
 const qualities: VideoQuality[] = ["720p", "1080p", "4K"];
-const freshEpisode = (): EpisodeForm => ({ id: "", title: "", description: "", scripture: "", thumbnail: "", youtubeUrl: "", transcript: "", aslUrl: "", duration: "", number: "1", orientation: "landscape", published: false });
+const freshEpisode = (): EpisodeForm => ({ id: "", title: "", description: "", scripture: "", thumbnail: "", youtubeUrl: "", transcript: "", aslUrl: "", duration: "", number: "1", orientation: "landscape", audioLanguage: "en", published: false });
 const freshPlaylist = (): PlaylistForm => ({ id: "", title: "", description: "", order: "0", published: false, episodeIds: [] });
 
 export function StudioExperience() {
@@ -195,7 +195,7 @@ export function StudioExperience() {
       scripture: episode.scripture_reference ?? "", thumbnail: episode.thumbnail_url ?? "", youtubeUrl: episode.youtube_id ? youtubeWatchUrl(episode.youtube_id) : "",
       transcript: episode.transcript_text ?? "", aslUrl: episode.asl_interpretation_url ?? "",
       duration: episode.duration_seconds === null ? "" : String(episode.duration_seconds),
-      number: String(episode.episode_number), orientation: episode.orientation, published: episode.published,
+      number: String(episode.episode_number), orientation: episode.orientation, audioLanguage: episode.audio_language, published: episode.published,
     });
     setThumbnailFile(null);
     if (thumbnailFileInput.current) thumbnailFileInput.current.value = "";
@@ -351,7 +351,7 @@ export function StudioExperience() {
         transcript_text: episodeForm.transcript.trim() || null,
         asl_interpretation_url: aslUrl || null,
         duration_seconds: episodeForm.duration.trim() ? Number(episodeForm.duration) : null,
-        episode_number: Number(episodeForm.number) || 1, orientation: episodeForm.orientation,
+        episode_number: Number(episodeForm.number) || 1, orientation: episodeForm.orientation, audio_language: episodeForm.audioLanguage,
         published: publication.published,
       };
       const { data, error } = await client.from("media_episodes").upsert(payload).select("id").single();
@@ -702,7 +702,7 @@ export function StudioExperience() {
               {visibleEpisodes.length === 0 ? <p className="studio-empty">{episodes.length === 0 ? "No media yet. Create a video or story to begin." : studioMediaKind === "portrait" ? "No portrait stories in this collection yet." : "No landscape videos in this collection yet."}</p> : visibleEpisodes.map((episode) => (
                 <div key={episode.id} className="studio-video-row">
                   <button type="button" className={"studio-list-item" + (selectedEpisodeId === episode.id ? " is-selected" : "")} onClick={() => editEpisode(episode)}>
-                    <span><strong>{episode.title}</strong><small>{episode.orientation === "portrait" ? "9:16" : "16:9"} · {(episode.youtube_id ? "YouTube" + (episode.sources.length ? ", " : "") : "") + (episode.sources.map((source) => source.quality).join(", ") || (episode.youtube_id ? "" : "No video"))} · {episode.published ? "Published" : "Draft / hidden"}</small></span>
+                    <span><strong>{episode.title}</strong><small>{episode.orientation === "portrait" ? "9:16" : "16:9"} · {episode.audio_language.toUpperCase()} · {(episode.youtube_id ? "YouTube" + (episode.sources.length ? ", " : "") : "") + (episode.sources.map((source) => source.quality).join(", ") || (episode.youtube_id ? "" : "No video"))} · {episode.published ? "Published" : "Draft / hidden"}</small></span>
                     <span className={"studio-status" + (episode.published ? " is-live" : "")}>{episode.published ? "LIVE" : "PRIVATE"}</span>
                   </button>
                   <div className="studio-video-actions" aria-label={"Actions for " + episode.title}>
@@ -729,6 +729,7 @@ export function StudioExperience() {
                   <label>Story ID<input value={episodeForm.id} onChange={(event) => setEpisodeForm({ ...episodeForm, id: event.target.value.toLocaleLowerCase().replace(/[^a-z0-9-]/g, "") })} placeholder="created-from-title" /></label>
                   <label>Episode number<input type="number" min="1" value={episodeForm.number} onChange={(event) => setEpisodeForm({ ...episodeForm, number: event.target.value })} required /></label>
                   <label>Collection and aspect ratio<select value={episodeForm.orientation} onChange={(event) => { const orientation = event.target.value as EpisodeForm["orientation"]; setEpisodeForm({ ...episodeForm, orientation }); setStudioMediaKind(orientation); }}><option value="landscape">Videos · 16:9 landscape</option><option value="portrait">Stories · 9:16 portrait</option></select></label>
+                  <label>Spoken audio language<select aria-label="Spoken audio language" value={episodeForm.audioLanguage} onChange={(event) => setEpisodeForm({ ...episodeForm, audioLanguage: event.target.value as MediaAudioLanguage })} required><option value="en">English</option><option value="fr">Français (French)</option><option value="es">Español (Spanish)</option></select><small>For YouTube links and uploaded files. Only visitors browsing in this language will see the recording.</small></label>
                   <label>Duration, seconds<input type="number" min="0" value={episodeForm.duration} onChange={(event) => setEpisodeForm({ ...episodeForm, duration: event.target.value })} placeholder="Optional" /></label>
                   <label className="studio-span-two">Scripture reference<input value={episodeForm.scripture} onChange={(event) => setEpisodeForm({ ...episodeForm, scripture: event.target.value })} maxLength={180} /></label>
                   <label className="studio-span-two">Thumbnail URL<input type="url" value={episodeForm.thumbnail} onChange={(event) => { setEpisodeForm({ ...episodeForm, thumbnail: event.target.value }); setThumbnailFile(null); if (thumbnailFileInput.current) thumbnailFileInput.current.value = ""; }} placeholder="Optional HTTPS image" /></label>
