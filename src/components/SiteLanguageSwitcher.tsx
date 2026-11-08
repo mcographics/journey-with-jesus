@@ -37,7 +37,8 @@ function translateTextNode(node: Text, locale: SiteLocale) {
   const match = source.match(/^(\s*)([\s\S]*?)(\s*)$/);
   if (!match) return;
   const translated = translateSiteText(match[2].replace(/\s+/g, " ").trim(), locale);
-  const value = `${match[1]}${translated}${match[3]}`;
+  const suffix = locale === "fr" && /[’']$/.test(translated) ? "" : match[3];
+  const value = `${match[1]}${translated}${suffix}`;
   if (node.nodeValue !== value) node.nodeValue = value;
   saved.lastApplied = value;
 }
