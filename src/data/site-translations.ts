@@ -205,7 +205,7 @@ const translations: Array<[string, string, string]> = [
 
 const dictionaries: Record<Exclude<SiteLocale, "en">, Record<string, string>> = {
   fr: Object.fromEntries(translations.map(([english, french]) => [english, french])),
-  es: Object.fromEntries(translations.map(([english, french, spanish]) => [english, spanish])),
+  es: Object.fromEntries(translations.map(([english, , spanish]) => [english, spanish])),
 };
 
 export function translateSiteText(text: string, locale: SiteLocale): string {
