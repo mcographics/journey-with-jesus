@@ -783,6 +783,25 @@ function translateDynamicSiteMessage(value: string, locale: SiteLocale): string 
   const restored = value.match(/^"(.+)" is public again\.$/);
   if (restored) return locale === "fr" ? `« ${restored[1]} » est de nouveau visible au public.`
     : locale === "es" ? `« ${restored[1]} » vuelve a ser público.` : value;
+  const confirmDelete = value.match(/^Permanently delete "(.+)"\? This removes the story, its playlist entries, comments, caption files, transcript, and uploaded media from Journey Studio\. This cannot be undone\. Videos hosted on YouTube will not be deleted\.$/);
+  if (confirmDelete) return locale === "fr"
+    ? `Supprimer définitivement « ${confirmDelete[1]} » ? Cette action supprime le récit, ses entrées de liste de lecture, ses commentaires, ses fichiers de sous-titres, sa transcription et ses médias téléversés de Journey Studio. Cette action est irréversible. Les vidéos hébergées sur YouTube ne seront pas supprimées.`
+    : locale === "es"
+      ? `¿Eliminar permanentemente « ${confirmDelete[1]} »? Esto elimina la historia, sus entradas de lista de reproducción, comentarios, archivos de subtítulos, transcripción y archivos multimedia de Journey Studio. Esta acción no se puede deshacer. Los videos alojados en YouTube no se eliminarán.`
+      : value;
+  const deleted = value.match(/^Deleted "(.+)" from the library\.(?: The (.+) could not be fully cleaned up in Supabase Storage; check the storage dashboard\.)?$/);
+  if (deleted) {
+    const cleanupFr = deleted[2] ? ` Le nettoyage de ${deleted[2]} dans Supabase Storage est incomplet. Vérifiez le tableau de bord du stockage.` : "";
+    const cleanupEs = deleted[2] ? ` La limpieza de ${deleted[2]} en Supabase Storage no se completó. Revisa el panel de almacenamiento.` : "";
+    return locale === "fr" ? `« ${deleted[1]} » a été supprimé de la bibliothèque.${cleanupFr}`
+      : locale === "es" ? `Se eliminó « ${deleted[1]} » de la biblioteca.${cleanupEs}` : value;
+  }
+  const captionAttached = value.match(/^The (.+) WebVTT track was attached\.$/);
+  if (captionAttached) return locale === "fr" ? `La piste WebVTT ${captionAttached[1]} a été jointe.`
+    : locale === "es" ? `Se adjuntó la pista WebVTT ${captionAttached[1]}.` : value;
+  const captionRemoved = value.match(/^The (.+) caption track was removed\.$/);
+  if (captionRemoved) return locale === "fr" ? `La piste de sous-titres ${captionRemoved[1]} a été supprimée.`
+    : locale === "es" ? `Se eliminó la pista de subtítulos ${captionRemoved[1]}.` : value;
   const asl = value.match(/^ASL interpretation video for (.+)$/);
   if (asl) return locale === "fr" ? `Vidéo d’interprétation en ASL pour ${asl[1]}`
     : locale === "es" ? `Video de interpretación en ASL para ${asl[1]}` : value;
