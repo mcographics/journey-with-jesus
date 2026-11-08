@@ -295,7 +295,9 @@
 :root:not([data-theme="light"]) body #main-content.kerygma-company :is(
   .kerygma-button-outline, .kerygma-button-outline span,
   .kerygma-button-outline svg,
-  .kerygma-button:not(.kerygma-button-gold)
+  .kerygma-button:not(.kerygma-button-gold),
+  .kerygma-button:not(.kerygma-button-gold) span,
+  .kerygma-button:not(.kerygma-button-gold) svg
 ) {
   color: #e8c77f !important;
   -webkit-text-fill-color: currentColor !important;
