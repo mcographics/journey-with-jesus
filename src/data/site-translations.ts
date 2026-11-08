@@ -872,10 +872,11 @@ function translateBibleReaderMessage(value: string, locale: SiteLocale): string 
 }
 
 export function registerBibleBookNameAliases(names: string[]) {
-  if (names.length !== bibleBookNames.length) return;
+  const firstCanonicalBookIndex = names.length === 66 ? 0 : names.length === 39 ? 0 : names.length === 27 ? 39 : -1;
+  if (firstCanonicalBookIndex < 0) return;
   names.forEach((name, index) => {
     const normalized = normalizeBibleBookName(name);
-    if (normalized) bookNameAliases[normalized] = index;
+    if (normalized) bookNameAliases[normalized] = firstCanonicalBookIndex + index;
   });
 }
 
