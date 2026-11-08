@@ -1649,8 +1649,7 @@ body, .home-hero, .mission-section, .site-footer, .media-page {
     transform: none;
   }
   .site-language-options,
-  .site-language-error,
-  .accessibility-settings-panel {
+  .site-language-error {
     position: fixed;
     top: calc(58px + env(safe-area-inset-top, 0px));
     right: calc(12px + env(safe-area-inset-right, 0px));
