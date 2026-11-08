@@ -24,6 +24,10 @@ export const legalPolicies = [
         "body": "Supabase supports the website database and comment service. GitHub Pages and related hosting or delivery services may process technical information needed to deliver the site. Embedded media, if present, may be governed by their providers' policies."
       },
       {
+        "heading": "Website language translation",
+        "body": "If you choose another website language, the GTranslate widget loads from GTranslate and sends visible page text to the translation service used by the widget, including Google's translation service, to generate machine translations. The providers may receive ordinary connection details such as your IP address and browser request headers. Translations may be inaccurate. The widget uses a browser cookie to remember your selected language."
+      },
+      {
         "heading": "Retention and requests",
         "body": "Comment records may remain in the moderation system after being hidden or rejected. A specific retention period has not yet been established. Requests to review, correct, or remove a comment may be sent through a public contact method if one is published on the website."
       },
@@ -128,6 +132,10 @@ export const legalPolicies = [
       {
         "heading": "Your controls",
         "body": "You can clear cookies and local storage or restrict third-party cookies using your browser settings. Some features may behave differently afterward."
+      },
+      {
+        "heading": "Website language preference",
+        "body": "The site-wide language selector uses the googtrans cookie to remember the language you selected. You can remove it in your browser settings; the site will return to English."
       },
       {
         "heading": "Third-party technologies",
