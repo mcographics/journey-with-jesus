@@ -72,6 +72,7 @@ test.describe("mobile header controls and translations", () => {
       await expect(page.locator("html")).toHaveAttribute("lang", "fr");
       await expect(page.locator(".site-language-toggle")).toContainText("FR");
       const menuButton = page.locator(".mobile-menu-toggle");
+      await menuButton.focus();
       await menuButton.click();
       await expect(page.locator(".mobile-menu-options").getByRole("link", { name: "La Parole" })).toBeVisible();
     }
@@ -112,7 +113,8 @@ test.describe("mobile header controls and translations", () => {
     await themeButton.click();
     await expect(page.locator("html")).toHaveAttribute("data-theme-mode", "light");
 
-    const menuButton = page.getByRole("button", { name: "Open navigation menu" });
+    const menuButton = page.locator(".mobile-menu-toggle");
+    await menuButton.focus();
     await menuButton.click();
     const mobileNavigation = page.getByRole("navigation", { name: "Mobile navigation" });
     await expect(mobileNavigation).toBeVisible();
