@@ -748,7 +748,7 @@ const bibleBookNames: Array<[string, string, string]> = [
 ];
 const bookNameAliases: Record<string, number> = {};
 function normalizeBibleBookName(value: string) {
-  return value.normalize("NFD").replace(/\\p{M}/gu, "").toLocaleLowerCase().replace(/[^\\p{L}\\p{N}]/gu, "");
+  return value.normalize("NFD").replace(/\p{M}/gu, "").toLocaleLowerCase().replace(/[^\p{L}\p{N}]/gu, "");
 }
 bibleBookNames.forEach((names, index) => {
   names.forEach((name) => {
@@ -761,7 +761,7 @@ for (const [index, aliases] of [
   [65, ["Apocalypse de Jean", "Revelación"]],
 ] as Array<[number, string[]]>) {
   aliases.forEach((name) => {
-    const normalized = name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase().replace(/[^a-z0-9]/g, "");
+    const normalized = normalizeBibleBookName(name);
     bookNameAliases[normalized] = index;
   });
 }
