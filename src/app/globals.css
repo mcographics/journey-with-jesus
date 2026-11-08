@@ -1645,3 +1645,55 @@ body, .home-hero, .mission-section, .site-footer, .media-page {
     width: min(260px, calc(100vw - 24px));
   }
 }
+
+/* Keep every header action within the same compact, accessible control rhythm. */
+.site-language-toggle,
+.desktop-menu-toggle,
+.accessibility-settings-trigger,
+.theme-toggle,
+.mobile-menu-toggle {
+  min-height: 44px;
+  height: 44px;
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+.desktop-menu-toggle { padding-block: 0; }
+.accessibility-settings-trigger { width: 44px; min-width: 44px; padding: 0; }
+.theme-toggle { width: 44px; min-width: 44px; }
+.mobile-menu-toggle { width: 44px; min-width: 44px; }
+.site-language-toggle { min-height: 44px; }
+
+@media (max-width: 768px) {
+  .header-inner { gap: 7px; align-items: center; }
+  .site-language-toggle {
+    width: 54px;
+    min-width: 54px;
+    min-height: 44px;
+    height: 44px;
+    padding-inline: 5px;
+  }
+  .accessibility-settings-anchor {
+    flex: 0 0 44px;
+    width: 44px;
+    height: 44px;
+  }
+  .accessibility-settings-trigger,
+  .theme-toggle,
+  .mobile-menu-toggle {
+    width: 44px;
+    min-width: 44px;
+    height: 44px;
+    min-height: 44px;
+  }
+  .mobile-navigation {
+    flex-basis: 44px;
+    width: 44px;
+    height: 44px;
+  }
+  .mobile-menu-options { right: 0; }
+  .site-language-options,
+  .site-language-error,
+  .accessibility-settings-panel {
+    max-width: calc(100vw - 24px);
+  }
+}
