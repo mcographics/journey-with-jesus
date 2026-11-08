@@ -62,7 +62,6 @@ export function SiteHeader() {
   });
   const [isDesktopMenuOpen, setIsDesktopMenuOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isAutoHidden, setIsAutoHidden] = useState(false);
   const [themeMode, setThemeMode] = useState<ThemeMode>("auto");
   const desktopNavigationRef = useRef<HTMLDivElement>(null);
   const desktopMenuButtonRef = useRef<HTMLButtonElement>(null);
@@ -129,45 +128,6 @@ export function SiteHeader() {
     } catch {}
     setThemeColor(nextTheme);
   };
-
-  useEffect(() => {
-    const touchMobile = window.matchMedia("(max-width: 768px) and (hover: none) and (pointer: coarse)");
-    let hideTimer: number | undefined;
-
-    const clearHideTimer = () => {
-      if (hideTimer !== undefined) {
-        window.clearTimeout(hideTimer);
-        hideTimer = undefined;
-      }
-    };
-    const scheduleHide = () => {
-      clearHideTimer();
-      if (!touchMobile.matches) {
-        setIsAutoHidden(false);
-        return;
-      }
-      hideTimer = window.setTimeout(() => setIsAutoHidden(true), 1000);
-    };
-    const showWhileScrolling = () => {
-      if (!touchMobile.matches) return;
-      setIsAutoHidden(false);
-      scheduleHide();
-    };
-    const updateForInputMode = () => {
-      setIsAutoHidden(false);
-      scheduleHide();
-    };
-
-    window.addEventListener("scroll", showWhileScrolling, { passive: true });
-    touchMobile.addEventListener("change", updateForInputMode);
-    scheduleHide();
-
-    return () => {
-      clearHideTimer();
-      window.removeEventListener("scroll", showWhileScrolling);
-      touchMobile.removeEventListener("change", updateForInputMode);
-    };
-  }, []);
 
   useEffect(() => {
     if (!isDesktopMenuOpen) return;
@@ -294,7 +254,7 @@ export function SiteHeader() {
           </span>
         </button>
         <div
-          className={`mobile-navigation${isAutoHidden && !isMobileMenuOpen ? " is-autohidden" : ""}`}
+          className="mobile-navigation"
           ref={mobileNavigationRef}
         >
           <nav
