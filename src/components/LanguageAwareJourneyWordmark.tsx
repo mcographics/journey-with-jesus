@@ -38,8 +38,12 @@ export function LanguageAwareJourneyWordmark() {
   );
   const isFrench = language === "fr";
   const isSpanish = language === "es";
-  const wordmark = isFrench ? "journey-with-jesus-wordmark-fr" : "journey-with-jesus-wordmark";
-  const extension = isFrench ? "png" : "webp";
+  const hasTranslatedWordmark = isFrench || isSpanish;
+  const translationCode = isFrench ? "fr" : "es";
+  const wordmark = hasTranslatedWordmark
+    ? `journey-with-jesus-wordmark-${translationCode}`
+    : "journey-with-jesus-wordmark";
+  const extension = hasTranslatedWordmark ? "png" : "webp";
   const sources = imageSources(wordmark, [320, 640, 960], extension);
 
   return (
@@ -52,8 +56,8 @@ export function LanguageAwareJourneyWordmark() {
       loading="eager"
       pictureClassName="home-masthead-wordmark"
       sizes="(max-width: 700px) min(38vw, 154px), min(34vw, 460px)"
-      pngSources={isFrench ? sources : undefined}
-      webpSources={isFrench ? undefined : sources}
+      pngSources={hasTranslatedWordmark ? sources : undefined}
+      webpSources={hasTranslatedWordmark ? undefined : sources}
       width={2000}
     />
   );

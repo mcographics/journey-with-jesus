@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-test("French language selection switches the Journey with Jesus masthead wordmark", async ({ page }) => {
+test("French and Spanish selections use their localized Journey with Jesus masthead wordmarks", async ({ page }) => {
   await page.goto("/projects/journey-with-jesus/");
   const wordmark = page.locator(".home-masthead-wordmark-image");
 
@@ -14,6 +14,13 @@ test("French language selection switches the Journey with Jesus masthead wordmar
   await expect(wordmark).toHaveAttribute("alt", "Voyage avec Jésus");
   await expect.poll(() => wordmark.evaluate((image) => (image as HTMLImageElement).currentSrc))
     .toMatch(/journey-with-jesus-wordmark-fr-(320|640|960)\.png$/);
+
+  await page.locator(".site-language-toggle").click();
+  await page.getByRole("option", { name: "Español [ES]" }).click();
+  await expect(page.locator("html")).toHaveAttribute("lang", "es");
+  await expect(wordmark).toHaveAttribute("alt", "Viaje con Jesús");
+  await expect.poll(() => wordmark.evaluate((image) => (image as HTMLImageElement).currentSrc))
+    .toMatch(/journey-with-jesus-wordmark-es-(320|640|960)\.png$/);
 
   await page.locator(".site-language-toggle").click();
   await page.locator(".site-language-option").first().click();
