@@ -20,4 +20,16 @@ describe("site language translations", () => {
     expect(translateSiteText("3 matches found.", "fr")).toBe("3 résultats trouvés.");
     expect(translateSiteText("No matches found for “grace”.", "es")).toBe("No se encontraron coincidencias para «grace».");
   });
+
+  it("translates Journey with Jesus ticker scripture and verse references", () => {
+    expect(translateSiteText("“Come unto me, all [ye] that labour and are heavy laden, and I will give you rest”", "fr"))
+      .toBe("« Venez à moi, vous tous qui êtes fatigués et chargés »");
+    expect(translateSiteText("“Come unto me, all [ye] that labour and are heavy laden, and I will give you rest”", "es"))
+      .toBe("« Venid á mí todos los que estáis trabajados y cargados »");
+    expect(translateSiteText("Matthew 11:28", "fr")).toBe("Matthieu 11:28");
+    expect(translateSiteText("Matthew 11:28", "es")).toBe("Mateo 11:28");
+    expect(translateSiteText("“Suffer the little children to come unto me”", "es"))
+      .toBe("« Dejad los niños venir, y no se lo estorbéis »");
+    expect(translateSiteText("Mark 10:14", "fr")).toBe("Marc 10:14");
+  });
 });

@@ -24,8 +24,14 @@ const tickerItems: TickerItem[] = [
   { id: "matthew-6-33", kind: "verse", words: "But seek ye first the kingdom of God", reference: "Matthew 6:33" },
 ];
 
-function describeItem(item: TickerItem) {
-  return item.kind === "theme" ? item.text : `“${item.words}” — ${item.reference}`;
+function TickerVerse({ item }: { item: Extract<TickerItem, { kind: "verse" }> }) {
+  return (
+    <>
+      <span className="masthead-ticker-words">{`“${item.words}”`}</span>
+      <span className="masthead-ticker-reference">{" — "}</span>
+      <span className="masthead-ticker-reference">{item.reference}</span>
+    </>
+  );
 }
 
 function shuffleItems(items: TickerItem[]) {
@@ -63,10 +69,7 @@ function TickerSequence({ items }: { items: TickerItem[] }) {
             {item.kind === "theme" ? (
               item.text
             ) : (
-              <>
-                <span className="masthead-ticker-words" translate="no">“{item.words}”</span>
-                <span className="masthead-ticker-reference" translate="no"> — {item.reference}</span>
-              </>
+              <TickerVerse item={item} />
             )}
           </span>
           {index < items.length - 1 && <span className="masthead-ticker-separator" aria-hidden="true">✦</span>}
@@ -85,7 +88,7 @@ export default function MastheadTicker() {
         Journey with Jesus ticker.{" "}
         {tickerItems.map((item, index) => (
           <Fragment key={item.id}>
-            {item.kind === "verse" ? <span translate="no">{describeItem(item)}</span> : item.text}
+            {item.kind === "verse" ? <TickerVerse item={item} /> : item.text}
             {index < tickerItems.length - 1 ? ". " : "."}
           </Fragment>
         ))}
