@@ -10,6 +10,7 @@ import "./blog.css";
 import "./accessibility.css";
 import "./scripture.css";
 import "./dark-mode.css";
+import "./glass-polish.css";
 
 const siteUrl = "https://kerygmapath.com/";
 
