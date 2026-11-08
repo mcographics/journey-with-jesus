@@ -328,6 +328,26 @@
   background: transparent !important;
 }
 
+
+/* Stronger than the inherited company-text rule so the gold button
+   always has a readable midnight label, not pale-gold-on-gold text. */
+:root:not([data-theme="light"]) body #main-content.kerygma-company a.kerygma-button.kerygma-button-gold,
+:root:not([data-theme="light"]) body #main-content.kerygma-company a.kerygma-button.kerygma-button-gold :is(span, svg) {
+  color: #06142f !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+
+:root:not([data-theme="light"]) body #main-content.kerygma-company .kerygma-button:not(.kerygma-button-gold),
+:root:not([data-theme="light"]) body #main-content.kerygma-company .kerygma-button:not(.kerygma-button-gold) :is(span, svg) {
+  color: #ffda70 !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+
+/* Override the shared glass border shorthand for the intentional gold rail. */
+:root:not([data-theme="light"]) body .blog-page .blog-next-note {
+  border-left-color: var(--gold-bright) !important;
+}
+
 /* High contrast and reduced transparency must not depend on translucent glass.
    Also retain the site's color-vision accessibility overrides. */
 :root[data-accessibility-contrast="high"]:not([data-theme="light"]) body :is(
