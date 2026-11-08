@@ -536,6 +536,10 @@
     linear-gradient(125deg, rgba(255, 221, 154, .12), transparent 28%, transparent 58%) !important;
 }
 
+:root:not([data-theme="light"]) body:has(.home-hero) .mission-copy {
+  transform: translateX(20px);
+}
+
 }
 
 @media (min-width: 701px) and (max-width: 1320px) {
