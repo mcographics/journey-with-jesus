@@ -68,6 +68,25 @@ export function TeamDirectory({ fallbackMembers }: Props) {
 
   return (
     <section aria-label="Journey with Jesus team" className="team-grid" aria-busy={!loaded}>
+      {/* Mobile reserves the expanded height separately from the compact visible portrait list.
+          This keeps the footer anchored without inserting large gaps between closed portraits. */}
+      <div className="team-grid-mobile-footprint" aria-hidden="true" inert>
+        {members.map((member) => {
+          const role = language === "fr" ? member.role_fr || member.role : language === "es" ? member.role_es || member.role : member.role;
+          const bio = language === "fr" ? member.bio_fr || member.bio : language === "es" ? member.bio_es || member.bio : member.bio;
+          return (
+            <div className="team-profile-space" key={member.id}>
+              <div className="team-profile-photo-space" />
+              <div className="team-card-copy">
+                <p className="team-role">{role || (language === "fr" ? "Membre de l’équipe" : language === "es" ? "Miembro del equipo" : "Team member")}</p>
+                <h2>{member.name}</h2>
+                {bio && <p>{bio}</p>}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      <div className="team-profile-list">
       {members.map((member) => {
         const role = language === "fr" ? member.role_fr || member.role : language === "es" ? member.role_es || member.role : member.role;
         const bio = language === "fr" ? member.bio_fr || member.bio : language === "es" ? member.bio_es || member.bio : member.bio;
@@ -106,6 +125,7 @@ export function TeamDirectory({ fallbackMembers }: Props) {
         );
       })}
       {loaded && members.length === 0 && <p className="team-empty">Team profiles are being prepared. Please check back soon.</p>}
+      </div>
     </section>
   );
 }
