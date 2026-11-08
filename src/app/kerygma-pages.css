@@ -772,21 +772,16 @@
 
 
 /* The gateway keeps only the language control so visitors can choose before entering. */
-body:has(.kerygma-gateway) .site-header {
-  display: block !important;
-}
+body:has(.kerygma-gateway) .site-header,
 body:has(.kerygma-gateway) .site-footer {
   display: none !important;
 }
-body:has(.kerygma-gateway) .site-header .header-inner > :not(.site-language-switcher) {
-  display: none !important;
-}
-body:has(.kerygma-gateway) .site-header .header-inner {
-  width: min(1280px, calc(100% - 36px)) !important;
-  justify-content: flex-end;
-  padding-top: max(14px, env(safe-area-inset-top));
-}
-body:has(.kerygma-gateway) .site-header .site-language-switcher {
+body:has(.kerygma-gateway) .gateway-language-control {
+  position: fixed;
+  z-index: 30;
+  top: max(14px, env(safe-area-inset-top));
+  right: clamp(18px, 4vw, 48px);
+  display: flex;
   pointer-events: auto;
 }
 
