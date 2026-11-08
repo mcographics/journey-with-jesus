@@ -1646,7 +1646,19 @@ body, .home-hero, .mission-section, .site-footer, .media-page {
     transform: translateY(-50%);
     transition: opacity .24s ease;
   }
-  .mobile-navigation:focus-within { opacity: 1; pointer-events: auto; }
+  /* While idle, the button recedes rather than blocking the page. Keep
+     the low-opacity handle tappable so users can always reopen the menu. */
+  .mobile-navigation.is-idle:not(:focus-within) {
+    opacity: .14;
+    pointer-events: auto;
+  }
+  .mobile-navigation:focus-within {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  :root[data-accessibility-contrast="high"] .mobile-navigation.is-idle:not(:focus-within) {
+    opacity: .65;
+  }
   /* Open leftward, centred on the floating trigger and constrained to
      the visible viewport on compact and landscape mobile screens. */
   .mobile-menu-options {

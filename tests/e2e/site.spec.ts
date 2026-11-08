@@ -73,7 +73,7 @@ test.describe("mobile header controls and translations", () => {
   test.use({ viewport: { width: 375, height: 812 }, isMobile: true, hasTouch: true });
 
 
-  test("floating menu remains visible at right centre through scrolling and opens leftward", async ({ page }) => {
+  test("floating menu fades at rest, returns while scrolling and opens leftward", async ({ page }) => {
     await page.goto("/company/");
     const floating = page.locator(".mobile-navigation");
     const toggle = floating.locator(".mobile-menu-toggle");
@@ -94,14 +94,32 @@ test.describe("mobile header controls and translations", () => {
     expect(after!.x).toBeCloseTo(before!.x, 0);
     expect(after!.y).toBeCloseTo(before!.y, 0);
 
-    // The menu must not vanish after scrolling stops.
-    await page.waitForTimeout(1250);
+    // After scrolling stops, the menu fades to a subtle but tappable handle.
+    await expect.poll(async () =>
+      floating.evaluate((node) => getComputedStyle(node).opacity)
+    ).toBe("0.14");
+    await expect(floating).toHaveCSS("pointer-events", "auto");
     await expect(toggle).toBeVisible();
-    await expect(floating).toHaveCSS("opacity", "1");
 
+    // Scroll again: it returns to full brightness without moving.
+    await page.evaluate(() => window.scrollBy(0, -240));
+    await expect.poll(async () =>
+      floating.evaluate((node) => getComputedStyle(node).opacity)
+    ).toBe("1");
+    const restored = await toggle.boundingBox();
+    expect(restored!.x).toBeCloseTo(before!.x, 0);
+    expect(restored!.y).toBeCloseTo(before!.y, 0);
+
+    // The handle can be tapped even after dimming.
+    await expect.poll(async () =>
+      floating.evaluate((node) => getComputedStyle(node).opacity)
+    ).toBe("0.14");
     await toggle.click();
     const options = floating.locator(".mobile-menu-options");
     await expect(options).toBeVisible();
+    await expect(floating).toHaveCSS("opacity", "1");
+    await page.waitForTimeout(1600);
+    await expect(floating).toHaveCSS("opacity", "1");
     const menuBox = await options.boundingBox();
     expect(menuBox).not.toBeNull();
     expect(menuBox!.x).toBeGreaterThanOrEqual(0);
