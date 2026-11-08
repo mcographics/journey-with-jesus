@@ -3,6 +3,7 @@ export type SiteLocale = "en" | "fr" | "es";
 const translations: Array<[string, string, string]> = [
   ["Studio", "Studio", "Estudio"],
   ["The Studio", "Le studio", "El estudio"],
+  ["John 1:1", "Jean 1:1", "Juan 1:1"],
   ["Blog", "Blog", "Blog"],
   ["The Word", "La Parole", "La Palabra"],
   ["Journey with Jesus", "Le Voyage avec Jésus", "El Viaje con Jesús"],
