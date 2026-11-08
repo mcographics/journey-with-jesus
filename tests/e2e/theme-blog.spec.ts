@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-test("blog dark mode uses white headings, deep royal-blue gradients and gold-rimmed glass", async ({ page }) => {
+test("blog dark mode has crisp white headings and quietly layered navy glass", async ({ page }) => {
   await page.addInitScript(() => {
     window.localStorage.setItem("journey-with-jesus-theme-mode", "dark");
   });
@@ -12,23 +12,23 @@ test("blog dark mode uses white headings, deep royal-blue gradients and gold-rim
   const cardTitle = page.locator(".blog-welcome h2").first();
 
   for (const heading of [hero, emphasizedTitle, sectionTitle, cardTitle]) {
-    await expect(heading).toHaveCSS("color", "rgb(249, 251, 255)");
+    await expect(heading).toHaveCSS("color", "rgb(247, 249, 252)");
     await expect(heading).toHaveCSS("background-image", "none");
   }
 
-  await expect(page.locator(".blog-page")).toHaveCSS("background-color", "rgb(6, 21, 49)");
+  await expect(page.locator(".blog-page")).toHaveCSS("background-color", "rgb(7, 19, 35)");
   const background = await page.locator(".blog-page").evaluate((node) => getComputedStyle(node).backgroundImage);
   expect(background).toContain("linear-gradient(");
   expect(background).toContain("radial-gradient(");
   const glassCard = page.locator(".blog-welcome").first();
   const cardGradient = await glassCard.evaluate((node) => getComputedStyle(node).backgroundImage);
   expect(cardGradient).toContain("linear-gradient(");
-  await expect(glassCard).toHaveCSS("backdrop-filter", "blur(16px) saturate(1.35)");
+  await expect(glassCard).toHaveCSS("backdrop-filter", "blur(12px) saturate(1.1)");
   await expect(page.locator(".blog-topic-card").first()).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
-  await expect(page.locator(".blog-eyebrow").first()).toHaveCSS("color", "rgb(255, 220, 118)");
-  await expect(page.locator(".blog-next-note")).toHaveCSS("border-left-color", "rgb(255, 220, 118)");
+  await expect(page.locator(".blog-eyebrow").first()).toHaveCSS("color", "rgb(232, 199, 127)");
+  await expect(page.locator(".blog-next-note")).toHaveCSS("border-left-color", "rgb(232, 199, 127)");
   const border = await glassCard.evaluate((node) => getComputedStyle(node).borderTopColor);
-  expect(border).toContain("247, 204, 112");
+  expect(border).toContain("188, 207, 229");
 });
 
 test("blog light mode uses light cards and dark readable headings", async ({ page }) => {
@@ -113,7 +113,7 @@ test("high-contrast preference replaces translucent glass with solid legible pan
     window.localStorage.setItem("journey-with-jesus-accessibility", JSON.stringify({ highContrast: true }));
   });
   await page.goto("/blog/");
-  await expect(page.locator(".blog-welcome").first()).toHaveCSS("background-color", "rgb(12, 40, 85)");
+  await expect(page.locator(".blog-welcome").first()).toHaveCSS("background-color", "rgb(16, 38, 61)");
   await expect(page.locator(".blog-welcome").first()).toHaveCSS("background-image", "none");
 });
 
@@ -125,16 +125,16 @@ test("dark mode uses real gold CTAs with dark readable labels", async ({ page })
   const enter = page.locator(".kerygma-enter-button");
   expect(await enter.evaluate((node) => getComputedStyle(node).backgroundImage))
     .toContain("linear-gradient(");
-  await expect(enter).toHaveCSS("color", "rgb(6, 20, 47)");
-  await expect(enter).toHaveCSS("border-top-color", "rgba(255, 245, 199, 0.85)");
+  await expect(enter).toHaveCSS("color", "rgb(16, 32, 55)");
+  await expect(enter).toHaveCSS("border-top-color", "rgba(255, 240, 200, 0.65)");
 
   await page.goto("/company/");
   const studioAction = page.locator(".kerygma-button-gold").first();
-  await expect(studioAction).toHaveCSS("color", "rgb(6, 20, 47)");
+  await expect(studioAction).toHaveCSS("color", "rgb(16, 32, 55)");
   expect(await studioAction.evaluate((node) => getComputedStyle(node).backgroundImage))
     .toContain("linear-gradient(");
   await expect(page.locator(".kerygma-company .kerygma-eyebrow").first())
-    .toHaveCSS("color", "rgb(255, 218, 112)");
+    .toHaveCSS("color", "rgb(232, 199, 127)");
 });
 
 test("dark mode keeps original media imagery and excludes gold from photo overlays", async ({ page }) => {
@@ -159,7 +159,37 @@ test("royal gold is scoped to dark mode and respects high contrast", async ({ pa
     localStorage.setItem("journey-with-jesus-accessibility", JSON.stringify({ highContrast: true }));
   });
   await page.goto("/blog/");
-  await expect(page.locator(".blog-welcome").first()).toHaveCSS("background-color", "rgb(12, 40, 85)");
+  await expect(page.locator(".blog-welcome").first()).toHaveCSS("background-color", "rgb(16, 38, 61)");
   await expect(page.locator(".blog-welcome").first()).toHaveCSS("background-image", "none");
   await expect(page.locator("html")).toHaveCSS("--gold-bright", "#ffe27a");
+});
+
+test("dark surfaces use a unified calm navy palette rather than vivid cobalt", async ({ page }) => {
+  await page.addInitScript(() => {
+    localStorage.setItem("journey-with-jesus-theme-mode", "dark");
+  });
+  for (const route of ["/blog/", "/word/", "/team/"]) {
+    await page.goto(route);
+    const surface = page.locator(route === "/blog/" ? ".blog-page" : route === "/word/" ? ".word-page" : ".editorial-page");
+    await expect(surface).toHaveCSS("background-color", "rgb(7, 19, 35)");
+    const gradient = await surface.evaluate((node) => getComputedStyle(node).backgroundImage);
+    expect(gradient).toContain("linear-gradient(");
+    expect(gradient).not.toContain("12, 52, 116");
+  }
+  await page.goto("/blog/");
+  const card = page.locator(".blog-welcome").first();
+  await expect(card).toHaveCSS("backdrop-filter", "blur(12px) saturate(1.1)");
+  await expect(card).toHaveCSS("border-top-color", "rgba(188, 207, 229, 0.17)");
+});
+
+test("active navigation uses dark glass with a precise gold edge", async ({ page }) => {
+  await page.addInitScript(() => {
+    localStorage.setItem("journey-with-jesus-theme-mode", "dark");
+  });
+  await page.goto("/blog/");
+  const current = page.locator(".nav-link.is-current, .desktop-menu-link.is-current, .mobile-menu-link.is-current").first();
+  if (await current.count()) {
+    await expect(current).toHaveCSS("color", "rgb(242, 210, 145)");
+    await expect(current).toHaveCSS("border-top-color", "rgba(234, 195, 119, 0.65)");
+  }
 });
