@@ -215,6 +215,17 @@ export function SiteHeader() {
     };
   }, [isMobileMenuOpen]);
 
+  if (normalizedPath === "/") {
+    return (
+      <>
+        <div className="gateway-language-control">
+          <SiteLanguageSwitcher />
+        </div>
+        <header className="site-header" />
+      </>
+    );
+  }
+
   return (
     <header className="site-header">
       <div className="header-inner">
