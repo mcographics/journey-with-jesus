@@ -1,5 +1,6 @@
 export type CommentStatus = "pending" | "approved" | "rejected";
 export type VideoQuality = "720p" | "1080p" | "4K";
+export type MediaAudioLanguage = "en" | "fr" | "es";
 export type VideoContentType = "video/mp4" | "video/webm" | "video/quicktime";
 export type SocialPlatform = "youtube" | "facebook" | "instagram" | "tiktok" | "x" | "linkedin" | "pinterest" | "twitch" | "discord" | "custom";
 
@@ -34,9 +35,9 @@ export type Database = {
         Relationships: [];
       };
       media_episodes: {
-        Row: { id: string; title: string; description: string; scripture_reference: string | null; thumbnail_url: string | null; youtube_id: string | null; transcript_text: string | null; asl_interpretation_url: string | null; duration_seconds: number | null; episode_number: number; orientation: "landscape" | "portrait"; published: boolean; created_at: string; updated_at: string };
-        Insert: { id: string; title: string; description?: string; scripture_reference?: string | null; thumbnail_url?: string | null; youtube_id?: string | null; transcript_text?: string | null; asl_interpretation_url?: string | null; duration_seconds?: number | null; episode_number?: number; orientation?: "landscape" | "portrait"; published?: boolean };
-        Update: { title?: string; description?: string; scripture_reference?: string | null; thumbnail_url?: string | null; youtube_id?: string | null; transcript_text?: string | null; asl_interpretation_url?: string | null; duration_seconds?: number | null; episode_number?: number; orientation?: "landscape" | "portrait"; published?: boolean; updated_at?: string };
+        Row: { id: string; title: string; description: string; scripture_reference: string | null; thumbnail_url: string | null; youtube_id: string | null; audio_language: MediaAudioLanguage; transcript_text: string | null; asl_interpretation_url: string | null; duration_seconds: number | null; episode_number: number; orientation: "landscape" | "portrait"; published: boolean; created_at: string; updated_at: string };
+        Insert: { id: string; title: string; description?: string; scripture_reference?: string | null; thumbnail_url?: string | null; youtube_id?: string | null; audio_language?: MediaAudioLanguage; transcript_text?: string | null; asl_interpretation_url?: string | null; duration_seconds?: number | null; episode_number?: number; orientation?: "landscape" | "portrait"; published?: boolean };
+        Update: { title?: string; description?: string; scripture_reference?: string | null; thumbnail_url?: string | null; youtube_id?: string | null; audio_language?: MediaAudioLanguage; transcript_text?: string | null; asl_interpretation_url?: string | null; duration_seconds?: number | null; episode_number?: number; orientation?: "landscape" | "portrait"; published?: boolean; updated_at?: string };
         Relationships: [];
       };
       media_captions: {
