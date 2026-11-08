@@ -1652,8 +1652,7 @@ body, .home-hero, .mission-section, .site-footer, .media-page {
     opacity: .14;
     pointer-events: auto;
   }
-  .mobile-navigation:focus-within,
-  .mobile-navigation:hover {
+  .mobile-navigation:focus-within {
     opacity: 1;
     pointer-events: auto;
   }
