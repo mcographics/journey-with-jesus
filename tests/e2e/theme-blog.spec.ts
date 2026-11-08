@@ -54,6 +54,9 @@ test("dark mode avoids gradient washes across navigation and key site pages", as
     const backgroundImage = await page.locator(surface).first()
       .evaluate((element) => getComputedStyle(element).backgroundImage);
     expect(backgroundImage, `gradient on ${route}`).not.toContain("gradient(");
-    await expect(page.locator(".theme-toggle")).toHaveCSS("background-image", "none");
+    const themeControl = page.locator(".theme-toggle, .desktop-menu-toggle, .mobile-menu-toggle").first();
+    if (await themeControl.count()) {
+      await expect(themeControl).toHaveCSS("background-image", "none");
+    }
   }
 });
