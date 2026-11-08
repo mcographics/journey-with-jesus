@@ -91,7 +91,7 @@ test.describe("mobile header controls and translations", () => {
       page.locator(".theme-toggle"),
       page.locator(".mobile-menu-toggle"),
     ];
-    const boxes = [];
+    const boxes: Array<{ x: number; y: number; width: number; height: number }> = [];
     for (const selector of selectors) {
       await expect(selector).toBeVisible();
       const box = await selector.boundingBox();
@@ -130,7 +130,11 @@ test.describe("mobile header controls and translations", () => {
     await expect(page.locator(".word-selects label").nth(1).locator("span")).toHaveText("Livre");
     await expect(page.locator(".word-selects label").nth(2).locator("span")).toHaveText("Chapitre");
     await expect(page.locator("#word-translation-select")).toHaveValue("KJV");
-    await expect(page.locator("#word-verse-1")).toHaveText("In the beginning God created the heaven and the earth.");
+    await expect(page.locator("#word-verse-1 > span")).toHaveText("In the beginning God created the heaven and the earth.");
+    await page.locator("#word-search-input").fill("the heaven and the earth");
+    await page.locator(".word-search-button").click();
+    await expect(page.locator(".word-search-results h2")).toHaveText("Résultats de recherche");
+    await expect(page.locator(".word-result > span").first()).toHaveText("In the beginning God created the heaven and the earth.");
   });
 });
 
