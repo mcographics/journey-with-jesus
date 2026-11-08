@@ -25,7 +25,10 @@ const episodes: Episode[] = [
   },
 ];
 
-afterEach(() => window.history.replaceState({}, "", "/media/"));
+afterEach(() => {
+  window.history.replaceState({}, "", "/media/");
+  window.localStorage.removeItem("kerygmapath-language");
+});
 
 describe("MediaExperience", () => {
   it("opens Media community as a separate view when the library is empty", () => {
@@ -65,5 +68,35 @@ describe("MediaExperience", () => {
     fireEvent(window, new PopStateEvent("popstate"));
     expect(screen.getByRole("heading", { name: "A Story of Mercy" })).toBeTruthy();
     expect(screen.getByRole("button", { name: /Videos/ }).getAttribute("aria-pressed")).toBe("true");
+  });
+
+  it("shows only media in the selected site audio language for both YouTube and uploads", () => {
+    const localized: Episode[] = [
+      { id: "en-upload", title: "English upload", description: "", episodeNumber: 1, published: true, orientation: "landscape", audioLanguage: "en", videoUrl: "https://media.example.test/en.mp4" },
+      { id: "fr-youtube", title: "French YouTube", description: "", episodeNumber: 2, published: true, orientation: "landscape", audioLanguage: "fr", youtubeId: "abcdefghijk" },
+      { id: "es-upload", title: "Spanish upload", description: "", episodeNumber: 3, published: true, orientation: "portrait", audioLanguage: "es", videoUrl: "https://media.example.test/es.mp4" },
+    ];
+    render(<MediaExperience episodes={localized} />);
+    expect(screen.getByRole("heading", { name: "English upload" })).toBeTruthy();
+    expect(screen.queryByText("French YouTube")).toBeNull();
+
+    window.localStorage.setItem("kerygmapath-language", "fr");
+    fireEvent(window, new Event("site-language-change"));
+    expect(screen.getByRole("heading", { name: "French YouTube" })).toBeTruthy();
+    expect(screen.queryByText("English upload")).toBeNull();
+    expect(screen.getByRole("button", { name: /Videos/ }).textContent).toContain("1");
+
+    window.localStorage.setItem("kerygmapath-language", "es");
+    fireEvent(window, new Event("site-language-change"));
+    expect(screen.getByRole("heading", { name: "Spanish upload" })).toBeTruthy();
+    expect(screen.queryByText("French YouTube")).toBeNull();
+    expect(screen.getByRole("button", { name: /Stories/ }).textContent).toContain("1");
+  });
+
+  it("never plays a recording from another language when a requested language has no media", () => {
+    window.localStorage.setItem("kerygmapath-language", "fr");
+    render(<MediaExperience episodes={episodes} />);
+    expect(screen.queryByRole("heading", { name: "A Story of Mercy" })).toBeNull();
+    expect(screen.getByText("No french stories are available yet.")).toBeTruthy();
   });
 });
