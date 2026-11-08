@@ -1,0 +1,420 @@
+
+/*
+ * Kerygma Path / Midnight Atelier
+ * A unified dark presentation: ink navy, restrained sapphire light, warm-gold
+ * details, quiet typography and architectural (not glossy) glass.
+ *
+ * Do not add image-wide colour grading or artwork overlays. The original
+ * Media Library photograph is always the only media-page background layer.
+ */
+:root:not([data-theme="light"]) {
+  color-scheme: dark;
+  --night: #071323;
+  --night-soft: #0d2138;
+  --panel: #122940;
+  --ink: #f5f7fb;
+  --muted: #c8d3e0;
+  --quiet: #aabacd;
+  --line: rgba(184, 203, 223, .2);
+
+  --gold: #dcb46a;
+  --gold-bright: #f0cf8a;
+  --gold-text: #e9c783;
+  --gold-text-bright: #f5dcaa;
+  --gold-outline: rgba(213, 177, 108, .22);
+  --gold-outline-flash: rgba(232, 204, 144, .34);
+  --gold-glow: rgba(225, 181, 102, .07);
+
+  --atelier-bg: 
+    radial-gradient(ellipse at 80% 0%, rgba(42, 82, 130, .17), transparent 45%),
+    linear-gradient(162deg, #071221 0%, #0a1b31 52%, #09182b 100%);
+  --atelier-bg-alt:
+    linear-gradient(145deg, #09192e 0%, #102842 53%, #0a1b30 100%);
+  --atelier-glass:
+    linear-gradient(155deg, rgba(31, 54, 78, .92) 0%, rgba(17, 36, 58, .94) 52%, rgba(12, 27, 46, .96) 100%);
+  --atelier-border: rgba(188, 207, 229, .17);
+  --atelier-shadow:
+    inset 0 1px 0 rgba(236, 245, 255, .07),
+    0 20px 46px rgba(1, 6, 16, .2);
+  --atelier-action:
+    linear-gradient(145deg, #f7dfa8 0%, #e3bb6e 63%, #d1a355 100%);
+  --atelier-action-hover:
+    linear-gradient(145deg, #ffedc5 0%, #f1cf8b 66%, #ddb56a 100%);
+}
+
+:root:not([data-theme="light"]) body {
+  background-color: #071323;
+  color: var(--ink);
+}
+
+/* A soft sapphire ambient glow, with continuous understated page surfaces. */
+:root:not([data-theme="light"]) body :is(
+  .kerygma-gateway, .home-hero, .editorial-page, .blog-page,
+  .word-page, .studio-page, .kerygma-principles-section
+),
+:root:not([data-theme="light"]) body .editorial-page.store-page-v2 {
+  background-color: #071323 !important;
+  background-image: var(--atelier-bg) !important;
+  background-repeat: no-repeat !important;
+}
+:root:not([data-theme="light"]) body :is(
+  .site-footer, .kerygma-mission-section, .kerygma-project-section
+) {
+  background: var(--atelier-bg-alt) !important;
+  border-color: rgba(198, 211, 224, .11);
+}
+:root:not([data-theme="light"]) body :is(
+  .storybook-section, .mission-section, .invitation-section,
+  .kerygma-company-hero
+) {
+  background-color: #081727 !important;
+  background-image: none !important;
+}
+
+/* Material quality comes from a thin light-catching edge and subtle shadow,
+   not highly saturated blue fills, decorative halos or pulsing borders. */
+:root:not([data-theme="light"]) body :is(
+  .blog-welcome, .blog-topic-card, .blog-next-note,
+  .kerygma-principle-card, .character-card,
+  .team-card:not(.team-profile), .team-profile[open],
+  .store-card, .store-preparing, .store-space-card, .store-unavailable-card,
+  .word-tools, .word-reading-paper, .word-search-results,
+  .playlist-panel, .episode-card, .comment-card, .comment-form,
+  .studio-panel, .studio-gate, .media-invitation
+) {
+  background: var(--atelier-glass) !important;
+  border-color: var(--atelier-border) !important;
+  box-shadow: var(--atelier-shadow) !important;
+  outline-color: rgba(208, 225, 244, .13) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(110%);
+  backdrop-filter: blur(12px) saturate(110%);
+  animation: none !important;
+}
+
+:root:not([data-theme="light"]) body :is(
+  .blog-welcome, .blog-topic-card, .kerygma-principle-card,
+  .character-card, .store-card, .store-space-card,
+  .playlist-panel, .word-tools
+):hover {
+  border-color: rgba(230, 201, 146, .38) !important;
+  box-shadow: inset 0 1px 0 rgba(246, 242, 230, .1),
+    0 22px 48px rgba(1, 7, 18, .24) !important;
+}
+
+/* Photography is first class. Never place a blue or gold gradient over it. */
+:root:not([data-theme="light"]) body :is(
+  .storybook-shade, .invitation-shade
+) {
+  background: rgba(0, 0, 0, .26) !important;
+}
+:root:not([data-theme="light"]) body :is(
+  .kerygma-company-hero-shade, .kerygma-gateway-shade
+) {
+  background: rgba(0, 0, 0, .2) !important;
+}
+:root:not([data-theme="light"]) body .mission-art::after,
+:root:not([data-theme="light"]) body .store-hero-art::after,
+:root:not([data-theme="light"]) body .episode-art::after {
+  background: rgba(0, 0, 0, .18) !important;
+}
+:root:not([data-theme="light"]) body .storybook-description-panel::before {
+  background: none !important;
+}
+:root:not([data-theme="light"]) body :is(
+  .team-art, .team-art.has-photo, .character-portrait-trigger,
+  .video-frame, .episode-art
+) {
+  background-color: #0d2034 !important;
+  background-image: none !important;
+}
+
+/* Media photograph stays visible in dark AND light modes, on all screen sizes. */
+:root body .media-page {
+  background-image: var(--media-background-image, none) !important;
+  background-repeat: no-repeat !important;
+  background-position: center top !important;
+  background-size: 100% auto !important;
+  background-blend-mode: normal !important;
+}
+:root:not([data-theme="light"]) body .media-page {
+  background-color: #071323 !important;
+}
+:root body .media-page .media-stage {
+  background: transparent !important;
+  background-image: none !important;
+}
+@media (max-width: 850px) {
+  :root body .media-page {
+    background-size: auto 100vh !important;
+  }
+}
+
+/* Navigation: quiet dark glass; active state indicated by gold precision,
+   not a large block of glossy cobalt or a blinking decorative outline. */
+:root:not([data-theme="light"]) body :is(
+  .nav-link, .mobile-menu-toggle, .desktop-menu-toggle, .theme-toggle,
+  .site-language-toggle, .accessibility-settings-trigger,
+  .mobile-menu-options, .desktop-menu-options, .site-language-options,
+  .accessibility-settings-panel
+) {
+  background: linear-gradient(160deg, rgba(27, 48, 73, .96), rgba(11, 27, 47, .97)) !important;
+  border-color: rgba(182, 201, 223, .25) !important;
+  color: #f0f4fa !important;
+  box-shadow: inset 0 1px 0 rgba(240, 246, 255, .08),
+    0 9px 24px rgba(1, 7, 18, .21) !important;
+  outline-color: rgba(207, 188, 147, .12) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(110%);
+  backdrop-filter: blur(12px) saturate(110%);
+  animation: none !important;
+  text-shadow: none !important;
+}
+:root:not([data-theme="light"]) body :is(
+  .nav-link:hover, .desktop-menu-toggle:hover, .mobile-menu-toggle:hover,
+  .theme-toggle:hover, .site-language-toggle:hover,
+  .accessibility-settings-trigger:hover
+) {
+  background: linear-gradient(160deg, rgba(34, 61, 93, .97), rgba(15, 34, 57, .98)) !important;
+  border-color: rgba(224, 191, 129, .45) !important;
+}
+:root:not([data-theme="light"]) body :is(
+  .nav-link.is-current, .desktop-menu-link.is-current,
+  .mobile-menu-link.is-current
+) {
+  background: rgba(32, 51, 70, .92) !important;
+  border-color: rgba(234, 195, 119, .65) !important;
+  color: #f2d291 !important;
+  -webkit-text-fill-color: currentColor !important;
+  box-shadow: inset 0 1px 0 rgba(251, 231, 191, .13) !important;
+  text-shadow: none !important;
+}
+:root:not([data-theme="light"]) body :is(
+  .nav-link.is-current svg, .desktop-menu-link.is-current svg,
+  .mobile-menu-link.is-current svg, .site-language-option-code,
+  .accessibility-settings-trigger svg, .mobile-menu-toggle svg,
+  .desktop-menu-toggle svg
+) {
+  color: #e8c57b !important;
+  filter: none !important;
+}
+:root:not([data-theme="light"]) body :is(
+  .site-language-option:hover, .site-language-option.is-selected,
+  .site-language-option:focus-visible, .mobile-menu-link:hover,
+  .desktop-menu-link:hover
+) {
+  background: rgba(220, 183, 108, .085) !important;
+  color: #f2d291 !important;
+}
+
+/* One metallic-gold primary action treatment; dark labels remain readable. */
+:root:not([data-theme="light"]) body :is(
+  .button-gold, .kerygma-button-gold
+),
+:root:not([data-theme="light"]) body .kerygma-gateway .kerygma-enter-button,
+:root:not([data-theme="light"]) body #main-content.kerygma-company .kerygma-button-gold {
+  background: var(--atelier-action) !important;
+  border: 1px solid rgba(255, 240, 200, .65) !important;
+  color: #102037 !important;
+  -webkit-text-fill-color: currentColor !important;
+  text-shadow: none !important;
+  box-shadow: inset 0 1px 0 rgba(255, 252, 241, .44),
+    0 10px 23px rgba(1, 9, 22, .25) !important;
+}
+:root:not([data-theme="light"]) body :is(
+  .button-gold:hover, .kerygma-button-gold:hover
+),
+:root:not([data-theme="light"]) body .kerygma-gateway .kerygma-enter-button:hover,
+:root:not([data-theme="light"]) body #main-content.kerygma-company .kerygma-button-gold:hover {
+  background: var(--atelier-action-hover) !important;
+}
+:root:not([data-theme="light"]) body #main-content.kerygma-company a.kerygma-button.kerygma-button-gold,
+:root:not([data-theme="light"]) body #main-content.kerygma-company a.kerygma-button.kerygma-button-gold :is(span, svg),
+:root:not([data-theme="light"]) body .kerygma-gateway .kerygma-enter-button :is(span, svg) {
+  color: #102037 !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+
+/* Editorial hierarchy: mostly ivory type with measured champagne-gold markers.
+   The blog's titles explicitly stay white in dark mode. */
+:root:not([data-theme="light"]) body :is(
+  .blog-eyebrow, .blog-post-kicker, .blog-welcome-mark,
+  .blog-topic-number, .blog-studio-link,
+  .editorial-eyebrow, .character-role, .team-role,
+  .store-kicker, .store-section-eyebrow, .store-space-icon,
+  .media-kicker, .episode-current-label,
+  .studio-tabs button[aria-selected="true"], .footer-note
+) {
+  color: #e8c77f !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+:root:not([data-theme="light"]) body :is(
+  .blog-topic-card > svg, .kerygma-principle-card > svg,
+  .store-preparing-icon svg, .word-tool-icon svg,
+  .studio-panel-heading > svg
+) {
+  color: #e8c77f !important;
+}
+:root:not([data-theme="light"]) body .blog-page :is(h1, h2, h3, h1 em) {
+  color: #f7f9fc !important;
+  -webkit-text-fill-color: currentColor !important;
+  background-image: none !important;
+}
+:root:not([data-theme="light"]) body .blog-page .blog-next-note {
+  border-left-color: #e8c77f !important;
+}
+:root:not([data-theme="light"]) body .blog-welcome-mark {
+  border-color: rgba(232, 199, 127, .48) !important;
+  background: rgba(232, 199, 127, .055) !important;
+}
+:root:not([data-theme="light"]) body :is(
+  .blog-eyebrow > span, .store-kicker-line
+) {
+  background: #e8c77f !important;
+}
+:root:not([data-theme="light"]) body .site-footer::before {
+  background: linear-gradient(90deg, transparent, rgba(221, 190, 129, .48), transparent) !important;
+}
+:root:not([data-theme="light"]) body .scroll-cue span {
+  background: linear-gradient(#d7b46e, transparent) !important;
+}
+:root:not([data-theme="light"]) body .word-page {
+  --word-paper: #11273e;
+  --word-panel: rgba(19, 41, 62, .96);
+  --word-panel-raised: #1a354f;
+}
+
+/* The studio has a deliberately limited gold vocabulary, not every text node. */
+:root:not([data-theme="light"]) body #main-content.kerygma-company :is(
+  .kerygma-eyebrow, .kerygma-eyebrow span, h1 em, h2 em,
+  .kerygma-principle-number, .kerygma-text-link,
+  .kerygma-project-secondary, .kerygma-hero-caption,
+  .kerygma-principle-card > svg
+) {
+  color: #e8c77f !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+:root:not([data-theme="light"]) body #main-content.kerygma-company :is(
+  .kerygma-button-outline, .kerygma-button-outline span,
+  .kerygma-button-outline svg,
+  .kerygma-button:not(.kerygma-button-gold),
+  .kerygma-button:not(.kerygma-button-gold) span,
+  .kerygma-button:not(.kerygma-button-gold) svg
+) {
+  color: #e8c77f !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+
+/* Subdued selected tabs without saturated fills. */
+:root:not([data-theme="light"]) body :is(
+  .media-kind-tabs button[aria-pressed="true"],
+  .media-discussion-tabs button[aria-pressed="true"]
+) {
+  background: rgba(222, 185, 115, .095) !important;
+  border-color: rgba(230, 197, 129, .45) !important;
+  color: #f2d99e !important;
+}
+
+/* Accessible fallback: high contrast or reduced transparency is opaque. */
+:root[data-accessibility-contrast="high"]:not([data-theme="light"]) body :is(
+  .blog-welcome, .blog-topic-card, .blog-next-note,
+  .kerygma-principle-card, .character-card, .team-profile[open],
+  .store-card, .word-tools, .word-reading-paper, .playlist-panel,
+  .studio-panel, .nav-link, .theme-toggle, .desktop-menu-options,
+  .mobile-menu-options, .site-language-options, .accessibility-settings-panel
+) {
+  background: #10263d !important;
+  border-color: #f0cf8a !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+:root[data-accessibility-contrast="high"]:not([data-theme="light"]) {
+  --ink: #fff;
+  --muted: #f1f1f1;
+  --quiet: #d0d0d0;
+  --gold: #ffe27a;
+  --gold-bright: #ffe27a;
+}
+@media (prefers-reduced-transparency: reduce) {
+  :root:not([data-theme="light"]) body :is(
+    .blog-welcome, .blog-topic-card, .kerygma-principle-card,
+    .character-card, .word-tools, .playlist-panel, .studio-panel,
+    .nav-link, .theme-toggle, .desktop-menu-options, .mobile-menu-options
+  ) {
+    background: #10273f !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  :root:not([data-theme="light"]) body :is(
+    .blog-welcome, .blog-topic-card, .kerygma-principle-card,
+    .character-card, .word-tools, .playlist-panel, .studio-panel,
+    .nav-link, .theme-toggle, .desktop-menu-options, .mobile-menu-options
+  ) {
+    background: #112940 !important;
+  }
+}
+@media (max-width: 700px) {
+  :root:not([data-theme="light"]) body :is(
+    .blog-welcome, .blog-topic-card, .kerygma-principle-card,
+    .character-card, .playlist-panel, .word-tools,
+    .nav-link, .desktop-menu-options, .mobile-menu-options
+  ) {
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+  }
+}
+
+/* Respect site accessibility modes instead of recolouring assets or toggles. */
+:root:not([data-theme="light"])[data-accessibility-color-vision="protanopia"] {
+  --gold: #e69f00;
+  --gold-bright: #f0d55e;
+}
+:root:not([data-theme="light"])[data-accessibility-color-vision="deuteranopia"] {
+  --gold: #ff986c;
+  --gold-bright: #ffb28e;
+}
+:root:not([data-theme="light"])[data-accessibility-color-vision="tritanopia"] {
+  --gold: #a64b16;
+  --gold-bright: #803300;
+}
+:root:not([data-theme="light"])[data-accessibility-color-vision="monochromacy"] {
+  --gold: #e1e1e1;
+  --gold-bright: #fff;
+}
+
+/* Preserve the established light theme and its low-key pale glass. */
+/* Subtle frost in the light theme: bright surfaces and legible dark text. */
+:root[data-theme="light"] body :is(
+  .blog-page, .editorial-page, .word-page, .studio-page,
+  .kerygma-principles-section
+) {
+  background-color: #f2f6fa !important;
+  background-image:
+    radial-gradient(ellipse at 85% 9%, rgba(157, 200, 249, .19), transparent 47%),
+    linear-gradient(135deg, #f8fbff 0%, #ebf3fd 62%, #f7faff 100%) !important;
+}
+
+:root[data-theme="light"] body .site-footer {
+  background-color: #edf4fc !important;
+  background-image: linear-gradient(150deg, #f7faff, #e8f1fc 60%, #f6faff) !important;
+}
+
+:root[data-theme="light"] body :is(
+  .blog-welcome, .blog-topic-card, .blog-next-note,
+  .kerygma-principle-card, .character-card,
+  .team-card:not(.team-profile), .team-profile[open],
+  .store-card, .store-preparing, .store-space-card, .store-unavailable-card,
+  .word-tools, .word-reading-paper, .word-search-results,
+  .playlist-panel, .episode-card, .comment-card, .comment-form,
+  .studio-panel, .studio-gate
+) {
+  background: linear-gradient(
+    142deg, rgba(255, 255, 255, .97), rgba(234, 244, 255, .91)
+  ) !important;
+  border-color: rgba(129, 164, 205, .38) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .98),
+    0 14px 36px rgba(34, 67, 111, .11) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(110%);
+  backdrop-filter: blur(14px) saturate(110%);
+}
+
