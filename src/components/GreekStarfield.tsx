@@ -14,6 +14,32 @@ function createStar(): Star {
     phase: Math.random() * Math.PI * 2, tint: chooseStarTint(Math.random()) };
 }
 
+// Independent, occasional meteors. These never alter the star particles used to form words.
+type ShootingStar = {
+  x: number; y: number; vx: number; vy: number;
+  age: number; duration: number; tail: number; tint: "blue" | "gold";
+};
+
+function nextShootingStarDelay(): number {
+  // A new, unpredictable gap after every meteor; never a repeating interval.
+  return 24 + Math.random() * 66;
+}
+
+function createShootingStar(width: number, height: number): ShootingStar {
+  const direction = Math.random() < 0.5 ? 1 : -1;
+  const angle = (15 + Math.random() * 25) * Math.PI / 180;
+  const speed = 380 + Math.random() * 210;
+  return {
+    x: width * (0.15 + Math.random() * 0.7),
+    y: height * (0.12 + Math.random() * 0.62),
+    vx: direction * speed * Math.cos(angle),
+    vy: (Math.random() < 0.5 ? 1 : -1) * speed * Math.sin(angle),
+    age: 0, duration: 0.65 + Math.random() * 0.45,
+    tail: 55 + Math.random() * 55,
+    tint: Math.random() < 0.5 ? "blue" : "gold",
+  };
+}
+
 export function GreekStarfield() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   useEffect(() => {
@@ -25,6 +51,47 @@ export function GreekStarfield() {
     const reduced = () => preference.matches || document.documentElement.dataset.accessibilityReduceMotion === "true";
     let width = 1, height = 1, time = 0, last = 0, frame = 0;
     let stars: Star[] = [];
+    let shootingStar: ShootingStar | null = null;
+    let nextMeteorAt = nextShootingStarDelay();
+
+    const paintShootingStar = () => {
+      if (!shootingStar) return;
+      const { x, y, vx, vy, age, duration, tail, tint } = shootingStar;
+      const fade = Math.max(0, Math.min(1, age / 0.14, (duration - age) / 0.3));
+      if (fade <= 0) return;
+
+      const headX = x + vx * age;
+      const headY = y + vy * age;
+      const velocity = Math.hypot(vx, vy);
+      const visibleTail = tail * Math.min(1, age / 0.2);
+      const tailX = headX - vx / velocity * visibleTail;
+      const tailY = headY - vy / velocity * visibleTail;
+      const rgb = tint === "blue" ? "100,184,255" : "255,204,91";
+      const glow = tint === "blue" ? "#46aaff" : "#ffd36b";
+
+      context.save();
+      const trailGradient = context.createLinearGradient(tailX, tailY, headX, headY);
+      trailGradient.addColorStop(0, `rgba(${rgb},0)`);
+      trailGradient.addColorStop(0.5, `rgba(${rgb},${(0.33 * fade).toFixed(3)})`);
+      trailGradient.addColorStop(1, `rgba(${rgb},${(0.95 * fade).toFixed(3)})`);
+      context.strokeStyle = trailGradient;
+      context.lineWidth = 1.8;
+      context.lineCap = "round";
+      context.shadowColor = glow;
+      context.shadowBlur = 14;
+      context.beginPath();
+      context.moveTo(tailX, tailY);
+      context.lineTo(headX, headY);
+      context.stroke();
+
+      context.shadowBlur = 18;
+      context.beginPath();
+      context.arc(headX, headY, 2.2 * Math.min(1, fade), 0, Math.PI * 2);
+      context.fillStyle = `rgba(255,250,232,${fade.toFixed(3)})`;
+      context.fill();
+      context.restore();
+    };
+
     const paint = () => {
       context.fillStyle = "#000";
       context.fillRect(0, 0, width, height);
@@ -68,7 +135,10 @@ export function GreekStarfield() {
     };
     const paintScene = () => {
       paint();
-      if (!reduced()) words.draw(time, width, height);
+      if (!reduced()) {
+        paintShootingStar();
+        words.draw(time, width, height);
+      }
     };
     const resize = () => {
       const bounds = canvas.getBoundingClientRect();
@@ -95,6 +165,15 @@ export function GreekStarfield() {
             star.z3 = 1; star.x3 = Math.random() * 2 - 1; star.y3 = Math.random() * 2 - 1;
             star.tint = chooseStarTint(Math.random());
           }
+        }
+        if (shootingStar) {
+          shootingStar.age += steps * 0.016;
+          if (shootingStar.age >= shootingStar.duration) {
+            shootingStar = null;
+            nextMeteorAt = time + nextShootingStarDelay();
+          }
+        } else if (time >= nextMeteorAt) {
+          shootingStar = createShootingStar(width, height);
         }
       }
       paintScene();
