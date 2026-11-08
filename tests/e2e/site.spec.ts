@@ -318,8 +318,11 @@ test("light mode uses muted surfaces and a larger mobile media kicker", async ({
   await page.goto("/media/");
 
   await expect(page.locator(".media-page")).toHaveCSS("--night", "#f2f4f2");
-  expect(await page.locator(".media-page").evaluate((element) => getComputedStyle(element).backgroundImage))
-    .toContain("rgba(232, 236, 235, 0.68)");
+  const backgroundImage = await page.locator(".media-page")
+    .evaluate((element) => getComputedStyle(element).backgroundImage);
+  expect(backgroundImage).toContain("media-page-background.webp");
+  expect(backgroundImage).not.toContain("gradient(");
+  await expect(page.locator(".media-page")).toHaveCSS("background-blend-mode", "normal");
   await expect(page.locator(".media-kicker")).toHaveCSS("font-size", "18px");
 });
 
