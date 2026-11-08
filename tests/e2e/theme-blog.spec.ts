@@ -258,10 +258,9 @@ test("mobile language control stays light in light mode and retains dark crystal
   expect(bounds!.x).toBeGreaterThanOrEqual(0);
   expect(bounds!.x + bounds!.width).toBeLessThanOrEqual(375);
 
-  await page.evaluate(() => {
-    localStorage.setItem("journey-with-jesus-theme-mode", "dark");
-  });
-  await page.reload();
+  // Switch themes through the real UI. The test's initial light-mode
+  // script runs on every navigation, so a reload would force light again.
+  await page.locator(".theme-toggle").click();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   await expect(toggle).toHaveCSS("color", "rgb(255, 248, 231)");
   expect(await toggle.evaluate((node) => getComputedStyle(node).backgroundImage)).toContain("32, 76, 127");
