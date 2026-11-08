@@ -56,6 +56,33 @@ test("public destinations are available in the desktop menu, with working story 
 test.describe("mobile header controls and translations", () => {
   test.use({ viewport: { width: 375, height: 812 }, isMobile: true, hasTouch: true });
 
+  test("the selected language is applied across all public and policy routes", async ({ page }) => {
+    await page.goto("/company/");
+    await page.locator(".site-language-toggle").click();
+    await page.getByRole("option", { name: "Français [FR]" }).click();
+
+    const routes = [
+      "/", "/company/", "/blog/", "/word/", "/projects/journey-with-jesus/",
+      "/media/", "/characters/", "/team/", "/store/", "/studio/",
+      "/policies/privacy/", "/policies/terms/", "/policies/community-guidelines/",
+      "/policies/cookies/", "/policies/copyright/",
+    ];
+    for (const route of routes) {
+      await page.goto(route);
+      await expect(page.locator("html")).toHaveAttribute("lang", "fr");
+      await expect(page.locator(".site-language-toggle")).toContainText("FR");
+      const menuButton = page.locator(".mobile-menu-toggle");
+      await menuButton.click();
+      await expect(page.locator(".mobile-menu-options").getByRole("link", { name: "La Parole" })).toBeVisible();
+    }
+
+    await page.locator(".site-language-toggle").click();
+    await page.getByRole("option", { name: "Español [ES]" }).click();
+    await expect(page.locator("html")).toHaveAttribute("lang", "es");
+    await page.locator(".mobile-menu-toggle").click();
+    await expect(page.locator(".mobile-menu-options").getByRole("link", { name: "La Palabra" })).toBeVisible();
+  });
+
   test("header actions stay aligned, and the Bible interface translates without changing Scripture", async ({ page }) => {
     await page.goto("/company/");
     const selectors = [
