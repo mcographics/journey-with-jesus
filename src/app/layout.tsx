@@ -9,6 +9,7 @@ import "./kerygma-pages.css";
 import "./blog.css";
 import "./accessibility.css";
 import "./scripture.css";
+import "./dark-mode.css";
 
 const siteUrl = "https://kerygmapath.com/";
 
@@ -35,7 +36,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0B1120",
+  themeColor: "#0D2342",
   colorScheme: "light dark",
 };
 
@@ -63,7 +64,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
                 document.documentElement.dataset.theme = theme;
                 document.querySelector('meta[name="theme-color"]')?.setAttribute(
                   "content",
-                  theme === "light" ? "#f2f5f9" : "#0B1120",
+                  theme === "light" ? "#f2f5f9" : "#0D2342",
                 );
                 const savedAccessibility = localStorage.getItem("journey-with-jesus-accessibility");
                 const accessibility = savedAccessibility ? JSON.parse(savedAccessibility) : {};
