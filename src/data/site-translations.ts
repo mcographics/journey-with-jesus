@@ -224,7 +224,7 @@ const translations: Array<[string, string, string]> = [
   ["Light mode is active. Activate to use dark mode.", "Le mode clair est actif. Activez pour utiliser le mode sombre.", "El modo claro está activo. Activa para usar el modo oscuro."],
   ["Dark mode is active. Activate to return to automatic theme.", "Le mode sombre est actif. Activez pour revenir au thème automatique.", "El modo oscuro está activo. Activa para volver al tema automático."],
   ["Automatic: light 7 AM–7 PM and dark 7 PM–7 AM, using local time.", "Automatique : mode clair de 7 h à 19 h et mode sombre de 19 h à 7 h, selon l’heure locale.", "Automático: modo claro de 7 a. m. a 7 p. m. y oscuro de 7 p. m. a 7 a. m., según la hora local."],
-  ["Information", "Information", "Información"],,
+  ["Information", "Information", "Información"],
   ["An animated journey through the life, teachings, miracles, sacrifice, and resurrection of Jesus Christ. This is the first project from Kerygma Path.", "Un voyage animé à travers la vie, les enseignements, les miracles, le sacrifice et la résurrection de Jésus-Christ. C’est le premier projet de Kerygma Path.", "Un recorrido animado por la vida, las enseñanzas, los milagros, el sacrificio y la resurrección de Jesucristo. Este es el primer proyecto de Kerygma Path."],
   ["“One extraordinary life. One timeless message.", "« Une vie extraordinaire. Un message intemporel.", "« Una vida extraordinaria. Un mensaje eterno."],
   ["A journey that changes everything.”", "Une aventure qui transforme tout. »", "Un viaje que lo cambia todo. »"],
