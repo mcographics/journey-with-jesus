@@ -295,6 +295,14 @@
 .team-profile-space h2 { margin: 0; font-family: var(--serif); font-size: 27px; font-weight: 400; letter-spacing: -.02em; }
 .team-profile-slot > .team-profile { position: absolute; top: 0; left: 0; right: 0; margin-inline: auto; }
 .team-profile-slot > .team-profile[open] { bottom: 0; }
+@media (max-width: 700px) {
+  /* Override desktop absolute positioning so mobile profiles cannot overlap and block taps. */
+  .team-profile-slot > .team-profile,
+  .team-profile-slot > .team-profile[open] {
+    position: relative;
+    inset: auto;
+  }
+}
 
 /* Kerygma Path shop preview — product listings and purchase actions stay offline until launch. */
 .editorial-page.store-page-v2 {
