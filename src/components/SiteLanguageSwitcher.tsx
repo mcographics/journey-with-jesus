@@ -191,14 +191,11 @@ export function SiteLanguageSwitcher() {
   }, []);
 
   useEffect(() => {
-    document.documentElement.lang = languageCode === "iw" ? "he" : languageCode;
-  }, [languageCode]);
-
-  useEffect(() => {
     if (pendingLanguage === null) return;
 
     const code = pendingLanguage;
-    document.documentElement.lang = code === "iw" ? "he" : code;
+    // Keep <html lang="en"> as the translation source language. GTranslate
+    // reads it when applying the saved googtrans target-language cookie.
     if (code === "en") {
       document.cookie = "googtrans=; Max-Age=0; Path=/; SameSite=Lax";
       document.cookie = "googtrans=; Max-Age=0; Path=/; Domain=.kerygmapath.com; SameSite=Lax";
