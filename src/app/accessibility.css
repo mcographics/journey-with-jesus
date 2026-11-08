@@ -182,8 +182,6 @@ body { zoom: var(--accessibility-text-scale); }
 }
 
 @media (max-width: 700px) {
-  .accessibility-settings-anchor { position: relative; flex: 0 0 44px; width: 44px; height: 44px; }
-  .accessibility-settings-trigger { position: relative; inset: auto; width: 44px; height: 44px; min-height: 44px; padding: 0; }
   .accessibility-settings-trigger span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
   .accessibility-settings-panel { position: fixed; top: calc(64px + env(safe-area-inset-top, 0px)); right: calc(62px + env(safe-area-inset-right, 0px)); width: min(340px, calc(100vw - 74px - env(safe-area-inset-right, 0px))); max-height: calc(100dvh - 78px - env(safe-area-inset-top, 0px)); padding: 13px; }
   :root[data-accessibility-text-size="large"] .accessibility-settings-panel {
@@ -215,3 +213,17 @@ body { zoom: var(--accessibility-text-scale); }
 }
 
 .accessibility-range { min-height: 44px; touch-action: none; }
+
+
+@media (max-width: 768px) {
+  .accessibility-settings-panel {
+    position: fixed;
+    top: calc(58px + env(safe-area-inset-top, 0px));
+    right: 12px;
+    left: 12px;
+    width: min(340px, calc(100vw - 24px));
+    max-height: calc(100dvh - 72px - env(safe-area-inset-top, 0px));
+  }
+  :root[data-accessibility-text-size="large"] .accessibility-settings-panel { width: min(361px, calc(92.5926vw - 12px)); }
+  :root[data-accessibility-text-size="largest"] .accessibility-settings-panel { width: min(336px, calc(86.2069vw - 12px)); }
+}

@@ -53,77 +53,92 @@ test("public destinations are available in the desktop menu, with working story 
   await expect(footerNavigation.getByRole("link", { name: "Media" })).toBeVisible();
 });
 
-test.describe("touch mobile navigation", () => {
+test.describe("mobile header controls and translations", () => {
   test.use({ viewport: { width: 375, height: 812 }, isMobile: true, hasTouch: true });
 
-  test("the floating menu auto-hides after scrolling, stays accessible, and opens Home and Media", async ({ page }) => {
-    await page.goto("/projects/journey-with-jesus/");
-    const masthead = page.getByRole("img", { name: /Jesus walks with a young man/ });
-    await expect(masthead).toBeVisible();
-    await expect.poll(() => page.locator(".home-masthead-wordmark-image").evaluate((image) => (image as HTMLImageElement).currentSrc)).toMatch(/journey-with-jesus-wordmark-(320|640)\.webp$/);
+  test("the selected language is applied across all public and policy routes", async ({ page }) => {
+    await page.goto("/company/");
+    await page.locator(".site-language-toggle").click();
+    await page.getByRole("option", { name: "Français [FR]" }).click();
+
+    const routes = [
+      "/", "/company/", "/blog/", "/word/", "/projects/journey-with-jesus/",
+      "/media/", "/characters/", "/team/", "/store/", "/studio/",
+      "/policies/privacy/", "/policies/terms/", "/policies/community-guidelines/",
+      "/policies/cookies/", "/policies/copyright/",
+    ];
+    for (const route of routes) {
+      await page.goto(route);
+      await expect(page.locator("html")).toHaveAttribute("lang", "fr");
+      await expect(page.locator(".site-language-toggle")).toContainText("FR");
+      if (route !== "/") {
+        const menuButton = page.locator(".mobile-menu-toggle");
+        await menuButton.focus();
+        await menuButton.click();
+        await expect(page.locator(".mobile-menu-options").getByRole("link", { name: "La Parole" })).toBeVisible();
+      }
+    }
+
+    await page.locator(".site-language-toggle").click();
+    await page.getByRole("option", { name: "Español [ES]" }).click();
+    await expect(page.locator("html")).toHaveAttribute("lang", "es");
+    await page.locator(".mobile-menu-toggle").click();
+    await expect(page.locator(".mobile-menu-options").getByRole("link", { name: "La Palabra" })).toBeVisible();
+  });
+
+  test("header actions stay aligned, and the Bible interface translates without changing Scripture", async ({ page }) => {
+    await page.goto("/company/");
+    const selectors = [
+      page.locator(".site-language-toggle"),
+      page.locator(".accessibility-settings-trigger"),
+      page.locator(".theme-toggle"),
+      page.locator(".mobile-menu-toggle"),
+    ];
+    const boxes: Array<{ x: number; y: number; width: number; height: number }> = [];
+    for (const selector of selectors) {
+      await expect(selector).toBeVisible();
+      const box = await selector.boundingBox();
+      expect(box).not.toBeNull();
+      expect(box!.height).toBeGreaterThanOrEqual(44);
+      boxes.push(box!);
+    }
+    for (let index = 1; index < boxes.length; index += 1) {
+      expect(boxes[index].y).toBeCloseTo(boxes[0].y, 0);
+      expect(boxes[index].x).toBeGreaterThanOrEqual(boxes[index - 1].x + boxes[index - 1].width);
+    }
+
+    const accessibilityButton = page.getByRole("button", { name: "Accessibility settings" });
+    await accessibilityButton.click();
+    await expect(page.getByRole("region", { name: "Accessibility settings" })).toBeVisible();
+
+    const themeButton = page.locator(".theme-toggle");
+    await themeButton.click();
+    await expect(page.locator("html")).toHaveAttribute("data-theme-mode", "light");
+
     const menuButton = page.locator(".mobile-menu-toggle");
-    await expect(menuButton).toBeVisible();
-    await expect(page.locator(".desktop-menu-toggle")).toBeHidden();
-    await expect(menuButton).toHaveText("");
-    await expect(menuButton.locator("svg")).toBeVisible();
-    const mobileNavigation = page.locator(".mobile-navigation");
-    await expect(mobileNavigation).toHaveCSS("opacity", "0", { timeout: 3000 });
-    const restingButtonBounds = await menuButton.boundingBox();
-    expect(restingButtonBounds).not.toBeNull();
-    const viewport = page.viewportSize()!;
-    expect(restingButtonBounds!.y + restingButtonBounds!.height / 2).toBeCloseTo(viewport.height / 2, 0);
-    expect(restingButtonBounds!.x + restingButtonBounds!.width).toBeCloseTo(viewport.width - 16, 0);
-
-    await page.evaluate(() => window.scrollTo(0, 240));
-    await page.waitForFunction(() => window.scrollY >= 240);
-    await expect(mobileNavigation).toHaveCSS("opacity", "1");
-    const initialButtonPosition = await menuButton.boundingBox();
-    expect(initialButtonPosition).not.toBeNull();
-    await page.evaluate(() => window.scrollTo(0, 480));
-    await page.waitForFunction(() => window.scrollY >= 480);
-    const scrolledButtonPosition = await menuButton.boundingBox();
-    expect(scrolledButtonPosition?.y).toBeCloseTo(initialButtonPosition!.y, 0);
-    await expect(mobileNavigation).toHaveCSS("opacity", "0", { timeout: 3000 });
-
     await menuButton.focus();
-    await expect(mobileNavigation).toHaveCSS("opacity", "1");
-
-    const navigation = page.getByRole("navigation", { name: "Mobile navigation" });
-    await expect(navigation).toBeHidden();
     await menuButton.click();
-    await expect(navigation).toBeVisible();
-    const openButtonPosition = await menuButton.boundingBox();
-    expect(openButtonPosition?.y).toBeCloseTo(initialButtonPosition!.y, 0);
-    await menuButton.evaluate((button) => button.blur());
-    await page.waitForTimeout(1100);
-    await expect(mobileNavigation).toHaveCSS("opacity", "1");
-    const homeLink = navigation.getByRole("link", { name: "Studio" });
-    await expect(homeLink).toBeVisible();
-    await expect(homeLink).toHaveAttribute("href", "/company/");
-    const mediaLink = navigation.getByRole("link", { name: "Media" });
-    await expect(mediaLink).toBeVisible();
-    await mediaLink.click();
-    await expect(page).toHaveURL(/\/media\/$/);
-    const dimensions = await page.evaluate(() => ({
-      viewport: document.documentElement.clientWidth,
-      content: document.documentElement.scrollWidth,
-    }));
-    expect(dimensions.content).toBeLessThanOrEqual(dimensions.viewport);
+    const mobileNavigation = page.getByRole("navigation", { name: "Mobile navigation" });
+    await expect(mobileNavigation).toBeVisible();
+    await expect(mobileNavigation.getByRole("link", { name: "Blog" })).toBeVisible();
+    await menuButton.click();
 
-    await page.setViewportSize({ width: 768, height: 812 });
-    await page.goto("/projects/journey-with-jesus/");
-    await page.evaluate(() => window.scrollTo(0, 100));
-    await page.waitForFunction(() => window.scrollY >= 100);
-    await expect(mobileNavigation).toHaveCSS("opacity", "1");
+    await page.getByRole("button", { name: "Website language: English" }).click();
+    await page.getByRole("option", { name: "Français [FR]" }).click();
+    await expect(page.locator("html")).toHaveAttribute("lang", "fr");
+    await expect(page.getByRole("heading", { name: /Fidèles à la Parole/ })).toBeVisible();
 
-    await page.setViewportSize({ width: 375, height: 812 });
-    await page.goto("/projects/journey-with-jesus/");
-    const storySeal = page.getByRole("link", { name: /Click Me!/ });
-    await expect(storySeal).toBeVisible();
-    await storySeal.scrollIntoViewIfNeeded();
-    await expect.poll(() => page.locator(".storybook-background").evaluate((image) => (image as HTMLImageElement).currentSrc)).toMatch(/scripture-city-story-mobile-\d+\.webp$/);
-    await storySeal.click();
-    await expect(page).toHaveURL(/\/media\/$/);
+    await page.goto("/word/");
+    await expect(page.locator("html")).toHaveAttribute("lang", "fr");
+    await expect(page.locator(".word-translation-control label")).toHaveText("Traduction");
+    await expect(page.locator(".word-selects label").nth(1).locator("span")).toHaveText("Livre");
+    await expect(page.locator(".word-selects label").nth(2).locator("span")).toHaveText("Chapitre");
+    await expect(page.locator("#word-translation-select")).toHaveValue("KJV");
+    await expect(page.locator("#word-verse-1 > span")).toHaveText("In the beginning God created the heaven and the earth.");
+    await page.locator("#word-search-input").fill("the heaven and the earth");
+    await page.locator(".word-search-button").click();
+    await expect(page.locator(".word-search-results h2")).toHaveText("Résultats de recherche");
+    await expect(page.locator(".word-result > span").first()).toHaveText("In the beginning God created the heaven and the earth.");
   });
 });
 

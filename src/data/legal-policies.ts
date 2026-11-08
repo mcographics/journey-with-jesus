@@ -25,7 +25,7 @@ export const legalPolicies = [
       },
       {
         "heading": "Website language translation",
-        "body": "If you choose another website language, the GTranslate widget loads from GTranslate and sends visible page text to the translation service used by the widget, including Google's translation service, to generate machine translations. The providers may receive ordinary connection details such as your IP address and browser request headers. Translations may be inaccurate. The widget uses a browser cookie to remember your selected language."
+        "body": "If you select French or Spanish, the website displays translations included with the site. The language selector stores your preference in your browser's local storage. The selector does not send page text to an external translation service. Translations may contain errors."
       },
       {
         "heading": "Retention and requests",
@@ -135,7 +135,7 @@ export const legalPolicies = [
       },
       {
         "heading": "Website language preference",
-        "body": "The site-wide language selector uses the googtrans cookie to remember the language you selected. You can remove it in your browser settings; the site will return to English."
+        "body": "The site-wide language selector stores your selected language in this browser's local storage. You can clear this preference in your browser settings; the site will then use English by default."
       },
       {
         "heading": "Third-party technologies",

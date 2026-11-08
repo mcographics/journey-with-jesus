@@ -2,7 +2,6 @@ export type SiteLocale = "en" | "fr" | "es";
 
 const translations: Array<[string, string, string]> = [
   ["Studio", "Studio", "Estudio"],
-  ["The Studio", "Le studio", "El estudio"],
   ["John 1:1", "Jean 1:1", "Juan 1:1"],
   ["Blog", "Blog", "Blog"],
   ["The Word", "La Parole", "La Palabra"],
@@ -21,10 +20,10 @@ const translations: Array<[string, string, string]> = [
   ["Community Guidelines", "Règles de la communauté", "Normas de la comunidad"],
   ["Cookies", "Cookies", "Cookies"],
   ["Copyright", "Droits d’auteur", "Derechos de autor"],
-  ["English", "English", "English"],
+  ["English", "Anglais", "Inglés"],
   ["French", "Français", "Francés"],
   ["Spanish", "Español", "Español"],
-  ["Website language: English", "Langue du site : English", "Idioma del sitio: English"],
+  ["Website language: English", "Langue du site : anglais", "Idioma del sitio: inglés"],
   ["Website language: French", "Langue du site : français", "Idioma del sitio: francés"],
   ["Website language: Spanish", "Langue du site : espagnol", "Idioma del sitio: español"],
   ["Choose website language", "Choisir la langue du site", "Elegir el idioma del sitio"],
@@ -37,10 +36,8 @@ const translations: Array<[string, string, string]> = [
   ["Our process", "Notre démarche", "Nuestro proceso"],
   ["Scripture · Story · AI-assisted animation", "Écriture · Récit · Animation assistée par l’IA", "Escritura · Historia · Animación asistida por IA"],
   ["Our purpose", "Notre mission", "Nuestro propósito"],
-  ["Stories can help the message", "Les histoires peuvent aider le message", "Las historias pueden ayudar a que el mensaje"],
   ["reach the heart.", "toucher le cœur.", "llegue al corazón."],
   ["Our creative process", "Notre processus créatif", "Nuestro proceso creativo"],
-  ["From Scripture to", "De l’Écriture à l’", "De la Escritura a la"],
   ["screen.", "écran.", "pantalla."],
   ["Story rooted in Scripture", "Un récit enraciné dans l’Écriture", "Una historia arraigada en la Escritura"],
   ["Every project begins with the biblical message it is meant to share.", "Chaque projet commence par le message biblique qu’il souhaite transmettre.", "Cada proyecto comienza con el mensaje bíblico que busca compartir."],
@@ -225,6 +222,488 @@ const translations: Array<[string, string, string]> = [
   ["Dark mode is active. Activate to return to automatic theme.", "Le mode sombre est actif. Activez pour revenir au thème automatique.", "El modo oscuro está activo. Activa para volver al tema automático."],
   ["Automatic: light 7 AM–7 PM and dark 7 PM–7 AM, using local time.", "Automatique : mode clair de 7 h à 19 h et mode sombre de 19 h à 7 h, selon l’heure locale.", "Automático: modo claro de 7 a. m. a 7 p. m. y oscuro de 7 p. m. a 7 a. m., según la hora local."],
   ["Information", "Information", "Información"],
+  ["An animated journey through the life, teachings, miracles, sacrifice, and resurrection of Jesus Christ. This is the first project from Kerygma Path.", "Un voyage animé à travers la vie, les enseignements, les miracles, le sacrifice et la résurrection de Jésus-Christ. C’est le premier projet de Kerygma Path.", "Un recorrido animado por la vida, las enseñanzas, los milagros, el sacrificio y la resurrección de Jesucristo. Este es el primer proyecto de Kerygma Path."],
+  ["“One extraordinary life. One timeless message.", "« Une vie extraordinaire. Un message intemporel.", "« Una vida extraordinaria. Un mensaje eterno."],
+  ["A journey that changes everything.”", "Une aventure qui transforme tout. »", "Un viaje que lo cambia todo. »"],
+  ["Journey with Jesus · A Kerygma Path project", "Journey with Jesus · Un projet de Kerygma Path", "Journey with Jesus · Un proyecto de Kerygma Path"],
+  ["Last updated: November 6, 2026", "Dernière mise à jour : 6 novembre 2026", "Última actualización: 6 de noviembre de 2026"],
+  ["These preferences are saved in this browser. Your default light and dark themes stay unchanged.", "Ces préférences sont enregistrées dans ce navigateur. Vos réglages par défaut des thèmes clair et sombre restent inchangés.", "Estas preferencias se guardan en este navegador. Los temas claro y oscuro predeterminados no cambian."],
+  ["Softens white backgrounds in light mode. Photos, videos, and other colors keep their original brightness.", "Adoucit les arrière-plans blancs en mode clair. Les photos, les vidéos et les autres couleurs conservent leur luminosité d’origine.", "Suaviza los fondos blancos en el modo claro. Las fotos, los videos y los demás colores conservan su brillo original."],
+  ["The larger settings zoom the page while keeping heading and paragraph sizes in proportion.", "Les réglages plus élevés agrandissent la page tout en conservant les proportions des titres et des paragraphes.", "Los ajustes más altos amplían la página y mantienen proporcionales los tamaños de los títulos y los párrafos."],
+  ["These site-wide palettes change accent, link, and status colors for the selected color-vision profile. They do not simulate vision or alter video colors. Status messages keep their text labels.", "Ces palettes appliquées à tout le site modifient les couleurs d’accentuation, des liens et des statuts selon le profil de vision des couleurs choisi. Elles ne simulent pas la vision et ne modifient pas les couleurs des vidéos. Les messages de statut conservent leurs libellés textuels.", "Estas paletas para todo el sitio cambian los colores de acento, enlaces y estados según el perfil de visión cromática seleccionado. No simulan la visión ni alteran los colores de los videos. Los mensajes de estado conservan sus etiquetas de texto."],
+  ["The story library can be enjoyed while the site owner connects the moderated comments service.", "Puedes disfrutar de la biblioteca de historias mientras el propietario del sitio conecta el servicio de comentarios moderados.", "Puedes disfrutar de la biblioteca de historias mientras el propietario del sitio conecta el servicio de comentarios moderados."],
+  ["By submitting, you agree to our", "En envoyant votre commentaire, vous acceptez nos", "Al enviar tu comentario, aceptas nuestras"],
+  ["Terms of Service", "Conditions d’utilisation", "Condiciones del servicio"],
+  ["Privacy Policy", "Politique de confidentialité", "Política de privacidad"],
+  ["Search is case-insensitive and checks the selected translation.", "La recherche ne tient pas compte des majuscules et vérifie la traduction sélectionnée.", "La búsqueda no distingue entre mayúsculas y minúsculas y revisa la traducción seleccionada."],
+  ["Try again", "Réessayer", "Intentar de nuevo"],
+  ["Clear results", "Effacer les résultats", "Borrar resultados"],
+  ["Verse text unavailable in this source.", "Texte du verset indisponible dans cette source.", "El texto del versículo no está disponible en esta fuente."],
+  ["Your browser does not support video playback.", "Votre navigateur ne prend pas en charge la lecture vidéo.", "Tu navegador no admite la reproducción de video."],
+  ["Quality", "Qualité", "Calidad"],
+  ["Captions", "Sous-titres", "Subtítulos"],
+  ["Kerygma Path Store", "Boutique Kerygma Path", "Tienda de Kerygma Path"],
+  ["The store is not available yet.", "La boutique n’est pas encore disponible.", "La tienda aún no está disponible."],
+  ["This space is not open to visitors yet. Please check back later.", "Cet espace n’est pas encore ouvert aux visiteurs. Revenez plus tard.", "Este espacio aún no está abierto al público. Vuelve a consultarlo más adelante."],
+  ["Media community", "Communauté des médias", "Comunidad de medios"],
+  ["Majestic Creations", "Majestic Creations", "Majestic Creations"],
+  ["Kerygma Path", "Kerygma Path", "Kerygma Path"],
+  ["Policies", "Politiques", "Políticas"],
+  [". As it develops, we’ll bring you updates from the creative process and the plans shaping what comes next.", ". Au fil de son développement, nous vous tiendrons au courant du processus créatif et des projets qui façonneront la suite.", ". A medida que avance, compartiremos novedades del proceso creativo y de los planes que darán forma a lo que viene."],
+  ["An animated journey through the life, teachings, miracles, sacrifice, and resurrection of Jesus Christ.", "Un voyage animé à travers la vie, les enseignements, les miracles, le sacrifice et la résurrection de Jésus-Christ.", "Un recorrido animado por la vida, las enseñanzas, los milagros, el sacrificio y la resurrección de Jesucristo."],
+  ["We're getting everything ready.", "Nous préparons tout.", "Estamos preparando todo."],
+  ["Upload video versions, organize public playlists, edit character dossiers, and review community comments.", "Téléversez les versions vidéo, organisez les listes de lecture publiques, modifiez les fiches des personnages et examinez les commentaires de la communauté.", "Sube versiones de video, organiza listas públicas, edita perfiles de personajes y revisa los comentarios de la comunidad."],
+  ["Visitors comment without signing in. Approve a comment to show it under its story.", "Les visiteurs peuvent commenter sans se connecter. Approuvez un commentaire pour l’afficher sous son récit.", "Los visitantes pueden comentar sin iniciar sesión. Aprueba un comentario para mostrarlo debajo de su historia."],
+  ["Visitors can read and download this text. Up to 100,000 characters.", "Les visiteurs peuvent lire et télécharger ce texte. Jusqu’à 100 000 caractères.", "Los visitantes pueden leer y descargar este texto. Hasta 100.000 caracteres."],
+  ["This signed-in account is not listed as a Journey Studio admin.", "Ce compte connecté ne figure pas parmi les administrateurs de Journey Studio.", "Esta cuenta no figura entre los administradores de Journey Studio."],
+  ["Publish a video or story before adding it to a public playlist.", "Publiez une vidéo ou un récit avant de l’ajouter à une liste de lecture publique.", "Publica un video o una historia antes de añadirlo a una lista pública."],
+  ["No caption or subtitle files are attached to this story yet.", "Aucun fichier de sous-titres ou de légendes n’est encore associé à ce récit.", "Esta historia aún no tiene archivos de subtítulos."],
+  ["No social links yet. Add one to display it in the footer.", "Aucun lien vers les réseaux sociaux pour le moment. Ajoutez-en un pour l’afficher dans le pied de page.", "Aún no hay enlaces a redes sociales. Añade uno para mostrarlo en el pie de página."],
+  ["Changes appear publicly when this dossier is published.", "Les modifications seront visibles publiquement lorsque cette fiche sera publiée.", "Los cambios serán públicos cuando se publique este perfil."],
+  ["Save the story details before attaching a caption file.", "Enregistrez les détails du récit avant d’ajouter un fichier de sous-titres.", "Guarda los detalles de la historia antes de adjuntar un archivo de subtítulos."],
+  ["Add and edit the people shown on the public team page.", "Ajoutez et modifiez les personnes présentées sur la page publique de l’équipe.", "Añade y edita a las personas que aparecen en la página pública del equipo."],
+  ["The saved profile image will be removed when you save.", "L’image de profil enregistrée sera supprimée lors de l’enregistrement.", "La imagen de perfil guardada se eliminará al guardar."],
+  ["The saved portrait will be removed when you save.", "Le portrait enregistré sera supprimé lors de l’enregistrement.", "El retrato guardado se eliminará al guardar."],
+  ["Choose and order the stories viewers can browse.", "Choisissez et classez les récits que les visiteurs pourront parcourir.", "Elige y ordena las historias que podrán explorar los visitantes."],
+  ["The profile image uploads as part of this save.", "L’image de profil sera téléversée lors de cet enregistrement.", "La imagen de perfil se subirá al guardar."],
+  ["No staff profiles yet. Add the first one here.", "Aucun profil de membre de l’équipe pour le moment. Ajoutez le premier ici.", "Aún no hay perfiles del equipo. Añade el primero aquí."],
+  ["Edit the public dossiers and portrait images.", "Modifiez les fiches publiques et les portraits.", "Edita los perfiles públicos y las imágenes de retrato."],
+  ["Create a playlist and add published stories.", "Créez une liste de lecture et ajoutez-y des récits publiés.", "Crea una lista y añade historias publicadas."],
+  ["Save this story before uploading its files.", "Enregistrez ce récit avant d’en téléverser les fichiers.", "Guarda esta historia antes de subir sus archivos."],
+  ["Published profiles appear on Meet the Team.", "Les profils publiés apparaissent sur la page Découvrez l’équipe.", "Los perfiles publicados aparecen en la página Conoce al equipo."],
+  ["No characters yet. Add one to get started.", "Aucun personnage pour le moment. Ajoutez-en un pour commencer.", "Aún no hay personajes. Añade uno para empezar."],
+  ["Public playlists appear on the Media page.", "Les listes de lecture publiques apparaissent sur la page Médias.", "Las listas públicas aparecen en la página Medios."],
+  ["Connecting to the secure media library…", "Connexion à la médiathèque sécurisée…", "Conectando con la biblioteca multimedia segura…"],
+  ["Portrait uploads as part of this save.", "Le portrait sera téléversé lors de cet enregistrement.", "El retrato se subirá al guardar."],
+  ["Drafts stay private until published.", "Les brouillons restent privés jusqu’à leur publication.", "Los borradores permanecen privados hasta que se publiquen."],
+  ["Set details and player shape.", "Définissez les détails et le format du lecteur.", "Configura los detalles y el formato del reproductor."],
+  ["ASL interpretation video link", "Lien vers la vidéo d’interprétation en ASL", "Enlace al video con interpretación en ASL"],
+  ["Studio access is restricted", "L’accès au Studio est restreint", "El acceso al Studio está restringido"],
+  ["Collection and aspect ratio", "Collection et format d’image", "Colección y proporción de imagen"],
+  ["Or upload a thumbnail image", "Ou téléversez une image miniature", "O sube una imagen en miniatura"],
+  ["Maximum video file size is", "La taille maximale des fichiers vidéo est de", "El tamaño máximo de los archivos de video es de"],
+  ["Checking Studio access…", "Vérification de l’accès au Studio…", "Comprobando el acceso a Studio…"],
+  ["Videos · 16:9 landscape", "Vidéos · format paysage 16:9", "Videos · formato horizontal 16:9"],
+  ["Stories · 9:16 portrait", "Récits · format portrait 9:16", "Historias · formato vertical 9:16"],
+  ["Opening the Upper Room", "Ouverture de la Chambre haute", "Abriendo el Aposento alto"],
+  ["Captions and subtitles", "Légendes et sous-titres", "Subtítulos y subtítulos descriptivos"],
+  ["Loading social links…", "Chargement des liens vers les réseaux sociaux…", "Cargando enlaces a redes sociales…"],
+  ["Loading characters…", "Chargement des personnages…", "Cargando personajes…"],
+  ["Role or description", "Rôle ou description", "Cargo o descripción"],
+  ["Scripture reference", "Référence biblique", "Referencia bíblica"],
+  ["Supabase Free plan:", "Offre gratuite Supabase :", "Plan gratuito de Supabase:"],
+  ["Restore and approve", "Rétablir et approuver", "Restaurar y aprobar"],
+  ["PRIVATE ADMIN AREA", "ESPACE ADMINISTRATEUR PRIVÉ", "ÁREA PRIVADA DE ADMINISTRACIÓN"],
+  ["YouTube video link", "Lien vidéo YouTube", "Enlace de video de YouTube"],
+  ["Community comments", "Commentaires de la communauté", "Comentarios de la comunidad"],
+  ["Social media links", "Liens vers les réseaux sociaux", "Enlaces a redes sociales"],
+  ["Duration, seconds", "Durée, en secondes", "Duración, en segundos"],
+  ["Bible references", "Références bibliques", "Referencias bíblicas"],
+  ["Loading Studio…", "Chargement du Studio…", "Cargando Studio…"],
+  ["Add social link", "Ajouter un lien vers les réseaux sociaux", "Añadir enlace a redes sociales"],
+  ["Portrait image", "Image de portrait", "Imagen de retrato"],
+  ["Journey Studio", "Journey Studio", "Journey Studio"],
+  ["Episode number", "Numéro d’épisode", "Número de episodio"],
+  ["Video versions", "Versions vidéo", "Versiones de video"],
+  ["50 MB per file", "50 Mo par fichier", "50 MB por archivo"],
+  ["Playlist title", "Titre de la liste de lecture", "Título de la lista"],
+  ["Loading staff…", "Chargement de l’équipe…", "Cargando equipo…"],
+  ["Display order", "Ordre d’affichage", "Orden de visualización"],
+  ["Email address", "Adresse courriel", "Correo electrónico"],
+  ["Thumbnail URL", "URL de l’image miniature", "URL de la imagen en miniatura"],
+  ["Language code", "Code de langue", "Código de idioma"],
+  ["Save playlist", "Enregistrer la liste de lecture", "Guardar lista"],
+  ["Show comments", "Afficher les commentaires", "Mostrar comentarios"],
+  ["Role or title", "Rôle ou titre", "Cargo o título"],
+  ["Profile image", "Image de profil", "Imagen de perfil"],
+  ["Social Links", "Liens vers les réseaux sociaux", "Enlaces a redes sociales"],
+  ["Player label", "Libellé du lecteur", "Etiqueta del reproductor"],
+  ["New playlist", "Nouvelle liste de lecture", "Nueva lista"],
+  ["Hide comment", "Masquer le commentaire", "Ocultar comentario"],
+  ["Description", "Description", "Descripción"],
+  ["WebVTT file", "Fichier WebVTT", "Archivo WebVTT"],
+  ["Read our", "Lisez nos", "Lee nuestras"],
+  ["Transcript", "Transcription", "Transcripción"],
+  ["Track type", "Type de piste", "Tipo de pista"],
+  ["Sort order", "Ordre de tri", "Orden de clasificación"],
+  ["Biography", "Biographie", "Biografía"],
+  ["Playlists", "Listes de lecture", "Listas"],
+  ["Story ID:", "ID du récit :", "ID de la historia:"],
+  ["Subtitles", "Sous-titres", "Subtítulos"],
+  ["Sign out", "Se déconnecter", "Cerrar sesión"],
+  ["Comments", "Commentaires", "Comentarios"],
+  ["Story ID", "ID du récit", "ID de la historia"],
+  ["Platform", "Plateforme", "Plataforma"],
+  ["Page URL", "URL de la page", "URL de la página"],
+  ["Approve", "Approuver", "Aprobar"],
+  ["Delete", "Supprimer", "Eliminar"],
+  ["Remove", "Retirer", "Quitar"],
+  ["Reject", "Rejeter", "Rechazar"],
+  ["Close", "Fermer", "Cerrar"],
+  ["Staff", "Équipe", "Equipo"],
+  ["Title", "Titre", "Título"],
+  ["About", "À propos", "Acerca de"],
+  ["Name", "Nom", "Nombre"],
+  ["New", "Nouveau", "Nuevo"],
+  ["Optional. Paste a YouTube watch, share, Shorts, or live link. Save the story to enable YouTube playback without uploading a video file. Clear the link and save to use uploaded video versions instead.", "Facultatif. Collez un lien YouTube vers une vidéo, un partage, un Short ou une diffusion en direct. Enregistrez le récit pour activer la lecture YouTube sans téléverser de fichier vidéo. Effacez le lien et enregistrez pour utiliser plutôt les versions vidéo téléversées.", "Opcional. Pega un enlace de YouTube a un video, Short o transmisión en vivo. Guarda la historia para reproducirla desde YouTube sin subir un archivo. Borra el enlace y guarda para usar las versiones de video subidas."],
+  ["Attach administrator-prepared WebVTT files to direct video playback. YouTube caption controls remain inside the YouTube player and cannot be managed here.", "Joignez des fichiers WebVTT préparés par l’administrateur à la lecture vidéo directe. Les commandes de sous-titres YouTube restent dans le lecteur YouTube et ne peuvent pas être gérées ici.", "Adjunta archivos WebVTT preparados por el administrador para la reproducción directa. Los controles de subtítulos de YouTube permanecen dentro del reproductor de YouTube y no se pueden administrar aquí."],
+  ["Add links here to show them beneath the Kerygma Path logo in the site footer. Unpublished links stay visible in Studio but hidden from visitors.", "Ajoutez ici les liens qui apparaîtront sous le logo Kerygma Path dans le pied de page du site. Les liens non publiés restent visibles dans le Studio, mais sont masqués pour les visiteurs.", "Añade aquí los enlaces que aparecerán debajo del logotipo de Kerygma Path en el pie de página. Los enlaces no publicados siguen visibles en Studio, pero ocultos para los visitantes."],
+  ["Request a sign-in link with an email already invited by the site owner. Public visitors can watch and comment without an account.", "Demandez un lien de connexion à l’aide d’une adresse courriel déjà invitée par le propriétaire du site. Les visiteurs peuvent regarder et commenter sans compte.", "Solicita un enlace de inicio de sesión con un correo que ya haya sido invitado por el propietario del sitio. Los visitantes pueden ver y comentar sin una cuenta."],
+  ["The private video Studio will appear after the site owner connects the Supabase project and deploys the media migration.", "Le Studio vidéo privé apparaîtra lorsque le propriétaire du site aura connecté le projet Supabase et déployé la migration de la médiathèque.", "El Studio privado de video aparecerá cuando el propietario del sitio conecte el proyecto de Supabase y despliegue la migración multimedia."],
+  ["Studio will check and display the file size when you select it. Larger videos can be added by YouTube link instead.", "Le Studio vérifiera et affichera la taille du fichier lorsque vous le sélectionnerez. Les vidéos plus volumineuses peuvent être ajoutées à l’aide d’un lien YouTube.", "Studio comprobará y mostrará el tamaño del archivo cuando lo selecciones. Puedes añadir videos más grandes mediante un enlace de YouTube."],
+  ["A future home for releases from Kerygma Path and the stories we bring to life. We're preparing the shop before the first collection arrives.", "Un futur espace pour les créations de Kerygma Path et les récits que nous donnons vie. Nous préparons la boutique avant l’arrivée de la première collection.", "Un futuro espacio para las creaciones de Kerygma Path y las historias que hacemos realidad. Estamos preparando la tienda antes de que llegue la primera colección."],
+  ["The shop isn't open yet, and no products or checkout are available. This page will be updated when the first collection is ready to share.", "La boutique n’est pas encore ouverte : aucun produit ni paiement n’est disponible. Cette page sera mise à jour lorsque la première collection sera prête à partager.", "La tienda aún no está abierta y no hay productos ni pagos disponibles. Esta página se actualizará cuando la primera colección esté lista para compartir."],
+  ["Who operates this website", "Qui exploite ce site Web", "Quién administra este sitio web"],
+  ["Journey with Jesus is an independent Christian storytelling project created by Eric Oberhausen. Website development and maintenance are credited to Majestic Creations. The project is not represented as an incorporated business or registered charity.", "Journey with Jesus est un projet indépendant de récits chrétiens créé par Eric Oberhausen. La conception et la maintenance du site Web sont attribuées à Majestic Creations. Le projet n’est pas présenté comme une entreprise constituée en société ni comme un organisme de bienfaisance enregistré.", "Journey with Jesus es un proyecto independiente de narración cristiana creado por Eric Oberhausen. El desarrollo y mantenimiento del sitio web se atribuyen a Majestic Creations. El proyecto no se presenta como una empresa constituida ni como una organización benéfica registrada."],
+  ["Information you provide", "Renseignements que vous fournissez", "Información que proporcionas"],
+  ["When you submit a community comment, you provide a display name and comment text. No account is required to comment. Please do not include sensitive personal information in public submissions.", "Lorsque vous envoyez un commentaire à la communauté, vous fournissez un nom d’affichage et le texte du commentaire. Aucun compte n’est nécessaire. Veuillez ne pas inclure de renseignements personnels sensibles dans vos commentaires publics.", "Al enviar un comentario a la comunidad, proporcionas un nombre visible y el texto del comentario. No necesitas una cuenta para comentar. No incluyas información personal sensible en publicaciones públicas."],
+  ["Technical information", "Renseignements techniques", "Información técnica"],
+  ["The comment service uses technical request information to help prevent repeated submissions and abuse. The submission service generates a one-way fingerprint of the requesting network address for rate limiting. Hosting and service providers may also process ordinary server logs.", "Le service de commentaires utilise des renseignements techniques sur les requêtes afin de prévenir les envois répétés et les abus. Le service crée une empreinte irréversible de l’adresse réseau utilisée pour la requête afin de limiter le débit des envois. Les fournisseurs d’hébergement et de services peuvent également traiter les journaux ordinaires du serveur.", "El servicio de comentarios utiliza información técnica de las solicitudes para ayudar a prevenir envíos repetidos y abusos. El servicio genera una huella unidireccional de la dirección de red desde la que se realiza la solicitud para limitar la frecuencia de los envíos. Los proveedores de alojamiento y servicios también pueden procesar registros habituales del servidor."],
+  ["How information is used", "Utilisation des renseignements", "Cómo se utiliza la información"],
+  ["Submitted comments are reviewed before public display. Approved comments may appear publicly with the display name and submission date. Comments can be hidden or rejected. Information is used to operate, secure, and moderate the website.", "Les commentaires sont examinés avant leur affichage public. Les commentaires approuvés peuvent être publiés avec le nom d’affichage et la date d’envoi. Ils peuvent être masqués ou refusés. Les renseignements servent à exploiter, sécuriser et modérer le site Web.", "Los comentarios se revisan antes de mostrarse públicamente. Los comentarios aprobados pueden publicarse junto con el nombre visible y la fecha de envío. Se pueden ocultar o rechazar. La información se utiliza para operar, proteger y moderar el sitio web."],
+  ["Service providers", "Fournisseurs de services", "Proveedores de servicios"],
+  ["Supabase supports the website database and comment service. GitHub Pages and related hosting or delivery services may process technical information needed to deliver the site. Embedded media, if present, may be governed by their providers' policies.", "Supabase héberge la base de données du site et prend en charge le service de commentaires. GitHub Pages et les services d’hébergement ou de diffusion associés peuvent traiter les renseignements techniques nécessaires à la mise à disposition du site. Les médias intégrés, le cas échéant, peuvent être soumis aux politiques de leurs fournisseurs.", "Supabase proporciona la base de datos del sitio y el servicio de comentarios. GitHub Pages y otros servicios relacionados de alojamiento o distribución pueden procesar la información técnica necesaria para ofrecer el sitio. Los medios incrustados, si los hay, pueden regirse por las políticas de sus proveedores."],
+  ["Website language translation", "Traduction du site Web", "Traducción del sitio web"],
+  ["If you select French or Spanish, the website displays translations included with the site. The language selector stores your preference in your browser's local storage. The selector does not send page text to an external translation service. Translations may contain errors.", "Si vous choisissez le français ou l’espagnol, le site affiche les traductions intégrées au site. Le sélecteur de langue enregistre votre préférence dans le stockage local de votre navigateur. Il n’envoie pas le texte des pages à un service de traduction externe. Les traductions peuvent contenir des erreurs.", "Si eliges francés o español, el sitio muestra traducciones incluidas en el propio sitio. El selector de idioma guarda tu preferencia en el almacenamiento local del navegador. No envía el texto de las páginas a un servicio de traducción externo. Las traducciones pueden contener errores."],
+  ["Retention and requests", "Conservation et demandes", "Conservación y solicitudes"],
+  ["Comment records may remain in the moderation system after being hidden or rejected. A specific retention period has not yet been established. Requests to review, correct, or remove a comment may be sent through a public contact method if one is published on the website.", "Les commentaires peuvent rester dans le système de modération après avoir été masqués ou refusés. Aucune durée précise de conservation n’a encore été établie. Les demandes d’examen, de correction ou de suppression d’un commentaire peuvent être envoyées par un moyen de contact public, si le site en publie un.", "Los registros de comentarios pueden permanecer en el sistema de moderación después de ocultarse o rechazarse. Aún no se ha establecido un período de conservación específico. Las solicitudes para revisar, corregir o eliminar un comentario pueden enviarse mediante un método de contacto público, si se publica uno en el sitio web."],
+  ["Your choices", "Vos choix", "Tus opciones"],
+  ["Avoid sharing personal details in comments. You may choose not to submit comments. Browser settings may allow you to manage storage and third-party cookies.", "Évitez de communiquer des renseignements personnels dans vos commentaires. Vous pouvez choisir de ne pas en envoyer. Les paramètres de votre navigateur peuvent vous permettre de gérer le stockage et les témoins tiers.", "Evita compartir datos personales en los comentarios. Puedes decidir no enviar comentarios. La configuración del navegador puede permitirte gestionar el almacenamiento y las cookies de terceros."],
+  ["Contact and changes", "Contact et modifications", "Contacto y cambios"],
+  ["A dedicated privacy contact method is not currently listed on the website. This policy may be updated when website features or data practices change.", "Le site Web ne présente actuellement aucun moyen de contact dédié aux questions de confidentialité. Cette politique peut être mise à jour si les fonctions du site ou les pratiques relatives aux données changent.", "Actualmente, el sitio web no indica un método de contacto específico para asuntos de privacidad. Esta política puede actualizarse si cambian las funciones del sitio o las prácticas relacionadas con los datos."],
+  ["About the service", "À propos du service", "Acerca del servicio"],
+  ["Journey with Jesus offers Scripture-inspired creative storytelling, animation, and moderated community discussion. The project is created by Eric Oberhausen and independently operated, with website support by Majestic Creations.", "Journey with Jesus propose des récits créatifs inspirés de l’Écriture, de l’animation et des discussions communautaires modérées. Le projet a été créé par Eric Oberhausen et est exploité de façon indépendante, avec le soutien Web de Majestic Creations.", "Journey with Jesus ofrece narración creativa inspirada en las Escrituras, animación y conversaciones comunitarias moderadas. El proyecto fue creado por Eric Oberhausen y funciona de forma independiente, con el apoyo web de Majestic Creations."],
+  ["Use of the website", "Utilisation du site Web", "Uso del sitio web"],
+  ["Use the website lawfully and respectfully. Do not disrupt its services, impersonate others, post spam, threaten users, or attempt unauthorized access.", "Utilisez le site Web conformément à la loi et avec respect. Ne perturbez pas ses services, ne vous faites pas passer pour quelqu’un d’autre, ne publiez pas de pourriel, ne menacez pas les utilisateurs et ne tentez pas d’y accéder sans autorisation.", "Utiliza el sitio web de forma legal y respetuosa. No interrumpas sus servicios, suplantes a otras personas, publiques spam, amenaces a otros usuarios ni intentes acceder sin autorización."],
+  ["Community submissions", "Contributions de la communauté", "Publicaciones de la comunidad"],
+  ["You are responsible for the comments you submit. Do not post material you lack permission to share. You grant the project a non-exclusive permission to display, store, and moderate your submitted comments as needed to operate the community.", "Vous êtes responsable des commentaires que vous envoyez. Ne publiez pas de contenu que vous n’avez pas le droit de partager. Vous accordez au projet une autorisation non exclusive d’afficher, de stocker et de modérer vos commentaires dans la mesure nécessaire au fonctionnement de la communauté.", "Eres responsable de los comentarios que envías. No publiques material que no tengas permiso para compartir. Concedes al proyecto un permiso no exclusivo para mostrar, almacenar y moderar tus comentarios según sea necesario para gestionar la comunidad."],
+  ["Moderation", "Modération", "Moderación"],
+  ["Comments are reviewed before publication. The website may decline, hide, reject, or remove comments under the Community Guidelines. Publication is not guaranteed.", "Les commentaires sont examinés avant leur publication. Le site Web peut refuser, masquer ou supprimer des commentaires conformément aux règles de la communauté. La publication n’est pas garantie.", "Los comentarios se revisan antes de publicarse. El sitio web puede rechazar, ocultar o eliminar comentarios de acuerdo con las Normas de la comunidad. No se garantiza la publicación."],
+  ["Creative rights", "Droits sur les œuvres créatives", "Derechos sobre las obras creativas"],
+  ["Original animations, artwork, text, logos, and other content belong to their respective rights holders. Viewing the website does not grant permission to reproduce or commercially exploit its content.", "Les animations, les illustrations, les textes, les logos et les autres contenus originaux appartiennent à leurs titulaires de droits respectifs. La consultation du site Web n’autorise pas la reproduction ni l’exploitation commerciale de son contenu.", "Las animaciones, ilustraciones, textos, logotipos y otros contenidos originales pertenecen a sus respectivos titulares de derechos. Ver el sitio web no otorga permiso para reproducir ni explotar comercialmente su contenido."],
+  ["Faith and informational content", "Contenu spirituel et informatif", "Contenido religioso e informativo"],
+  ["Content is offered for creative, educational, and faith-oriented purposes. It is not professional medical, mental-health, legal, or financial advice.", "Le contenu est proposé à des fins créatives, éducatives et spirituelles. Il ne constitue pas un avis professionnel d’ordre médical, psychologique, juridique ou financier.", "El contenido se ofrece con fines creativos, educativos y religiosos. No constituye asesoramiento profesional médico, de salud mental, legal ni financiero."],
+  ["Availability and external links", "Disponibilité et liens externes", "Disponibilidad y enlaces externos"],
+  ["The service may change or be temporarily unavailable. External websites and embedded services have their own terms and practices.", "Le service peut être modifié ou temporairement indisponible. Les sites Web externes et les services intégrés ont leurs propres conditions et pratiques.", "El servicio puede cambiar o no estar disponible temporalmente. Los sitios web externos y los servicios incrustados tienen sus propios términos y prácticas."],
+  ["Limitations", "Limites", "Limitaciones"],
+  ["The website is provided on an as-available basis to the extent permitted by applicable law. Nothing here excludes rights or remedies that cannot legally be excluded.", "Le site Web est fourni selon sa disponibilité, dans la mesure permise par la loi applicable. Aucune disposition des présentes n’exclut les droits ou recours qui ne peuvent légalement être écartés.", "El sitio web se ofrece según su disponibilidad, en la medida permitida por la ley aplicable. Nada de lo aquí expuesto excluye derechos o recursos que legalmente no puedan excluirse."],
+  ["Updates and contact", "Mises à jour et contact", "Actualizaciones y contacto"],
+  ["These terms may change as the website develops. The website does not currently list a dedicated contact channel for questions about these terms.", "Ces conditions peuvent changer à mesure que le site évolue. Le site Web ne présente actuellement aucun canal de contact dédié aux questions relatives à ces conditions.", "Estos términos pueden cambiar a medida que se desarrolla el sitio web. Actualmente, el sitio no indica un canal de contacto específico para consultas sobre estos términos."],
+  ["We welcome thoughtful reflections, encouragement, questions, and respectful discussion about faith and the stories shared on Journey with Jesus.", "Nous accueillons les réflexions constructives, les encouragements, les questions et les échanges respectueux sur la foi et les récits présentés dans Journey with Jesus.", "Damos la bienvenida a reflexiones consideradas, palabras de ánimo, preguntas y conversaciones respetuosas sobre la fe y las historias de Journey with Jesus."],
+  ["Be respectful", "Faites preuve de respect", "Sé respetuoso"],
+  ["Disagreement is welcome when expressed with care. Do not attack, insult, shame, or harass other people.", "Les désaccords sont les bienvenus lorsqu’ils sont exprimés avec bienveillance. N’attaquez, n’insultez, n’humiliez et ne harcelez personne.", "Se aceptan las discrepancias cuando se expresan con consideración. No ataques, insultes, avergüences ni acoses a otras personas."],
+  ["Prohibited submissions", "Contenus interdits", "Publicaciones prohibidas"],
+  ["Do not submit threats, hateful slurs, targeted harassment, abusive profanity, spam, impersonation, personal information about others, or unlawful or infringing content.", "N’envoyez pas de menaces, d’insultes haineuses, de harcèlement ciblé, de grossièretés injurieuses, de pourriels, de contenus usurpant l’identité d’autrui, de renseignements personnels sur d’autres personnes, ni de contenu illégal ou portant atteinte aux droits d’autrui.", "No envíes amenazas, insultos de odio, acoso dirigido, lenguaje obsceno abusivo, spam, suplantaciones de identidad, información personal de otras personas ni contenido ilegal o que infrinja derechos."],
+  ["Sensitive conversations", "Conversations délicates", "Conversaciones delicadas"],
+  ["People may discuss grief, depression, doubt, or difficult experiences respectfully. Do not shame people seeking support. The community is not an emergency or crisis-response service.", "Les membres peuvent parler respectueusement de deuil, de dépression, de doute ou d’expériences difficiles. N’humiliez pas les personnes qui cherchent du soutien. La communauté n’est pas un service d’urgence ni d’intervention en situation de crise.", "Se puede hablar con respeto sobre el duelo, la depresión, las dudas o experiencias difíciles. No avergüences a quienes buscan apoyo. La comunidad no es un servicio de emergencia ni de atención en crisis."],
+  ["Review process", "Processus d’examen", "Proceso de revisión"],
+  ["Comments are screened and then held for human review before publication. A comment may be rejected automatically, remain pending, or be approved. Moderators may later hide approved comments.", "Les commentaires sont filtrés puis soumis à un examen humain avant publication. Un commentaire peut être refusé automatiquement, rester en attente ou être approuvé. Les modérateurs peuvent ensuite masquer les commentaires approuvés.", "Los comentarios se filtran y luego quedan pendientes de revisión humana antes de publicarse. Un comentario puede rechazarse automáticamente, quedar pendiente o aprobarse. Los moderadores pueden ocultar más adelante los comentarios aprobados."],
+  ["Reporting concerns", "Signaler un problème", "Cómo informar de un problema"],
+  ["The website does not currently list a dedicated reporting method for moderation concerns. If someone is in immediate danger, contact local emergency services.", "Le site Web ne présente actuellement aucun moyen dédié pour signaler un problème de modération. Si une personne est en danger immédiat, contactez les services d’urgence locaux.", "Actualmente, el sitio web no indica un método específico para denunciar problemas de moderación. Si alguien corre peligro inmediato, contacta con los servicios de emergencia locales."],
+  ["Cookie and Local Storage Policy", "Politique relative aux cookies et au stockage local", "Política de cookies y almacenamiento local"],
+  ["What this site uses", "Technologies utilisées par le site", "Qué utiliza este sitio"],
+  ["The website uses browser storage for preferences such as light or dark appearance. Some hosting, security, database, or embedded media services may use cookies or comparable technologies.", "Le site Web utilise le stockage du navigateur pour des préférences telles que l’apparence claire ou sombre. Certains services d’hébergement, de sécurité, de base de données ou de médias intégrés peuvent utiliser des témoins ou des technologies similaires.", "El sitio web utiliza el almacenamiento del navegador para guardar preferencias como la apariencia clara u oscura. Algunos servicios de alojamiento, seguridad, bases de datos o medios incrustados pueden utilizar cookies o tecnologías similares."],
+  ["Comment functionality", "Fonctionnement des commentaires", "Función de comentarios"],
+  ["Submitting a comment involves communicating with the Supabase-backed service. Technical request information may be used to protect the service from abuse.", "L’envoi d’un commentaire implique une communication avec le service propulsé par Supabase. Les renseignements techniques sur la requête peuvent servir à protéger le service contre les abus.", "Al enviar un comentario, te comunicas con el servicio respaldado por Supabase. La información técnica de la solicitud puede utilizarse para proteger el servicio contra abusos."],
+  ["Third-party media", "Médias de tiers", "Medios de terceros"],
+  ["If external video or other embeds are enabled, their providers may set cookies or collect information under their own policies.", "Si des vidéos ou d’autres contenus externes sont intégrés, leurs fournisseurs peuvent installer des témoins ou recueillir des renseignements conformément à leurs propres politiques.", "Si se habilitan videos u otros elementos incrustados de terceros, sus proveedores pueden instalar cookies o recopilar información según sus propias políticas."],
+  ["Your controls", "Vos paramètres", "Tus controles"],
+  ["You can clear cookies and local storage or restrict third-party cookies using your browser settings. Some features may behave differently afterward.", "Vous pouvez effacer les témoins et le stockage local ou limiter les témoins tiers dans les paramètres de votre navigateur. Certaines fonctions pourraient ensuite se comporter différemment.", "Puedes borrar las cookies y el almacenamiento local, o restringir las cookies de terceros desde la configuración del navegador. Después, algunas funciones podrían comportarse de otra manera."],
+  ["Website language preference", "Préférence de langue du site Web", "Preferencia de idioma del sitio web"],
+  ["The site-wide language selector stores your selected language in this browser's local storage. You can clear this preference in your browser settings; the site will then use English by default.", "Le sélecteur de langue du site enregistre la langue choisie dans le stockage local de ce navigateur. Vous pouvez effacer cette préférence dans les paramètres de votre navigateur; le site utilisera alors l’anglais par défaut.", "El selector de idioma del sitio guarda el idioma elegido en el almacenamiento local de este navegador. Puedes borrar esta preferencia en la configuración del navegador; el sitio volverá a usar inglés por defecto."],
+  ["Third-party technologies", "Technologies de tiers", "Tecnologías de terceros"],
+  ["An exact inventory of cookies, local storage, analytics, and embeds has not been established. This policy describes known uses and does not guarantee that tracking or other data collection is absent. Third-party services may use additional technologies under their own policies.", "Un inventaire exact des témoins, du stockage local, des outils d’analyse et des contenus intégrés n’a pas été établi. Cette politique décrit les utilisations connues et ne garantit pas l’absence de suivi ou d’autres collectes de données. Les services tiers peuvent utiliser d’autres technologies selon leurs propres politiques.", "No se ha elaborado un inventario exacto de cookies, almacenamiento local, herramientas de análisis y elementos incrustados. Esta política describe los usos conocidos y no garantiza que no haya seguimiento ni otra recopilación de datos. Los servicios de terceros pueden utilizar tecnologías adicionales según sus propias políticas."],
+  ["Copyright and Content Policy", "Politique sur les droits d’auteur et le contenu", "Política de derechos de autor y contenido"],
+  ["Ownership and credits", "Propriété et crédits", "Titularidad y créditos"],
+  ["Journey with Jesus is a creative project by Eric Oberhausen. Website design, development, and maintenance are credited to Majestic Creations. Individual assets may have different creators or licensors.", "Journey with Jesus est un projet créatif d’Eric Oberhausen. La conception, le développement et la maintenance du site Web sont attribués à Majestic Creations. Certains éléments peuvent appartenir à d’autres créateurs ou titulaires de licence.", "Journey with Jesus es un proyecto creativo de Eric Oberhausen. El diseño, desarrollo y mantenimiento del sitio web se atribuyen a Majestic Creations. Algunos elementos pueden tener otros creadores o licenciantes."],
+  ["Permitted use", "Utilisation autorisée", "Uso permitido"],
+  ["Visitors may view and share links to publicly available pages. Downloading, re-uploading, modifying, selling, or redistributing protected content requires authorization unless permitted by law.", "Les visiteurs peuvent consulter les pages accessibles au public et en partager les liens. Le téléchargement, le téléversement, la modification, la vente ou la redistribution de contenu protégé nécessite une autorisation, sauf disposition contraire de la loi.", "Los visitantes pueden consultar y compartir enlaces a páginas públicas. Descargar, volver a subir, modificar, vender o redistribuir contenido protegido requiere autorización, salvo que la ley lo permita."],
+  ["Scripture and third-party works", "Écriture et œuvres de tiers", "Escrituras y obras de terceros"],
+  ["Scripture translations, music, fonts, images, and third-party materials may be subject to separate licenses or attribution requirements.", "Les traductions de l’Écriture, la musique, les polices, les images et les éléments de tiers peuvent être soumis à des licences ou à des exigences d’attribution distinctes.", "Las traducciones de las Escrituras, la música, las fuentes, las imágenes y los materiales de terceros pueden estar sujetos a licencias o requisitos de atribución independientes."],
+  ["Visitor contributions", "Contributions des visiteurs", "Contribuciones de los visitantes"],
+  ["Only submit comments or other content that you have the right to share. The website may remove material that appears to infringe rights.", "N’envoyez que des commentaires ou contenus que vous avez le droit de partager. Le site Web peut supprimer tout élément qui semble porter atteinte à des droits.", "Envía únicamente comentarios u otro contenido que tengas derecho a compartir. El sitio web puede retirar material que parezca infringir derechos."],
+  ["Copyright concerns", "Questions de droits d’auteur", "Consultas sobre derechos de autor"],
+  ["The website does not currently list a dedicated rights-contact method. A notice should identify the material, the location of the alleged infringement, and a way to respond. Applicable legal procedures will be respected.", "Le site Web ne présente actuellement aucun moyen de contact dédié aux questions de droits. Un avis devrait identifier le contenu, l’emplacement de l’atteinte présumée et un moyen d’y répondre. Les procédures juridiques applicables seront respectées.", "Actualmente, el sitio web no indica un método de contacto específico para asuntos de derechos. Una notificación debe identificar el material, la ubicación de la presunta infracción y un medio para responder. Se respetarán los procedimientos legales aplicables."],
+  ["Jesus welcomes a young man as they look across a sunlit valley toward an ancient city.", "Jésus accueille un jeune homme tandis qu’ils contemplent une vallée ensoleillée et une ville ancienne.", "Jesús recibe a un joven mientras contemplan un valle iluminado por el sol y una ciudad antigua."],
+  ["Jesus walks with a young man beneath an autumn tree, overlooking a sunlit valley.", "Jésus marche avec un jeune homme sous un arbre d’automne, au-dessus d’une vallée ensoleillée.", "Jesús camina con un joven bajo un árbol otoñal, con vistas a un valle iluminado por el sol."],
+  ["Scroll to learn about the project", "Faites défiler pour découvrir le projet", "Desliza para conocer el proyecto"],
+  ["Explore Media: Faith, Hope, Love — Let the story light the way. Click Me!", "Découvrir les médias : Foi, espérance, amour — que l’histoire éclaire le chemin. Cliquez ici !", "Explora los medios: Fe, esperanza, amor — deja que la historia ilumine el camino. ¡Haz clic!"],
+  ["A peaceful garden valley with flower-filled banks, waterfalls, and a sunlit river.", "Une paisible vallée-jardin aux rives fleuries, avec des cascades et une rivière ensoleillée.", "Un tranquilo valle-jardín con riberas llenas de flores, cascadas y un río iluminado por el sol."],
+  ["The risen Jesus welcomes his followers at sunset as an angel opens the empty tomb.", "Jésus ressuscité accueille ses disciples au coucher du soleil tandis qu’un ange ouvre le tombeau vide.", "Jesús resucitado recibe a sus seguidores al atardecer mientras un ángel abre la tumba vacía."],
+  ["Jesus and a young follower look toward a sunlit city in Journey with Jesus artwork.", "Dans une illustration de Journey with Jesus, Jésus et un jeune disciple regardent une ville ensoleillée.", "En una ilustración de Journey with Jesus, Jesús y un joven discípulo miran hacia una ciudad iluminada por el sol."],
+  ["Explore Kerygma Path", "Découvrir Kerygma Path", "Explora Kerygma Path"],
+  ["Close accessibility settings", "Fermer les paramètres d’accessibilité", "Cerrar los ajustes de accesibilidad"],
+  ["Media library", "Médiathèque", "Biblioteca multimedia"],
+  ["Choose a media collection", "Choisir une collection de médias", "Elige una colección multimedia"],
+  ["Media discussion", "Discussion sur les médias", "Debate sobre los medios"],
+  ["Choose a discussion", "Choisir une discussion", "Elige un debate"],
+  ["Bible navigation and search", "Navigation et recherche bibliques", "Navegación y búsqueda bíblicas"],
+  ["Bible translation", "Traduction biblique", "Traducción de la Biblia"],
+  ["Available Bible translations", "Traductions bibliques disponibles", "Traducciones bíblicas disponibles"],
+  ["Bible book", "Livre biblique", "Libro de la Biblia"],
+  ["Bible chapter", "Chapitre biblique", "Capítulo bíblico"],
+  ["A word or phrase", "Un mot ou une expression", "Una palabra o frase"],
+  ["Reading text size", "Taille du texte de lecture", "Tamaño del texto de lectura"],
+  ["Make Bible text smaller", "Réduire la taille du texte biblique", "Reducir el tamaño del texto bíblico"],
+  ["Make Bible text larger", "Agrandir le texte biblique", "Aumentar el tamaño del texto bíblico"],
+  ["Bible chapter navigation", "Navigation entre les chapitres bibliques", "Navegación por capítulos de la Biblia"],
+  ["Kerygma Path home", "Accueil de Kerygma Path", "Inicio de Kerygma Path"],
+  ["Footer navigation", "Navigation du pied de page", "Navegación del pie de página"],
+  ["Kerygma Path social media", "Réseaux sociaux de Kerygma Path", "Redes sociales de Kerygma Path"],
+  ["e.g. Luke 1–2 · John 2", "p. ex. Luc 1–2 · Jean 2", "p. ej., Lucas 1–2 · Juan 2"],
+  ["Studio tools", "Outils du Studio", "Herramientas de Studio"],
+  ["Choose a Studio upload collection", "Choisir une collection de téléversement du Studio", "Elige una colección para subir desde Studio"],
+  ["created-from-title", "créé à partir du titre", "creado a partir del título"],
+  ["Optional", "Facultatif", "Opcional"],
+  ["Optional HTTPS image", "Image HTTPS facultative", "Imagen HTTPS opcional"],
+  ["https://www.youtube.com/watch?v=...", "https://www.youtube.com/watch?v=...", "https://www.youtube.com/watch?v=..."],
+  ["Paste an approved transcript. No transcript is generated automatically.", "Collez une transcription approuvée. Aucune transcription n’est générée automatiquement.", "Pega una transcripción aprobada. No se genera ninguna transcripción automáticamente."],
+  ["https://…", "https://…", "https://…"],
+  ["Attached caption tracks", "Pistes de sous-titres jointes", "Pistas de subtítulos adjuntas"],
+  ["en or fr-CA", "en ou fr-CA", "en o fr-CA"],
+  ["English captions", "Sous-titres en anglais", "Subtítulos en inglés"],
+  ["Playlist story order", "Ordre des récits dans la liste de lecture", "Orden de las historias de la lista"],
+  ["e.g. Instagram", "p. ex. Instagram", "p. ej., Instagram"],
+  ["e.g. Editor / Webmaster", "p. ex. rédacteur / webmestre", "p. ej., editor / webmaster"],
+  ["A short introduction for the public team page.", "Une courte présentation pour la page publique de l’équipe.", "Una breve presentación para la página pública del equipo."],
+  ["Journey with Jesus team", "Équipe de Journey with Jesus", "Equipo de Journey with Jesus"],
+  ["Video player", "Lecteur vidéo", "Reproductor de video"],
+  ["Video quality", "Qualité vidéo", "Calidad del video"],
+  ["/ Policies", "/ Politiques", "/ Políticas"],
+  ["and", "et", "y"],
+  [". Read our", ". Lisez nos", ". Lee nuestras"],
+  [". Studio will check and display the file size when you select it. Larger videos can be added by YouTube link instead.", "Le Studio vérifiera et affichera la taille du fichier lorsque vous le sélectionnerez. Les vidéos plus volumineuses peuvent être ajoutées à l’aide d’un lien YouTube.", "Studio comprobará y mostrará el tamaño del archivo cuando lo selecciones. Puedes añadir videos más grandes mediante un enlace de YouTube."],
+  ["Enter at least two characters to search the Bible.", "Saisissez au moins deux caractères pour rechercher dans la Bible.", "Escribe al menos dos caracteres para buscar en la Biblia."],
+  ["verse", "verset", "versículo"],
+  ["verses", "versets", "versículos"],
+  ["match", "résultat", "coincidencia"],
+  ["matches", "résultats", "coincidencias"],
+  ["found", "trouvé(s)", "encontrado(s)"],
+  ["Showing the first", "Affichage des premiers", "Mostrando los primeros"],
+  ["No matches found for", "Aucun résultat trouvé pour", "No se encontraron coincidencias para"],
+  ["King James Version", "Version King James", "Versión King James"],
+  ["American King James Version", "Version américaine King James", "Versión King James estadounidense"],
+  ["American Standard Version", "American Standard Version", "Versión American Standard"],
+  ["Darby Translation", "Traduction Darby", "Traducción Darby"],
+  ["Douay-Rheims Bible", "Bible Douay-Rheims", "Biblia Douay-Rheims"],
+  ["English Revised Version", "Version révisée anglaise", "Versión inglesa revisada"],
+  ["Geneva Bible (1560)", "Bible de Genève (1560)", "Biblia de Ginebra (1560)"],
+  ["JPS Tanakh 1917 (Old Testament)", "Tanakh JPS 1917 (Ancien Testament)", "Tanaj JPS 1917 (Antiguo Testamento)"],
+  ["Smith's Literal Translation", "Traduction littérale de Smith", "Traducción literal de Smith"],
+  ["Webster's Bible Translation", "Traduction biblique de Webster", "Traducción bíblica de Webster"],
+  ["Young's Literal Translation", "Traduction littérale de Young", "Traducción literal de Young"],
+  ["Berean Literal Bible (New Testament)", "Bible littérale béréenne (Nouveau Testament)", "Biblia literal bereana (Nuevo Testamento)"],
+  ["Berean Interlinear Bible (New Testament)", "Bible interlinéaire béréenne (Nouveau Testament)", "Biblia interlineal bereana (Nuevo Testamento)"],
+  ["World English Bible Updated", "World English Bible mise à jour", "World English Bible actualizada"],
+  ["Bible in Basic English", "Bible en anglais fondamental", "Biblia en inglés básico"],
+  ["Spanish Free Bible for the World (draft)", "Bible espagnole libre pour le monde (version provisoire)", "Biblia española gratuita para el mundo (borrador)"],
+  ["La Biblia en Español Sencillo (2026)", "La Biblia en Español Sencillo (2026)", "La Biblia en Español Sencillo (2026)"],
+  ["Spanish BLL (draft, 2026)", "Bible espagnole BLL (version provisoire, 2026)", "Biblia española BLL (borrador, 2026)"],
+  ["Lutherbibel 1912", "Bible de Luther 1912", "Biblia de Lutero de 1912"],
+  ["De Heilige Schrift 1917", "De Heilige Schrift 1917", "De Heilige Schrift 1917"],
+  ["Russian Synodal Bible", "Bible synodale russe", "Biblia sinodal rusa"],
+  ["Arabic Van Dyck Bible", "Bible arabe de Van Dyck", "Biblia árabe de Van Dyck"],
+  ["Bíblia Portuguesa Mundial (draft)", "Bíblia Portuguesa Mundial (version provisoire)", "Bíblia Portuguesa Mundial (borrador)"],
+  ["Ukrainian Bible by Kulish and Pulyui (1905)", "Bible ukrainienne de Koulich et Pulyui (1905)", "Biblia ucraniana de Kulish y Pulyui (1905)"],
+  ["Diodati Bibbia 1885", "Bible Diodati 1885", "Biblia Diodati 1885"],
+  ["Riveduta Bibbia 1927", "Bible Riveduta 1927", "Biblia Riveduta 1927"],
+  ["Modern Hebrew Bible (Delitzsch)", "Bible hébraïque moderne (Delitzsch)", "Biblia hebrea moderna (Delitzsch)"],
+  ["Hebrew Old Testament (WLC)", "Ancien Testament hébreu (WLC)", "Antiguo Testamento hebreo (WLC)"],
+  ["Vamvas Modern Greek Bible (1850)", "Bible grecque moderne de Vamvas (1850)", "Biblia griega moderna de Vamvas (1850)"],
+  ["Septuagint (LXX, Old Testament)", "Septante (LXX, Ancien Testament)", "Septuaginta (LXX, Antiguo Testamento)"],
+  ["Greek Majority Text (New Testament)", "Texte majoritaire grec (Nouveau Testament)", "Texto mayoritario griego (Nuevo Testamento)"],
+  ["Hebrew", "Hébreu", "Hebreo"],
+  ["Ancient Greek", "Grec ancien", "Griego antiguo"],
+  ["Modern Greek", "Grec moderne", "Griego moderno"],
+  ["German", "Allemand", "Alemán"],
+  ["Dutch", "Néerlandais", "Neerlandés"],
+  ["Russian", "Russe", "Ruso"],
+  ["Arabic", "Arabe", "Árabe"],
+  ["Portuguese", "Portugais", "Portugués"],
+  ["Ukrainian", "Ukrainien", "Ucraniano"],
+  ["Italian", "Italien", "Italiano"],
+  ["Eric Oberhausen is the founder of Journey with Jesus, an animated storytelling project sharing Scripture and the life of Jesus.","Eric Oberhausen est le fondateur de Journey with Jesus, un projet de récits animés qui partage les Écritures et la vie de Jésus.","Eric Oberhausen es el fundador de Journey with Jesus, un proyecto de narración animada que comparte las Escrituras y la vida de Jesús."],
+  ["Kenneth Salmon serves as Editor / Webmaster, editing site content and maintaining Journey with Jesus online.","Kenneth Salmon est rédacteur et responsable du site. Il révise le contenu et assure la présence en ligne de Journey with Jesus.","Kenneth Salmon es editor y webmaster. Edita el contenido y mantiene Journey with Jesus en línea."],
+  ["Meet the people bringing Journey with Jesus to life.","Découvrez les personnes qui donnent vie à Journey with Jesus.","Conoce a las personas que dan vida a Journey with Jesus."],
+  ["Explore the people in the Gospel story and follow their stories through the Bible.","Découvrez les personnes des récits de l’Évangile et suivez leurs parcours dans la Bible.","Conoce a las personas de los relatos del Evangelio y sigue sus historias en la Biblia."],
+  ["Watch animated stories inspired by Scripture and the life of Jesus.","Regardez des récits animés inspirés des Écritures et de la vie de Jésus.","Mira historias animadas inspiradas en las Escrituras y en la vida de Jesús."],
+  ["Read and search Bible translations in the Journey with Jesus Scripture reader.","Lisez et parcourez les traductions de la Bible dans le lecteur biblique de Journey with Jesus.","Lee y busca en las traducciones bíblicas del lector de las Escrituras de Journey with Jesus."],
+  ["Kerygma Path is a Christian animation studio sharing the Gospel through Scripture-rooted animated storytelling.","Kerygma Path est un studio d’animation chrétien qui partage l’Évangile par des récits animés ancrés dans les Écritures.","Kerygma Path es un estudio de animación cristiana que comparte el Evangelio mediante historias animadas arraigadas en las Escrituras."],
+  ["Christian animation sharing the Gospel through Scripture-rooted storytelling.","De l’animation chrétienne qui partage l’Évangile par des récits ancrés dans les Écritures.","Animación cristiana que comparte el Evangelio mediante historias arraigadas en las Escrituras."],
+  ["Stories of Scripture, brought to life through thoughtful Christian animation.","Les récits des Écritures prennent vie grâce à une animation chrétienne réfléchie.","Historias de las Escrituras que cobran vida mediante una animación cristiana cuidadosa."],
+  ["Kerygma Path is a Christian animation studio using AI and creative tools to bring Gospel-centered stories to life.","Kerygma Path est un studio d’animation chrétien qui utilise l’IA et des outils créatifs pour donner vie à des récits centrés sur l’Évangile.","Kerygma Path es un estudio de animación cristiana que usa IA y herramientas creativas para dar vida a historias centradas en el Evangelio."],
+  ["Meet Kerygma Path, a Christian animation studio using AI and digital tools to bring Scripture-rooted narratives to life.","Découvrez Kerygma Path, un studio d’animation chrétien qui utilise l’IA et des outils numériques pour donner vie à des récits ancrés dans les Écritures.","Conoce Kerygma Path, un estudio de animación cristiana que usa IA y herramientas digitales para dar vida a relatos arraigados en las Escrituras."],
+  ["Journey with Jesus — A Kerygma Path Project","Journey with Jesus — un projet de Kerygma Path","Journey with Jesus — un proyecto de Kerygma Path"],
+  ["The Kerygma Path store is not available to visitors yet.","La boutique Kerygma Path n’est pas encore accessible aux visiteurs.","La tienda de Kerygma Path aún no está disponible para los visitantes."],
+  ["Kerygma Path Store — Not Available Yet","Boutique Kerygma Path — bientôt disponible","Tienda de Kerygma Path — aún no disponible"],
+  ["Full-length videos will appear here as they are released.","Les vidéos intégrales seront publiées ici au fur et à mesure de leur sortie.","Aquí aparecerán los videos completos a medida que se publiquen."],
+  ["Portrait stories will appear here as they are released.","Les récits au format portrait seront publiés ici au fur et à mesure de leur sortie.","Aquí aparecerán las historias verticales a medida que se publiquen."],
+  ["No portrait stories in this collection yet.","Aucun récit au format portrait dans cette collection pour le moment.","Aún no hay historias verticales en esta colección."],
+  ["No landscape videos in this collection yet.","Aucune vidéo au format paysage dans cette collection pour le moment.","Aún no hay videos horizontales en esta colección."],
+  ["No caption file has been supplied for this story yet.","Aucun fichier de sous-titres n’a encore été fourni pour ce récit.","Aún no se ha proporcionado un archivo de subtítulos para esta historia."],
+  ["Comments are temporarily unavailable. Please try again later.","Les commentaires sont temporairement indisponibles. Veuillez réessayer plus tard.","Los comentarios no están disponibles temporalmente. Inténtalo de nuevo más tarde."],
+  ["Comments are not configured yet.","Les commentaires ne sont pas encore configurés.","Los comentarios aún no están configurados."],
+  ["Your comment could not be submitted right now.","Votre commentaire n’a pas pu être envoyé pour le moment.","No se pudo enviar tu comentario en este momento."],
+  ["Your comment could not be submitted right now. Please try again later.","Votre commentaire n’a pas pu être envoyé pour le moment. Veuillez réessayer plus tard.","No se pudo enviar tu comentario en este momento. Inténtalo de nuevo más tarde."],
+  ["Thanks for sharing. Your comment is waiting for review before it appears publicly.","Merci pour votre contribution. Votre commentaire sera vérifié avant sa publication.","Gracias por compartir. Tu comentario está pendiente de revisión antes de hacerse público."],
+  ["This submission could not be accepted.","Cette contribution n’a pas pu être acceptée.","No se pudo aceptar este envío."],
+  ["Please wait a minute before commenting again.","Veuillez patienter une minute avant de publier un autre commentaire.","Espera un minuto antes de volver a comentar."],
+  ["Write a comment between 3 and 2,000 characters.","Rédigez un commentaire de 3 à 2 000 caractères.","Escribe un comentario de entre 3 y 2.000 caracteres."],
+  ["The Bible text could not be loaded.","Le texte biblique n’a pas pu être chargé.","No se pudo cargar el texto bíblico."],
+  ["The Bible text file is incomplete.","Le fichier du texte biblique est incomplet.","El archivo del texto bíblico está incompleto."],
+  ["A collection space for our animated storytelling project.","Un espace consacré à notre projet de récits animés.","Un espacio para nuestro proyecto de narración animada."],
+  ["A home for creative releases from the studio.","Un espace consacré aux créations du studio.","Un espacio para las publicaciones creativas del estudio."],
+  ["Captions are enabled automatically in the YouTube player when a caption track is available. Use the player’s CC controls to change or turn them off.","Les sous-titres s’activent automatiquement dans le lecteur YouTube lorsqu’une piste est disponible. Utilisez les commandes CC du lecteur pour les modifier ou les désactiver.","Los subtítulos se activan automáticamente en el reproductor de YouTube cuando hay una pista disponible. Usa los controles CC del reproductor para cambiarlos o desactivarlos."],
+  ["Choose a caption track in the video controls or the Captions menu.","Choisissez une piste de sous-titres dans les commandes vidéo ou le menu Sous-titres.","Elige una pista de subtítulos en los controles del video o en el menú Subtítulos."],
+  ["Caption files are attached, but a direct video is not available yet.","Les fichiers de sous-titres sont joints, mais la vidéo directe n’est pas encore disponible.","Los archivos de subtítulos están adjuntos, pero el video directo aún no está disponible."],
+  ["Share a reflection, a word of encouragement, or what you hope to see on Journey with Jesus. No account is needed. Comments are reviewed before they appear.","Partagez une réflexion, un encouragement ou ce que vous aimeriez voir sur Journey with Jesus. Aucun compte n’est nécessaire. Les commentaires sont vérifiés avant publication.","Comparte una reflexión, una palabra de ánimo o lo que esperas ver en Journey with Jesus. No necesitas una cuenta. Los comentarios se revisan antes de publicarse."],
+  ["Share a thoughtful reflection on this video or story. No account is needed. Comments are reviewed before they appear.","Partagez une réflexion sur cette vidéo ou ce récit. Aucun compte n’est nécessaire. Les commentaires sont vérifiés avant publication.","Comparte una reflexión sobre este video o historia. No necesitas una cuenta. Los comentarios se revisan antes de publicarse."],
+  ["A faithful presence in Jesus’ life","Une présence fidèle dans la vie de Jésus","Una presencia fiel en la vida de Jesús"],
+  ["The centre of the Gospel story","Au cœur du récit de l’Évangile","En el centro del relato del Evangelio"],
+  ["The voice preparing the way","La voix qui prépare le chemin","La voz que prepara el camino"],
+  ["A witness to the resurrection","Témoin de la résurrection","Testigo de la resurrección"],
+  ["A fisherman and disciple","Un pêcheur et disciple","Un pescador y discípulo"],
+  ["A witness in John’s Gospel","Un témoin dans l’Évangile selon Jean","Un testigo en el Evangelio de Juan"],
+  ["Follow Jesus through His teaching, miracles, compassion, death, and resurrection in the four Gospel accounts.","Suivez Jésus à travers son enseignement, ses miracles, sa compassion, sa mort et sa résurrection dans les quatre Évangiles.","Sigue a Jesús a través de sus enseñanzas, milagros, compasión, muerte y resurrección en los cuatro Evangelios."],
+  ["The Gospels introduce Mary at Jesus’ birth and show her trust, courage, and presence with the disciples.","Les Évangiles présentent Marie à la naissance de Jésus et témoignent de sa confiance, de son courage et de sa présence auprès des disciples.","Los Evangelios presentan a María en el nacimiento de Jesús y muestran su confianza, valentía y presencia junto a los discípulos."],
+  ["Peter’s journey includes bold declarations, painful failures, restoration, and a leading role among the early disciples.","Le parcours de Pierre comprend des déclarations audacieuses, des échecs douloureux, un relèvement et un rôle de premier plan parmi les premiers disciples.","El recorrido de Pedro incluye declaraciones audaces, dolorosos fracasos, restauración y un papel destacado entre los primeros discípulos."],
+  ["John calls people to repentance, baptizes Jesus, and points others toward the one whose arrival he announces.","Jean appelle les gens à la repentance, baptise Jésus et dirige les autres vers celui dont il annonce la venue.","Juan llama al arrepentimiento, bautiza a Jesús y señala a aquel cuya llegada anuncia."],
+  ["Mary Magdalene follows Jesus, remains near the cross, and is among the first witnesses to the empty tomb.","Marie Madeleine suit Jésus, reste près de la croix et compte parmi les premières à témoigner du tombeau vide.","María Magdalena sigue a Jesús, permanece cerca de la cruz y es una de las primeras testigos del sepulcro vacío."],
+  ["John’s Gospel uses this title for a close disciple who appears at key moments in Jesus’ final days and resurrection story.","L’Évangile selon Jean emploie ce titre pour un disciple proche qui apparaît à des moments clés des derniers jours de Jésus et du récit de sa résurrection.","El Evangelio de Juan usa este título para un discípulo cercano que aparece en momentos clave de los últimos días de Jesús y de la historia de su resurrección."],
+  ["The video uploaded, but Studio did not confirm that its file record was saved.","La vidéo a été téléversée, mais Studio n’a pas confirmé l’enregistrement de son fichier.","El video se subió, pero Studio no confirmó que se guardara el registro del archivo."],
+  ["Video files were uploaded and saved, but the library could not refresh. Reload to confirm the saved versions.","Les fichiers vidéo ont été téléversés et enregistrés, mais la bibliothèque n’a pas pu s’actualiser. Rechargez la page pour confirmer les versions enregistrées.","Los archivos de video se subieron y guardaron, pero no se pudo actualizar la biblioteca. Recarga la página para confirmar las versiones guardadas."],
+  ["Video files uploaded and saved. You can now publish the story.","Les fichiers vidéo ont été téléversés et enregistrés. Vous pouvez maintenant publier le récit.","Los archivos de video se subieron y guardaron. Ya puedes publicar la historia."],
+  ["Story saved. Choose a video file and click Upload selected versions.","Récit enregistré. Choisissez un fichier vidéo et cliquez sur Téléverser les versions sélectionnées.","Historia guardada. Elige un archivo de video y haz clic en Subir las versiones seleccionadas."],
+  ["YouTube link and story saved. No direct video file is required.","Lien YouTube et récit enregistrés. Aucun fichier vidéo direct n’est nécessaire.","Enlace de YouTube e historia guardados. No se necesita un archivo de video directo."],
+  ["Sign-in link sent. Open it once in this same browser. If it fails, request a fresh link and use the newest email.","Lien de connexion envoyé. Ouvrez-le une seule fois dans ce même navigateur. En cas d’échec, demandez un nouveau lien et utilisez le courriel le plus récent.","Enlace de inicio de sesión enviado. Ábrelo una sola vez en este mismo navegador. Si falla, solicita un enlace nuevo y usa el correo más reciente."],
+  ["Email sign-in is disabled for this project. The site administrator must enable Email Magic Link / OTP in Supabase Authentication settings.","La connexion par courriel est désactivée pour ce projet. L’administrateur du site doit activer Magic Link / OTP par courriel dans les paramètres d’authentification Supabase.","El inicio de sesión por correo está desactivado para este proyecto. El administrador del sitio debe activar Magic Link / OTP por correo en la configuración de autenticación de Supabase."],
+  ["Too many sign-in requests were made. Wait a few minutes, then try again.","Trop de demandes de connexion ont été effectuées. Patientez quelques minutes, puis réessayez.","Se realizaron demasiadas solicitudes de inicio de sesión. Espera unos minutos y vuelve a intentarlo."],
+  ["The email sending limit has been reached. Wait before requesting another sign-in link.","La limite d’envoi de courriels a été atteinte. Patientez avant de demander un autre lien de connexion.","Se alcanzó el límite de envío de correos. Espera antes de solicitar otro enlace de inicio de sesión."],
+  ["This sign-in link has expired or was already used. Request a fresh link and open it once.","Ce lien de connexion a expiré ou a déjà été utilisé. Demandez un nouveau lien et ouvrez-le une seule fois.","Este enlace de inicio de sesión caducó o ya se usó. Solicita un enlace nuevo y ábrelo una sola vez."],
+  ["The sign-in link could not be verified. Request a fresh link and open it once in this browser.","Le lien de connexion n’a pas pu être vérifié. Demandez un nouveau lien et ouvrez-le une seule fois dans ce navigateur.","No se pudo verificar el enlace de inicio de sesión. Solicita un enlace nuevo y ábrelo una sola vez en este navegador."],
+  ["Sign-in could not be completed. Please try again.","La connexion n’a pas pu aboutir. Veuillez réessayer.","No se pudo completar el inicio de sesión. Inténtalo de nuevo."],
+  ["Studio access could not be checked. Try signing in again.","L’accès à Studio n’a pas pu être vérifié. Essayez de vous reconnecter.","No se pudo comprobar el acceso a Studio. Intenta iniciar sesión de nuevo."],
+  ["You are signed out of Studio.","Vous êtes déconnecté de Studio.","Has cerrado sesión en Studio."],
+  ["Save story details first to enable uploads. You can save a draft without a video, even with Publish checked.","Enregistrez d’abord les détails du récit pour activer les téléversements. Vous pouvez enregistrer un brouillon sans vidéo, même si Publier est coché.","Guarda primero los detalles de la historia para habilitar las cargas. Puedes guardar un borrador sin video, incluso si Publicar está marcado."],
+  ["Add a YouTube link or upload a video before making this story public.","Ajoutez un lien YouTube ou téléversez une vidéo avant de rendre ce récit public.","Añade un enlace de YouTube o sube un video antes de hacer pública esta historia."],
+  ["Enter a valid YouTube video link (youtube.com or youtu.be).","Saisissez un lien vidéo YouTube valide (youtube.com ou youtu.be).","Introduce un enlace válido de video de YouTube (youtube.com o youtu.be)."],
+  ["Enter a valid language code such as en, fr, or fr-CA.","Saisissez un code de langue valide, comme en, fr ou fr-CA.","Introduce un código de idioma válido, como en, fr o fr-CA."],
+  ["Choose one or more video files first.","Choisissez d’abord un ou plusieurs fichiers vidéo.","Primero elige uno o más archivos de video."],
+  ["Choose an MP4, WebM, or QuickTime video file.","Choisissez un fichier vidéo MP4, WebM ou QuickTime.","Elige un archivo de video MP4, WebM o QuickTime."],
+  ["Caption files must be 2 MB or smaller.","Les fichiers de sous-titres ne doivent pas dépasser 2 Mo.","Los archivos de subtítulos deben tener 2 MB o menos."],
+  ["This file must start with WEBVTT and contain at least one timed cue.","Ce fichier doit commencer par WEBVTT et contenir au moins un repère temporel.","Este archivo debe comenzar con WEBVTT y contener al menos una indicación de tiempo."],
+  ["Add a caption label of up to 80 characters.","Ajoutez un libellé de sous-titre de 80 caractères maximum.","Añade una etiqueta de subtítulo de hasta 80 caracteres."],
+  ["Keep the transcript under 100,000 characters.","La transcription doit contenir moins de 100 000 caractères.","Mantén la transcripción por debajo de 100.000 caracteres."],
+  ["Choose a JPEG, PNG, WebP, or AVIF image up to 10 MB.","Choisissez une image JPEG, PNG, WebP ou AVIF de 10 Mo maximum.","Elige una imagen JPEG, PNG, WebP o AVIF de hasta 10 MB."],
+  ["Add a staff member name so Upper Room can create a record ID.","Ajoutez le nom d’un membre de l’équipe pour qu’Upper Room puisse créer un identifiant de fiche.","Añade el nombre de un miembro del equipo para que Upper Room pueda crear un ID de registro."],
+  ["Add a character name so Upper Room can create a record ID.","Ajoutez le nom d’un personnage pour qu’Upper Room puisse créer un identifiant de fiche.","Añade el nombre de un personaje para que Upper Room pueda crear un ID de registro."],
+  ["Add a title so Studio can create a story ID.","Ajoutez un titre pour que Studio puisse créer un identifiant de récit.","Añade un título para que Studio pueda crear un ID de historia."],
+  ["No media yet. Create a video or story to begin.","Aucun média pour le moment. Créez une vidéo ou un récit pour commencer.","Aún no hay contenido multimedia. Crea un video o una historia para comenzar."],
+  ["The list could not refresh; reload the page to see the latest changes.","La liste n’a pas pu s’actualiser. Rechargez la page pour voir les dernières modifications.","No se pudo actualizar la lista; recarga la página para ver los cambios más recientes."],
+  ["The library could not refresh; reload the page to see the latest list.","La bibliothèque n’a pas pu s’actualiser. Rechargez la page pour voir la liste à jour.","No se pudo actualizar la biblioteca; recarga la página para ver la lista más reciente."],
+  ["Character details were not saved. Reload the list and try again.","Les détails du personnage n’ont pas été enregistrés. Rechargez la liste et réessayez.","No se guardaron los detalles del personaje. Recarga la lista e inténtalo de nuevo."],
+  ["Character details could not be saved.","Les détails du personnage n’ont pas pu être enregistrés.","No se pudieron guardar los detalles del personaje."],
+  ["Character could not be saved.","Le personnage n’a pas pu être enregistré.","No se pudo guardar el personaje."],
+  ["Staff details were not saved. Reload the list and try again.","Les détails du membre de l’équipe n’ont pas été enregistrés. Rechargez la liste et réessayez.","No se guardaron los detalles del miembro del equipo. Recarga la lista e inténtalo de nuevo."],
+  ["Staff details could not be saved.","Les détails du membre de l’équipe n’ont pas pu être enregistrés.","No se pudieron guardar los detalles del miembro del equipo."],
+  ["Staff profile could not be saved.","Le profil du membre de l’équipe n’a pas pu être enregistré.","No se pudo guardar el perfil del miembro del equipo."],
+  ["Character details saved in Upper Room.","Détails du personnage enregistrés dans Upper Room.","Detalles del personaje guardados en Upper Room."],
+  ["Character and portrait saved in Upper Room.","Personnage et portrait enregistrés dans Upper Room.","Personaje y retrato guardados en Upper Room."],
+  ["Changes are live in Meet the Team if published.","Les modifications sont visibles dans Découvrez l’équipe si elles sont publiées.","Los cambios aparecen en Conoce al equipo si están publicados."],
+  ["Social links could not be loaded.","Les liens sociaux n’ont pas pu être chargés.","No se pudieron cargar los enlaces sociales."],
+  ["Social links must use HTTPS.","Les liens sociaux doivent utiliser HTTPS.","Los enlaces sociales deben usar HTTPS."],
+  ["The social link could not be saved.","Le lien social n’a pas pu être enregistré.","No se pudo guardar el enlace social."],
+  ["The social link could not be removed.","Le lien social n’a pas pu être supprimé.","No se pudo eliminar el enlace social."],
+  ["Studio could not complete that request.","Studio n’a pas pu effectuer cette demande.","Studio no pudo completar esa solicitud."],
+  ["Studio could not verify the visibility change.","Studio n’a pas pu vérifier le changement de visibilité.","Studio no pudo verificar el cambio de visibilidad."],
+  ["Unable to update story visibility.","Impossible de modifier la visibilité du récit.","No se pudo actualizar la visibilidad de la historia."],
+  ["Story details could not be saved.","Les détails du récit n’ont pas pu être enregistrés.","No se pudieron guardar los detalles de la historia."],
+  ["Studio did not confirm that the story was saved.","Studio n’a pas confirmé l’enregistrement du récit.","Studio no confirmó que se guardara la historia."],
+  ["Studio did not confirm the story was deleted.","Studio n’a pas confirmé la suppression du récit.","Studio no confirmó que se eliminara la historia."],
+  ["Unable to delete this story.","Impossible de supprimer ce récit.","No se pudo eliminar esta historia."],
+  ["Playlist could not be created.","La liste de lecture n’a pas pu être créée.","No se pudo crear la lista de reproducción."],
+  ["Story details and thumbnail saved.","Détails du récit et vignette enregistrés.","Detalles de la historia y miniatura guardados."],
+  ["Private video and community management for Journey with Jesus.","Gestion privée des vidéos et de la communauté Journey with Jesus.","Gestión privada de videos y de la comunidad de Journey with Jesus."],
+  ["Journey Studio did not confirm that the link was saved.","Journey Studio n’a pas confirmé l’enregistrement du lien.","Journey Studio no confirmó que se guardara el enlace."],
+  ["Enter a valid HTTPS link to the interpreter-produced ASL video.","Saisissez un lien HTTPS valide vers la vidéo en ASL produite par l’interprète.","Introduce un enlace HTTPS válido al video en ASL producido por el intérprete."],
+  ["Follow Kerygma Path's studio progress, creative process, project plans, and news.","Suivez l’avancement du studio Kerygma Path, son processus créatif, ses projets et ses actualités.","Sigue el progreso del estudio Kerygma Path, su proceso creativo, sus planes y novedades."],
+  ["Kerygma Path — Christian Animation Studio","Kerygma Path — studio d’animation chrétien","Kerygma Path — estudio de animación cristiana"],
+  ["Kerygma Path is a Christian animation studio sharing the Gospel through Scripture-rooted storytelling.","Kerygma Path est un studio d’animation chrétien qui partage l’Évangile par des récits ancrés dans les Écritures.","Kerygma Path es un estudio de animación cristiana que comparte el Evangelio mediante historias arraigadas en las Escrituras."],
+  ["Discover Journey with Jesus, Kerygma Path's animated project sharing the life and message of Jesus Christ.","Découvrez Journey with Jesus, le projet animé de Kerygma Path qui partage la vie et le message de Jésus-Christ.","Descubre Journey with Jesus, el proyecto animado de Kerygma Path que comparte la vida y el mensaje de Jesucristo."],
+  ["Room to grow as new projects come to life.","Un espace qui évoluera avec les nouveaux projets.","Un espacio que crecerá a medida que surjan nuevos proyectos."],
+  ["Double-tap to reveal ·","Appuyez deux fois pour révéler ·","Toca dos veces para descubrir ·"],
+  ["Use a display name between 1 and 60 characters.","Choisissez un nom d’affichage de 1 à 60 caractères.","Usa un nombre visible de entre 1 y 60 caracteres."],
+  ["Choose a story playlist","Choisissez une liste de lecture de récits","Elige una lista de reproducción de historias"],
+  ["Choose a video playlist","Choisissez une liste de lecture de vidéos","Elige una lista de reproducción de videos"],
+  ["Choose Bible translation, selected","Choisir une traduction biblique, sélectionnée","Elegir traducción bíblica, seleccionada"],
+  ["Light mode. Activate to switch to dark mode.","Mode clair. Activez pour passer au mode sombre.","Modo claro. Activa para cambiar al modo oscuro."],
+  ["Dark mode. Activate to return to automatic theme.","Mode sombre. Activez pour revenir au thème automatique.","Modo oscuro. Activa para volver al tema automático."],
+  ["Character list could not be refreshed:","La liste des personnages n’a pas pu être actualisée :","No se pudo actualizar la lista de personajes:"],
+  ["A portrait is saved. Choose a new image to replace it.","Un portrait est enregistré. Choisissez une nouvelle image pour le remplacer.","Hay un retrato guardado. Elige otra imagen para reemplazarlo."],
+  ["Save character and portrait","Enregistrer le personnage et son portrait","Guardar personaje y retrato"],
+  ["Story saved as a draft. Choose a video file below and click Upload selected versions. When it finishes, check Publish and save the story again.","Récit enregistré comme brouillon. Choisissez un fichier vidéo ci-dessous et cliquez sur Téléverser les versions sélectionnées. Une fois le téléversement terminé, cochez Publier et enregistrez de nouveau le récit.","Historia guardada como borrador. Elige un archivo de video abajo y haz clic en Subir las versiones seleccionadas. Cuando termine, marca Publicar y vuelve a guardar la historia."],
+  ["Save the story details before attaching caption files.","Enregistrez les détails du récit avant de joindre les fichiers de sous-titres.","Guarda los detalles de la historia antes de adjuntar archivos de subtítulos."],
+  ["Choose a WebVTT caption file first.","Choisissez d’abord un fichier de sous-titres WebVTT.","Primero elige un archivo de subtítulos WebVTT."],
+  ["The selected caption file could not be read.","Le fichier de sous-titres sélectionné n’a pas pu être lu.","No se pudo leer el archivo de subtítulos seleccionado."],
+  ["The caption file was saved, but the library could not refresh. Reload Studio to confirm it.","Le fichier de sous-titres a été enregistré, mais la bibliothèque n’a pas pu s’actualiser. Rechargez Studio pour confirmer l’enregistrement.","El archivo de subtítulos se guardó, pero no se pudo actualizar la biblioteca. Recarga Studio para confirmarlo."],
+  ["Caption file could not be attached.","Le fichier de sous-titres n’a pas pu être joint.","No se pudo adjuntar el archivo de subtítulos."],
+  ["Caption track could not be removed.","La piste de sous-titres n’a pas pu être supprimée.","No se pudo eliminar la pista de subtítulos."],
+  ["Add a playlist title.","Ajoutez un titre à la liste de lecture.","Añade un título a la lista de reproducción."],
+  ["Email me a sign-in link","M’envoyer un lien de connexion par courriel","Enviarme un enlace de inicio de sesión por correo"],
+  ["JPEG, PNG, WebP, or AVIF · up to 10 MB · saved with story details","JPEG, PNG, WebP ou AVIF · jusqu’à 10 Mo · enregistré avec les détails du récit","JPEG, PNG, WebP o AVIF · hasta 10 MB · se guarda con los detalles de la historia"],
+  ["Save story and thumbnail","Enregistrer le récit et la vignette","Guardar historia y miniatura"],
+  ["Interpreter-prepared .vtt · up to 2 MB","Fichier .vtt préparé par l’interprète · jusqu’à 2 Mo","Archivo .vtt preparado por el intérprete · hasta 2 MB"],
+  ["Stories in this playlist","Récits dans cette liste de lecture","Historias en esta lista de reproducción"],
+  ["Videos in this playlist","Vidéos dans cette liste de lecture","Videos en esta lista de reproducción"],
+  ["Supabase blocked the Studio redirect. The site administrator must add this site's Studio URL to the Supabase Auth redirect allow list.","Supabase a bloqué la redirection vers Studio. L’administrateur du site doit ajouter l’URL de Studio à la liste des redirections autorisées de Supabase Auth.","Supabase bloqueó la redirección a Studio. El administrador del sitio debe añadir la URL de Studio a la lista de redirecciones permitidas de Supabase Auth."],
+  ["Enter a display name for this social link.","Saisissez un nom d’affichage pour ce lien social.","Introduce un nombre visible para este enlace social."],
+  ["Enter a valid HTTPS link.","Saisissez un lien HTTPS valide.","Introduce un enlace HTTPS válido."],
+  ["Published in the footer","Publié dans le pied de page","Publicado en el pie de página"],
+  ["Staff list could not be refreshed:","La liste des membres de l’équipe n’a pas pu être actualisée :","No se pudo actualizar la lista del equipo:"],
+  ["Staff member and profile image saved.","Membre de l’équipe et photo de profil enregistrés.","Miembro del equipo e imagen de perfil guardados."],
+  ["Staff member details saved.","Détails du membre de l’équipe enregistrés.","Detalles del miembro del equipo guardados."],
+  ["Reload Upper Room to confirm the saved details.","Rechargez Upper Room pour confirmer l’enregistrement des détails.","Recarga Upper Room para confirmar los detalles guardados."],
+  ["A profile image is saved. Choose another to replace it.","Une photo de profil est enregistrée. Choisissez-en une autre pour la remplacer.","Hay una imagen de perfil guardada. Elige otra para reemplazarla."],
+  ["Save staff member and image","Enregistrer le membre de l’équipe et sa photo","Guardar miembro del equipo e imagen"],
+  ["Storage did not confirm the upload.","Le stockage n’a pas confirmé le téléversement.","El almacenamiento no confirmó la carga."],
+  ["The previous image could not be removed from storage.","L’image précédente n’a pas pu être supprimée du stockage.","No se pudo eliminar la imagen anterior del almacenamiento."],
+  ["The previous thumbnail could not be removed.","La vignette précédente n’a pas pu être supprimée.","No se pudo eliminar la miniatura anterior."],
+  ["The incomplete thumbnail upload could not be removed.","Le téléversement incomplet de la vignette n’a pas pu être supprimé.","No se pudo eliminar la carga incompleta de la miniatura."],
+  ["The unlinked upload could not be removed from storage.","Le fichier téléversé non associé n’a pas pu être supprimé du stockage.","No se pudo eliminar del almacenamiento la carga sin vínculo."],
+  ["The unfinished upload could not be removed.","Le téléversement inachevé n’a pas pu être supprimé.","No se pudo eliminar la carga incompleta."],
+  ["The caption record was removed, but its stored file could not be deleted. Check Supabase Storage.","L’enregistrement des sous-titres a été supprimé, mais le fichier stocké n’a pas pu l’être. Vérifiez Supabase Storage.","Se eliminó el registro de subtítulos, pero no se pudo borrar el archivo almacenado. Revisa Supabase Storage."],
+  ["The caption track was removed, but the library could not refresh.","La piste de sous-titres a été supprimée, mais la bibliothèque n’a pas pu s’actualiser.","Se eliminó la pista de subtítulos, pero no se pudo actualizar la biblioteca."],
+  ["The stored file could not be deleted. Check Supabase Storage.","Le fichier stocké n’a pas pu être supprimé. Vérifiez Supabase Storage.","No se pudo eliminar el archivo almacenado. Revisa Supabase Storage."],
+  ["The previous file could not be removed from storage.","Le fichier précédent n’a pas pu être supprimé du stockage.","No se pudo eliminar el archivo anterior del almacenamiento."],
+  ["The selected file could not be read.","Le fichier sélectionné n’a pas pu être lu.","No se pudo leer el archivo seleccionado."],
+  ["The unlinked file could not be removed from storage.","Le fichier non associé n’a pas pu être supprimé du stockage.","No se pudo eliminar del almacenamiento el archivo sin vínculo."],
+  ["Profile image upload failed:","Le téléversement de la photo de profil a échoué :","Falló la carga de la imagen de perfil:"],
+  ["Storage did not return an uploaded image.","Le stockage n’a pas renvoyé l’image téléversée.","El almacenamiento no devolvió la imagen cargada."],
+  ["Storage did not return an uploaded file.","Le stockage n’a pas renvoyé le fichier téléversé.","El almacenamiento no devolvió el archivo cargado."],
+  ["Storage did not confirm that the upload.","Le stockage n’a pas confirmé le téléversement.","El almacenamiento no confirmó la carga."],
+  ["The previous image could not be removed.","L’image précédente n’a pas pu être supprimée.","No se pudo eliminar la imagen anterior."],
+  ["Media community · General discussion","Communauté média · discussion générale","Comunidad multimedia · debate general"],
+  ["Save story details first to enable uploads.","Enregistrez d’abord les détails du récit pour activer les téléversements.","Guarda primero los detalles de la historia para habilitar las cargas."],
+  ["An Animated Journey Through God's Word","Un voyage animé à travers la Parole de Dieu","Un viaje animado a través de la Palabra de Dios"],
+  ["Bible Stories","Récits bibliques","Historias bíblicas"],
+  ["Conversations with Jesus","Conversations avec Jésus","Conversaciones con Jesús"],
+  ["The Gospel","L’Évangile","El Evangelio"],
+  ["Jesus of Nazareth","Jésus de Nazareth","Jesús de Nazaret"],
+  ["Mary, Mother of Jesus","Marie, mère de Jésus","María, madre de Jesús"],
+  ["Simon Peter","Simon Pierre","Simón Pedro"],
+  ["John the Baptist","Jean-Baptiste","Juan el Bautista"],
+  ["Mary Magdalene","Marie Madeleine","María Magdalena"],
+  ["The Beloved Disciple","Le disciple bien-aimé","El discípulo amado"],
+  ["Matthew 1–28 · Mark 1–16 · Luke 1–24 · John 1–21","Matthieu 1–28 · Marc 1–16 · Luc 1–24 · Jean 1–21","Mateo 1–28 · Marcos 1–16 · Lucas 1–24 · Juan 1–21"],
+  ["Matthew 1–2 · Luke 1–2 · John 2:1–12; 19:25–27 · Acts 1:14","Matthieu 1–2 · Luc 1–2 · Jean 2:1–12; 19:25–27 · Actes 1:14","Mateo 1–2 · Lucas 1–2 · Juan 2:1–12; 19:25–27 · Hechos 1:14"],
+  ["Matthew 4:18–20; 16:13–19 · Luke 22:54–62 · John 21 · Acts 1–12","Matthieu 4:18–20; 16:13–19 · Luc 22:54–62 · Jean 21 · Actes 1–12","Mateo 4:18–20; 16:13–19 · Lucas 22:54–62 · Juan 21 · Hechos 1–12"],
+  ["Matthew 3 · Mark 1:1–11 · Luke 1; 3 · John 1:19–34","Matthieu 3 · Marc 1:1–11 · Luc 1; 3 · Jean 1:19–34","Mateo 3 · Marcos 1:1–11 · Lucas 1; 3 · Juan 1:19–34"],
+  ["Luke 8:1–3 · John 19:25 · John 20:1–18","Luc 8:1–3 · Jean 19:25 · Jean 20:1–18","Lucas 8:1–3 · Juan 19:25 · Juan 20:1–18"],
+  ["John 13:23 · 19:26–27 · 20:2–8 · 21:7, 20–24","Jean 13:23 · 19:26–27 · 20:2–8 · 21:7, 20–24","Juan 13:23 · 19:26–27 · 20:2–8 · 21:7, 20–24"],
+  ["JPEG, PNG, WebP, or AVIF · up to 10 MB","JPEG, PNG, WebP ou AVIF · jusqu’à 10 Mo","JPEG, PNG, WebP o AVIF · hasta 10 MB"],
+  ["Studio did not confirm that the caption file was attached.","Studio n’a pas confirmé que le fichier de sous-titres était joint.","Studio no confirmó que se adjuntara el archivo de subtítulos."],
+  ["Studio did not confirm that the caption track was removed.","Studio n’a pas confirmé la suppression de la piste de sous-titres.","Studio no confirmó que se eliminara la pista de subtítulos."],
+  ["Journey with Jesus ticker.", "Bandeau Journey with Jesus.", "Cinta de Journey with Jesus."],
 ];
 
 const dictionaries: Record<Exclude<SiteLocale, "en">, Record<string, string>> = {
@@ -232,7 +711,173 @@ const dictionaries: Record<Exclude<SiteLocale, "en">, Record<string, string>> = 
   es: Object.fromEntries(translations.map(([english, , spanish]) => [english, spanish])),
 };
 
+const bibleBookNames: Array<[string, string, string]> = [
+  ["Genesis", "Genèse", "Génesis"], ["Exodus", "Exode", "Éxodo"], ["Leviticus", "Lévitique", "Levítico"],
+  ["Numbers", "Nombres", "Números"], ["Deuteronomy", "Deutéronome", "Deuteronomio"], ["Joshua", "Josué", "Josué"],
+  ["Judges", "Juges", "Jueces"], ["Ruth", "Ruth", "Rut"], ["1 Samuel", "1 Samuel", "1 Samuel"],
+  ["2 Samuel", "2 Samuel", "2 Samuel"], ["1 Kings", "1 Rois", "1 Reyes"], ["2 Kings", "2 Rois", "2 Reyes"],
+  ["1 Chronicles", "1 Chroniques", "1 Crónicas"], ["2 Chronicles", "2 Chroniques", "2 Crónicas"], ["Ezra", "Esdras", "Esdras"],
+  ["Nehemiah", "Néhémie", "Nehemías"], ["Esther", "Esther", "Ester"], ["Job", "Job", "Job"],
+  ["Psalms", "Psaumes", "Salmos"], ["Proverbs", "Proverbes", "Proverbios"], ["Ecclesiastes", "Ecclésiaste", "Eclesiastés"],
+  ["Song of Solomon", "Cantique des cantiques", "Cantar de los Cantares"], ["Isaiah", "Ésaïe", "Isaías"],
+  ["Jeremiah", "Jérémie", "Jeremías"], ["Lamentations", "Lamentations", "Lamentaciones"], ["Ezekiel", "Ézéchiel", "Ezequiel"],
+  ["Daniel", "Daniel", "Daniel"], ["Hosea", "Osée", "Oseas"], ["Joel", "Joël", "Joel"], ["Amos", "Amos", "Amós"],
+  ["Obadiah", "Abdias", "Abdías"], ["Jonah", "Jonas", "Jonás"], ["Micah", "Michée", "Miqueas"],
+  ["Nahum", "Nahum", "Nahúm"], ["Habakkuk", "Habacuc", "Habacuc"], ["Zephaniah", "Sophonie", "Sofonías"],
+  ["Haggai", "Aggée", "Hageo"], ["Zechariah", "Zacharie", "Zacarías"], ["Malachi", "Malachie", "Malaquías"],
+  ["Matthew", "Matthieu", "Mateo"], ["Mark", "Marc", "Marcos"], ["Luke", "Luc", "Lucas"], ["John", "Jean", "Juan"],
+  ["Acts", "Actes", "Hechos"], ["Romans", "Romains", "Romanos"], ["1 Corinthians", "1 Corinthiens", "1 Corintios"],
+  ["2 Corinthians", "2 Corinthiens", "2 Corintios"], ["Galatians", "Galates", "Gálatas"], ["Ephesians", "Éphésiens", "Efesios"],
+  ["Philippians", "Philippiens", "Filipenses"], ["Colossians", "Colossiens", "Colosenses"],
+  ["1 Thessalonians", "1 Thessaloniciens", "1 Tesalonicenses"], ["2 Thessalonians", "2 Thessaloniciens", "2 Tesalonicenses"],
+  ["1 Timothy", "1 Timothée", "1 Timoteo"], ["2 Timothy", "2 Timothée", "2 Timoteo"], ["Titus", "Tite", "Tito"],
+  ["Philemon", "Philémon", "Filemón"], ["Hebrews", "Hébreux", "Hebreos"], ["James", "Jacques", "Santiago"],
+  ["1 Peter", "1 Pierre", "1 Pedro"], ["2 Peter", "2 Pierre", "2 Pedro"], ["1 John", "1 Jean", "1 Juan"],
+  ["2 John", "2 Jean", "2 Juan"], ["3 John", "3 Jean", "3 Juan"], ["Jude", "Jude", "Judas"],
+  ["Revelation", "Apocalypse", "Apocalipsis"],
+];
+const bookNameAliases: Record<string, number> = {};
+function normalizeBibleBookName(value: string) {
+  return value.normalize("NFD").replace(/\p{M}/gu, "").toLocaleLowerCase().replace(/[^\p{L}\p{N}]/gu, "");
+}
+bibleBookNames.forEach((names, index) => {
+  names.forEach((name) => {
+    const normalized = normalizeBibleBookName(name);
+    bookNameAliases[normalized] = index;
+  });
+});
+for (const [index, aliases] of [
+  [21, ["Song of Songs", "Cantique des Cantiques", "Cantares"]],
+  [65, ["Apocalypse de Jean", "Revelación"]],
+] as Array<[number, string[]]>) {
+  aliases.forEach((name) => {
+    const normalized = normalizeBibleBookName(name);
+    bookNameAliases[normalized] = index;
+  });
+}
+function localizedBibleBookName(value: string, locale: SiteLocale): string | undefined {
+  const normalized = normalizeBibleBookName(value);
+  const index = bookNameAliases[normalized];
+  if (index === undefined) return undefined;
+  return bibleBookNames[index][locale === "en" ? 0 : locale === "fr" ? 1 : 2];
+}
+
+function translateDynamicSiteMessage(value: string, locale: SiteLocale): string | undefined {
+  const hidden = value.match(/^"(.+)" is hidden from the public Media page\. Its files and story details are preserved\.$/);
+  if (hidden) return locale === "fr"
+    ? `« ${hidden[1]} » est masqué sur la page Médias publique. Ses fichiers et les détails du récit sont conservés.`
+    : locale === "es"
+      ? `« ${hidden[1]} » está oculto en la página pública de Medios. Se conservan sus archivos y los detalles de la historia.`
+      : value;
+  const restored = value.match(/^"(.+)" is public again\.$/);
+  if (restored) return locale === "fr" ? `« ${restored[1]} » est de nouveau visible au public.`
+    : locale === "es" ? `« ${restored[1]} » vuelve a ser público.` : value;
+  const confirmDelete = value.match(/^Permanently delete "(.+)"\? This removes the story, its playlist entries, comments, caption files, transcript, and uploaded media from Journey Studio\. This cannot be undone\. Videos hosted on YouTube will not be deleted\.$/);
+  if (confirmDelete) return locale === "fr"
+    ? `Supprimer définitivement « ${confirmDelete[1]} » ? Cette action supprime le récit, ses entrées de liste de lecture, ses commentaires, ses fichiers de sous-titres, sa transcription et ses médias téléversés de Journey Studio. Cette action est irréversible. Les vidéos hébergées sur YouTube ne seront pas supprimées.`
+    : locale === "es"
+      ? `¿Eliminar permanentemente « ${confirmDelete[1]} »? Esto elimina la historia, sus entradas de lista de reproducción, comentarios, archivos de subtítulos, transcripción y archivos multimedia de Journey Studio. Esta acción no se puede deshacer. Los videos alojados en YouTube no se eliminarán.`
+      : value;
+  const deleted = value.match(/^Deleted "(.+)" from the library\.(?: The (.+) could not be fully cleaned up in Supabase Storage; check the storage dashboard\.)?$/);
+  if (deleted) {
+    const cleanupFr = deleted[2] ? ` Le nettoyage de ${deleted[2]} dans Supabase Storage est incomplet. Vérifiez le tableau de bord du stockage.` : "";
+    const cleanupEs = deleted[2] ? ` La limpieza de ${deleted[2]} en Supabase Storage no se completó. Revisa el panel de almacenamiento.` : "";
+    return locale === "fr" ? `« ${deleted[1]} » a été supprimé de la bibliothèque.${cleanupFr}`
+      : locale === "es" ? `Se eliminó « ${deleted[1]} » de la biblioteca.${cleanupEs}` : value;
+  }
+  const captionAttached = value.match(/^The (.+) WebVTT track was attached\.$/);
+  if (captionAttached) return locale === "fr" ? `La piste WebVTT ${captionAttached[1]} a été jointe.`
+    : locale === "es" ? `Se adjuntó la pista WebVTT ${captionAttached[1]}.` : value;
+  const captionRemoved = value.match(/^The (.+) caption track was removed\.$/);
+  if (captionRemoved) return locale === "fr" ? `La piste de sous-titres ${captionRemoved[1]} a été supprimée.`
+    : locale === "es" ? `Se eliminó la pista de subtítulos ${captionRemoved[1]}.` : value;
+  const asl = value.match(/^ASL interpretation video for (.+)$/);
+  if (asl) return locale === "fr" ? `Vidéo d’interprétation en ASL pour ${asl[1]}`
+    : locale === "es" ? `Video de interpretación en ASL para ${asl[1]}` : value;
+  return undefined;
+}
+
+function translateBibleReaderMessage(value: string, locale: SiteLocale): string | undefined {
+  const normalized = value.trim();
+  const noMatches = normalized.match(/^No matches found for “([\s\S]*)”\.$/);
+  if (noMatches) {
+    return locale === "fr"
+      ? `Aucun résultat trouvé pour « ${noMatches[1]} ».`
+      : locale === "es"
+        ? `No se encontraron coincidencias para «${noMatches[1]}».`
+        : normalized;
+  }
+  const showing = normalized.match(/^Showing the first (\d+) of (\d+) matches\.$/);
+  if (showing) {
+    return locale === "fr"
+      ? `Affichage des ${showing[1]} premiers résultats sur ${showing[2]}.`
+      : locale === "es"
+        ? `Se muestran los primeros ${showing[1]} de ${showing[2]} resultados.`
+        : normalized;
+  }
+  const found = normalized.match(/^(\d+) match(es)? found\.$/);
+  if (found) {
+    const count = Number(found[1]);
+    return locale === "fr"
+      ? `${count} résultat${count > 1 ? "s" : ""} trouvé${count > 1 ? "s" : ""}.`
+      : locale === "es"
+        ? `${count} coincidencia${count === 1 ? "" : "s"} encontrada${count === 1 ? "" : "s"}.`
+        : normalized;
+  }
+  const chapterLabel = normalized.match(/^(.+) chapter (\d+)$/i);
+  if (chapterLabel) {
+    const book = localizedBibleBookName(chapterLabel[1], locale) ?? chapterLabel[1];
+    return locale === "fr" ? `Chapitre ${chapterLabel[2]} de ${book}`
+      : locale === "es" ? `Capítulo ${chapterLabel[2]} de ${book}`
+        : `${book} chapter ${chapterLabel[2]}`;
+  }
+  const openReference = normalized.match(/^Open (.+)$/);
+  if (openReference) {
+    const reference = openReference[1].match(/^(.+) (\d+):(\d+)$/);
+    const localizedReference = reference
+      ? `${localizedBibleBookName(reference[1], locale) ?? reference[1]} ${reference[2]}:${reference[3]}`
+      : openReference[1];
+    return locale === "fr" ? `Ouvrir ${localizedReference}`
+      : locale === "es" ? `Abrir ${localizedReference}`
+        : `Open ${localizedReference}`;
+  }
+  const reference = normalized.match(/^(.+) (\d+):(\d+)$/);
+  if (reference) {
+    const book = localizedBibleBookName(reference[1], locale);
+    if (book) return `${book} ${reference[2]}:${reference[3]}`;
+  }
+  const chapter = normalized.match(/^(.+) (\d+)$/);
+  if (chapter) {
+    const book = localizedBibleBookName(chapter[1], locale);
+    if (book) return `${book} ${chapter[2]}`;
+  }
+  const verseCount = normalized.match(/^(\d+) verses?$/);
+  if (verseCount) {
+    const count = Number(verseCount[1]);
+    return locale === "fr" ? `${count} verset${count > 1 ? "s" : ""}`
+      : locale === "es" ? `${count} versículo${count > 1 ? "s" : ""}`
+        : normalized;
+  }
+  return undefined;
+}
+
+export function registerBibleBookNameAliases(names: string[]) {
+  const firstCanonicalBookIndex = names.length === 66 ? 0 : names.length === 39 ? 0 : names.length === 27 ? 39 : -1;
+  if (firstCanonicalBookIndex < 0) return;
+  names.forEach((name, index) => {
+    const normalized = normalizeBibleBookName(name);
+    if (normalized) bookNameAliases[normalized] = firstCanonicalBookIndex + index;
+  });
+}
+
 export function translateSiteText(text: string, locale: SiteLocale): string {
+  const normalized = text.trim();
+  const dynamicSiteMessage = translateDynamicSiteMessage(normalized, locale);
+  if (dynamicSiteMessage) return dynamicSiteMessage;
+  const dynamicMessage = translateBibleReaderMessage(normalized, locale);
+  if (dynamicMessage) return dynamicMessage;
+  const bookName = localizedBibleBookName(normalized, locale);
+  if (bookName) return bookName;
   if (locale === "en") return text;
-  return dictionaries[locale][text.trim()] ?? text;
+  return dictionaries[locale][normalized] ?? text;
 }

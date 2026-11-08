@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, type CSSProperties, type FormEvent, type ReactNode } from "react";
 import { BookOpen, Check, ChevronDown, ChevronLeft, ChevronRight, Minus, Plus, Search } from "lucide-react";
+import { registerBibleBookNameAliases } from "@/data/site-translations";
 
 type BibleBook = {
   name: string;
@@ -82,7 +83,7 @@ const translationLanguages = [
 ];
 
 function ScriptureText({ text, segments }: { text: string; segments: Array<[number, number]> }) {
-  if (!segments.length) return text;
+  if (!segments.length) return <span translate="no">{text}</span>;
 
   const parts: ReactNode[] = [];
   let cursor = 0;
@@ -99,7 +100,7 @@ function ScriptureText({ text, segments }: { text: string; segments: Array<[numb
     cursor = end;
   });
   if (cursor < text.length) parts.push(text.slice(cursor));
-  return <>{parts}</>;
+  return <span translate="no">{parts}</span>;
 }
 
 export function ScriptureReader({ scriptureBaseUrl }: { scriptureBaseUrl: string }) {
@@ -146,7 +147,10 @@ export function ScriptureReader({ scriptureBaseUrl }: { scriptureBaseUrl: string
         ) {
           throw new Error("The Bible text file is incomplete.");
         }
-        if (!cancelled) setBible(data);
+        if (!cancelled) {
+          registerBibleBookNameAliases(data.books.map((book) => book.name));
+          setBible(data);
+        }
       })
       .catch((error: unknown) => {
         if (cancelled) return;

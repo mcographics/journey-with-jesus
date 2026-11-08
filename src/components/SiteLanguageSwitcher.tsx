@@ -16,7 +16,7 @@ const languages: Language[] = [
 type SavedText = { source: string; lastApplied: string };
 const originalText = new WeakMap<Text, SavedText>();
 const originalAttributes = new WeakMap<Element, Map<string, SavedText>>();
-const translatableAttributes = ["alt", "aria-label", "aria-description", "placeholder", "title"];
+const translatableAttributes = ["alt", "aria-label", "aria-description", "placeholder", "title", "content"];
 
 function getTextSource(node: Text) {
   const current = node.nodeValue ?? "";
@@ -92,6 +92,7 @@ export function SiteLanguageSwitcher() {
   const menuRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [languageCode, setLanguageCode] = useState<SiteLocale>("en");
+  const [languageReady, setLanguageReady] = useState(false);
 
   useEffect(() => {
     const frame = window.requestAnimationFrame(() => {
@@ -100,19 +101,22 @@ export function SiteLanguageSwitcher() {
         if (saved === "fr" || saved === "es") setLanguageCode(saved);
       } catch {
         // The switcher still works for this visit if browser storage is unavailable.
+      } finally {
+        setLanguageReady(true);
       }
     });
     return () => window.cancelAnimationFrame(frame);
   }, []);
 
   useEffect(() => {
+    if (!languageReady) return;
     applySiteLanguage(languageCode);
     try {
       window.localStorage.setItem("kerygmapath-language", languageCode);
     } catch {
       // Keep the selected language active for this page view.
     }
-  }, [languageCode, pathname]);
+  }, [languageCode, languageReady, pathname]);
 
   useEffect(() => {
     const observer = new MutationObserver((records) => {
@@ -128,13 +132,15 @@ export function SiteLanguageSwitcher() {
         record.addedNodes.forEach((node) => translateNode(node, languageCode));
       }
     });
-    observer.observe(document.body, {
+    const observerOptions: MutationObserverInit = {
       subtree: true,
       childList: true,
       characterData: true,
       attributes: true,
       attributeFilter: translatableAttributes,
-    });
+    };
+    observer.observe(document.head, observerOptions);
+    observer.observe(document.body, observerOptions);
     return () => observer.disconnect();
   }, [languageCode]);
 
