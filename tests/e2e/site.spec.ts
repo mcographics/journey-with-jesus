@@ -355,8 +355,8 @@ test("Media, Characters, Team, and Store dark mode use soft-white text", async (
 
   for (const { route, selector, copySelector } of [
     { route: "/media/", selector: ".media-page", copySelector: ".media-heading p:last-child" },
-    { route: "/characters/", selector: ".characters-page" },
-    { route: "/team/", selector: ".team-page" },
+    { route: "/characters/", selector: ".characters-page", copySelector: ".editorial-intro" },
+    { route: "/team/", selector: ".team-page", copySelector: ".editorial-intro" },
     { route: "/store/", selector: ".store-page", copySelector: ".store-unavailable-description" },
   ]) {
     await page.goto(route);
