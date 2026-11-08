@@ -468,7 +468,7 @@ test("studio dark mode uses luminous gold accents, strong actions and white main
   expect(await copy.count()).toBeGreaterThan(20);
   for (const element of await copy.all()) {
     const color = await element.evaluate((node) => getComputedStyle(node).color);
-    expect(["rgb(255, 255, 255)", "rgb(255, 218, 112)", "rgb(6, 20, 47)"]).toContain(color);
+    expect(["rgb(255, 255, 255)", "rgb(232, 199, 127)", "rgb(16, 32, 55)"]).toContain(color);
     await expect(element).toHaveCSS("-webkit-text-fill-color", color);
     const isGoldAction = await element.evaluate((node) => node.classList.contains("kerygma-button-gold"));
     if (isGoldAction) {
@@ -479,10 +479,10 @@ test("studio dark mode uses luminous gold accents, strong actions and white main
     await expect(element).toHaveCSS("animation-name", "none");
   }
   for (const label of await page.locator(".kerygma-company .kerygma-eyebrow").all()) {
-    await expect(label).toHaveCSS("color", "rgb(255, 218, 112)");
+    await expect(label).toHaveCSS("color", "rgb(232, 199, 127)");
   }
   await expect(page.locator("#mission-title")).toHaveCSS("color", "rgb(255, 255, 255)");
-  await expect(page.locator("#mission-title em")).toHaveCSS("color", "rgb(255, 218, 112)");
+  await expect(page.locator("#mission-title em")).toHaveCSS("color", "rgb(232, 199, 127)");
   await expect(page.locator(".kerygma-company-lead")).toHaveCSS("color", "rgb(255, 255, 255)");
 });
 
