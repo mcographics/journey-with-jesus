@@ -36,7 +36,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#071323",
+  themeColor: "#08172a",
   colorScheme: "light dark",
 };
 
@@ -64,7 +64,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
                 document.documentElement.dataset.theme = theme;
                 document.querySelector('meta[name="theme-color"]')?.setAttribute(
                   "content",
-                  theme === "light" ? "#f2f5f9" : "#071323",
+                  theme === "light" ? "#f2f5f9" : "#08172a",
                 );
                 const savedAccessibility = localStorage.getItem("journey-with-jesus-accessibility");
                 const accessibility = savedAccessibility ? JSON.parse(savedAccessibility) : {};
