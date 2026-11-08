@@ -28,16 +28,29 @@ export default function HomePage() {
         <p className="kerygma-gateway-kicker">A Christian Animation Studio</p>
         <h1 className="kerygma-gateway-logo-heading">
           <span className="visually-hidden">Kerygma Path</span>
-          <LanguageAwareLogo
-            alt=""
-            className="kerygma-gateway-logo"
-            height={724}
-            fetchPriority="high"
-            loading="eager"
-            pictureClassName="kerygma-gateway-logo-picture"
-            sizes="(max-width: 700px) min(68vw, 250px), 390px"
-            width={2172}
-          />
+          <span className="kerygma-gateway-logo-stack">
+            <LanguageAwareLogo
+              alt=""
+              className="kerygma-gateway-logo"
+              height={724}
+              fetchPriority="high"
+              loading="eager"
+              pictureClassName="kerygma-gateway-logo-picture"
+              sizes="(max-width: 700px) min(68vw, 250px), 390px"
+              width={2172}
+            />
+            <span aria-hidden="true" className="kerygma-gateway-logo-trace">
+              <LanguageAwareLogo
+                alt=""
+                className="kerygma-gateway-logo-trace-image"
+                height={724}
+                loading="eager"
+                pictureClassName="kerygma-gateway-logo-picture kerygma-gateway-logo-trace-picture"
+                sizes="(max-width: 700px) min(68vw, 250px), 390px"
+                width={2172}
+              />
+            </span>
+          </span>
         </h1>
         <p className="kerygma-gateway-description">
           Scripture-rooted stories, brought to life through animation to share the Gospel.

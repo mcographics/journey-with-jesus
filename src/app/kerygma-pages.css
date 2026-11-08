@@ -616,6 +616,89 @@
   mix-blend-mode: screen;
 }
 
+
+/* The exact current-language logo is duplicated only as a masked highlight.
+   The asset beneath is unchanged: the traveling light illuminates its existing
+   shapes and gold/white colouring instead of redrawing or recolouring it. */
+.kerygma-gateway-logo-stack {
+  position: relative;
+  display: block;
+  width: 100%;
+  isolation: isolate;
+}
+.kerygma-gateway-logo-trace {
+  position: absolute;
+  inset: 0;
+  display: block;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  opacity: 0;
+  -webkit-mask-image: linear-gradient(
+    103deg,
+    transparent 0%, transparent 38%,
+    rgba(255, 255, 255, .07) 44%,
+    rgba(255, 255, 255, .96) 49%,
+    #fff 51%,
+    rgba(255, 255, 255, .26) 57%,
+    transparent 65%, transparent 100%
+  );
+  mask-image: linear-gradient(
+    103deg,
+    transparent 0%, transparent 38%,
+    rgba(255, 255, 255, .07) 44%,
+    rgba(255, 255, 255, .96) 49%,
+    #fff 51%,
+    rgba(255, 255, 255, .26) 57%,
+    transparent 65%, transparent 100%
+  );
+  -webkit-mask-size: 310% 100%;
+  mask-size: 310% 100%;
+  -webkit-mask-position: 100% 50%;
+  mask-position: 100% 50%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  animation: kerygma-logo-light-trace 9s ease-in-out infinite;
+  will-change: opacity, mask-position;
+}
+.kerygma-gateway-logo-trace-picture {
+  display: block;
+  width: 100%;
+}
+.kerygma-gateway-logo-trace-image {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  filter: brightness(1.85) saturate(1.25)
+    drop-shadow(0 0 5px rgba(255, 214, 116, .72))
+    drop-shadow(0 0 9px rgba(99, 171, 255, .34));
+}
+@keyframes kerygma-logo-light-trace {
+  0%, 15% {
+    opacity: 0;
+    -webkit-mask-position: 100% 50%;
+    mask-position: 100% 50%;
+  }
+  22% { opacity: .93; }
+  57% {
+    opacity: .93;
+    -webkit-mask-position: 0% 50%;
+    mask-position: 0% 50%;
+  }
+  67%, 100% {
+    opacity: 0;
+    -webkit-mask-position: 0% 50%;
+    mask-position: 0% 50%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .kerygma-gateway-logo-trace { display: none; animation: none; }
+}
+:root[data-accessibility-reduce-motion="true"] .kerygma-gateway-logo-trace {
+  display: none;
+  animation: none;
+}
+
 .kerygma-gateway-description {
   max-width: 580px;
   margin: 16px auto 24px;
