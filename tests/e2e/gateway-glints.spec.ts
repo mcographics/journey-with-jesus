@@ -40,6 +40,9 @@ test("reduced-motion settings disable the moving logo trail", async ({ page }) =
   const glint = page.locator(".kerygma-gateway-logo-trace");
   await expect(glint).toHaveCSS("display", "none");
   await page.emulateMedia({ reducedMotion: "no-preference" });
+  // The site's accessibility setting can persist after an OS preference
+  // change, so explicitly re-enable motion before testing the alternate mode.
+  await page.evaluate(() => { document.documentElement.dataset.accessibilityReduceMotion = "false"; });
   await expect(glint).toHaveCSS("animation-name", "kerygma-logo-light-trace");
   await page.evaluate(() => { document.documentElement.dataset.accessibilityReduceMotion = "true"; });
   await expect(glint).toHaveCSS("display", "none");
