@@ -564,7 +564,7 @@ for (const route of ["/projects/journey-with-jesus/", "/media/", "/characters/",
 }
 
 for (const width of [1280, 375]) {
-  test(`team footer tracks profile expansion appropriately at ${width}px`, async ({ page }) => {
+  test(`team footer stays in place while profiles toggle at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/team/");
     await expect(page.locator(".team-grid")).toHaveAttribute("aria-busy", "false");
@@ -574,13 +574,7 @@ for (const width of [1280, 375]) {
     for (let index = 0; index < await profiles.count(); index++) {
       const toggle = profiles.nth(index).locator("summary");
       await toggle.click();
-      if (width <= 700) {
-        // Mobile keeps collapsed cards compact and grows the page when a biography opens.
-        expect(await footerTop() - originalTop).toBeGreaterThan(20);
-      } else {
-        // Desktop reserves the full expanded footprint to avoid layout shifts.
-        expect(Math.abs(await footerTop() - originalTop)).toBeLessThan(2);
-      }
+      expect(Math.abs(await footerTop() - originalTop)).toBeLessThan(2);
       await toggle.click();
       expect(Math.abs(await footerTop() - originalTop)).toBeLessThan(2);
     }
@@ -595,6 +589,10 @@ test("mobile team cards show names and language-aware tap prompts when collapsed
   await expect(captions).toHaveCount(2);
   await expect(captions.nth(0)).toContainText("Eric Oberhausen");
   await expect(captions.nth(1)).toContainText("Kenneth Salmon");
+  const portraitBounds = await page.locator(".team-card.team-profile").evaluateAll((elements) =>
+    elements.map((element) => element.getBoundingClientRect().toJSON()),
+  );
+  expect(portraitBounds[1].top - portraitBounds[0].bottom).toBeLessThan(110);
 
   for (const [code, instruction] of [
     ["en", "Tap circle to read more"],
