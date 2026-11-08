@@ -440,3 +440,55 @@
   backdrop-filter: blur(14px) saturate(110%);
 }
 
+
+
+/* Language selector / light theme
+   The shared component defaults to midnight navy for the dark gateway.
+   Explicitly restyle both the trigger AND its menu whenever visitors choose
+   light mode, including the landing gateway and narrow mobile layouts. */
+:root[data-theme="light"] body .site-language-toggle {
+  background:
+    linear-gradient(112deg, rgba(255, 255, 255, .94), rgba(238, 246, 255, .96) 60%, rgba(221, 236, 252, .96)) !important;
+  border-color: rgba(126, 163, 205, .78) !important;
+  box-shadow: inset 0 1px 0 #fff, 0 5px 16px rgba(31, 63, 105, .12) !important;
+  color: #163451 !important;
+  -webkit-text-fill-color: currentColor !important;
+  text-shadow: none !important;
+}
+:root[data-theme="light"] body .site-language-toggle:is(:hover, :focus-visible, [aria-expanded="true"]) {
+  background: linear-gradient(135deg, #fff, #e3f0ff 70%, #d3e6fa) !important;
+  border-color: #6694c7 !important;
+  box-shadow: inset 0 1px 0 #fff, 0 7px 19px rgba(31, 63, 105, .17) !important;
+  color: #102d4a !important;
+}
+:root[data-theme="light"] body .site-language-toggle :is(svg, .site-language-bracket) {
+  color: #8b671f !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+:root[data-theme="light"] body .site-language-options {
+  background: linear-gradient(150deg, #fff 0%, #f3f8ff 52%, #e8f2fe 100%) !important;
+  border-color: rgba(119, 159, 201, .68) !important;
+  box-shadow: inset 0 1px 0 #fff, 0 14px 35px rgba(21, 49, 85, .17) !important;
+  color: #193854 !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+:root[data-theme="light"] body .site-language-option {
+  background: transparent !important;
+  border-color: transparent !important;
+  color: #193854 !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+:root[data-theme="light"] body .site-language-option:is(:hover, :focus-visible, .is-selected) {
+  background: rgba(72, 127, 187, .12) !important;
+  border-color: rgba(100, 150, 200, .43) !important;
+  color: #123252 !important;
+}
+:root[data-theme="light"] body .site-language-option-code {
+  color: #86601b !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+:root[data-theme="light"] body .site-language-error {
+  background: #f4f9ff !important;
+  border-color: rgba(119, 159, 201, .65) !important;
+  color: #193854 !important;
+}
