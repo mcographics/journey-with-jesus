@@ -21,10 +21,10 @@ const translations: Array<[string, string, string]> = [
   ["Community Guidelines", "Règles de la communauté", "Normas de la comunidad"],
   ["Cookies", "Cookies", "Cookies"],
   ["Copyright", "Droits d’auteur", "Derechos de autor"],
-  ["English", "English", "English"],
+  ["English", "Anglais", "Inglés"],
   ["French", "Français", "Francés"],
   ["Spanish", "Español", "Español"],
-  ["Website language: English", "Langue du site : English", "Idioma del sitio: English"],
+  ["Website language: English", "Langue du site : anglais", "Idioma del sitio: inglés"],
   ["Website language: French", "Langue du site : français", "Idioma del sitio: francés"],
   ["Website language: Spanish", "Langue du site : espagnol", "Idioma del sitio: español"],
   ["Choose website language", "Choisir la langue du site", "Elegir el idioma del sitio"],
@@ -542,7 +542,126 @@ const dictionaries: Record<Exclude<SiteLocale, "en">, Record<string, string>> = 
   es: Object.fromEntries(translations.map(([english, , spanish]) => [english, spanish])),
 };
 
+const bibleBookNames: Array<[string, string, string]> = [
+  ["Genesis", "Genèse", "Génesis"], ["Exodus", "Exode", "Éxodo"], ["Leviticus", "Lévitique", "Levítico"],
+  ["Numbers", "Nombres", "Números"], ["Deuteronomy", "Deutéronome", "Deuteronomio"], ["Joshua", "Josué", "Josué"],
+  ["Judges", "Juges", "Jueces"], ["Ruth", "Ruth", "Rut"], ["1 Samuel", "1 Samuel", "1 Samuel"],
+  ["2 Samuel", "2 Samuel", "2 Samuel"], ["1 Kings", "1 Rois", "1 Reyes"], ["2 Kings", "2 Rois", "2 Reyes"],
+  ["1 Chronicles", "1 Chroniques", "1 Crónicas"], ["2 Chronicles", "2 Chroniques", "2 Crónicas"], ["Ezra", "Esdras", "Esdras"],
+  ["Nehemiah", "Néhémie", "Nehemías"], ["Esther", "Esther", "Ester"], ["Job", "Job", "Job"],
+  ["Psalms", "Psaumes", "Salmos"], ["Proverbs", "Proverbes", "Proverbios"], ["Ecclesiastes", "Ecclésiaste", "Eclesiastés"],
+  ["Song of Solomon", "Cantique des cantiques", "Cantar de los Cantares"], ["Isaiah", "Ésaïe", "Isaías"],
+  ["Jeremiah", "Jérémie", "Jeremías"], ["Lamentations", "Lamentations", "Lamentaciones"], ["Ezekiel", "Ézéchiel", "Ezequiel"],
+  ["Daniel", "Daniel", "Daniel"], ["Hosea", "Osée", "Oseas"], ["Joel", "Joël", "Joel"], ["Amos", "Amos", "Amós"],
+  ["Obadiah", "Abdias", "Abdías"], ["Jonah", "Jonas", "Jonás"], ["Micah", "Michée", "Miqueas"],
+  ["Nahum", "Nahum", "Nahúm"], ["Habakkuk", "Habacuc", "Habacuc"], ["Zephaniah", "Sophonie", "Sofonías"],
+  ["Haggai", "Aggée", "Hageo"], ["Zechariah", "Zacharie", "Zacarías"], ["Malachi", "Malachie", "Malaquías"],
+  ["Matthew", "Matthieu", "Mateo"], ["Mark", "Marc", "Marcos"], ["Luke", "Luc", "Lucas"], ["John", "Jean", "Juan"],
+  ["Acts", "Actes", "Hechos"], ["Romans", "Romains", "Romanos"], ["1 Corinthians", "1 Corinthiens", "1 Corintios"],
+  ["2 Corinthians", "2 Corinthiens", "2 Corintios"], ["Galatians", "Galates", "Gálatas"], ["Ephesians", "Éphésiens", "Efesios"],
+  ["Philippians", "Philippiens", "Filipenses"], ["Colossians", "Colossiens", "Colosenses"],
+  ["1 Thessalonians", "1 Thessaloniciens", "1 Tesalonicenses"], ["2 Thessalonians", "2 Thessaloniciens", "2 Tesalonicenses"],
+  ["1 Timothy", "1 Timothée", "1 Timoteo"], ["2 Timothy", "2 Timothée", "2 Timoteo"], ["Titus", "Tite", "Tito"],
+  ["Philemon", "Philémon", "Filemón"], ["Hebrews", "Hébreux", "Hebreos"], ["James", "Jacques", "Santiago"],
+  ["1 Peter", "1 Pierre", "1 Pedro"], ["2 Peter", "2 Pierre", "2 Pedro"], ["1 John", "1 Jean", "1 Juan"],
+  ["2 John", "2 Jean", "2 Juan"], ["3 John", "3 Jean", "3 Juan"], ["Jude", "Jude", "Judas"],
+  ["Revelation", "Apocalypse", "Apocalipsis"],
+];
+const bookNameAliases: Record<string, number> = {};
+bibleBookNames.forEach((names, index) => {
+  names.forEach((name) => {
+    const normalized = name.normalize("NFD").replace(/[\\u0300-\\u036f]/g, "").toLocaleLowerCase().replace(/[^a-z0-9]/g, "");
+    bookNameAliases[normalized] = index;
+  });
+});
+for (const [index, aliases] of [
+  [21, ["Song of Songs", "Cantique des Cantiques", "Cantares"]],
+  [38, ["Apocalypse de Jean", "Revelación"]],
+] as Array<[number, string[]]>) {
+  aliases.forEach((name) => {
+    const normalized = name.normalize("NFD").replace(/[\\u0300-\\u036f]/g, "").toLocaleLowerCase().replace(/[^a-z0-9]/g, "");
+    bookNameAliases[normalized] = index;
+  });
+}
+function localizedBibleBookName(value: string, locale: SiteLocale): string | undefined {
+  const normalized = value.normalize("NFD").replace(/[\\u0300-\\u036f]/g, "").toLocaleLowerCase().replace(/[^a-z0-9]/g, "");
+  const index = bookNameAliases[normalized];
+  if (index === undefined) return undefined;
+  return bibleBookNames[index][locale === "en" ? 0 : locale === "fr" ? 1 : 2];
+}
+
+function translateBibleReaderMessage(value: string, locale: SiteLocale): string | undefined {
+  const normalized = value.trim();
+  const noMatches = normalized.match(/^No matches found for “([\\s\\S]*)”\\.$/);
+  if (noMatches) {
+    return locale === "fr"
+      ? `Aucun résultat trouvé pour « ${noMatches[1]} ».`
+      : locale === "es"
+        ? `No se encontraron coincidencias para «${noMatches[1]}».`
+        : normalized;
+  }
+  const showing = normalized.match(/^Showing the first (\\d+) of (\\d+) matches\\.$/);
+  if (showing) {
+    return locale === "fr"
+      ? `Affichage des ${showing[1]} premiers résultats sur ${showing[2]}.`
+      : locale === "es"
+        ? `Se muestran los primeros ${showing[1]} de ${showing[2]} resultados.`
+        : normalized;
+  }
+  const found = normalized.match(/^(\\d+) match(es)? found\\.$/);
+  if (found) {
+    const count = Number(found[1]);
+    return locale === "fr"
+      ? `${count} résultat${count > 1 ? "s" : ""} trouvé${count > 1 ? "s" : ""}.`
+      : locale === "es"
+        ? `${count} coincidencia${count === 1 ? "" : "s"} encontrada${count === 1 ? "" : "s"}.`
+        : normalized;
+  }
+  const chapterLabel = normalized.match(/^(.+) chapter (\\d+)$/i);
+  if (chapterLabel) {
+    const book = localizedBibleBookName(chapterLabel[1], locale) ?? chapterLabel[1];
+    return locale === "fr" ? `Chapitre ${chapterLabel[2]} de ${book}`
+      : locale === "es" ? `Capítulo ${chapterLabel[2]} de ${book}`
+        : `${book} chapter ${chapterLabel[2]}`;
+  }
+  const openReference = normalized.match(/^Open (.+)$/);
+  if (openReference) {
+    const reference = openReference[1].match(/^(.+) (\\d+):(\\d+)$/);
+    const localizedReference = reference
+      ? `${localizedBibleBookName(reference[1], locale) ?? reference[1]} ${reference[2]}:${reference[3]}`
+      : openReference[1];
+    return locale === "fr" ? `Ouvrir ${localizedReference}`
+      : locale === "es" ? `Abrir ${localizedReference}`
+        : `Open ${localizedReference}`;
+  }
+  const reference = normalized.match(/^(.+) (\\d+):(\\d+)$/);
+  if (reference) {
+    const book = localizedBibleBookName(reference[1], locale);
+    if (book) return `${book} ${reference[2]}:${reference[3]}`;
+  }
+  const chapter = normalized.match(/^(.+) (\\d+)$/);
+  if (chapter) {
+    const book = localizedBibleBookName(chapter[1], locale);
+    if (book) return `${book} ${chapter[2]}`;
+  }
+  const verseCount = normalized.match(/^(\\d+) verses?$/);
+  if (verseCount) {
+    const count = Number(verseCount[1]);
+    return locale === "fr" ? `${count} verset${count > 1 ? "s" : ""}`
+      : locale === "es" ? `${count} versículo${count > 1 ? "s" : ""}`
+        : normalized;
+  }
+  return undefined;
+}
+
 export function translateSiteText(text: string, locale: SiteLocale): string {
+  const normalized = text.trim();
+  if (locale !== "en") {
+    const dynamicMessage = translateBibleReaderMessage(normalized, locale);
+    if (dynamicMessage) return dynamicMessage;
+  }
+  const bookName = localizedBibleBookName(normalized, locale);
+  if (bookName) return bookName;
   if (locale === "en") return text;
-  return dictionaries[locale][text.trim()] ?? text;
+  return dictionaries[locale][normalized] ?? text;
 }
