@@ -1,8 +1,8 @@
 import type { Episode, MediaPlaylist } from "@/data/episodes";
-import type { VideoQuality } from "@/lib/database.types";
+import type { MediaAudioLanguage, VideoQuality } from "@/lib/database.types";
 import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
 
-type EpisodeRow = { id: string; title: string; description: string; scripture_reference: string | null; thumbnail_url: string | null; youtube_id: string | null; transcript_text: string | null; asl_interpretation_url: string | null; duration_seconds: number | null; episode_number: number; orientation: "landscape" | "portrait" };
+type EpisodeRow = { id: string; title: string; description: string; scripture_reference: string | null; thumbnail_url: string | null; youtube_id: string | null; audio_language: MediaAudioLanguage; transcript_text: string | null; asl_interpretation_url: string | null; duration_seconds: number | null; episode_number: number; orientation: "landscape" | "portrait" };
 type SourceRow = { episode_id: string; quality: VideoQuality; storage_path: string };
 type CaptionRow = { id: string; episode_id: string; language: string; label: string; kind: "captions" | "subtitles"; storage_path: string; is_default: boolean };
 type PlaylistRow = { id: string; title: string; description: string; sort_order: number };
@@ -13,7 +13,7 @@ export async function loadPublishedMediaCatalog(): Promise<PublishedMediaCatalog
   const client = createBrowserSupabaseClient();
   if (!client) return { episodes: [], playlists: [] };
   const [episodeResult, playlistResult] = await Promise.all([
-    client.from("media_episodes").select("id, title, description, scripture_reference, thumbnail_url, youtube_id, transcript_text, asl_interpretation_url, duration_seconds, episode_number, orientation").eq("published", true).order("episode_number"),
+    client.from("media_episodes").select("id, title, description, scripture_reference, thumbnail_url, youtube_id, audio_language, transcript_text, asl_interpretation_url, duration_seconds, episode_number, orientation").eq("published", true).order("episode_number"),
     client.from("media_playlists").select("id, title, description, sort_order").eq("published", true).order("sort_order"),
   ]);
   if (episodeResult.error) throw episodeResult.error;
@@ -52,7 +52,7 @@ export async function loadPublishedMediaCatalog(): Promise<PublishedMediaCatalog
     id: row.id, title: row.title, description: row.description,
     scriptureReference: row.scripture_reference ?? undefined, thumbnail: row.thumbnail_url ?? undefined,
     duration: formatDuration(row.duration_seconds), episodeNumber: row.episode_number,
-    orientation: row.orientation, youtubeId: row.youtube_id ?? undefined, videoSources: byEpisode.get(row.id) ?? [],
+    orientation: row.orientation, youtubeId: row.youtube_id ?? undefined, audioLanguage: row.audio_language, videoSources: byEpisode.get(row.id) ?? [],
     captions: (captionsByEpisode.get(row.id) ?? []).sort((a, b) => Number(b.isDefault) - Number(a.isDefault)),
     transcript: row.transcript_text ?? undefined, aslInterpretationUrl: row.asl_interpretation_url ?? undefined, published: true,
   }));
