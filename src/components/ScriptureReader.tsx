@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, type CSSProperties, type FormEvent, type ReactNode } from "react";
 import { BookOpen, Check, ChevronDown, ChevronLeft, ChevronRight, Minus, Plus, Search } from "lucide-react";
+import { registerBibleBookNameAliases } from "@/data/site-translations";
 
 type BibleBook = {
   name: string;
@@ -146,7 +147,10 @@ export function ScriptureReader({ scriptureBaseUrl }: { scriptureBaseUrl: string
         ) {
           throw new Error("The Bible text file is incomplete.");
         }
-        if (!cancelled) setBible(data);
+        if (!cancelled) {
+          registerBibleBookNameAliases(data.books.map((book) => book.name));
+          setBible(data);
+        }
       })
       .catch((error: unknown) => {
         if (cancelled) return;
