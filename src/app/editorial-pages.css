@@ -222,6 +222,7 @@
   gap: 28px;
 }
 .team-profile { width: 100%; }
+.team-profile-mobile-caption { display: none; }
 @media (max-width: 700px) {
   .team-grid:has(.team-profile) { grid-template-columns: minmax(0, 360px); gap: 20px; }
 
@@ -248,11 +249,6 @@
     font-size: 12px;
     line-height: 1.5;
   }
-}
-
-.team-profile-mobile-caption { display: none; }
-@media (max-width: 700px) {
-  .team-profile-slot:has(> .team-profile:not([open])) > .team-profile-mobile-caption { display: grid; }
 }
 
 :root body .team-card.team-profile:not([open]) {
