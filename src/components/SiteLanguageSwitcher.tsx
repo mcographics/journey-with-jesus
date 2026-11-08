@@ -92,6 +92,7 @@ export function SiteLanguageSwitcher() {
   const menuRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [languageCode, setLanguageCode] = useState<SiteLocale>("en");
+  const [languageReady, setLanguageReady] = useState(false);
 
   useEffect(() => {
     const frame = window.requestAnimationFrame(() => {
@@ -100,19 +101,22 @@ export function SiteLanguageSwitcher() {
         if (saved === "fr" || saved === "es") setLanguageCode(saved);
       } catch {
         // The switcher still works for this visit if browser storage is unavailable.
+      } finally {
+        setLanguageReady(true);
       }
     });
     return () => window.cancelAnimationFrame(frame);
   }, []);
 
   useEffect(() => {
+    if (!languageReady) return;
     applySiteLanguage(languageCode);
     try {
       window.localStorage.setItem("kerygmapath-language", languageCode);
     } catch {
       // Keep the selected language active for this page view.
     }
-  }, [languageCode, pathname]);
+  }, [languageCode, languageReady, pathname]);
 
   useEffect(() => {
     const observer = new MutationObserver((records) => {
