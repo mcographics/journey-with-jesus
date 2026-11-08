@@ -1,5 +1,21 @@
 import { expect, test } from "@playwright/test";
 
+for (const language of [
+  { name: "French", option: "Français [FR]", code: "fr" },
+  { name: "Spanish", option: "Español [ES]", code: "es" },
+]) {
+  test(`${language.name} selection switches the landing and footer logos`, async ({ page }) => {
+    await page.goto("/");
+    await page.locator(".site-language-toggle").click();
+    await page.getByRole("option", { name: language.option }).click();
+
+    const expectedLogo = `kerygma-path-gateway-logo-${language.code}-840.webp`;
+    await expect(page.locator("html")).toHaveAttribute("lang", language.code);
+    await expect(page.locator(".kerygma-gateway-logo")).toHaveAttribute("src", new RegExp(expectedLogo));
+    await expect(page.locator(".kerygma-footer-logo")).toHaveAttribute("src", new RegExp(expectedLogo));
+  });
+}
+
 test("public destinations are available in the desktop menu, with working story CTA", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByRole("heading", { level: 1 })).toContainText("Kerygma Path");

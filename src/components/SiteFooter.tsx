@@ -1,8 +1,6 @@
 import Link from "next/link";
-import ResponsivePicture from "@/components/ResponsivePicture";
+import { LanguageAwareLogo } from "@/components/LanguageAwareLogo";
 import SocialLinks from "@/components/SocialLinks";
-
-const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
 export function SiteFooter() {
   return (
@@ -10,18 +8,13 @@ export function SiteFooter() {
       <div className="footer-inner">
         <div className="footer-brand-stack">
         <Link aria-label="Kerygma Path home" className="footer-brand kerygma-footer-brand" href="/">
-          <ResponsivePicture
+          <LanguageAwareLogo
             alt=""
             className="kerygma-footer-logo"
             height={724}
-            fallbackSrc={`${basePath}/images/kerygma-path-gateway-logo-complete-840.webp`}
             loading="lazy"
             pictureClassName="kerygma-footer-logo-picture"
             sizes="(max-width: 700px) 260px, 340px"
-            webpSources={[480, 840].map((width) => ({
-              src: `${basePath}/images/kerygma-path-gateway-logo-complete-${width}.webp`,
-              width,
-            }))}
             width={2172}
           />
         </Link>
