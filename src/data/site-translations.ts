@@ -747,9 +747,12 @@ const bibleBookNames: Array<[string, string, string]> = [
   ["Revelation", "Apocalypse", "Apocalipsis"],
 ];
 const bookNameAliases: Record<string, number> = {};
+function normalizeBibleBookName(value: string) {
+  return value.normalize("NFD").replace(/\\p{M}/gu, "").toLocaleLowerCase().replace(/[^\\p{L}\\p{N}]/gu, "");
+}
 bibleBookNames.forEach((names, index) => {
   names.forEach((name) => {
-    const normalized = name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase().replace(/[^a-z0-9]/g, "");
+    const normalized = normalizeBibleBookName(name);
     bookNameAliases[normalized] = index;
   });
 });
@@ -763,7 +766,7 @@ for (const [index, aliases] of [
   });
 }
 function localizedBibleBookName(value: string, locale: SiteLocale): string | undefined {
-  const normalized = value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase().replace(/[^a-z0-9]/g, "");
+  const normalized = normalizeBibleBookName(value);
   const index = bookNameAliases[normalized];
   if (index === undefined) return undefined;
   return bibleBookNames[index][locale === "en" ? 0 : locale === "fr" ? 1 : 2];
@@ -866,6 +869,14 @@ function translateBibleReaderMessage(value: string, locale: SiteLocale): string 
         : normalized;
   }
   return undefined;
+}
+
+export function registerBibleBookNameAliases(names: string[]) {
+  if (names.length !== bibleBookNames.length) return;
+  names.forEach((name, index) => {
+    const normalized = normalizeBibleBookName(name);
+    if (normalized) bookNameAliases[normalized] = index;
+  });
 }
 
 export function translateSiteText(text: string, locale: SiteLocale): string {
