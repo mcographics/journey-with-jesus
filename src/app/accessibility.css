@@ -224,6 +224,6 @@ body { zoom: var(--accessibility-text-scale); }
     width: min(340px, calc(100vw - 24px));
     max-height: calc(100dvh - 72px - env(safe-area-inset-top, 0px));
   }
-  :root[data-accessibility-text-size="large"] .accessibility-settings-panel { width: min(361px, calc(100vw - 24px)); }
-  :root[data-accessibility-text-size="largest"] .accessibility-settings-panel { width: min(336px, calc(100vw - 24px)); }
+  :root[data-accessibility-text-size="large"] .accessibility-settings-panel { width: min(361px, calc(92.5926vw - 12px)); }
+  :root[data-accessibility-text-size="largest"] .accessibility-settings-panel { width: min(336px, calc(86.2069vw - 12px)); }
 }
