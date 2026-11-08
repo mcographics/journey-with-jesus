@@ -82,7 +82,7 @@ const translationLanguages = [
 ];
 
 function ScriptureText({ text, segments }: { text: string; segments: Array<[number, number]> }) {
-  if (!segments.length) return text;
+  if (!segments.length) return <span translate="no">{text}</span>;
 
   const parts: ReactNode[] = [];
   let cursor = 0;
@@ -99,7 +99,7 @@ function ScriptureText({ text, segments }: { text: string; segments: Array<[numb
     cursor = end;
   });
   if (cursor < text.length) parts.push(text.slice(cursor));
-  return <>{parts}</>;
+  return <span translate="no">{parts}</span>;
 }
 
 export function ScriptureReader({ scriptureBaseUrl }: { scriptureBaseUrl: string }) {
