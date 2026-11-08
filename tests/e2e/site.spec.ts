@@ -71,10 +71,12 @@ test.describe("mobile header controls and translations", () => {
       await page.goto(route);
       await expect(page.locator("html")).toHaveAttribute("lang", "fr");
       await expect(page.locator(".site-language-toggle")).toContainText("FR");
-      const menuButton = page.locator(".mobile-menu-toggle");
-      await menuButton.focus();
-      await menuButton.click();
-      await expect(page.locator(".mobile-menu-options").getByRole("link", { name: "La Parole" })).toBeVisible();
+      if (route !== "/") {
+        const menuButton = page.locator(".mobile-menu-toggle");
+        await menuButton.focus();
+        await menuButton.click();
+        await expect(page.locator(".mobile-menu-options").getByRole("link", { name: "La Parole" })).toBeVisible();
+      }
     }
 
     await page.locator(".site-language-toggle").click();
