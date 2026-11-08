@@ -570,7 +570,7 @@ const bibleBookNames: Array<[string, string, string]> = [
 const bookNameAliases: Record<string, number> = {};
 bibleBookNames.forEach((names, index) => {
   names.forEach((name) => {
-    const normalized = name.normalize("NFD").replace(/[\\u0300-\\u036f]/g, "").toLocaleLowerCase().replace(/[^a-z0-9]/g, "");
+    const normalized = name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase().replace(/[^a-z0-9]/g, "");
     bookNameAliases[normalized] = index;
   });
 });
@@ -579,12 +579,12 @@ for (const [index, aliases] of [
   [65, ["Apocalypse de Jean", "Revelación"]],
 ] as Array<[number, string[]]>) {
   aliases.forEach((name) => {
-    const normalized = name.normalize("NFD").replace(/[\\u0300-\\u036f]/g, "").toLocaleLowerCase().replace(/[^a-z0-9]/g, "");
+    const normalized = name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase().replace(/[^a-z0-9]/g, "");
     bookNameAliases[normalized] = index;
   });
 }
 function localizedBibleBookName(value: string, locale: SiteLocale): string | undefined {
-  const normalized = value.normalize("NFD").replace(/[\\u0300-\\u036f]/g, "").toLocaleLowerCase().replace(/[^a-z0-9]/g, "");
+  const normalized = value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase().replace(/[^a-z0-9]/g, "");
   const index = bookNameAliases[normalized];
   if (index === undefined) return undefined;
   return bibleBookNames[index][locale === "en" ? 0 : locale === "fr" ? 1 : 2];
@@ -592,7 +592,7 @@ function localizedBibleBookName(value: string, locale: SiteLocale): string | und
 
 function translateBibleReaderMessage(value: string, locale: SiteLocale): string | undefined {
   const normalized = value.trim();
-  const noMatches = normalized.match(/^No matches found for “([\\s\\S]*)”\\.$/);
+  const noMatches = normalized.match(/^No matches found for “([\s\S]*)”\.$/);
   if (noMatches) {
     return locale === "fr"
       ? `Aucun résultat trouvé pour « ${noMatches[1]} ».`
@@ -600,7 +600,7 @@ function translateBibleReaderMessage(value: string, locale: SiteLocale): string 
         ? `No se encontraron coincidencias para «${noMatches[1]}».`
         : normalized;
   }
-  const showing = normalized.match(/^Showing the first (\\d+) of (\\d+) matches\\.$/);
+  const showing = normalized.match(/^Showing the first (\d+) of (\d+) matches\.$/);
   if (showing) {
     return locale === "fr"
       ? `Affichage des ${showing[1]} premiers résultats sur ${showing[2]}.`
@@ -608,7 +608,7 @@ function translateBibleReaderMessage(value: string, locale: SiteLocale): string 
         ? `Se muestran los primeros ${showing[1]} de ${showing[2]} resultados.`
         : normalized;
   }
-  const found = normalized.match(/^(\\d+) match(es)? found\\.$/);
+  const found = normalized.match(/^(\d+) match(es)? found\.$/);
   if (found) {
     const count = Number(found[1]);
     return locale === "fr"
@@ -617,7 +617,7 @@ function translateBibleReaderMessage(value: string, locale: SiteLocale): string 
         ? `${count} coincidencia${count === 1 ? "" : "s"} encontrada${count === 1 ? "" : "s"}.`
         : normalized;
   }
-  const chapterLabel = normalized.match(/^(.+) chapter (\\d+)$/i);
+  const chapterLabel = normalized.match(/^(.+) chapter (\d+)$/i);
   if (chapterLabel) {
     const book = localizedBibleBookName(chapterLabel[1], locale) ?? chapterLabel[1];
     return locale === "fr" ? `Chapitre ${chapterLabel[2]} de ${book}`
@@ -626,7 +626,7 @@ function translateBibleReaderMessage(value: string, locale: SiteLocale): string 
   }
   const openReference = normalized.match(/^Open (.+)$/);
   if (openReference) {
-    const reference = openReference[1].match(/^(.+) (\\d+):(\\d+)$/);
+    const reference = openReference[1].match(/^(.+) (\d+):(\d+)$/);
     const localizedReference = reference
       ? `${localizedBibleBookName(reference[1], locale) ?? reference[1]} ${reference[2]}:${reference[3]}`
       : openReference[1];
@@ -634,17 +634,17 @@ function translateBibleReaderMessage(value: string, locale: SiteLocale): string 
       : locale === "es" ? `Abrir ${localizedReference}`
         : `Open ${localizedReference}`;
   }
-  const reference = normalized.match(/^(.+) (\\d+):(\\d+)$/);
+  const reference = normalized.match(/^(.+) (\d+):(\d+)$/);
   if (reference) {
     const book = localizedBibleBookName(reference[1], locale);
     if (book) return `${book} ${reference[2]}:${reference[3]}`;
   }
-  const chapter = normalized.match(/^(.+) (\\d+)$/);
+  const chapter = normalized.match(/^(.+) (\d+)$/);
   if (chapter) {
     const book = localizedBibleBookName(chapter[1], locale);
     if (book) return `${book} ${chapter[2]}`;
   }
-  const verseCount = normalized.match(/^(\\d+) verses?$/);
+  const verseCount = normalized.match(/^(\d+) verses?$/);
   if (verseCount) {
     const count = Number(verseCount[1]);
     return locale === "fr" ? `${count} verset${count > 1 ? "s" : ""}`
