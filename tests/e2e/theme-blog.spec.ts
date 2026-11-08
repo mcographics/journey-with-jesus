@@ -16,9 +16,9 @@ test("blog dark mode uses white headings and solid navy surfaces", async ({ page
     await expect(heading).toHaveCSS("background-image", "none");
   }
 
-  await expect(page.locator(".blog-page")).toHaveCSS("background-color", "rgb(13, 35, 66)");
+  await expect(page.locator(".blog-page")).toHaveCSS("background-color", "rgb(7, 26, 61)");
   await expect(page.locator(".blog-page")).toHaveCSS("background-image", "none");
-  await expect(page.locator(".blog-welcome").first()).toHaveCSS("background-color", "rgb(24, 54, 86)");
+  await expect(page.locator(".blog-welcome").first()).toHaveCSS("background-color", "rgb(17, 47, 92)");
   await expect(page.locator(".blog-topic-card").first()).toHaveCSS("background-image", "none");
 });
 
@@ -59,4 +59,33 @@ test("dark mode avoids gradient washes across navigation and key site pages", as
       await expect(themeControl).toHaveCSS("background-image", "none");
     }
   }
+});
+
+test("media page restores its original photograph in dark and light modes", async ({ page }) => {
+  for (const mode of ["dark", "light"] as const) {
+    await page.goto("/media/");
+    await page.evaluate((value) => {
+      window.localStorage.setItem("journey-with-jesus-theme-mode", value);
+    }, mode);
+    await page.reload();
+
+    const media = page.locator(".media-page");
+    const backgroundImage = await media.evaluate((node) => getComputedStyle(node).backgroundImage);
+    expect(backgroundImage, `photo missing in ${mode} mode`).toContain("media-page-background.webp");
+    expect(backgroundImage, `image scrim in ${mode} mode`).not.toContain("gradient(");
+    await expect(media).toHaveCSS("background-blend-mode", "normal");
+
+    const stage = page.locator(".media-stage");
+    await expect(stage).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
+    await expect(stage).toHaveCSS("background-image", "none");
+  }
+});
+
+test("dark theme shades artwork neutrally without a blue cast", async ({ page }) => {
+  await page.addInitScript(() => {
+    window.localStorage.setItem("journey-with-jesus-theme-mode", "dark");
+  });
+  await page.goto("/company/");
+  await expect(page.locator(".kerygma-company-hero-shade"))
+    .toHaveCSS("background-color", "rgba(0, 0, 0, 0.2)");
 });
