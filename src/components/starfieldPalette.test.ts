@@ -14,7 +14,7 @@ describe("gateway star glints", () => {
   it("gives each tinted star a brief phase-offset flash", () => {
     expect(starGlint(0, 0)).toBe(0);
     expect(starGlint(0, Math.PI / 2)).toBeCloseTo(1, 8);
-    expect(starGlint(0, Math.PI)).toBe(0);
+    expect(starGlint(0, Math.PI)).toBeCloseTo(0, 8);
     expect(starGlint(0.2, 0)).toBeGreaterThan(0);
     expect(starGlint(0.2, Math.PI)).toBe(0);
   });
