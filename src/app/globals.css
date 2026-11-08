@@ -1557,3 +1557,91 @@ body, .home-hero, .mission-section, .site-footer, .media-page {
     transition-duration: .01ms;
   }
 }
+
+
+/* Compact, consistent header controls on desktop and mobile. */
+.site-language-toggle,
+.desktop-menu-toggle,
+.accessibility-settings-trigger,
+.theme-toggle,
+.mobile-menu-toggle {
+  min-height: 42px;
+  border-radius: 10px;
+}
+.desktop-menu-toggle { padding-inline: 12px; gap: 7px; }
+.desktop-menu-toggle::before { border-radius: 6px; }
+.mobile-menu-toggle { width: 42px; min-width: 42px; height: 42px; }
+.mobile-menu-toggle::before { border-radius: 6px; }
+.theme-toggle { width: 42px; height: 42px; }
+.site-language-toggle { min-height: 42px; }
+
+@media (max-width: 768px) {
+  .header-inner {
+    position: relative;
+    width: 100%;
+    margin: 0;
+    gap: 7px;
+    padding: calc(8px + env(safe-area-inset-top, 0px)) calc(12px + env(safe-area-inset-right, 0px)) 0 12px;
+  }
+  .site-language-toggle {
+    width: 54px;
+    min-width: 54px;
+    min-height: 42px;
+    gap: 2px;
+    padding-inline: 5px;
+    border-radius: 10px;
+  }
+  .site-language-bracket { display: none; }
+  .accessibility-settings-anchor {
+    position: relative;
+    flex: 0 0 42px;
+    width: 42px;
+    height: 42px;
+  }
+  .accessibility-settings-trigger {
+    position: relative;
+    inset: auto;
+    width: 42px;
+    height: 42px;
+    min-height: 42px;
+    padding: 0;
+    border-radius: 10px;
+  }
+  .theme-toggle { flex: 0 0 42px; width: 42px; height: 42px; }
+  .mobile-navigation {
+    position: relative;
+    inset: auto;
+    z-index: 40;
+    display: flex;
+    flex: 0 0 42px;
+    width: 42px;
+    height: 42px;
+    flex-direction: row;
+    align-items: center;
+    gap: 0;
+    opacity: 1;
+    pointer-events: auto;
+    transform: none;
+    transition: none;
+  }
+  .mobile-navigation.is-autohidden { opacity: 1; pointer-events: auto; }
+  .mobile-navigation:focus-within { opacity: 1; pointer-events: auto; }
+  .mobile-menu-toggle { width: 42px; min-width: 42px; height: 42px; min-height: 42px; }
+  .mobile-menu-options {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    left: auto;
+    width: max-content;
+    max-width: min(280px, calc(100vw - 24px));
+    transform: none;
+  }
+  .site-language-options,
+  .site-language-error {
+    position: fixed;
+    top: calc(58px + env(safe-area-inset-top, 0px));
+    right: calc(12px + env(safe-area-inset-right, 0px));
+    left: auto;
+    width: min(260px, calc(100vw - 24px));
+  }
+}
