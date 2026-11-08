@@ -93,12 +93,15 @@ export function SiteLanguageSwitcher() {
   const [languageCode, setLanguageCode] = useState<SiteLocale>("en");
 
   useEffect(() => {
-    try {
-      const saved = window.localStorage.getItem("kerygmapath-language");
-      if (saved === "fr" || saved === "es") setLanguageCode(saved);
-    } catch {
-      // The switcher still works for this visit if browser storage is unavailable.
-    }
+    const frame = window.requestAnimationFrame(() => {
+      try {
+        const saved = window.localStorage.getItem("kerygmapath-language");
+        if (saved === "fr" || saved === "es") setLanguageCode(saved);
+      } catch {
+        // The switcher still works for this visit if browser storage is unavailable.
+      }
+    });
+    return () => window.cancelAnimationFrame(frame);
   }, []);
 
   useEffect(() => {
