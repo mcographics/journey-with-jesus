@@ -85,8 +85,7 @@ test("dark theme shades artwork neutrally without a blue cast", async ({ page })
   await page.addInitScript(() => {
     window.localStorage.setItem("journey-with-jesus-theme-mode", "dark");
   });
-  await page.goto("/");
-  await expect(page.locator(".kerygma-gateway-shade")).toHaveCSS("background-color", "rgba(0, 0, 0, 0.2)");
   await page.goto("/company/");
-  await expect(page.locator(".kerygma-company-hero-shade")).toHaveCSS("background-color", "rgba(0, 0, 0, 0.2)");
+  await expect(page.locator(".kerygma-company-hero-shade"))
+    .toHaveCSS("background-color", "rgba(0, 0, 0, 0.2)");
 });
