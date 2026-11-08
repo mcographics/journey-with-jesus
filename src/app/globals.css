@@ -1528,18 +1528,25 @@ body, .home-hero, .mission-section, .site-footer, .media-page {
 
 @media (max-width: 768px) {
   .site-language-toggle {
-    min-width: 48px;
-    min-height: 48px;
-    padding-inline: 7px;
-    border-radius: 50%;
+    width: 54px;
+    min-width: 54px;
+    min-height: 44px;
+    padding-inline: 5px;
+    border-radius: 22px;
     font-size: 12px;
+  }
+
+  .site-language-bracket {
+    display: none;
   }
 
   .site-language-options,
   .site-language-error {
+    position: fixed;
+    top: calc(64px + env(safe-area-inset-top, 0px));
     left: auto;
-    right: 0;
-    width: min(310px, calc(100vw - 24px));
+    right: calc(12px + env(safe-area-inset-right, 0px));
+    width: min(260px, calc(100vw - 24px));
   }
 }
 
