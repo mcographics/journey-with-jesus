@@ -43,7 +43,7 @@ const getNextThemeSwitchDelay = () => {
 const setThemeColor = (theme: ColorTheme) => {
   document.querySelector("meta[name='theme-color']")?.setAttribute(
     "content",
-    theme === "light" ? "#f8f6f0" : "#0B1120",
+    theme === "light" ? "#f8f6f0" : "#08172a",
   );
 };
 
