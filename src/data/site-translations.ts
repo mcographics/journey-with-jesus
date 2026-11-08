@@ -699,6 +699,25 @@ const translations: Array<[string, string, string]> = [
   ["The previous image could not be removed.","L’image précédente n’a pas pu être supprimée.","No se pudo eliminar la imagen anterior."],
   ["Media community · General discussion","Communauté média · discussion générale","Comunidad multimedia · debate general"],
   ["Save story details first to enable uploads.","Enregistrez d’abord les détails du récit pour activer les téléversements.","Guarda primero los detalles de la historia para habilitar las cargas."],
+  ["An Animated Journey Through God's Word","Un voyage animé à travers la Parole de Dieu","Un viaje animado a través de la Palabra de Dios"],
+  ["Bible Stories","Récits bibliques","Historias bíblicas"],
+  ["Conversations with Jesus","Conversations avec Jésus","Conversaciones con Jesús"],
+  ["The Gospel","L’Évangile","El Evangelio"],
+  ["Jesus of Nazareth","Jésus de Nazareth","Jesús de Nazaret"],
+  ["Mary, Mother of Jesus","Marie, mère de Jésus","María, madre de Jesús"],
+  ["Simon Peter","Simon Pierre","Simón Pedro"],
+  ["John the Baptist","Jean-Baptiste","Juan el Bautista"],
+  ["Mary Magdalene","Marie Madeleine","María Magdalena"],
+  ["The Beloved Disciple","Le disciple bien-aimé","El discípulo amado"],
+  ["Matthew 1–28 · Mark 1–16 · Luke 1–24 · John 1–21","Matthieu 1–28 · Marc 1–16 · Luc 1–24 · Jean 1–21","Mateo 1–28 · Marcos 1–16 · Lucas 1–24 · Juan 1–21"],
+  ["Matthew 1–2 · Luke 1–2 · John 2:1–12; 19:25–27 · Acts 1:14","Matthieu 1–2 · Luc 1–2 · Jean 2:1–12; 19:25–27 · Actes 1:14","Mateo 1–2 · Lucas 1–2 · Juan 2:1–12; 19:25–27 · Hechos 1:14"],
+  ["Matthew 4:18–20; 16:13–19 · Luke 22:54–62 · John 21 · Acts 1–12","Matthieu 4:18–20; 16:13–19 · Luc 22:54–62 · Jean 21 · Actes 1–12","Mateo 4:18–20; 16:13–19 · Lucas 22:54–62 · Juan 21 · Hechos 1–12"],
+  ["Matthew 3 · Mark 1:1–11 · Luke 1; 3 · John 1:19–34","Matthieu 3 · Marc 1:1–11 · Luc 1; 3 · Jean 1:19–34","Mateo 3 · Marcos 1:1–11 · Lucas 1; 3 · Juan 1:19–34"],
+  ["Luke 8:1–3 · John 19:25 · John 20:1–18","Luc 8:1–3 · Jean 19:25 · Jean 20:1–18","Lucas 8:1–3 · Juan 19:25 · Juan 20:1–18"],
+  ["John 13:23 · 19:26–27 · 20:2–8 · 21:7, 20–24","Jean 13:23 · 19:26–27 · 20:2–8 · 21:7, 20–24","Juan 13:23 · 19:26–27 · 20:2–8 · 21:7, 20–24"],
+  ["JPEG, PNG, WebP, or AVIF · up to 10 MB","JPEG, PNG, WebP ou AVIF · jusqu’à 10 Mo","JPEG, PNG, WebP o AVIF · hasta 10 MB"],
+  ["Studio did not confirm that the caption file was attached.","Studio n’a pas confirmé que le fichier de sous-titres était joint.","Studio no confirmó que se adjuntara el archivo de subtítulos."],
+  ["Studio did not confirm that the caption track was removed.","Studio n’a pas confirmé la suppression de la piste de sous-titres.","Studio no confirmó que se eliminara la pista de subtítulos."],
 ];
 
 const dictionaries: Record<Exclude<SiteLocale, "en">, Record<string, string>> = {
@@ -752,6 +771,22 @@ function localizedBibleBookName(value: string, locale: SiteLocale): string | und
   const index = bookNameAliases[normalized];
   if (index === undefined) return undefined;
   return bibleBookNames[index][locale === "en" ? 0 : locale === "fr" ? 1 : 2];
+}
+
+function translateDynamicSiteMessage(value: string, locale: SiteLocale): string | undefined {
+  const hidden = value.match(/^"(.+)" is hidden from the public Media page\. Its files and story details are preserved\.$/);
+  if (hidden) return locale === "fr"
+    ? `« ${hidden[1]} » est masqué sur la page Médias publique. Ses fichiers et les détails du récit sont conservés.`
+    : locale === "es"
+      ? `« ${hidden[1]} » está oculto en la página pública de Medios. Se conservan sus archivos y los detalles de la historia.`
+      : value;
+  const restored = value.match(/^"(.+)" is public again\.$/);
+  if (restored) return locale === "fr" ? `« ${restored[1]} » est de nouveau visible au public.`
+    : locale === "es" ? `« ${restored[1]} » vuelve a ser público.` : value;
+  const asl = value.match(/^ASL interpretation video for (.+)$/);
+  if (asl) return locale === "fr" ? `Vidéo d’interprétation en ASL pour ${asl[1]}`
+    : locale === "es" ? `Video de interpretación en ASL para ${asl[1]}` : value;
+  return undefined;
 }
 
 function translateBibleReaderMessage(value: string, locale: SiteLocale): string | undefined {
@@ -820,6 +855,8 @@ function translateBibleReaderMessage(value: string, locale: SiteLocale): string 
 
 export function translateSiteText(text: string, locale: SiteLocale): string {
   const normalized = text.trim();
+  const dynamicSiteMessage = translateDynamicSiteMessage(normalized, locale);
+  if (dynamicSiteMessage) return dynamicSiteMessage;
   const dynamicMessage = translateBibleReaderMessage(normalized, locale);
   if (dynamicMessage) return dynamicMessage;
   const bookName = localizedBibleBookName(normalized, locale);
