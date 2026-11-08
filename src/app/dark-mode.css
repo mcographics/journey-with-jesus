@@ -1,0 +1,176 @@
+/*
+ * Dark mode uses a single, saturated navy palette.
+ * Do not add gradient backgrounds here: the light theme keeps its own
+ * softer treatment, while art assets and the Media page photograph remain.
+ */
+:root:not([data-theme="light"]) {
+  color-scheme: dark;
+  --night: #0d2342;
+  --night-soft: #142e4e;
+  --panel: #183656;
+  --ink: #f7faff;
+  --muted: #c7d5e7;
+  --quiet: #a9bdd5;
+  --line: rgba(153, 192, 233, .24);
+}
+
+:root:not([data-theme="light"]) body {
+  background: var(--night);
+  color: var(--ink);
+}
+
+/* Flat page surfaces: the blues are deliberate, not a gradient or amber wash. */
+:root:not([data-theme="light"]) body :is(
+  .home-hero, .editorial-page, .blog-page, .word-page,
+  .media-stage, .kerygma-gateway, .kerygma-company-hero,
+  .kerygma-principles-section
+) {
+  background: #0d2342 !important;
+}
+
+:root:not([data-theme="light"]) body :is(
+  .site-footer, .kerygma-mission-section, .kerygma-project-section,
+  .storybook-section, .mission-section, .invitation-section
+) {
+  background: #142e4e !important;
+}
+
+:root:not([data-theme="light"]) body .editorial-page.store-page-v2 {
+  background: #0d2342 !important;
+}
+
+/* Solid raised surfaces throughout the public site and the private Studio. */
+:root:not([data-theme="light"]) body :is(
+  .character-card, .team-card, .team-art, .team-art.has-photo,
+  .store-card, .store-preparing, .store-space-card, .store-unavailable-card,
+  .kerygma-principle-card, .video-frame, .episode-art,
+  .storybook-description-panel, .character-portrait-trigger
+) {
+  background: #183656 !important;
+  border-color: rgba(153, 192, 233, .24);
+}
+
+:root:not([data-theme="light"]) body :is(
+  .storybook-seal, .word-tools
+) {
+  background: #1a3b60 !important;
+  border-color: rgba(153, 192, 233, .28);
+}
+
+:root:not([data-theme="light"]) body .word-page {
+  --word-paper: #183656;
+  --word-panel: rgba(24, 54, 86, .92);
+  --word-panel-raised: #1c4269;
+}
+
+/* Keep photo-based pages, but replace directional scrims with solid overlays. */
+:root:not([data-theme="light"]) body .media-page {
+  background-color: #173553;
+  background-image: var(--media-background-image, none) !important;
+  background-position: center top;
+  background-size: 100% auto;
+  background-repeat: no-repeat;
+  background-blend-mode: multiply;
+}
+
+:root:not([data-theme="light"]) body :is(
+  .storybook-shade, .invitation-shade,
+  .kerygma-company-hero-shade, .kerygma-gateway-shade
+) {
+  background: rgba(9, 27, 52, .72) !important;
+}
+
+:root:not([data-theme="light"]) body .store-hero-art::after,
+:root:not([data-theme="light"]) body .episode-art::after {
+  background: rgba(9, 27, 52, .45) !important;
+}
+
+:root:not([data-theme="light"]) body .mission-art::after,
+:root:not([data-theme="light"]) body .storybook-description-panel::before {
+  background: none !important;
+}
+
+:root:not([data-theme="light"]) body .site-footer::before {
+  background: #436f9e !important;
+}
+
+:root:not([data-theme="light"]) body .scroll-cue span {
+  background: #88b7e8 !important;
+}
+
+@media (max-width: 850px) {
+  :root:not([data-theme="light"]) body .media-page {
+    background-size: auto 100vh;
+  }
+}
+
+/* Header and navigation: solid blue controls, not gold-to-black gradients. */
+:root:not([data-theme="light"]) body :is(
+  .nav-link, .mobile-menu-toggle, .mobile-menu-options,
+  .desktop-menu-toggle, .desktop-menu-options, .theme-toggle,
+  .site-language-toggle, .site-language-options,
+  .accessibility-settings-trigger
+) {
+  background: #183b60 !important;
+  background-image: none !important;
+  border-color: rgba(150, 196, 241, .52) !important;
+  color: #f4f8ff !important;
+  text-shadow: none;
+}
+
+:root:not([data-theme="light"]) body :is(
+  .nav-link:hover, .desktop-menu-link:hover, .mobile-menu-link:hover,
+  .site-language-option:hover, .site-language-option:focus-visible,
+  .site-language-option.is-selected
+) {
+  background: #26517d !important;
+  background-image: none !important;
+}
+
+:root:not([data-theme="light"]) body :is(
+  .nav-link.is-current, .desktop-menu-link.is-current,
+  .mobile-menu-link.is-current
+) {
+  background: #2a5a89 !important;
+  background-image: none !important;
+  border-color: #9bc7f3 !important;
+  color: #fff !important;
+  text-shadow: none !important;
+}
+
+:root:not([data-theme="light"]) body :is(
+  .nav-link svg, .mobile-menu-link svg, .desktop-menu-link svg,
+  .mobile-menu-toggle svg, .site-language-option-code
+) {
+  color: #b1d8ff;
+  filter: none;
+}
+
+/* A strong, flat call-to-action blue; no metallic gold gradient in dark mode. */
+:root:not([data-theme="light"]) body :is(
+  .kerygma-button-gold, .button-gold
+) {
+  background: #9bcaf4;
+  background-image: none !important;
+  color: #10253f;
+}
+
+:root:not([data-theme="light"]) body :is(
+  .kerygma-button-gold:hover, .button-gold:hover
+) {
+  background: #c1e0ff;
+  background-image: none !important;
+}
+
+:root:not([data-theme="light"]) body .kerygma-gateway .kerygma-enter-button {
+  background: #9bcaf4 !important;
+  background-image: none !important;
+  border-color: #d4eaff !important;
+  color: #10253f !important;
+  box-shadow: 0 8px 24px rgba(3, 12, 29, .3) !important;
+}
+
+:root:not([data-theme="light"]) body .kerygma-gateway .kerygma-enter-button:hover {
+  background: #c1e0ff !important;
+  background-image: none !important;
+}
