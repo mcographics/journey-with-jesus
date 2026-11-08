@@ -98,6 +98,10 @@ export function TeamDirectory({ fallbackMembers }: Props) {
               {bio && <p>{bio}</p>}
             </div>
           </details>
+          <div className="team-profile-mobile-caption">
+            <p className="team-profile-mobile-name">{member.name}</p>
+            <p className="team-profile-mobile-prompt">Tap circle to read more</p>
+          </div>
           </div>
         );
       })}
