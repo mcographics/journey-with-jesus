@@ -267,3 +267,31 @@ test("mobile language control stays light in light mode and retains dark crystal
   await toggle.click();
   await expect(menu).toHaveCSS("color", "rgb(255, 248, 231)");
 });
+
+for (const { screen, viewport, expectedWidth } of [
+  { screen: "desktop", viewport: { width: 1280, height: 800 }, expectedWidth: 174 },
+  { screen: "mobile", viewport: { width: 375, height: 812 }, expectedWidth: 168 },
+]) {
+  test(`site language dropdown uses compact width and name-to-code spacing on ${screen}`, async ({ page }) => {
+    await page.setViewportSize(viewport);
+    await page.goto("/company/");
+    await page.locator(".site-language-toggle").click();
+    const menu = page.locator(".site-language-options");
+    await expect(menu).toBeVisible();
+    await expect(menu).toHaveCSS("width", `${expectedWidth}px`);
+    const bounds = await menu.boundingBox();
+    expect(bounds).not.toBeNull();
+    expect(bounds!.x).toBeGreaterThanOrEqual(0);
+    expect(bounds!.x + bounds!.width).toBeLessThanOrEqual(viewport.width);
+
+    for (const option of await menu.locator(".site-language-option").all()) {
+      await expect(option).toHaveCSS("justify-content", "flex-start");
+      await expect(option).toHaveCSS("gap", "8px");
+      const name = await option.locator("span").first().boundingBox();
+      const code = await option.locator(".site-language-option-code").boundingBox();
+      expect(name).not.toBeNull();
+      expect(code).not.toBeNull();
+      expect(code!.x - (name!.x + name!.width)).toBeCloseTo(8, 0);
+    }
+  });
+}
