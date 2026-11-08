@@ -576,7 +576,7 @@ bibleBookNames.forEach((names, index) => {
 });
 for (const [index, aliases] of [
   [21, ["Song of Songs", "Cantique des Cantiques", "Cantares"]],
-  [38, ["Apocalypse de Jean", "Revelación"]],
+  [65, ["Apocalypse de Jean", "Revelación"]],
 ] as Array<[number, string[]]>) {
   aliases.forEach((name) => {
     const normalized = name.normalize("NFD").replace(/[\\u0300-\\u036f]/g, "").toLocaleLowerCase().replace(/[^a-z0-9]/g, "");
@@ -656,10 +656,8 @@ function translateBibleReaderMessage(value: string, locale: SiteLocale): string 
 
 export function translateSiteText(text: string, locale: SiteLocale): string {
   const normalized = text.trim();
-  if (locale !== "en") {
-    const dynamicMessage = translateBibleReaderMessage(normalized, locale);
-    if (dynamicMessage) return dynamicMessage;
-  }
+  const dynamicMessage = translateBibleReaderMessage(normalized, locale);
+  if (dynamicMessage) return dynamicMessage;
   const bookName = localizedBibleBookName(normalized, locale);
   if (bookName) return bookName;
   if (locale === "en") return text;
