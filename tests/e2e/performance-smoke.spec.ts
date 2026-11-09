@@ -9,8 +9,8 @@ test("page-to-page navigation keeps working from the public footer", async ({ pa
   for (const href of [
     "/projects/journey-with-jesus/",
     "/media/",
-    "/team/",
     "/company/",
+    "/policies/privacy/",
   ]) {
     await page.locator(`footer .footer-links a[href="${href}"]`).click();
     await expect(page).toHaveURL(new RegExp(`${href.replace(/\//g, "\\/")}$`));
