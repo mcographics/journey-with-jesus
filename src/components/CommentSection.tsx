@@ -25,14 +25,14 @@ export function CommentSection({ episode, general = false, title }: { episode: E
     const client = createBrowserSupabaseClient();
     if (!client) return;
     void client.from("episode_comments").select("id, episode_id, display_name, body, status, created_at")
-      .eq("episode_id", episodeId).eq("status", "approved").order("created_at", { ascending: false }).limit(50)
+      .eq("episode_id", episodeId).eq("status", "approved").order("created_at", { ascending: sortOrder === "oldest" }).limit(50)
       .then(({ data, error }) => {
         if (!active) return;
         if (error) { setIsError(true); setStatus("Comments are temporarily unavailable. Please try again later."); return; }
         setComments(data ?? []);
       });
     return () => { active = false; };
-  }, [episodeId, configured]);
+  }, [episodeId, configured, sortOrder]);
 
   async function submitComment(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
