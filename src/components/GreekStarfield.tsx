@@ -49,6 +49,8 @@ export function GreekStarfield() {
     const words = createSacredWordAnimation(context, canvas);
     const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
     const reduced = () => preference.matches || document.documentElement.dataset.accessibilityReduceMotion === "true";
+    // Mobile GPUs benefit from a lower frame rate while keeping the same elapsed-time motion.
+    const minFrameInterval = window.matchMedia("(max-width: 700px)").matches ? 1000 / 30 : 1000 / 60;
     let width = 1, height = 1, time = 0, last = 0, frame = 0;
     let stars: Star[] = [];
     let shootingStar: ShootingStar | null = null;
@@ -150,7 +152,7 @@ export function GreekStarfield() {
     const resize = () => {
       const bounds = canvas.getBoundingClientRect();
       width = Math.max(1, bounds.width); height = Math.max(1, bounds.height);
-      const ratio = Math.min(window.devicePixelRatio || 1, 2);
+      const ratio = Math.min(window.devicePixelRatio || 1, window.matchMedia("(max-width: 700px)").matches ? 1.5 : 2);
       canvas.width = Math.round(width * ratio); canvas.height = Math.round(height * ratio);
       context.setTransform(ratio, 0, 0, ratio, 0, 0);
       spaceBase = context.createLinearGradient(0, 0, width, height);
@@ -171,6 +173,10 @@ export function GreekStarfield() {
       paintScene();
     };
     const draw = (now: number) => {
+      if (last && now - last < minFrameInterval) {
+        frame = requestAnimationFrame(draw);
+        return;
+      }
       // Source updates every 16 ms; elapsed time keeps that speed on any refresh rate.
       const steps = last ? Math.min((now - last) / 16, 4) : 1;
       last = now;
@@ -201,6 +207,8 @@ export function GreekStarfield() {
     };
     const restart = () => {
       cancelAnimationFrame(frame); last = 0;
+      // Stop all canvas work while the tab is hidden, restarting only when visible.
+      if (document.hidden) return;
       if (reduced()) paint(); else frame = requestAnimationFrame(draw);
     };
     const observer = new ResizeObserver(resize);
@@ -209,9 +217,11 @@ export function GreekStarfield() {
     observer.observe(canvas);
     motionObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["data-accessibility-reduce-motion"] });
     preference.addEventListener("change", restart);
+    document.addEventListener("visibilitychange", restart);
     return () => {
       cancelAnimationFrame(frame); observer.disconnect(); motionObserver.disconnect();
       preference.removeEventListener("change", restart);
+      document.removeEventListener("visibilitychange", restart);
     };
   }, []);
 
