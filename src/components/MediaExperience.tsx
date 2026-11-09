@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState, useSyncExternalStore } from "react";
-import { Film, MessageCircle, Smartphone, Users } from "lucide-react";
+import { Film, MessageCircle, Users } from "lucide-react";
 import type { Episode, MediaPlaylist } from "@/data/episodes";
 import type { SiteLocale } from "@/data/site-translations";
 import { episodeHref, resolveEpisodeId } from "@/lib/episode-navigation";
@@ -10,7 +10,6 @@ import { CommentSection } from "@/components/CommentSection";
 import { EpisodePlaylist } from "@/components/EpisodePlaylist";
 import { VideoPlayer } from "@/components/VideoPlayer";
 
-type MediaKind = "videos" | "stories";
 type DiscussionKind = "comments" | "community";
 function subscribeToNavigation(onStoreChange: () => void) {
   window.addEventListener("popstate", onStoreChange);
@@ -18,9 +17,6 @@ function subscribeToNavigation(onStoreChange: () => void) {
 }
 function getSearch() { return window.location.search; }
 function getServerSearch() { return ""; }
-function getMediaKind(episode: Episode): MediaKind {
-  return episode.orientation === "portrait" ? "stories" : "videos";
-}
 
 export function MediaExperience({ episodes: initialEpisodes }: { episodes: Episode[] }) {
   const search = useSyncExternalStore(subscribeToNavigation, getSearch, getServerSearch);
@@ -28,7 +24,6 @@ export function MediaExperience({ episodes: initialEpisodes }: { episodes: Episo
   const [locale, setLocale] = useState<SiteLocale>("en");
   const [playlists, setPlaylists] = useState<MediaPlaylist[]>([]);
   const [playlistId, setPlaylistId] = useState("all");
-  const [mediaKind, setMediaKind] = useState<MediaKind>("stories");
   const [discussion, setDiscussion] = useState<DiscussionKind>("comments");
   const [catalogStatus, setCatalogStatus] = useState<"loading" | "ready" | "unconfigured" | "error">(() =>
     initialEpisodes.length ? "ready" : isSupabaseConfigured() ? "loading" : "unconfigured",
@@ -74,29 +69,15 @@ export function MediaExperience({ episodes: initialEpisodes }: { episodes: Episo
     window.history.pushState({}, "", episodeHref(window.location.href, episode.id));
     window.dispatchEvent(new PopStateEvent("popstate"));
   };
-  const clearSelection = () => {
-    const url = new URL(window.location.href);
-    url.searchParams.delete("episode");
-    window.history.pushState({}, "", url);
-    window.dispatchEvent(new PopStateEvent("popstate"));
-  };
-  const switchMediaKind = (nextKind: MediaKind) => {
-    setMediaKind(nextKind);
-    setPlaylistId("all");
-    setDiscussion("comments");
-    const nextEpisode = languageEpisodes.find((episode) => getMediaKind(episode) === nextKind);
-    if (nextEpisode) selectEpisode(nextEpisode);
-    else clearSelection();
-  };
-
-  const currentMediaKind = selectedEpisode ? getMediaKind(selectedEpisode) : mediaKind;
-  const kindEpisodes = languageEpisodes.filter((episode) => getMediaKind(episode) === currentMediaKind);
-  const kindEpisodeIds = new Set(kindEpisodes.map((episode) => episode.id));
-  const kindPlaylists = playlists
-    .map((playlist) => ({ ...playlist, episodeIds: playlist.episodeIds.filter((id) => kindEpisodeIds.has(id)) }))
+  const availableEpisodeIds = new Set(languageEpisodes.map((episode) => episode.id));
+  const availablePlaylists = playlists
+    .map((playlist) => ({
+      ...playlist,
+      episodeIds: playlist.episodeIds.filter((id) => availableEpisodeIds.has(id)),
+    }))
     .filter((playlist) => playlist.episodeIds.length > 0);
   const localeName = locale === "fr" ? "French" : locale === "es" ? "Spanish" : "English";
-  const commentTitle = currentMediaKind === "stories" ? "Story comments" : "Video comments";
+  const commentTitle = selectedEpisode?.orientation === "portrait" ? "Story comments" : "Video comments";
 
   return (
     <main id="main-content" className="media-page">
@@ -116,24 +97,19 @@ export function MediaExperience({ episodes: initialEpisodes }: { episodes: Episo
           {catalogStatus === "unconfigured" && episodes.length === 0 && <p className="catalog-notice" role="status">The public media library is being prepared. Please check back soon.</p>}
           {catalogStatus === "error" && <p className="catalog-notice is-error" role="status">The media library could not be reached. Please refresh to try again.</p>}
 
-          <nav className="media-kind-tabs" aria-label="Choose a media collection">
-            <button type="button" aria-pressed={currentMediaKind === "videos"} onClick={() => switchMediaKind("videos")}>
-              <Film size={17} aria-hidden="true" /><span>Videos</span><small>{languageEpisodes.filter((episode) => getMediaKind(episode) === "videos").length}</small>
-            </button>
-            <button type="button" aria-pressed={currentMediaKind === "stories"} onClick={() => switchMediaKind("stories")}>
-              <Smartphone size={17} aria-hidden="true" /><span>Stories</span><small>{languageEpisodes.filter((episode) => getMediaKind(episode) === "stories").length}</small>
-            </button>
-          </nav>
-
-          {catalogStatus === "ready" && kindEpisodes.length === 0 && (
-            <p className="catalog-notice" role="status">No {localeName.toLowerCase()} {currentMediaKind} are available yet.</p>
+          <div className="media-library-summary" aria-label="Unified media library">
+            <span className="media-library-summary-title"><Film size={17} aria-hidden="true" /> All videos &amp; stories</span>
+            <span className="media-library-summary-count">{languageEpisodes.length} {languageEpisodes.length === 1 ? "title" : "titles"}</span>
+          </div>
+          {catalogStatus === "ready" && languageEpisodes.length === 0 && (
+            <p className="catalog-notice" role="status">No {localeName.toLowerCase()} media are available yet.</p>
           )}
           <div className="media-layout">
             <div className="media-main">
               <VideoPlayer key={"player-" + (selectedEpisode?.id ?? "none")} episode={selectedEpisode} />
             </div>
-            <EpisodePlaylist episodes={kindEpisodes} playlists={kindPlaylists} selectedPlaylistId={playlistId}
-              onPlaylistChange={setPlaylistId} selectedId={selectedId} onSelect={selectEpisode} mediaKind={currentMediaKind} />
+            <EpisodePlaylist episodes={languageEpisodes} playlists={availablePlaylists} selectedPlaylistId={playlistId}
+              onPlaylistChange={setPlaylistId} selectedId={selectedId} onSelect={selectEpisode} />
           </div>
         </div>
       </section>
@@ -153,7 +129,7 @@ export function MediaExperience({ episodes: initialEpisodes }: { episodes: Episo
           ? <CommentSection episode={null} general />
           : selectedEpisode
             ? <CommentSection key={"comments-" + selectedEpisode.id} episode={selectedEpisode} title={commentTitle} />
-            : <p className="comment-status media-comment-prompt">Choose a {currentMediaKind === "stories" ? "story" : "video"} to open its comments, or join the Media community.</p>}
+            : <p className="comment-status media-comment-prompt">Choose a video or story to open its comments, or join the Media community.</p>}
       </section>
     </main>
   );
