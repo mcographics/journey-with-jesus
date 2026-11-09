@@ -33,7 +33,7 @@ afterEach(() => {
 describe("MediaExperience", () => {
   it("shows a single shared Comments section even when the library is empty", () => {
     render(<MediaExperience episodes={[]} />);
-    expect(screen.getAllByRole("heading", { name: "Comments", exact: true })).toHaveLength(1);
+    expect(screen.getAllByRole("heading", { name: "Comments" })).toHaveLength(1);
     expect(screen.getAllByRole("region", { name: "Media discussion" })).toHaveLength(1);
     expect(screen.queryByRole("navigation", { name: "Choose a discussion" })).toBeNull();
     expect(screen.queryByText("Choose a story to see its community conversation.")).toBeNull();
@@ -44,7 +44,7 @@ describe("MediaExperience", () => {
     const discussion = screen.getByRole("region", { name: "Media discussion" });
     const comments = discussion.querySelector(".comment-section");
     expect(comments).toBeTruthy();
-    expect(screen.getAllByRole("heading", { name: "Comments", exact: true })).toHaveLength(1);
+    expect(screen.getAllByRole("heading", { name: "Comments" })).toHaveLength(1);
 
     fireEvent.click(screen.getByRole("button", { name: /A Story of Hope/ }));
     expect(discussion.querySelector(".comment-section")).toBe(comments);
