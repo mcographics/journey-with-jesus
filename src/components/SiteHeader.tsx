@@ -204,6 +204,8 @@ export function SiteHeader() {
           desktopUtilityHideTimerRef.current = null;
           setIsDesktopUtilityPinned(false);
           setIsDesktopUtilityOpen(false);
+          setIsDesktopMenuOpen(false);
+          setIsDesktopThemeOpen(false);
         }, 350);
       }
     };
@@ -213,6 +215,8 @@ export function SiteHeader() {
         clearPendingHide();
         setIsDesktopUtilityPinned(false);
         setIsDesktopUtilityOpen(false);
+        setIsDesktopMenuOpen(false);
+        setIsDesktopThemeOpen(false);
       }
     };
     const onEscape = (event: KeyboardEvent) => {
@@ -220,6 +224,8 @@ export function SiteHeader() {
       clearPendingHide();
       setIsDesktopUtilityPinned(false);
       setIsDesktopUtilityOpen(false);
+      setIsDesktopMenuOpen(false);
+      setIsDesktopThemeOpen(false);
       suppressUtilityHoverRef.current = true;
       desktopUtilityRef.current?.querySelector<HTMLButtonElement>(".desktop-utility-handle")?.focus();
     };
@@ -230,9 +236,10 @@ export function SiteHeader() {
     // Mark the hover controls ready only after the native pointer listener
     // is attached. Browser tests and assistive integrations can use this
     // to avoid racing the first client-side hydration.
-    desktopUtilityRef.current?.setAttribute("data-ready", "true");
+    const drawerElement = desktopUtilityRef.current;
+    drawerElement?.setAttribute("data-ready", "true");
     return () => {
-      desktopUtilityRef.current?.removeAttribute("data-ready");
+      drawerElement?.removeAttribute("data-ready");
       clearPendingHide();
       window.removeEventListener("pointermove", onPointerMove);
       document.removeEventListener("pointerdown", onOutsideClick);
@@ -249,6 +256,8 @@ export function SiteHeader() {
       suppressUtilityHoverRef.current = true;
       setIsDesktopUtilityPinned(false);
       setIsDesktopUtilityOpen(false);
+      setIsDesktopMenuOpen(false);
+      setIsDesktopThemeOpen(false);
     } else {
       suppressUtilityHoverRef.current = false;
       setIsDesktopUtilityPinned(true);
@@ -278,13 +287,6 @@ export function SiteHeader() {
       document.removeEventListener("keydown", closeOnEscape);
     };
   }, [isDesktopMenuOpen]);
-
-  useEffect(() => {
-    if (!isDesktopUtilityOpen) {
-      setIsDesktopMenuOpen(false);
-      setIsDesktopThemeOpen(false);
-    }
-  }, [isDesktopUtilityOpen]);
 
   useEffect(() => {
     if (!isDesktopThemeOpen) return;
