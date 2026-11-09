@@ -13,7 +13,7 @@ test("sitewide browser and app icon variants resolve", async ({ page }) => {
 
   expect(icons).toEqual(
     expect.arrayContaining([
-      expect.objectContaining({ path: "/favicon.ico", sizes: "any" }),
+      expect.objectContaining({ path: "/favicon.ico", sizes: "256x256" }),
       expect.objectContaining({ path: "/icon.svg", type: "image/svg+xml" }),
       expect.objectContaining({ path: "/icon1.png", sizes: "16x16" }),
       expect.objectContaining({ path: "/icon2.png", sizes: "32x32" }),
