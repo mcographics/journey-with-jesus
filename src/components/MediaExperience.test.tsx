@@ -37,7 +37,8 @@ describe("MediaExperience", () => {
     expect(container.querySelector(".media-format-guide")).toBeNull();
     expect(container.querySelector(".media-visually-hidden")?.textContent).toBe("Media library");
     expect(container.querySelector(".media-layout")).toBeTruthy();
-    expect(container.querySelector(".media-library-summary")).toBeTruthy();
+    expect(container.querySelector(".media-library-summary")).toBeNull();
+    expect(screen.queryByText("All videos & stories")).toBeNull();
   });
 
   it("shows a single shared Comments section even when the library is empty", () => {
@@ -116,13 +117,13 @@ describe("MediaExperience", () => {
     fireEvent(window, new Event("site-language-change"));
     expect(screen.getByRole("heading", { name: "French YouTube" })).toBeTruthy();
     expect(screen.queryByText("English upload")).toBeNull();
-    expect(screen.getByLabelText("Unified media library").textContent).toContain("1 title");
+    expect(screen.getByRole("complementary", { name: "Media playlist" }).textContent).toContain("1 ITEM");
 
     window.localStorage.setItem("kerygmapath-language", "es");
     fireEvent(window, new Event("site-language-change"));
     expect(screen.getByRole("heading", { name: "Spanish upload" })).toBeTruthy();
     expect(screen.queryByText("French YouTube")).toBeNull();
-    expect(screen.getByLabelText("Unified media library").textContent).toContain("1 title");
+    expect(screen.getByRole("complementary", { name: "Media playlist" }).textContent).toContain("1 ITEM");
   });
 
   it("never plays a recording from another language when a requested language has no media", () => {
