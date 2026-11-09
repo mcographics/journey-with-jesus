@@ -560,36 +560,55 @@
   }
 }
 
-/* Desktop Our Story: replace the boxed description with a left-to-right image blend. */
+/* Desktop Our Story: retain a readable, semi-transparent text panel.
+   Its blue surface visibly covers the left copy and softly dissolves into the
+   untouched artwork on the right. The original mobile layout stays unchanged. */
 @media (min-width: 701px) {
-  /* Shade the left image area where the story lives, then reveal the artwork to the right. */
+  /* A gentle left-side tint supports readability without a full-image dark wash. */
   :root:not([data-theme="light"]) body .storybook-section .storybook-shade {
     background: linear-gradient(90deg,
-      rgba(5, 16, 38, .94) 0%,
-      rgba(9, 24, 49, .88) 28%,
-      rgba(11, 29, 55, .72) 46%,
-      rgba(11, 29, 55, .38) 65%,
-      rgba(11, 29, 55, .1) 82%,
+      rgba(5, 16, 38, .85) 0%,
+      rgba(9, 24, 49, .7) 30%,
+      rgba(11, 29, 55, .42) 52%,
+      rgba(11, 29, 55, .12) 76%,
       transparent 100%) !important;
   }
   :root[data-theme="light"] body .storybook-section .storybook-shade {
     background: linear-gradient(90deg,
-      rgba(239, 246, 255, .94) 0%,
-      rgba(239, 246, 255, .87) 28%,
-      rgba(233, 243, 253, .7) 46%,
-      rgba(233, 243, 253, .34) 65%,
-      rgba(233, 243, 253, .08) 82%,
+      rgba(239, 246, 255, .84) 0%,
+      rgba(239, 246, 255, .68) 30%,
+      rgba(233, 243, 253, .41) 52%,
+      rgba(233, 243, 253, .12) 76%,
       transparent 100%) !important;
   }
-  /* Keep text aligned on the left without a visible rectangular card or hard edge. */
-  :root:not([data-theme="light"]) body .storybook-section .storybook-description-panel,
-  :root[data-theme="light"] body .storybook-section .storybook-description-panel {
+
+  /* Keep the panel itself visible beneath the paragraphs. Only its RIGHT
+     side fades away; the left remains a translucent navy-blue surface. */
+  :root:not([data-theme="light"]) body .storybook-section .storybook-description-panel {
     border: 0;
-    border-radius: 0;
-    background: transparent;
+    border-radius: 14px 0 0 14px;
+    background: linear-gradient(90deg,
+      rgba(13, 32, 56, .95) 0%,
+      rgba(19, 45, 78, .91) 43%,
+      rgba(22, 52, 85, .8) 65%,
+      rgba(22, 52, 85, .46) 83%,
+      rgba(22, 52, 85, 0) 100%) !important;
     box-shadow: none;
     backdrop-filter: none;
   }
+  :root[data-theme="light"] body .storybook-section .storybook-description-panel {
+    border: 0;
+    border-radius: 14px 0 0 14px;
+    background: linear-gradient(90deg,
+      rgba(238, 247, 255, .95) 0%,
+      rgba(224, 240, 255, .91) 43%,
+      rgba(211, 231, 251, .8) 65%,
+      rgba(211, 231, 251, .46) 83%,
+      rgba(211, 231, 251, 0) 100%) !important;
+    box-shadow: none;
+    backdrop-filter: none;
+  }
+  /* No halo or solid border to reveal the otherwise seamless right edge. */
   :root:not([data-theme="light"]) body .storybook-section .storybook-description-panel::before,
   :root[data-theme="light"] body .storybook-section .storybook-description-panel::before {
     content: none;
