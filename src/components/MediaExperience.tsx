@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useState, useSyncExternalStore } from "react";
-import { Film } from "lucide-react";
 import type { Episode, MediaPlaylist } from "@/data/episodes";
 import type { SiteLocale } from "@/data/site-translations";
 import { episodeHref, resolveEpisodeId } from "@/lib/episode-navigation";
@@ -84,10 +83,6 @@ export function MediaExperience({ episodes: initialEpisodes }: { episodes: Episo
           {catalogStatus === "unconfigured" && episodes.length === 0 && <p className="catalog-notice" role="status">The public media library is being prepared. Please check back soon.</p>}
           {catalogStatus === "error" && <p className="catalog-notice is-error" role="status">The media library could not be reached. Please refresh to try again.</p>}
 
-          <div className="media-library-summary" aria-label="Unified media library">
-            <span className="media-library-summary-title"><Film size={17} aria-hidden="true" /> All videos &amp; stories</span>
-            <span className="media-library-summary-count">{languageEpisodes.length} {languageEpisodes.length === 1 ? "title" : "titles"}</span>
-          </div>
           {catalogStatus === "ready" && languageEpisodes.length === 0 && (
             <p className="catalog-notice" role="status">No {localeName.toLowerCase()} media are available yet.</p>
           )}
