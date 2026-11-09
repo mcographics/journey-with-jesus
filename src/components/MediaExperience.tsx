@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState, useSyncExternalStore } from "react";
-import { Film, MessageCircle, Users } from "lucide-react";
+import { Film } from "lucide-react";
 import type { Episode, MediaPlaylist } from "@/data/episodes";
 import type { SiteLocale } from "@/data/site-translations";
 import { episodeHref, resolveEpisodeId } from "@/lib/episode-navigation";
@@ -10,7 +10,6 @@ import { CommentSection } from "@/components/CommentSection";
 import { EpisodePlaylist } from "@/components/EpisodePlaylist";
 import { VideoPlayer } from "@/components/VideoPlayer";
 
-type DiscussionKind = "comments" | "community";
 function subscribeToNavigation(onStoreChange: () => void) {
   window.addEventListener("popstate", onStoreChange);
   return () => window.removeEventListener("popstate", onStoreChange);
@@ -24,7 +23,6 @@ export function MediaExperience({ episodes: initialEpisodes }: { episodes: Episo
   const [locale, setLocale] = useState<SiteLocale>("en");
   const [playlists, setPlaylists] = useState<MediaPlaylist[]>([]);
   const [playlistId, setPlaylistId] = useState("all");
-  const [discussion, setDiscussion] = useState<DiscussionKind>("comments");
   const [catalogStatus, setCatalogStatus] = useState<"loading" | "ready" | "unconfigured" | "error">(() =>
     initialEpisodes.length ? "ready" : isSupabaseConfigured() ? "loading" : "unconfigured",
   );
@@ -65,7 +63,6 @@ export function MediaExperience({ episodes: initialEpisodes }: { episodes: Episo
   const selectedId = resolveEpisodeId(search, languageEpisodes);
   const selectedEpisode = languageEpisodes.find((episode) => episode.id === selectedId) ?? null;
   const selectEpisode = (episode: Episode) => {
-    setDiscussion("comments");
     window.history.pushState({}, "", episodeHref(window.location.href, episode.id));
     window.dispatchEvent(new PopStateEvent("popstate"));
   };
@@ -77,7 +74,6 @@ export function MediaExperience({ episodes: initialEpisodes }: { episodes: Episo
     }))
     .filter((playlist) => playlist.episodeIds.length > 0);
   const localeName = locale === "fr" ? "French" : locale === "es" ? "Spanish" : "English";
-  const commentTitle = selectedEpisode?.orientation === "portrait" ? "Story comments" : "Video comments";
 
   return (
     <main id="main-content" className="media-page">
@@ -115,21 +111,7 @@ export function MediaExperience({ episodes: initialEpisodes }: { episodes: Episo
       </section>
 
       <section className="media-discussion page-width media-page-width" aria-label="Media discussion">
-        <nav className="media-discussion-tabs" aria-label="Choose a discussion">
-          <button type="button" aria-pressed={discussion === "comments"} disabled={!selectedEpisode}
-            onClick={() => setDiscussion("comments")}>
-            <MessageCircle size={16} aria-hidden="true" />{commentTitle}
-          </button>
-          <button type="button" aria-pressed={discussion === "community"}
-            onClick={() => setDiscussion("community")}>
-            <Users size={16} aria-hidden="true" />Media community
-          </button>
-        </nav>
-        {discussion === "community"
-          ? <CommentSection episode={null} general />
-          : selectedEpisode
-            ? <CommentSection key={"comments-" + selectedEpisode.id} episode={selectedEpisode} title={commentTitle} />
-            : <p className="comment-status media-comment-prompt">Choose a video or story to open its comments, or join the Media community.</p>}
+        <CommentSection episode={null} general title="Comments" />
       </section>
     </main>
   );
