@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useState, useSyncExternalStore } from "react";
-import type { CSSProperties } from "react";
 import { Film, MessageCircle, Smartphone, Users } from "lucide-react";
 import type { Episode, MediaPlaylist } from "@/data/episodes";
 import type { SiteLocale } from "@/data/site-translations";
@@ -13,17 +12,6 @@ import { VideoPlayer } from "@/components/VideoPlayer";
 
 type MediaKind = "videos" | "stories";
 type DiscussionKind = "comments" | "community";
-const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
-const mediaPageStyle = {
-  "--media-background-image-1440": `url("${basePath}/images/media-page-background.webp")`,
-  "--media-background-image-2560": `url("${basePath}/images/media-page-background.webp")`,
-  "--media-background-image-mobile": `url("${basePath}/images/media-page-background.webp")`,
-} as CSSProperties & {
-  "--media-background-image-1440": string;
-  "--media-background-image-2560": string;
-  "--media-background-image-mobile": string;
-};
-
 function subscribeToNavigation(onStoreChange: () => void) {
   window.addEventListener("popstate", onStoreChange);
   return () => window.removeEventListener("popstate", onStoreChange);
@@ -111,7 +99,7 @@ export function MediaExperience({ episodes: initialEpisodes }: { episodes: Episo
   const commentTitle = currentMediaKind === "stories" ? "Story comments" : "Video comments";
 
   return (
-    <main id="main-content" className="media-page" style={mediaPageStyle}>
+    <main id="main-content" className="media-page">
       <section className="media-stage" aria-label="Media library">
         <div className="page-width media-page-width">
           <header className="media-heading">
