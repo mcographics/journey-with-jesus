@@ -536,8 +536,10 @@
   content: "";
 }
 .team-page .team-grid:has(.team-profile) {
+  /* Let the page's continuous blue background show through. A separate
+     grid-level glow made a visible horizontal seam above the portraits. */
   position: relative;
-  background: radial-gradient(ellipse at 50% 18%, rgba(54, 119, 196, .14), transparent 59%);
+  background: transparent;
 }
 @media (min-width: 701px) {
   .team-page .team-grid:has(.team-profile) {
@@ -578,9 +580,7 @@
   font-size: 12px;
   letter-spacing: .012em;
 }
-:root[data-theme="light"] .team-page .team-grid:has(.team-profile) {
-  background: radial-gradient(ellipse at 50% 18%, rgba(74, 132, 207, .085), transparent 59%);
-}
+/* Keep light theme equally seamless; no separate grid background. */
 :root[data-theme="light"] .team-page .team-profile-mobile-role { color: #856126; }
 @media (max-width: 700px) {
   .team-page .editorial-heading { margin-bottom: 34px; }
