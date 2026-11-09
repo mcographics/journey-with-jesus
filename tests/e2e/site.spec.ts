@@ -602,7 +602,8 @@ test("mobile team cards show names and language-aware tap prompts when collapsed
     await page.evaluate((locale) => localStorage.setItem("kerygmapath-language", locale), code);
     await page.reload();
     await expect(page.locator(".team-grid")).toHaveAttribute("aria-busy", "false");
-    await expect(page.locator(".team-profile-mobile-prompt")).toHaveText([instruction, instruction]);
+    await expect(page.locator(".team-profile-mobile-caption .team-prompt-touch")).toHaveText([instruction, instruction]);
+    await expect(page.locator(".team-profile-mobile-caption .team-prompt-desktop").first()).toBeHidden();
   }
 
   await page.locator(".team-profile").first().locator("summary").click();
