@@ -21,3 +21,5 @@ Allow: /
 
 User-agent: Claude-SearchBot
 Allow: /
+
+Sitemap: https://kerygmapath.com/sitemap.xml

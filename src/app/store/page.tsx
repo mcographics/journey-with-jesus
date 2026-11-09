@@ -9,6 +9,7 @@ const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 export const metadata: Metadata = {
   title: "Kerygma Path Store — Not Available Yet",
   description: "The Kerygma Path store is not available to visitors yet.",
+  robots: { index: false, follow: true },
 };
 
 const shopSpaces = [
