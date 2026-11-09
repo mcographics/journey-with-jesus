@@ -181,7 +181,13 @@ export function SiteHeader() {
         if (!insideDrawer && !nearCorner) suppressUtilityHoverRef.current = false;
         return;
       }
-      if (!isDesktopUtilityPinned) setIsDesktopUtilityOpen(insideDrawer || nearCorner);
+      if (!insideDrawer && !nearCorner) {
+        // Even a click-opened drawer retracts when the pointer moves away.
+        setIsDesktopUtilityPinned(false);
+        setIsDesktopUtilityOpen(false);
+      } else if (!isDesktopUtilityPinned) {
+        setIsDesktopUtilityOpen(true);
+      }
     };
     const onOutsideClick = (event: PointerEvent) => {
       if (!desktopViewport.matches || !isDesktopUtilityOpen) return;
