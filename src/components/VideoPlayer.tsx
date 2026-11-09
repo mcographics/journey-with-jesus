@@ -16,8 +16,9 @@ export function VideoPlayer({ episode }: VideoPlayerProps) {
   const [frameSize, setFrameSize] = useState<{ width: number; height: number } | null>(null);
   const isPortrait = aspectRatio < 1;
   const shellStyle = {
-    overflow: "visible", background: "transparent", border: "none",
-    width: frameSize ? `${frameSize.width}px` : "100%", maxWidth: "100%", marginInline: "auto",
+    width: frameSize ? `${frameSize.width}px` : "100%",
+    maxWidth: "100%",
+    marginInline: "auto",
   } as const;
   const frameStyle = {
     aspectRatio: String(aspectRatio),
