@@ -183,9 +183,11 @@ export function SiteHeader() {
       }
       if (!insideDrawer && !nearCorner) {
         // Even a click-opened drawer retracts when the pointer moves away.
-        setIsDesktopUtilityPinned(false);
-        setIsDesktopUtilityOpen(false);
-      } else if (!isDesktopUtilityPinned) {
+        if (isDesktopUtilityOpen || isDesktopUtilityPinned) {
+          setIsDesktopUtilityPinned(false);
+          setIsDesktopUtilityOpen(false);
+        }
+      } else if (!isDesktopUtilityPinned && !isDesktopUtilityOpen) {
         setIsDesktopUtilityOpen(true);
       }
     };
