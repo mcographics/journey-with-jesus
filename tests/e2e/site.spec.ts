@@ -238,7 +238,8 @@ test("desktop media page fits the player and playlist without overflow", async (
   await expect(page.locator(".media-library-summary")).toHaveCount(0);
   await expect(page.getByText("All videos & stories")).toHaveCount(0);
   const playerTop = await page.locator(".media-layout").evaluate((node) => node.getBoundingClientRect().top);
-  expect(playerTop).toBeLessThan(185);
+  await expect(page.locator(".media-layout")).toHaveCSS("margin-top", "50px");
+  expect(playerTop).toBeLessThan(235);
 });
 
 test("accessibility preferences persist across routes and light brightness stays scoped to light mode", async ({ page }) => {
@@ -397,7 +398,8 @@ test("light mode keeps muted surfaces and brings the mobile Media player higher"
   await expect(page.locator(".media-heading, .media-format-guide")).toHaveCount(0);
   await expect(page.locator(".media-stage")).toHaveCSS("padding-top", "44px");
   const playerTop = await page.locator(".media-layout").evaluate((node) => node.getBoundingClientRect().top);
-  expect(playerTop).toBeLessThan(195);
+  await expect(page.locator(".media-layout")).toHaveCSS("margin-top", "50px");
+  expect(playerTop).toBeLessThan(245);
 });
 
 test("the desktop mobile preview is absent from the main site", async ({ page }) => {
