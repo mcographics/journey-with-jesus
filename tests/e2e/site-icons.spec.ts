@@ -7,7 +7,7 @@ test("sitewide browser and app icon variants resolve", async ({ page }) => {
     links.map((link) => {
       const element = link as HTMLLinkElement;
       const url = new URL(element.href);
-      return { path: url.pathname, sizes: element.sizes, type: element.type };
+      return { path: url.pathname, sizes: element.getAttribute("sizes") ?? "", type: element.type };
     }),
   );
 
