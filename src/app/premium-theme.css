@@ -665,3 +665,37 @@
     backdrop-filter: none;
   }
 }
+
+/* Journey with Jesus text palette: use the Mission heading's bright gold for
+   both Story title lines, with white description copy on every screen size.
+   The full-height blue image overlay and all layout rules remain unchanged. */
+:root:not([data-theme="light"]) body .storybook-section .storybook-title,
+:root:not([data-theme="light"]) body .storybook-section .storybook-title em,
+:root[data-theme="light"] body .storybook-section .storybook-title,
+:root[data-theme="light"] body .storybook-section .storybook-title em {
+  color: #ffe792 !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+
+:root body .storybook-section .storybook-description-panel > p {
+  color: #fff !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+
+/* On the light image shade, preserve readable contrast for the white copy. */
+:root[data-theme="light"] body .storybook-section .storybook-description-panel > p {
+  text-shadow: 0 1px 3px rgba(8, 25, 47, .92), 0 0 6px rgba(8, 25, 47, .62) !important;
+}
+
+/* Faith, Hope and Redemption stay white; only the word Love is standard red. */
+:root body .mission-section .mission-copy .virtue-statement > strong {
+  color: #fff !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+:root body .mission-section .mission-copy .virtue-statement .virtue-love {
+  color: #ff0000 !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+:root[data-theme="light"] body .mission-section .mission-copy .virtue-statement > strong {
+  text-shadow: 0 1px 3px rgba(8, 25, 47, .88) !important;
+}

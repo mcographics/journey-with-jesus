@@ -121,7 +121,7 @@ export default function HomePage() {
             <p>Our mission is simple: <strong>to share the Gospel of Jesus Christ through compelling visual storytelling.</strong></p>
             <p>We believe creative media can help people encounter biblical stories in ways that feel personal, memorable, and meaningful.</p>
             <p>Our animated narratives seek to remain faithful to the message of Scripture while using modern creative tools to introduce its stories to a new generation.</p>
-            <p className="virtue-statement"><strong>Faith. Hope. Love. Redemption.</strong></p>
+            <p className="virtue-statement"><strong>Faith. Hope. <span className="virtue-love">Love</span>. Redemption.</strong></p>
             <p className="virtue-description">These are more than themes. They are at the heart of the journey.</p>
           </div>
         </div>
