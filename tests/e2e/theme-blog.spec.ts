@@ -276,6 +276,7 @@ for (const { screen, viewport, expectedWidth } of [
     await page.setViewportSize(viewport);
     await page.goto("/company/");
     if (screen === "desktop") {
+      await expect(page.locator(".desktop-utility-drawer")).toHaveAttribute("data-ready", "true");
       await page.mouse.move(viewport.width - 3, 35);
       await expect(page.locator(".desktop-utility-drawer")).toHaveClass(/is-open/);
     }
