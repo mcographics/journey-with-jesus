@@ -1,0 +1,22 @@
+{
+  "name": "Kerygma Path — Journey with Jesus",
+  "short_name": "Kerygma Path",
+  "description": "Scripture-rooted animated storytelling from Kerygma Path.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#08172a",
+  "theme_color": "#08172a",
+  "icons": [
+    {
+      "src": "./icon4.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "./icon5.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
