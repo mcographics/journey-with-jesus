@@ -31,6 +31,15 @@ afterEach(() => {
 });
 
 describe("MediaExperience", () => {
+  it("omits the large Media introduction while retaining an accessible page heading", () => {
+    const { container } = render(<MediaExperience episodes={episodes} />);
+    expect(container.querySelector(".media-heading")).toBeNull();
+    expect(container.querySelector(".media-format-guide")).toBeNull();
+    expect(container.querySelector(".media-visually-hidden")?.textContent).toBe("Media library");
+    expect(container.querySelector(".media-layout")).toBeTruthy();
+    expect(container.querySelector(".media-library-summary")).toBeTruthy();
+  });
+
   it("shows a single shared Comments section even when the library is empty", () => {
     render(<MediaExperience episodes={[]} />);
     expect(screen.getAllByRole("heading", { name: "Comments" })).toHaveLength(1);
