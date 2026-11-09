@@ -45,7 +45,16 @@ export default function TeamPage() {
         </header>
 
         <TeamDirectory fallbackMembers={fallbackMembers} />
-        <p className="team-note">This project is made with care for the stories and the people who bring them to life.</p>
+        <figure className="team-scripture">
+          <blockquote>
+            “Whatever you do [whatever your task may be], work from the soul [that is, put in your very best effort], as [something done] for the Lord and not for men,”
+          </blockquote>
+          <figcaption>Colossians 3:23 <span>(AMP)</span></figcaption>
+          <p className="team-scripture-credit">
+            Scripture quotations taken from the Amplified® Bible (AMP), Copyright © 2015 by The Lockman Foundation. Used by permission.{" "}
+            <a href="https://www.lockman.org/" target="_blank" rel="noopener noreferrer">www.Lockman.org</a>
+          </p>
+        </figure>
       </div>
     </main>
   );
