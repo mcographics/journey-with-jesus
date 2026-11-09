@@ -1,4 +1,30 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
+
+async function revealDesktopControls(page: Page) {
+  const viewport = page.viewportSize();
+  if (!viewport || viewport.width <= 768) return;
+  await page.mouse.move(viewport.width - 3, 35);
+  await expect(page.locator(".desktop-utility-drawer")).toHaveClass(/is-open/);
+}
+
+test("desktop glass drawer auto-reveals and retracts with an accessible lip", async ({ page }) => {
+  await page.goto("/company/");
+  const drawer = page.locator(".desktop-utility-drawer");
+  const handle = drawer.locator(".desktop-utility-handle");
+  await expect(handle).toBeVisible();
+  await expect(drawer).not.toHaveClass(/is-open/);
+  await revealDesktopControls(page);
+  for (const selector of [".site-language-toggle", ".desktop-menu-toggle", ".accessibility-settings-trigger", ".theme-toggle"]) {
+    await expect(drawer.locator(selector)).toBeVisible();
+  }
+  await page.mouse.move(160, 420);
+  await expect(drawer).not.toHaveClass(/is-open/);
+  await handle.focus();
+  await handle.press("Enter");
+  await expect(drawer).toHaveClass(/is-open/);
+  await handle.press("Enter");
+  await expect(drawer).not.toHaveClass(/is-open/);
+});
 
 for (const language of [
   { name: "French", option: "Français [FR]", code: "fr" },
@@ -25,6 +51,7 @@ test("public destinations are available in the desktop menu, with working story 
   await expect(page.getByRole("heading", { name: /Faithful to the Word/ })).toBeVisible();
   await expect(page.getByText("Christian animation studio devoted to sharing the Gospel", { exact: false })).toBeVisible();
 
+  await revealDesktopControls(page);
   const desktopMenuButton = page.getByRole("button", { name: "Open site menu" });
   await expect(desktopMenuButton).toBeVisible();
   await desktopMenuButton.click();
@@ -272,6 +299,7 @@ test("desktop media page fits the player and playlist without overflow", async (
 test("accessibility preferences persist across routes and light brightness stays scoped to light mode", async ({ page }) => {
   await page.addInitScript(() => window.localStorage.setItem("journey-with-jesus-theme-mode", "light"));
   await page.goto("/company/");
+  await revealDesktopControls(page);
   const accessibilityButton = page.getByRole("button", { name: "Accessibility settings" });
   await expect(accessibilityButton).toBeVisible();
   await accessibilityButton.click();
@@ -299,6 +327,7 @@ test("accessibility preferences persist across routes and light brightness stays
   await expect(page.locator(".footer-links a").first()).toHaveCSS("color", "rgb(117, 200, 244)");
 
   await page.goto("/media/");
+  await revealDesktopControls(page);
   await expect(page.getByRole("button", { name: "Accessibility settings" })).toBeVisible();
   await expect(page.locator("html")).toHaveAttribute("data-accessibility-brightness", "85");
   await expect(page.locator("html")).toHaveAttribute("data-accessibility-text-size", "largest");
@@ -387,6 +416,7 @@ test("cross-origin WebVTT captions load with anonymous CORS on the native video 
 test("accessibility settings are available on every interior site route", async ({ page }) => {
   for (const route of ["/company/", "/projects/journey-with-jesus/", "/media/", "/characters/", "/team/", "/store/", "/studio/", "/policies/privacy/"]) {
     await page.goto(route);
+    await revealDesktopControls(page);
     await expect(page.getByRole("button", { name: "Accessibility settings" })).toBeVisible();
   }
 });
@@ -554,6 +584,7 @@ test("landing gateway hides site controls and footer until entering, including r
   await page.getByRole("link", { name: "Enter Site" }).click();
   await expect(page).toHaveURL(/\/company\/$/);
   await expect(page.locator(".site-header")).toHaveCSS("display", "block");
+  await revealDesktopControls(page);
   await expect(page.getByRole("button", { name: "Open site menu" })).toBeVisible();
   await expect(page.locator(".site-footer")).toBeVisible();
   await expect(page.getByRole("button", { name: "Accessibility settings" })).toBeVisible();
@@ -592,6 +623,7 @@ test("studio dark mode uses radiant gold details, dark readable actions and whit
 for (const route of ["/projects/journey-with-jesus/", "/media/", "/characters/", "/team/", "/store/", "/blog/"]) {
   test(`menu shows section links at ${route}`, async ({ page }) => {
     await page.goto(route);
+    await revealDesktopControls(page);
     await page.getByRole("button", { name: "Open site menu", exact: true }).click();
     const menu = page.getByRole("navigation", { name: "Primary navigation" });
     const expected = route === "/team/" || route === "/store/" || route === "/blog/"
