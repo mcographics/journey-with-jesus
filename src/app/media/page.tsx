@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import "../media-refresh.css";
 import { MediaExperience } from "@/components/MediaExperience";
 import { episodes, getPublishedEpisodes } from "@/data/episodes";
 
