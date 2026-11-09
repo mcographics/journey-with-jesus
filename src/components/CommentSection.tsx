@@ -66,7 +66,7 @@ export function CommentSection({ episode, general = false, title }: { episode: E
     (Date.parse(first.created_at) - Date.parse(second.created_at)),
   );
 
-  const heading = general ? "Media community" : title ?? "Story comments";
+  const heading = title ?? (general ? "Media community" : "Story comments");
   const headingId = general ? "media-community-title" : "episode-comments-title";
 
   return (
