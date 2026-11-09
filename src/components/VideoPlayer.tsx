@@ -5,6 +5,7 @@ import type { Episode } from "@/data/episodes";
 import { getDefaultVideoSource } from "@/lib/episode-navigation";
 import { parseYouTubeId } from "@/lib/youtube";
 
+const PLAYER_RATIO = 16 / 9;
 type VideoPlayerProps = { episode: Episode | null };
 export function VideoPlayer({ episode }: VideoPlayerProps) {
   const [selectedUrl, setSelectedUrl] = useState(() => episode ? getDefaultVideoSource(episode)?.url ?? "" : "");
@@ -13,7 +14,6 @@ export function VideoPlayer({ episode }: VideoPlayerProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const shellRef = useRef<HTMLDivElement>(null);
   // The player stays widescreen; vertical stories are letterboxed inside it.
-  const playerRatio = 16 / 9;
   const [isPortrait, setIsPortrait] = useState(() => episode?.orientation === "portrait");
   const [frameSize, setFrameSize] = useState<{ width: number; height: number } | null>(null);
   const shellStyle = {
@@ -22,7 +22,7 @@ export function VideoPlayer({ episode }: VideoPlayerProps) {
     marginInline: "auto",
   } as const;
   const frameStyle = {
-    aspectRatio: String(playerRatio),
+    aspectRatio: String(PLAYER_RATIO),
     ...(frameSize ? { width: `${frameSize.width}px`, height: `${frameSize.height}px` } : {}),
   };
 
@@ -34,8 +34,8 @@ export function VideoPlayer({ episode }: VideoPlayerProps) {
       const availableWidth = widthBoundary.clientWidth;
       if (!availableWidth) return;
       const maxHeight = Math.min(window.innerHeight * 0.68, 620);
-      const width = Math.min(availableWidth, 1102, maxHeight * playerRatio);
-      const height = width / playerRatio;
+      const width = Math.min(availableWidth, 1102, maxHeight * PLAYER_RATIO);
+      const height = width / PLAYER_RATIO;
       setFrameSize((current) =>
         current?.width === width && current.height === height ? current : { width, height },
       );
