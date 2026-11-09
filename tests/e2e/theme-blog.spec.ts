@@ -269,8 +269,8 @@ test("mobile language control stays light in light mode and retains dark crystal
 });
 
 for (const { screen, viewport, expectedWidth } of [
-  { screen: "desktop", viewport: { width: 1280, height: 800 }, expectedWidth: 174 },
-  { screen: "mobile", viewport: { width: 375, height: 812 }, expectedWidth: 168 },
+  { screen: "desktop", viewport: { width: 1280, height: 800 }, expectedWidth: 150 },
+  { screen: "mobile", viewport: { width: 375, height: 812 }, expectedWidth: 150 },
 ]) {
   test(`site language dropdown uses compact width and name-to-code spacing on ${screen}`, async ({ page }) => {
     await page.setViewportSize(viewport);
