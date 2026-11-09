@@ -33,6 +33,7 @@ test("Journey with Jesus ticker scripture follows the selected site language", a
   const ticker = page.locator(".masthead-ticker-window");
   await expect(ticker).toContainText("Come unto me, all [ye] that labour and are heavy laden");
 
+  await expect(page.locator(".desktop-utility-drawer")).toHaveAttribute("data-ready", "true");
   await page.mouse.move(page.viewportSize()!.width - 3, 35);
   await expect(page.locator(".desktop-utility-drawer")).toHaveClass(/is-open/);
   await page.locator(".site-language-toggle").click();
