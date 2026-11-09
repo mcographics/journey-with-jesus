@@ -12,16 +12,17 @@ export function VideoPlayer({ episode }: VideoPlayerProps) {
   const selectedCaptionId = selectedCaptionOverride ?? episode?.captions?.find((caption) => caption.isDefault)?.id ?? episode?.captions?.[0]?.id ?? "off";
   const videoRef = useRef<HTMLVideoElement>(null);
   const shellRef = useRef<HTMLDivElement>(null);
-  const [aspectRatio, setAspectRatio] = useState(() => episode?.orientation === "portrait" ? 9 / 16 : 16 / 9);
+  // The player stays widescreen; vertical stories are letterboxed inside it.
+  const playerRatio = 16 / 9;
+  const [isPortrait, setIsPortrait] = useState(() => episode?.orientation === "portrait");
   const [frameSize, setFrameSize] = useState<{ width: number; height: number } | null>(null);
-  const isPortrait = aspectRatio < 1;
   const shellStyle = {
     width: frameSize ? `${frameSize.width}px` : "100%",
     maxWidth: "100%",
     marginInline: "auto",
   } as const;
   const frameStyle = {
-    aspectRatio: String(aspectRatio),
+    aspectRatio: String(playerRatio),
     ...(frameSize ? { width: `${frameSize.width}px`, height: `${frameSize.height}px` } : {}),
   };
 
@@ -32,9 +33,9 @@ export function VideoPlayer({ episode }: VideoPlayerProps) {
     const updateFrameSize = () => {
       const availableWidth = widthBoundary.clientWidth;
       if (!availableWidth) return;
-      const maxHeight = Math.min(window.innerHeight * (isPortrait ? 0.78 : 0.68), isPortrait ? 690 : 620);
-      const width = Math.min(availableWidth, isPortrait ? 390 : 1102, maxHeight * aspectRatio);
-      const height = width / aspectRatio;
+      const maxHeight = Math.min(window.innerHeight * 0.68, 620);
+      const width = Math.min(availableWidth, 1102, maxHeight * playerRatio);
+      const height = width / playerRatio;
       setFrameSize((current) =>
         current?.width === width && current.height === height ? current : { width, height },
       );
@@ -47,7 +48,7 @@ export function VideoPlayer({ episode }: VideoPlayerProps) {
       observer?.disconnect();
       window.removeEventListener("resize", updateFrameSize);
     };
-  }, [aspectRatio, isPortrait]);
+  }, []);
 
   useEffect(() => {
     const tracks = videoRef.current?.textTracks;
@@ -86,7 +87,7 @@ export function VideoPlayer({ episode }: VideoPlayerProps) {
             <video key={episode.id + "-" + selectedSource.url} ref={videoRef} crossOrigin="anonymous" controls playsInline preload="metadata" aria-label={episode.title}
               onLoadedMetadata={(event) => {
                 const { videoWidth, videoHeight } = event.currentTarget;
-                if (videoWidth > 0 && videoHeight > 0) setAspectRatio(videoWidth / videoHeight);
+                if (videoWidth > 0 && videoHeight > 0) setIsPortrait(videoWidth < videoHeight);
               }}>
               <source src={selectedSource.url} />
               {episode.captions?.map((caption) => (
