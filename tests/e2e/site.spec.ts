@@ -60,7 +60,9 @@ test("public destinations are available in the desktop menu, with working story 
   await expect(page.getByText("Journey with Jesus brings biblical narratives to life", { exact: false })).toBeVisible();
   await page.getByRole("link", { name: "Watch the Stories" }).click();
   await expect(page).toHaveURL(/\/media\/$/);
-  await expect(page.getByRole("heading", { name: "Animated stories of faith." })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Media library" })).toHaveCount(1);
+  await expect(page.locator(".media-heading, .media-format-guide")).toHaveCount(0);
+  await expect(page.locator(".media-layout")).toBeVisible();
   await expect(page.getByRole("heading", { name: "Coming Soon" })).toBeVisible();
   await expect(page.locator("video")).toHaveCount(0);
   await expect(page.getByRole("link", { name: "Kerygma Path home" })).toBeVisible();
@@ -233,6 +235,8 @@ test("desktop media page fits the player and playlist without overflow", async (
   }));
   expect(dimensions.content).toBeLessThanOrEqual(dimensions.viewport);
   await expect(page.getByRole("complementary", { name: "Media playlist" })).toBeVisible();
+  const playerTop = await page.locator(".media-layout").evaluate((node) => node.getBoundingClientRect().top);
+  expect(playerTop).toBeLessThan(185);
 });
 
 test("accessibility preferences persist across routes and light brightness stays scoped to light mode", async ({ page }) => {
@@ -375,7 +379,7 @@ test("monochromacy keeps light-mode filled action buttons readable", async ({ pa
   expect(button).toEqual({ color: "rgb(255, 255, 255)", background: "rgb(69, 69, 69)" });
 });
 
-test("light mode uses muted surfaces and a larger mobile media kicker", async ({ page }) => {
+test("light mode keeps muted surfaces and brings the mobile Media player higher", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.addInitScript(() => {
     window.localStorage.setItem("journey-with-jesus-theme-mode", "light");
@@ -388,7 +392,10 @@ test("light mode uses muted surfaces and a larger mobile media kicker", async ({
   expect(backgroundImage).toContain("linear-gradient(");
   expect(backgroundImage).not.toContain("media-page-background.webp");
   await expect(page.locator(".media-page")).toHaveCSS("background-blend-mode", /^normal(?:,\s*normal)*$/);
-  await expect(page.locator(".media-kicker")).toHaveCSS("font-size", "18px");
+  await expect(page.locator(".media-heading, .media-format-guide")).toHaveCount(0);
+  await expect(page.locator(".media-stage")).toHaveCSS("padding-top", "68px");
+  const playerTop = await page.locator(".media-layout").evaluate((node) => node.getBoundingClientRect().top);
+  expect(playerTop).toBeLessThan(180);
 });
 
 test("the desktop mobile preview is absent from the main site", async ({ page }) => {
@@ -418,14 +425,14 @@ test("Media, Characters, Team, and Store dark mode use soft-white text", async (
     window.localStorage.setItem("journey-with-jesus-theme-mode", "dark");
   });
 
-  for (const { route, selector, copySelector } of [
-    { route: "/media/", selector: ".media-page", copySelector: ".media-heading p:last-child" },
-    { route: "/characters/", selector: ".characters-page", copySelector: ".editorial-intro" },
-    { route: "/team/", selector: ".team-page", copySelector: ".editorial-intro" },
-    { route: "/store/", selector: ".store-page", copySelector: ".store-unavailable-description" },
+  for (const { route, selector, titleSelector, copySelector } of [
+    { route: "/media/", selector: ".media-page", titleSelector: ".media-library-summary-title", copySelector: ".comment-intro" },
+    { route: "/characters/", selector: ".characters-page", titleSelector: "h1", copySelector: ".editorial-intro" },
+    { route: "/team/", selector: ".team-page", titleSelector: "h1", copySelector: ".editorial-intro" },
+    { route: "/store/", selector: ".store-page", titleSelector: "h1", copySelector: ".store-unavailable-description" },
   ]) {
     await page.goto(route);
-    const title = page.locator(`${selector} h1`).first();
+    const title = page.locator(`${selector} ${titleSelector}`).first();
     const copy = page.locator(copySelector ? `${selector} ${copySelector}` : `${selector} p`).first();
     await expect(title).toBeVisible();
     await expect(title).toHaveCSS("color", "rgb(229, 231, 235)");
