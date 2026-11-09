@@ -3,6 +3,7 @@ import { expect, test, type Page } from "@playwright/test";
 async function revealDesktopControls(page: Page) {
   const viewport = page.viewportSize();
   if (!viewport || viewport.width <= 768) return;
+  await expect(page.locator(".desktop-utility-drawer")).toHaveAttribute("data-ready", "true");
   await page.mouse.move(viewport.width - 3, 35);
   await expect(page.locator(".desktop-utility-drawer")).toHaveClass(/is-open/);
 }
