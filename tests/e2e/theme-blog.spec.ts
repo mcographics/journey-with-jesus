@@ -283,12 +283,7 @@ for (const { screen, viewport, expectedWidth } of [
     await page.locator(".site-language-toggle").click();
     const menu = page.locator(".site-language-options");
     await expect(menu).toBeVisible();
-    if (screen === "mobile") {
-      await expect(menu).toHaveCSS("width", `${expectedWidth}px`);
-    } else {
-      const triggerWidth = await page.locator(".site-language-toggle").evaluate(el => el.getBoundingClientRect().width);
-      expect(await menu.evaluate(el => el.getBoundingClientRect().width)).toBeCloseTo(triggerWidth, 0);
-    }
+    await expect(menu).toHaveCSS("width", `${expectedWidth}px`);
     const bounds = await menu.boundingBox();
     expect(bounds).not.toBeNull();
     expect(bounds!.x).toBeGreaterThanOrEqual(0);

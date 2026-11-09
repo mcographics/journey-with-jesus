@@ -27,6 +27,39 @@ test("desktop glass drawer auto-reveals and retracts with an accessible lip", as
   await expect(drawer).not.toHaveClass(/is-open/);
 });
 
+test("desktop utility bar is a compact horizontal row with downward menus", async ({ page }) => {
+  await page.goto("/company/");
+  await revealDesktopControls(page);
+  const bar = page.locator(".desktop-utility-content");
+  const barBox = await bar.boundingBox();
+  expect(barBox).not.toBeNull();
+  expect(barBox!.width).toBeLessThanOrEqual(315);
+  expect(barBox!.height).toBeLessThanOrEqual(60);
+  const controls = [
+    bar.locator(".site-language-toggle"),
+    bar.locator(".desktop-menu-toggle"),
+    bar.locator(".accessibility-settings-trigger"),
+    bar.locator(".theme-toggle"),
+  ];
+  const positions = await Promise.all(controls.map(control => control.boundingBox()));
+  for (let i = 0; i < positions.length; i += 1) {
+    expect(positions[i]).not.toBeNull();
+    if (i > 0) {
+      expect(positions[i]!.x).toBeGreaterThan(positions[i - 1]!.x + positions[i - 1]!.width - 1);
+      expect(positions[i]!.y).toBeCloseTo(positions[0]!.y, 0);
+    }
+  }
+  await bar.locator(".desktop-menu-toggle").click();
+  const menu = bar.locator(".desktop-menu-options");
+  await expect(menu).toBeVisible();
+  const menuBox = await menu.boundingBox();
+  expect(menuBox!.y).toBeGreaterThan(positions[1]!.y + positions[1]!.height);
+  await bar.locator(".theme-toggle").click();
+  await expect(bar.locator(".desktop-theme-options")).toBeVisible();
+  await bar.locator(".desktop-theme-options").getByRole("button", { name: "Light" }).click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+});
+
 for (const language of [
   { name: "French", option: "Français [FR]", code: "fr" },
   { name: "Spanish", option: "Español [ES]", code: "es" },
@@ -322,6 +355,7 @@ test("accessibility preferences persist across routes and light brightness stays
   expect(await page.locator("html").evaluate((root) => getComputedStyle(root).getPropertyValue("--accessibility-link-color").trim())).toBe("#005b91");
   await expect(page.locator(".footer-links a").first()).toHaveCSS("color", "rgb(0, 91, 145)");
   await page.locator(".theme-toggle").click();
+  await page.locator(".desktop-theme-options").getByRole("button", { name: "Dark" }).click();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   expect(await page.locator("body").evaluate((body) => getComputedStyle(body, "::after").opacity)).toBe("0");
   expect(await page.locator("html").evaluate((root) => getComputedStyle(root).getPropertyValue("--accessibility-link-color").trim())).toBe("#75c8f4");

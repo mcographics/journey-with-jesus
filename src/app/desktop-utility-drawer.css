@@ -1,5 +1,5 @@
-/* Desktop-only right-edge frosted-glass utility drawer.
-   The three-bar half-round lip remains visible when the controls retract. */
+/* Compact horizontal desktop navigation: glass ribbon slides LEFT from the right-edge lip.
+   Roughly 300px long and one control high, leaving dropdowns independent below the ribbon. */
 @media (min-width: 769px) {
   .site-header { z-index: 90; overflow: visible; }
   .desktop-utility-drawer {
@@ -7,165 +7,245 @@
     z-index: 90;
     top: calc(20px + env(safe-area-inset-top, 0px));
     right: 0;
-    box-sizing: border-box;
-    width: 258px;
-    max-width: calc(100vw - 58px);
-    padding: 21px 18px 22px;
-    border: 1px solid rgba(248, 209, 132, .78);
-    border-right: 0;
-    border-radius: 24px 0 0 24px;
-    background:
-      linear-gradient(112deg, rgba(184, 224, 255, .24), transparent 27%, rgba(69, 145, 224, .13) 63%),
-      linear-gradient(155deg, rgba(26, 76, 132, .88), rgba(5, 25, 55, .93) 82%);
-    -webkit-backdrop-filter: blur(26px) saturate(155%);
-    backdrop-filter: blur(26px) saturate(155%);
-    box-shadow: inset 0 1px 0 rgba(226, 241, 255, .66), inset 0 -1px 0 rgba(243, 201, 112, .3),
-      -12px 12px 40px rgba(0, 11, 34, .30), -2px 0 12px rgba(233, 188, 99, .12);
-    color: #fff3dc;
+    width: 46px;
+    height: 56px;
     pointer-events: auto;
-    transform: translateX(calc(100% + 1px));
-    transition: transform .36s cubic-bezier(.22, 1, .36, 1);
-    will-change: transform;
-  }
-  .desktop-utility-drawer.is-open { transform: translateX(0); }
-  .desktop-utility-drawer::before {
-    position: absolute;
-    inset: 5px 5px 5px 4px;
-    content: "";
-    border: 1px solid rgba(209, 233, 255, .17);
-    border-right: 0;
-    border-radius: 19px 0 0 19px;
-    pointer-events: none;
   }
   .desktop-utility-handle {
     position: absolute;
-    top: 25px;
-    left: -46px;
-    display: flex;
-    width: 47px;
-    height: 69px;
-    align-items: center;
-    justify-content: center;
+    z-index: 2;
+    top: 0;
+    right: 0;
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 56px;
     padding: 0;
-    border: 1px solid rgba(247, 205, 118, .85);
+    border: 1px solid rgba(255, 220, 142, .92);
     border-right: 0;
-    border-radius: 42px 0 0 42px;
-    background: linear-gradient(132deg, rgba(92, 158, 219, .93), rgba(13, 45, 87, .97) 65%, rgba(7, 27, 59, .97));
-    box-shadow: inset 0 1px 0 rgba(223, 241, 255, .8), inset 1px 0 0 rgba(248, 205, 111, .28),
-      -5px 5px 17px rgba(2, 17, 45, .25);
-    color: #ffe3a5;
-    font: 600 21px/1 var(--sans);
+    border-radius: 30px 0 0 30px;
+    background: linear-gradient(122deg, rgba(82, 159, 233, .93), rgba(12, 57, 117, .96) 54%, rgba(5, 27, 65, .98));
+    color: #fce2a9;
+    box-shadow: inset 1px 1px 0 rgba(232, 247, 255, .65), -4px 4px 17px rgba(1, 18, 44, .32);
     cursor: pointer;
     touch-action: manipulation;
   }
-  .desktop-utility-handle span { display: block; letter-spacing: .08em; transform: translateX(2px); }
   .desktop-utility-handle:hover,
-  .desktop-utility-handle:focus-visible { color: #fff8df; border-color: #ffecc5; }
-  .desktop-utility-content { display: grid; gap: 12px; visibility: hidden; pointer-events: none; }
-  .desktop-utility-drawer.is-open .desktop-utility-content { visibility: visible; pointer-events: auto; }
-  .desktop-utility-title {
-    display: block;
-    margin: 0 3px 2px;
-    color: #f8d69a;
-    font: 600 11px/1.4 var(--sans);
-    letter-spacing: .15em;
-    text-align: center;
-    text-transform: uppercase;
+  .desktop-utility-handle:focus-visible {
+    color: #fff7e5;
+    border-color: #fff0c7;
+    box-shadow: inset 1px 1px 0 rgba(255, 255, 255, .75), -4px 3px 17px rgba(227, 177, 90, .25);
   }
-  .desktop-utility-content > :is(.site-language-switcher, .desktop-navigation, .accessibility-settings-anchor) {
+  .desktop-utility-content {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    right: 45px;
+    box-sizing: border-box;
     display: flex;
-    width: 100%;
+    width: 302px;
+    max-width: calc(100vw - 50px);
+    height: 56px;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 7px 11px;
+    border: 1px solid rgba(255, 219, 144, .88);
+    border-right: 0;
+    border-radius: 25px 0 0 25px;
+    background:
+      linear-gradient(112deg, rgba(183, 228, 255, .23), transparent 26%, rgba(89, 164, 239, .19) 52%, transparent 81%),
+      linear-gradient(155deg, rgba(31, 91, 154, .9), rgba(6, 31, 72, .94) 85%);
+    -webkit-backdrop-filter: blur(22px) saturate(155%);
+    backdrop-filter: blur(22px) saturate(155%);
+    box-shadow: inset 0 1px 0 rgba(235, 247, 255, .6), inset 0 -1px 0 rgba(243, 197, 102, .3),
+      -9px 7px 28px rgba(0, 16, 46, .22);
+    color: #fff2da;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateX(calc(100% + 46px));
+    transition: transform .36s cubic-bezier(.2,.8,.25,1), opacity .24s ease, visibility 0s linear .36s;
+  }
+  .desktop-utility-drawer.is-open .desktop-utility-content {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateX(0);
+    transition: transform .36s cubic-bezier(.2,.8,.25,1), opacity .24s ease, visibility 0s;
+  }
+  .desktop-utility-content::before {
+    position: absolute;
+    content: "";
+    inset: 4px 0 4px 5px;
+    border: 1px solid rgba(217, 234, 255, .16);
+    border-right: 0;
+    border-radius: 20px 0 0 20px;
+    pointer-events: none;
+  }
+  .desktop-utility-content > :is(.site-language-switcher, .desktop-navigation, .accessibility-settings-anchor, .desktop-utility-theme) {
+    position: relative;
+    display: flex;
+    flex: 0 0 auto;
+    width: auto;
     min-width: 0;
     align-items: center;
-    justify-content: stretch;
+    justify-content: center;
   }
   .desktop-utility-content :is(.site-language-toggle, .desktop-menu-toggle, .accessibility-settings-trigger, .theme-toggle) {
     display: inline-flex;
-    width: 100%;
+    box-sizing: border-box;
     min-width: 0;
-    min-height: 45px;
-    height: 45px;
+    width: auto;
+    min-height: 38px;
+    height: 38px;
     align-items: center;
     justify-content: center;
-    gap: 9px;
-    border-radius: 999px;
-    font-size: 13px;
-    letter-spacing: .025em;
+    gap: 4px;
+    margin: 0;
+    padding: 0 7px;
+    border-radius: 11px;
+    font: 500 12px/1.1 var(--sans);
+    letter-spacing: 0;
     transform: none;
+    white-space: nowrap;
   }
-  :root:not([data-theme="light"]) body .desktop-utility-content :is(
-    .site-language-toggle, .desktop-menu-toggle, .accessibility-settings-trigger, .theme-toggle
-  ) {
-    border-color: rgba(242, 198, 115, .75) !important;
-    background: linear-gradient(112deg, rgba(132, 193, 241, .27), rgba(35, 92, 156, .44) 28%, rgba(9, 37, 77, .73) 90%) !important;
-    box-shadow: inset 0 1px 0 rgba(224, 240, 255, .4), inset 0 -1px 0 rgba(232, 182, 91, .27),
-      0 4px 16px rgba(1, 17, 46, .19) !important;
+  .desktop-utility-content .site-language-toggle { width: 57px; padding: 0 4px; }
+  .desktop-utility-content .desktop-menu-toggle { width: 77px; gap: 5px; }
+  .desktop-utility-content .desktop-menu-toggle svg:first-child { width: 16px; }
+  .desktop-utility-content .accessibility-settings-anchor { width: 39px; }
+  .desktop-utility-content .accessibility-settings-trigger { width: 39px; padding: 0; }
+  .desktop-utility-content .accessibility-settings-trigger > span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
   }
-  .desktop-utility-content .desktop-menu-toggle::before { border-radius: 999px; }
+  .desktop-utility-content .desktop-utility-theme { width: 73px; }
+  .desktop-utility-content .theme-toggle { width: 73px; padding-inline: 5px; gap: 5px; }
+  .desktop-utility-content .theme-toggle .theme-toggle-icons { gap: 1px; }
+  .desktop-utility-content .desktop-theme-chevron { flex: 0 0 auto; }
+  :root:not([data-theme="light"]) body .desktop-utility-content :is(.site-language-toggle, .desktop-menu-toggle, .accessibility-settings-trigger, .theme-toggle) {
+    border: 1px solid rgba(248, 204, 117, .78) !important;
+    background: linear-gradient(120deg, rgba(113, 182, 241, .25), rgba(29, 83, 150, .48) 30%, rgba(5, 31, 70, .82) 90%) !important;
+    box-shadow: inset 0 1px 0 rgba(232, 246, 255, .5), inset 0 -1px 0 rgba(235, 188, 94, .3) !important;
+  }
+  .desktop-utility-content .desktop-menu-toggle::before { border-radius: 8px; }
+  /* All flyouts drop BELOW their own button, never widen the horizontal rail. */
   .desktop-utility-content .desktop-menu-options {
-    top: 0;
-    right: calc(100% + 13px);
-    width: min(256px, calc(100vw - 320px));
-    max-width: calc(100vw - 320px);
+    top: calc(100% + 12px);
+    left: 0;
+    right: auto;
+    width: max-content;
+    min-width: 208px;
+    max-width: min(260px, calc(100vw - 32px));
+    max-height: min(70vh, 530px);
+    overflow-y: auto;
   }
   .desktop-utility-content .site-language-options {
-    top: calc(100% + 7px);
-    right: 0;
-    left: auto;
-    width: 100%;
-    min-width: 100%;
+    top: calc(100% + 12px);
+    right: auto;
+    left: 0;
+    width: 150px;
+    min-width: 150px;
+    max-width: min(150px, calc(100vw - 32px));
     box-sizing: border-box;
   }
   .desktop-utility-content .accessibility-settings-panel {
-    top: 0;
-    right: calc(100% + 13px);
-    width: min(340px, calc(100vw - 320px));
+    top: calc(100% + 12px);
+    right: -92px;
+    width: min(340px, calc(100vw - 32px));
+    max-height: min(72dvh, 640px);
   }
-  :root[data-theme="light"] body .desktop-utility-drawer {
-    border-color: rgba(183, 135, 46, .66);
-    background: linear-gradient(112deg, rgba(255, 255, 255, .8), rgba(202, 225, 248, .8) 55%, rgba(155, 198, 231, .76));
-    color: #183755;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .93), -12px 12px 40px rgba(20, 55, 97, .17);
+  .desktop-utility-content .desktop-theme-options {
+    position: absolute;
+    z-index: 100;
+    top: calc(100% + 12px);
+    right: 0;
+    display: grid;
+    width: 138px;
+    gap: 3px;
+    padding: 6px;
+    border: 1px solid rgba(245, 202, 119, .8);
+    border-radius: 13px;
+    background: linear-gradient(140deg, rgba(31, 80, 137, .98), rgba(5, 28, 65, .99));
+    color: #fff4dc;
+    box-shadow: inset 0 1px 0 rgba(219, 238, 255, .42), 0 15px 27px rgba(0, 12, 34, .34);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+  }
+  .desktop-utility-content .desktop-theme-options[hidden] { display: none; }
+  .desktop-utility-content .desktop-theme-option {
+    min-height: 38px;
+    padding: 7px 9px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    background: transparent;
+    color: inherit;
+    font: 500 12px/1.3 var(--sans);
+    text-align: left;
+    cursor: pointer;
+  }
+  .desktop-utility-content .desktop-theme-option:hover,
+  .desktop-utility-content .desktop-theme-option:focus-visible,
+  .desktop-utility-content .desktop-theme-option[aria-pressed="true"] {
+    border-color: rgba(245, 202, 119, .66);
+    background: rgba(136, 193, 253, .17);
+  }
+  :root[data-theme="light"] body .desktop-utility-content {
+    border-color: rgba(178, 134, 54, .68);
+    background: linear-gradient(120deg, rgba(255, 255, 255, .88), rgba(201, 228, 252, .88) 58%, rgba(173, 211, 243, .85));
+    color: #203b59;
+    box-shadow: inset 0 1px 0 #fff, -8px 7px 25px rgba(36, 73, 121, .16);
   }
   :root[data-theme="light"] body .desktop-utility-handle {
-    border-color: rgba(178, 127, 45, .72);
-    background: linear-gradient(140deg, #e9f5ff, #9fc4e4);
-    color: #6c4a18;
+    border-color: rgba(174, 128, 47, .78);
+    background: linear-gradient(133deg, #edf8ff, #a4cce9 80%);
+    color: #725018;
   }
-  :root[data-theme="light"] body .desktop-utility-title { color: #62491c; }
-  :root[data-theme="light"] body .desktop-utility-content :is(
-    .site-language-toggle, .desktop-menu-toggle, .accessibility-settings-trigger, .theme-toggle
-  ) {
-    border-color: rgba(155, 115, 48, .58) !important;
-    background: linear-gradient(130deg, rgba(255, 255, 255, .91), rgba(220, 237, 252, .88)) !important;
-    box-shadow: inset 0 1px 0 #fff, 0 4px 15px rgba(26, 61, 102, .10) !important;
-    color: #203b59;
+  :root[data-theme="light"] body .desktop-utility-content :is(.site-language-toggle, .desktop-menu-toggle, .accessibility-settings-trigger, .theme-toggle) {
+    border-color: rgba(159, 118, 52, .62) !important;
+    background: linear-gradient(135deg, rgba(255, 255, 255, .95), rgba(217, 235, 251, .93)) !important;
+    color: #203b59 !important;
+    box-shadow: inset 0 1px 0 #fff, 0 3px 10px rgba(31, 67, 110, .1) !important;
   }
-  :root[data-accessibility-contrast="high"] body .desktop-utility-drawer {
-    border-width: 2px;
-    border-color: currentColor;
+  :root[data-theme="light"] body .desktop-theme-options {
+    border-color: rgba(159, 118, 52, .58);
+    background: linear-gradient(145deg, #fff, #e4f1ff);
+    color: #163451;
+  }
+  :root[data-theme="light"] body .desktop-theme-option:is(:hover, :focus-visible, [aria-pressed="true"]) {
+    border-color: rgba(159, 118, 52, .5);
+    background: rgba(59, 117, 180, .15);
+  }
+  :root[data-accessibility-contrast="high"]:not([data-theme="light"]) body .desktop-utility-content {
+    background: #113052;
+    border: 2px solid #ffdf90;
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
   }
-  :root[data-accessibility-contrast="high"]:not([data-theme="light"]) body .desktop-utility-drawer {
-    background: #113052;
-  }
-  :root[data-accessibility-contrast="high"][data-theme="light"] body .desktop-utility-drawer {
+  :root[data-accessibility-contrast="high"][data-theme="light"] body .desktop-utility-content {
     background: #f3f8ff;
+    border: 2px solid #76541c;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
   }
   @media (prefers-reduced-transparency: reduce) {
-    .desktop-utility-drawer { -webkit-backdrop-filter: none; backdrop-filter: none; }
+    .desktop-utility-content { -webkit-backdrop-filter: none; backdrop-filter: none; }
   }
   @media (prefers-reduced-motion: reduce) {
-    :root:not([data-accessibility-reduce-motion="false"]) .desktop-utility-drawer { transition: none; }
+    :root:not([data-accessibility-reduce-motion="false"]) .desktop-utility-content { transition: none; }
   }
-  :root[data-accessibility-reduce-motion="true"] .desktop-utility-drawer { transition: none; }
+  :root[data-accessibility-reduce-motion="true"] .desktop-utility-content { transition: none; }
 }
 
-/* Keep the established mobile top controls and floating mobile nav unchanged. */
+/* Mobile remains the existing header row plus right-centre floating site nav. */
 @media (max-width: 768px) {
-  .desktop-utility-drawer,
-  .desktop-utility-content { display: contents; }
-  .desktop-utility-handle,
-  .desktop-utility-title { display: none; }
+  .desktop-utility-drawer, .desktop-utility-content, .desktop-utility-theme { display: contents; }
+  .desktop-utility-handle, .desktop-theme-chevron, .desktop-theme-options { display: none !important; }
 }

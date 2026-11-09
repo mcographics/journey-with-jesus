@@ -61,6 +61,8 @@ export function SiteHeader() {
     return href === "/projects/journey-with-jesus/" || href === "/team/" || href === "/store/";
   });
   const [isDesktopMenuOpen, setIsDesktopMenuOpen] = useState(false);
+  const [isDesktopThemeOpen, setIsDesktopThemeOpen] = useState(false);
+  const desktopThemeRef = useRef<HTMLDivElement>(null);
   const [isDesktopUtilityOpen, setIsDesktopUtilityOpen] = useState(false);
   const [isDesktopUtilityPinned, setIsDesktopUtilityPinned] = useState(false);
   const suppressUtilityHoverRef = useRef(false);
@@ -122,9 +124,7 @@ export function SiteHeader() {
     };
   }, [themeMode]);
 
-  const toggleTheme = () => {
-    const nextMode: ThemeMode =
-      themeMode === "auto" ? "light" : themeMode === "light" ? "dark" : "auto";
+  const selectTheme = (nextMode: ThemeMode) => {
     const nextTheme = nextMode === "auto" ? getTimeBasedTheme() : nextMode;
     setThemeMode(nextMode);
     document.documentElement.dataset.themeMode = nextMode;
@@ -134,6 +134,10 @@ export function SiteHeader() {
     } catch {}
     setThemeColor(nextTheme);
   };
+
+  // Mobile retains the existing three-state tap cycle.
+  const toggleTheme = () =>
+    selectTheme(themeMode === "auto" ? "light" : themeMode === "light" ? "dark" : "auto");
 
   // Keep the menu at the viewport's right centre; let its glow recede when
   // scrolling stops. Leave a faint, tappable handle for easy rediscovery.
@@ -276,6 +280,29 @@ export function SiteHeader() {
   }, [isDesktopMenuOpen]);
 
   useEffect(() => {
+    if (!isDesktopUtilityOpen) {
+      setIsDesktopMenuOpen(false);
+      setIsDesktopThemeOpen(false);
+    }
+  }, [isDesktopUtilityOpen]);
+
+  useEffect(() => {
+    if (!isDesktopThemeOpen) return;
+    const closeOnOutsidePointer = (event: PointerEvent) => {
+      if (!desktopThemeRef.current?.contains(event.target as Node)) setIsDesktopThemeOpen(false);
+    };
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setIsDesktopThemeOpen(false);
+    };
+    document.addEventListener("pointerdown", closeOnOutsidePointer);
+    document.addEventListener("keydown", closeOnEscape);
+    return () => {
+      document.removeEventListener("pointerdown", closeOnOutsidePointer);
+      document.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [isDesktopThemeOpen]);
+
+  useEffect(() => {
     if (!isMobileMenuOpen) return;
 
     const closeOnOutsidePointer = (event: PointerEvent) => {
@@ -325,10 +352,9 @@ export function SiteHeader() {
             onClick={toggleDesktopUtility}
             type="button"
           >
-            <span aria-hidden="true">|||</span>
+            <Menu aria-hidden="true" size={22} strokeWidth={2} />
           </button>
           <div className="desktop-utility-content" id="desktop-utility-content">
-            <span className="desktop-utility-title">Site controls</span>
             <SiteLanguageSwitcher />
             <div className="desktop-navigation" ref={desktopNavigationRef}>
           <button
@@ -376,27 +402,53 @@ export function SiteHeader() {
           </nav>
         </div>
         <AccessibilitySettings />
-        <button
-          aria-label={themeMode === "auto"
-            ? "Automatic theme is active. Activate to use light mode."
-            : themeMode === "light"
-              ? "Light mode is active. Activate to use dark mode."
-              : "Dark mode is active. Activate to return to automatic theme."}
-          className={`theme-toggle theme-toggle-${themeMode}`}
-          onClick={toggleTheme}
-          title={themeMode === "auto"
-            ? "Automatic: light 7 AM–7 PM and dark 7 PM–7 AM, using local time."
-            : themeMode === "light"
-              ? "Light mode. Activate to switch to dark mode."
-              : "Dark mode. Activate to return to automatic theme."}
-          type="button"
-        >
-          <span className="theme-toggle-icons" aria-hidden="true">
-            <Sun size={15} strokeWidth={1.8} />
-            <span className="theme-toggle-divider" />
-            <Moon size={14} strokeWidth={1.8} />
-          </span>
-        </button>
+        <div className="desktop-utility-theme" ref={desktopThemeRef}>
+          <button
+            aria-controls="desktop-theme-options"
+            aria-expanded={isDesktopThemeOpen}
+            aria-haspopup="true"
+            aria-label="Appearance settings"
+            className={`theme-toggle theme-toggle-${themeMode}`}
+            onClick={() => {
+              if (window.matchMedia("(min-width: 769px)").matches) {
+                setIsDesktopThemeOpen((open) => !open);
+              } else {
+                toggleTheme();
+              }
+            }}
+            title="Appearance: automatic, light or dark"
+            type="button"
+          >
+            <span className="theme-toggle-icons" aria-hidden="true">
+              <Sun size={15} strokeWidth={1.8} />
+              <span className="theme-toggle-divider" />
+              <Moon size={14} strokeWidth={1.8} />
+            </span>
+            <ChevronDown aria-hidden="true" className="desktop-theme-chevron" size={12} />
+          </button>
+          <div
+            aria-label="Appearance options"
+            className="desktop-theme-options"
+            hidden={!isDesktopThemeOpen}
+            id="desktop-theme-options"
+            role="group"
+          >
+            {(["auto", "light", "dark"] as const).map((mode) => (
+              <button
+                aria-pressed={themeMode === mode}
+                className="desktop-theme-option"
+                key={mode}
+                onClick={() => {
+                  selectTheme(mode);
+                  setIsDesktopThemeOpen(false);
+                }}
+                type="button"
+              >
+                {mode === "auto" ? "Automatic" : mode === "light" ? "Light" : "Dark"}
+              </button>
+            ))}
+          </div>
+        </div>
           </div>
         </div>
         <div
