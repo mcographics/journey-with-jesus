@@ -10,6 +10,7 @@ const translations: Array<[string, string, string]> = [
   ["Meet the Characters", "Découvrez les personnages", "Conoce a los personajes"],
   ["Meet the Team", "Découvrez l’équipe", "Conoce al equipo"],
   ["Tap circle to read more", "Touchez le cercle pour en savoir plus", "Toca el círculo para leer más"],
+  ["Click circle to read more", "Cliquez sur le cercle pour en savoir plus", "Haz clic en el círculo para leer más"],
   ["Store", "Boutique", "Tienda"],
   ["Menu", "Menu", "Menú"],
   ["Skip to content", "Passer au contenu", "Saltar al contenido"],
