@@ -235,6 +235,8 @@ test("desktop media page fits the player and playlist without overflow", async (
   }));
   expect(dimensions.content).toBeLessThanOrEqual(dimensions.viewport);
   await expect(page.getByRole("complementary", { name: "Media playlist" })).toBeVisible();
+  await expect(page.locator(".media-library-summary")).toHaveCount(0);
+  await expect(page.getByText("All videos & stories")).toHaveCount(0);
   const playerTop = await page.locator(".media-layout").evaluate((node) => node.getBoundingClientRect().top);
   expect(playerTop).toBeLessThan(185);
 });
@@ -426,7 +428,7 @@ test("Media, Characters, Team, and Store dark mode use soft-white text", async (
   });
 
   for (const { route, selector, titleSelector, copySelector } of [
-    { route: "/media/", selector: ".media-page", titleSelector: ".media-library-summary-title", copySelector: ".comment-intro" },
+    { route: "/media/", selector: ".media-page", titleSelector: ".playlist-header h2", copySelector: ".comment-intro" },
     { route: "/characters/", selector: ".characters-page", titleSelector: "h1", copySelector: ".editorial-intro" },
     { route: "/team/", selector: ".team-page", titleSelector: "h1", copySelector: ".editorial-intro" },
     { route: "/store/", selector: ".store-page", titleSelector: "h1", copySelector: ".store-unavailable-description" },
