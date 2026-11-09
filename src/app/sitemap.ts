@@ -3,6 +3,8 @@ import { legalPolicies } from "@/data/legal-policies";
 
 const siteUrl = "https://kerygmapath.com";
 
+export const dynamic = "force-static";
+
 const publicPaths = [
   "/",
   "/blog/",
