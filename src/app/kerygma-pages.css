@@ -148,6 +148,13 @@
   overflow: hidden;
 }
 
+/* Next/Image fill must be contained by a positioned picture element. */
+.kerygma-company-hero-art > picture {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
 .kerygma-company-hero-image {
   object-fit: cover;
   object-position: 61% center;
