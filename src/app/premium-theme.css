@@ -575,10 +575,10 @@
   }
   :root[data-theme="light"] body .storybook-section .storybook-shade {
     background: linear-gradient(90deg,
-      rgba(239, 246, 255, .84) 0%,
-      rgba(239, 246, 255, .68) 30%,
-      rgba(233, 243, 253, .41) 52%,
-      rgba(233, 243, 253, .12) 76%,
+      rgba(239, 246, 255, .78) 0%,
+      rgba(239, 246, 255, .62) 30%,
+      rgba(233, 243, 253, .36) 52%,
+      rgba(233, 243, 253, .10) 76%,
       transparent 100%) !important;
   }
 
@@ -600,10 +600,10 @@
     border: 0;
     border-radius: 14px 0 0 14px;
     background: linear-gradient(90deg,
-      rgba(238, 247, 255, .95) 0%,
-      rgba(224, 240, 255, .91) 43%,
-      rgba(211, 231, 251, .8) 65%,
-      rgba(211, 231, 251, .46) 83%,
+      rgba(238, 247, 255, .88) 0%,
+      rgba(224, 240, 255, .84) 43%,
+      rgba(211, 231, 251, .74) 65%,
+      rgba(211, 231, 251, .4) 83%,
       rgba(211, 231, 251, 0) 100%) !important;
     box-shadow: none;
     backdrop-filter: none;
@@ -640,9 +640,9 @@
   }
   :root[data-theme="light"] body .storybook-section .storybook-shade {
     background: linear-gradient(90deg,
-      rgba(228, 240, 254, .90) 0%,
-      rgba(228, 240, 254, .90) 87%,
-      rgba(228, 240, 254, .76) 92%,
+      rgba(228, 240, 254, .84) 0%,
+      rgba(228, 240, 254, .84) 87%,
+      rgba(228, 240, 254, .70) 92%,
       rgba(228, 240, 254, 0) 100%) !important;
   }
 
@@ -680,29 +680,33 @@
   -webkit-background-clip: border-box !important;
 }
 
-/* All four paragraphs after the heading, including the larger lead sentence,
-   must stay WHITE rather than inheriting the site's broad yellow text rule.
-   The ID-linked selector beats that rule regardless of stylesheet load order. */
+/* Preserve the original WHITE story paragraphs in dark mode. In light mode,
+   use true black text without the old dark glow on the pale translucent shade.
+   Both gold heading lines are intentionally untouched. */
 :root body .storybook-section #scripture-title + .storybook-description-panel > p {
   color: #ffffff !important;
   -webkit-text-fill-color: #ffffff !important;
 }
 :root[data-theme="light"] body .storybook-section #scripture-title + .storybook-description-panel > p {
-  text-shadow: 0 1px 3px rgba(8, 25, 47, .92),
-    0 0 6px rgba(8, 25, 47, .62) !important;
+  color: #101010 !important;
+  -webkit-text-fill-color: #101010 !important;
+  text-shadow: none !important;
 }
 
-/* Faith, Hope and Redemption stay white; only the word Love is standard red. */
+/* Faith, Hope and Redemption use readable royal navy ONLY in light mode.
+   Love and its period stay vivid red in both themes. */
 :root body .mission-section .mission-copy .virtue-statement > strong {
   color: #fff !important;
   -webkit-text-fill-color: currentColor !important;
 }
+:root[data-theme="light"] body .mission-section .mission-copy .virtue-statement > strong {
+  color: #153c64 !important;
+  -webkit-text-fill-color: #153c64 !important;
+  text-shadow: none !important;
+}
 :root body .mission-section .mission-copy .virtue-statement .virtue-love {
   color: #ff0000 !important;
-  -webkit-text-fill-color: currentColor !important;
-}
-:root[data-theme="light"] body .mission-section .mission-copy .virtue-statement > strong {
-  text-shadow: 0 1px 3px rgba(8, 25, 47, .88) !important;
+  -webkit-text-fill-color: #ff0000 !important;
 }
 
 /* Mobile only: extend the existing translucent Story text surface upward so
@@ -743,8 +747,8 @@
   :root[data-theme="light"] body .storybook-section .storybook-copy::before {
     border-color: rgba(112, 157, 201, .26);
     background: linear-gradient(120deg,
-      rgba(238, 247, 255, .80) 0%,
-      rgba(211, 231, 251, .72) 100%);
+      rgba(238, 247, 255, .73) 0%,
+      rgba(211, 231, 251, .65) 100%);
   }
 }
 /* The smaller mobile header already uses a 17px gap below the eyebrow. */

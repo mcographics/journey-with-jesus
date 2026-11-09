@@ -300,3 +300,43 @@ for (const { screen, viewport, expectedWidth } of [
     }
   });
 }
+
+for (const { device, viewport } of [
+  { device: "desktop", viewport: { width: 1280, height: 800 } },
+  { device: "mobile", viewport: { width: 375, height: 812 } },
+]) {
+  test(`light mode keeps the story overlay subtle and its copy black on ${device}`, async ({ page }) => {
+    await page.setViewportSize(viewport);
+    await page.addInitScript(() => {
+      localStorage.setItem("journey-with-jesus-theme-mode", "light");
+    });
+    await page.goto("/projects/journey-with-jesus/");
+    await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+
+    const story = page.locator(".storybook-section");
+    for (const paragraph of await story.locator("#scripture-title + .storybook-description-panel > p").all()) {
+      await expect(paragraph).toHaveCSS("color", "rgb(16, 16, 16)");
+      await expect(paragraph).toHaveCSS("-webkit-text-fill-color", "rgb(16, 16, 16)");
+      await expect(paragraph).toHaveCSS("text-shadow", "none");
+    }
+    await expect(story.locator("#scripture-title")).toHaveCSS("color", "rgb(255, 231, 146)");
+    const shade = device === "mobile"
+      ? await story.locator(".storybook-copy").evaluate((el) => getComputedStyle(el, "::before").backgroundImage)
+      : await story.locator(".storybook-shade").evaluate((el) => getComputedStyle(el).backgroundImage);
+    expect(shade).toContain(device === "mobile" ? "238, 247, 255, 0.73" : "228, 240, 254, 0.84");
+
+    const mission = page.locator(".mission-section");
+    await expect(mission.locator(".virtue-statement > strong")).toHaveCSS("color", "rgb(21, 60, 100)");
+    await expect(mission.locator(".virtue-love")).toHaveCSS("color", "rgb(255, 0, 0)");
+  });
+}
+
+test("dark mode retains white story copy, white virtues, and red Love", async ({ page }) => {
+  await page.addInitScript(() => {
+    localStorage.setItem("journey-with-jesus-theme-mode", "dark");
+  });
+  await page.goto("/projects/journey-with-jesus/");
+  await expect(page.locator("#scripture-title + .storybook-description-panel > p").first()).toHaveCSS("color", "rgb(255, 255, 255)");
+  await expect(page.locator(".virtue-statement > strong")).toHaveCSS("color", "rgb(255, 255, 255)");
+  await expect(page.locator(".virtue-love")).toHaveCSS("color", "rgb(255, 0, 0)");
+});
