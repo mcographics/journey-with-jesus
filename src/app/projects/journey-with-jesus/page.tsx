@@ -87,12 +87,12 @@ export default function HomePage() {
           <Link
             className="storybook-seal"
             href="/media/"
-            aria-label="Explore Media: Faith, Hope, Love — Let the story light the way. Click Me!"
+            aria-label="Explore Media: Faith, Hope, Love — Let the story light the way. Click Me"
           >
             <span>Faith · Hope · Love</span>
             <BookOpen size={34} strokeWidth={1.2} aria-hidden="true" />
             <small>Let the story<br />light the way</small>
-            <strong className="storybook-seal-cta">Click Me!</strong>
+            <strong className="storybook-seal-cta">Click Me</strong>
           </Link>
         </div>
       </section>

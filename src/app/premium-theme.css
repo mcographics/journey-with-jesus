@@ -757,3 +757,34 @@
     top: 42px;
   }
 }
+
+/* Our Story seal: reveal more of the original illustrated background through
+   its pale glass centre. The delicate gold orbit rings stay unchanged. */
+:root[data-theme="light"] body .storybook-section .storybook-seal {
+  background: radial-gradient(circle,
+    rgba(247, 249, 252, .82) 0%,
+    rgba(241, 246, 251, .73) 60%,
+    rgba(241, 246, 251, .08) 76%,
+    transparent 78%);
+}
+
+/* The invitation text should be visible at every breakpoint, not only mobile.
+   A slow pulse signals clickability without animating the entire page. */
+:root body .storybook-section .storybook-seal-cta {
+  display: block;
+}
+
+@keyframes storybook-seal-gentle-pulse {
+  0%, 100% { transform: scale(1); filter: brightness(1); }
+  50% { transform: scale(1.035); filter: brightness(1.055); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  :root:not([data-accessibility-reduce-motion="true"]) body .storybook-section .storybook-seal {
+    animation: storybook-seal-gentle-pulse 3s ease-in-out infinite;
+  }
+}
+/* Respect the visitor's explicit preference to allow animation, even when
+   their operating system requests reduced motion. */
+:root[data-accessibility-reduce-motion="false"] body .storybook-section .storybook-seal {
+  animation: storybook-seal-gentle-pulse 3s ease-in-out infinite;
+}

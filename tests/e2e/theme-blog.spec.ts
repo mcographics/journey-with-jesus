@@ -340,3 +340,32 @@ test("dark mode retains white story copy, white virtues, and red Love", async ({
   await expect(page.locator(".virtue-statement > strong")).toHaveCSS("color", "rgb(255, 255, 255)");
   await expect(page.locator(".virtue-love")).toHaveCSS("color", "rgb(255, 0, 0)");
 });
+
+for (const { screen, viewport } of [
+  { screen: "desktop", viewport: { width: 1280, height: 800 } },
+  { screen: "mobile", viewport: { width: 375, height: 812 } },
+]) {
+  test(`story circle has a softer white centre, visible Click Me label, and a gentle pulse on ${screen}`, async ({ page }) => {
+    await page.setViewportSize(viewport);
+    await page.addInitScript(() => {
+      localStorage.setItem("journey-with-jesus-theme-mode", "light");
+    });
+    await page.goto("/projects/journey-with-jesus/");
+    const seal = page.locator(".storybook-seal");
+    await expect(seal).toBeVisible();
+    await expect(seal.locator(".storybook-seal-cta")).toHaveText("Click Me");
+    await expect(seal.locator(".storybook-seal-cta")).toBeVisible();
+    const background = await seal.evaluate(el => getComputedStyle(el).backgroundImage);
+    expect(background).toContain("247, 249, 252, 0.82");
+    expect(background).toContain("241, 246, 251, 0.73");
+    await expect(seal).toHaveCSS("animation-name", "storybook-seal-gentle-pulse");
+  });
+}
+
+test("story circle honours reduced-motion preferences", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/projects/journey-with-jesus/");
+  const seal = page.locator(".storybook-seal");
+  await expect(seal.locator(".storybook-seal-cta")).toBeVisible();
+  await expect(seal).not.toHaveCSS("animation-name", "storybook-seal-gentle-pulse");
+});
