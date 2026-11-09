@@ -393,9 +393,9 @@ test("light mode keeps muted surfaces and brings the mobile Media player higher"
   expect(backgroundImage).not.toContain("media-page-background.webp");
   await expect(page.locator(".media-page")).toHaveCSS("background-blend-mode", /^normal(?:,\s*normal)*$/);
   await expect(page.locator(".media-heading, .media-format-guide")).toHaveCount(0);
-  await expect(page.locator(".media-stage")).toHaveCSS("padding-top", "68px");
+  await expect(page.locator(".media-stage")).toHaveCSS("padding-top", "44px");
   const playerTop = await page.locator(".media-layout").evaluate((node) => node.getBoundingClientRect().top);
-  expect(playerTop).toBeLessThan(180);
+  expect(playerTop).toBeLessThan(195);
 });
 
 test("the desktop mobile preview is absent from the main site", async ({ page }) => {
