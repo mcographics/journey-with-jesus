@@ -232,7 +232,7 @@ test("desktop media page fits the player and playlist without overflow", async (
     content: document.documentElement.scrollWidth,
   }));
   expect(dimensions.content).toBeLessThanOrEqual(dimensions.viewport);
-  await expect(page.getByRole("complementary", { name: "Story playlist" })).toBeVisible();
+  await expect(page.getByRole("complementary", { name: "Media playlist" })).toBeVisible();
 });
 
 test("accessibility preferences persist across routes and light brightness stays scoped to light mode", async ({ page }) => {
