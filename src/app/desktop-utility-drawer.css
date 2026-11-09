@@ -1,0 +1,171 @@
+/* Desktop-only right-edge frosted-glass utility drawer.
+   The three-bar half-round lip remains visible when the controls retract. */
+@media (min-width: 769px) {
+  .site-header { z-index: 90; overflow: visible; }
+  .desktop-utility-drawer {
+    position: fixed;
+    z-index: 90;
+    top: calc(20px + env(safe-area-inset-top, 0px));
+    right: 0;
+    box-sizing: border-box;
+    width: 258px;
+    max-width: calc(100vw - 58px);
+    padding: 21px 18px 22px;
+    border: 1px solid rgba(248, 209, 132, .78);
+    border-right: 0;
+    border-radius: 24px 0 0 24px;
+    background:
+      linear-gradient(112deg, rgba(184, 224, 255, .24), transparent 27%, rgba(69, 145, 224, .13) 63%),
+      linear-gradient(155deg, rgba(26, 76, 132, .88), rgba(5, 25, 55, .93) 82%);
+    -webkit-backdrop-filter: blur(26px) saturate(155%);
+    backdrop-filter: blur(26px) saturate(155%);
+    box-shadow: inset 0 1px 0 rgba(226, 241, 255, .66), inset 0 -1px 0 rgba(243, 201, 112, .3),
+      -12px 12px 40px rgba(0, 11, 34, .30), -2px 0 12px rgba(233, 188, 99, .12);
+    color: #fff3dc;
+    pointer-events: auto;
+    transform: translateX(calc(100% + 1px));
+    transition: transform .36s cubic-bezier(.22, 1, .36, 1);
+    will-change: transform;
+  }
+  .desktop-utility-drawer.is-open { transform: translateX(0); }
+  .desktop-utility-drawer::before {
+    position: absolute;
+    inset: 5px 5px 5px 4px;
+    content: "";
+    border: 1px solid rgba(209, 233, 255, .17);
+    border-right: 0;
+    border-radius: 19px 0 0 19px;
+    pointer-events: none;
+  }
+  .desktop-utility-handle {
+    position: absolute;
+    top: 25px;
+    left: -46px;
+    display: flex;
+    width: 47px;
+    height: 69px;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 1px solid rgba(247, 205, 118, .85);
+    border-right: 0;
+    border-radius: 42px 0 0 42px;
+    background: linear-gradient(132deg, rgba(92, 158, 219, .93), rgba(13, 45, 87, .97) 65%, rgba(7, 27, 59, .97));
+    box-shadow: inset 0 1px 0 rgba(223, 241, 255, .8), inset 1px 0 0 rgba(248, 205, 111, .28),
+      -5px 5px 17px rgba(2, 17, 45, .25);
+    color: #ffe3a5;
+    font: 600 21px/1 var(--sans);
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+  .desktop-utility-handle span { display: block; letter-spacing: .08em; transform: translateX(2px); }
+  .desktop-utility-handle:hover,
+  .desktop-utility-handle:focus-visible { color: #fff8df; border-color: #ffecc5; }
+  .desktop-utility-content { display: grid; gap: 12px; visibility: hidden; pointer-events: none; }
+  .desktop-utility-drawer.is-open .desktop-utility-content { visibility: visible; pointer-events: auto; }
+  .desktop-utility-title {
+    display: block;
+    margin: 0 3px 2px;
+    color: #f8d69a;
+    font: 600 11px/1.4 var(--sans);
+    letter-spacing: .15em;
+    text-align: center;
+    text-transform: uppercase;
+  }
+  .desktop-utility-content > :is(.site-language-switcher, .desktop-navigation, .accessibility-settings-anchor) {
+    display: flex;
+    width: 100%;
+    min-width: 0;
+    align-items: center;
+    justify-content: stretch;
+  }
+  .desktop-utility-content :is(.site-language-toggle, .desktop-menu-toggle, .accessibility-settings-trigger, .theme-toggle) {
+    display: inline-flex;
+    width: 100%;
+    min-width: 0;
+    min-height: 45px;
+    height: 45px;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    border-radius: 999px;
+    font-size: 13px;
+    letter-spacing: .025em;
+    transform: none;
+  }
+  :root:not([data-theme="light"]) body .desktop-utility-content :is(
+    .site-language-toggle, .desktop-menu-toggle, .accessibility-settings-trigger, .theme-toggle
+  ) {
+    border-color: rgba(242, 198, 115, .75) !important;
+    background: linear-gradient(112deg, rgba(132, 193, 241, .27), rgba(35, 92, 156, .44) 28%, rgba(9, 37, 77, .73) 90%) !important;
+    box-shadow: inset 0 1px 0 rgba(224, 240, 255, .4), inset 0 -1px 0 rgba(232, 182, 91, .27),
+      0 4px 16px rgba(1, 17, 46, .19) !important;
+  }
+  .desktop-utility-content .desktop-menu-toggle::before { border-radius: 999px; }
+  .desktop-utility-content .desktop-menu-options {
+    top: 0;
+    right: calc(100% + 13px);
+    width: min(256px, calc(100vw - 320px));
+    max-width: calc(100vw - 320px);
+  }
+  .desktop-utility-content .site-language-options {
+    top: calc(100% + 7px);
+    right: 0;
+    left: auto;
+    width: 100%;
+    min-width: 100%;
+    box-sizing: border-box;
+  }
+  .desktop-utility-content .accessibility-settings-panel {
+    top: 0;
+    right: calc(100% + 13px);
+    width: min(340px, calc(100vw - 320px));
+  }
+  :root[data-theme="light"] body .desktop-utility-drawer {
+    border-color: rgba(183, 135, 46, .66);
+    background: linear-gradient(112deg, rgba(255, 255, 255, .8), rgba(202, 225, 248, .8) 55%, rgba(155, 198, 231, .76));
+    color: #183755;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .93), -12px 12px 40px rgba(20, 55, 97, .17);
+  }
+  :root[data-theme="light"] body .desktop-utility-handle {
+    border-color: rgba(178, 127, 45, .72);
+    background: linear-gradient(140deg, #e9f5ff, #9fc4e4);
+    color: #6c4a18;
+  }
+  :root[data-theme="light"] body .desktop-utility-title { color: #62491c; }
+  :root[data-theme="light"] body .desktop-utility-content :is(
+    .site-language-toggle, .desktop-menu-toggle, .accessibility-settings-trigger, .theme-toggle
+  ) {
+    border-color: rgba(155, 115, 48, .58) !important;
+    background: linear-gradient(130deg, rgba(255, 255, 255, .91), rgba(220, 237, 252, .88)) !important;
+    box-shadow: inset 0 1px 0 #fff, 0 4px 15px rgba(26, 61, 102, .10) !important;
+    color: #203b59;
+  }
+  :root[data-accessibility-contrast="high"] body .desktop-utility-drawer {
+    border-width: 2px;
+    border-color: currentColor;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  :root[data-accessibility-contrast="high"]:not([data-theme="light"]) body .desktop-utility-drawer {
+    background: #113052;
+  }
+  :root[data-accessibility-contrast="high"][data-theme="light"] body .desktop-utility-drawer {
+    background: #f3f8ff;
+  }
+  @media (prefers-reduced-transparency: reduce) {
+    .desktop-utility-drawer { -webkit-backdrop-filter: none; backdrop-filter: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :root:not([data-accessibility-reduce-motion="false"]) .desktop-utility-drawer { transition: none; }
+  }
+  :root[data-accessibility-reduce-motion="true"] .desktop-utility-drawer { transition: none; }
+}
+
+/* Keep the established mobile top controls and floating mobile nav unchanged. */
+@media (max-width: 768px) {
+  .desktop-utility-drawer,
+  .desktop-utility-content { display: contents; }
+  .desktop-utility-handle,
+  .desktop-utility-title { display: none; }
+}

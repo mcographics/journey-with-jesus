@@ -61,6 +61,10 @@ export function SiteHeader() {
     return href === "/projects/journey-with-jesus/" || href === "/team/" || href === "/store/";
   });
   const [isDesktopMenuOpen, setIsDesktopMenuOpen] = useState(false);
+  const [isDesktopUtilityOpen, setIsDesktopUtilityOpen] = useState(false);
+  const [isDesktopUtilityPinned, setIsDesktopUtilityPinned] = useState(false);
+  const suppressUtilityHoverRef = useRef(false);
+  const desktopUtilityRef = useRef<HTMLDivElement>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobileMenuIdle, setIsMobileMenuIdle] = useState(false);
   const [themeMode, setThemeMode] = useState<ThemeMode>("auto");
@@ -163,6 +167,59 @@ export function SiteHeader() {
     };
   }, [isMobileMenuOpen]);
 
+  // The right-edge lip is always reachable; a mouse entering the upper-right
+  // hotspot reveals the controls, while leaving the panel retracts it.
+  // Clicking the lip pins the panel until clicked again, Escape, or outside click.
+  useEffect(() => {
+    const desktopViewport = window.matchMedia("(min-width: 769px)");
+    const onPointerMove = (event: PointerEvent) => {
+      if (!desktopViewport.matches || (event.pointerType !== "mouse" && event.pointerType !== "pen")) return;
+      const insideDrawer = desktopUtilityRef.current?.contains(event.target as Node) ?? false;
+      const nearCorner = event.clientX >= window.innerWidth - 68 && event.clientY <= 190;
+
+      if (suppressUtilityHoverRef.current) {
+        if (!insideDrawer && !nearCorner) suppressUtilityHoverRef.current = false;
+        return;
+      }
+      if (!isDesktopUtilityPinned) setIsDesktopUtilityOpen(insideDrawer || nearCorner);
+    };
+    const onOutsideClick = (event: PointerEvent) => {
+      if (!desktopViewport.matches || !isDesktopUtilityOpen) return;
+      if (!desktopUtilityRef.current?.contains(event.target as Node)) {
+        setIsDesktopUtilityPinned(false);
+        setIsDesktopUtilityOpen(false);
+      }
+    };
+    const onEscape = (event: KeyboardEvent) => {
+      if (event.key !== "Escape" || !isDesktopUtilityOpen) return;
+      setIsDesktopUtilityPinned(false);
+      setIsDesktopUtilityOpen(false);
+      suppressUtilityHoverRef.current = true;
+      desktopUtilityRef.current?.querySelector<HTMLButtonElement>(".desktop-utility-handle")?.focus();
+    };
+
+    window.addEventListener("pointermove", onPointerMove, { passive: true });
+    document.addEventListener("pointerdown", onOutsideClick);
+    document.addEventListener("keydown", onEscape);
+    return () => {
+      window.removeEventListener("pointermove", onPointerMove);
+      document.removeEventListener("pointerdown", onOutsideClick);
+      document.removeEventListener("keydown", onEscape);
+    };
+  }, [isDesktopUtilityOpen, isDesktopUtilityPinned]);
+
+  const toggleDesktopUtility = () => {
+    if (isDesktopUtilityPinned) {
+      suppressUtilityHoverRef.current = true;
+      setIsDesktopUtilityPinned(false);
+      setIsDesktopUtilityOpen(false);
+    } else {
+      suppressUtilityHoverRef.current = false;
+      setIsDesktopUtilityPinned(true);
+      setIsDesktopUtilityOpen(true);
+    }
+  };
+
   useEffect(() => {
     if (!isDesktopMenuOpen) return;
 
@@ -223,8 +280,25 @@ export function SiteHeader() {
   return (
     <header className="site-header">
       <div className="header-inner">
-        <SiteLanguageSwitcher />
-        <div className="desktop-navigation" ref={desktopNavigationRef}>
+        <div
+          className={`desktop-utility-drawer${isDesktopUtilityOpen ? " is-open" : ""}`}
+          data-pinned={isDesktopUtilityPinned}
+          ref={desktopUtilityRef}
+        >
+          <button
+            aria-controls="desktop-utility-content"
+            aria-expanded={isDesktopUtilityOpen}
+            aria-label={isDesktopUtilityOpen ? "Close site controls" : "Open site controls"}
+            className="desktop-utility-handle"
+            onClick={toggleDesktopUtility}
+            type="button"
+          >
+            <span aria-hidden="true">|||</span>
+          </button>
+          <div className="desktop-utility-content" id="desktop-utility-content">
+            <span className="desktop-utility-title">Site controls</span>
+            <SiteLanguageSwitcher />
+            <div className="desktop-navigation" ref={desktopNavigationRef}>
           <button
             aria-controls="desktop-navigation-options"
             aria-expanded={isDesktopMenuOpen}
@@ -252,7 +326,11 @@ export function SiteHeader() {
                   className={`desktop-menu-link${isCurrent ? " is-current" : ""}`}
                   href={href}
                   key={href}
-                  onClick={() => setIsDesktopMenuOpen(false)}
+                  onClick={() => {
+                    setIsDesktopMenuOpen(false);
+                    setIsDesktopUtilityOpen(false);
+                    setIsDesktopUtilityPinned(false);
+                  }}
                 >
                   {href === "/word/"
                     ? <BookOpen aria-hidden="true" size={15} strokeWidth={1.7} />
@@ -287,6 +365,8 @@ export function SiteHeader() {
             <Moon size={14} strokeWidth={1.8} />
           </span>
         </button>
+          </div>
+        </div>
         <div
           className={`mobile-navigation${isMobileMenuIdle && !isMobileMenuOpen ? " is-idle" : ""}`}
           ref={mobileNavigationRef}
