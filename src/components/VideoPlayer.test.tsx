@@ -26,7 +26,7 @@ describe("VideoPlayer", () => {
     const { container } = render(<VideoPlayer episode={episode(orientation)} />);
     const frame = container.querySelector(".video-frame");
     expect(frame?.classList.contains("is-portrait")).toBe(orientation === "portrait");
-    expect((frame as HTMLElement).style.aspectRatio).toBe(String(16 / 9));
+    expect(parseFloat((frame as HTMLElement).style.aspectRatio)).toBeCloseTo(16 / 9);
     expect(screen.getByLabelText("Video quality")).toBeTruthy();
     expect((container.querySelector("video source") as HTMLSourceElement).src).toBe(sources[1]!.url);
   });
@@ -39,7 +39,7 @@ describe("VideoPlayer", () => {
     fireEvent.loadedMetadata(video);
     const frame = container.querySelector(".video-frame") as HTMLElement;
     expect(frame.classList.contains("is-portrait")).toBe(true);
-    expect(frame.style.aspectRatio).toBe(String(16 / 9));
+    expect(parseFloat(frame.style.aspectRatio)).toBeCloseTo(16 / 9);
   });
 
   it("switches the native video source when the viewer chooses another quality", () => {
