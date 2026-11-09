@@ -79,16 +79,7 @@ export function MediaExperience({ episodes: initialEpisodes }: { episodes: Episo
     <main id="main-content" className="media-page">
       <section className="media-stage" aria-label="Media library">
         <div className="page-width media-page-width">
-          <header className="media-heading">
-            <p className="media-kicker">FAITH · HOPE · STORY</p>
-            <h1>Animated stories of faith.</h1>
-            <p>Explore the life and teachings of Jesus through Scripture-inspired animation. Choose a full-length video or a portrait story, then follow its conversation. Watching and commenting are open to everyone.</p>
-          </header>
-          <div className="media-format-guide" aria-label="Supported video formats">
-            <span>16:9 widescreen</span>
-            <span>9:16 vertical</span>
-            <span>4K playback when available</span>
-          </div>
+          <h1 className="media-visually-hidden">Media library</h1>
           {catalogStatus === "loading" && episodes.length === 0 && <p className="catalog-notice" role="status">Loading the media library…</p>}
           {catalogStatus === "unconfigured" && episodes.length === 0 && <p className="catalog-notice" role="status">The public media library is being prepared. Please check back soon.</p>}
           {catalogStatus === "error" && <p className="catalog-notice is-error" role="status">The media library could not be reached. Please refresh to try again.</p>}
