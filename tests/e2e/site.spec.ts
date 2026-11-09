@@ -226,7 +226,7 @@ test.describe("mobile header controls and translations", () => {
 test("desktop media page fits the player and playlist without overflow", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/media/");
-  await expect.poll(() => page.locator(".media-page").evaluate((element) => getComputedStyle(element).backgroundImage)).toContain("media-page-background.webp");
+  await expect.poll(() => page.locator(".media-page").evaluate((element) => getComputedStyle(element).backgroundImage)).toContain("linear-gradient(");
   const dimensions = await page.evaluate(() => ({
     viewport: document.documentElement.clientWidth,
     content: document.documentElement.scrollWidth,
@@ -283,7 +283,7 @@ test.describe("mobile accessibility controls", () => {
 
   test("settings remain labeled, touch-sized, and inside the viewport", async ({ page }) => {
     await page.goto("/media/");
-    await expect.poll(() => page.locator(".media-page").evaluate((element) => getComputedStyle(element).backgroundImage)).toContain("media-page-background.webp");
+    await expect.poll(() => page.locator(".media-page").evaluate((element) => getComputedStyle(element).backgroundImage)).toContain("linear-gradient(");
     const trigger = page.getByRole("button", { name: "Accessibility settings" });
     await expect(trigger).toBeVisible();
     const triggerBounds = await trigger.boundingBox();
@@ -385,8 +385,8 @@ test("light mode uses muted surfaces and a larger mobile media kicker", async ({
   await expect(page.locator(".media-page")).toHaveCSS("--night", "#f2f4f2");
   const backgroundImage = await page.locator(".media-page")
     .evaluate((element) => getComputedStyle(element).backgroundImage);
-  expect(backgroundImage).toContain("media-page-background.webp");
-  expect(backgroundImage).not.toContain("gradient(");
+  expect(backgroundImage).toContain("linear-gradient(");
+  expect(backgroundImage).not.toContain("media-page-background.webp");
   await expect(page.locator(".media-page")).toHaveCSS("background-blend-mode", "normal");
   await expect(page.locator(".media-kicker")).toHaveCSS("font-size", "18px");
 });
