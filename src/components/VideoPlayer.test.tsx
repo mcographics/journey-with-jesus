@@ -26,8 +26,20 @@ describe("VideoPlayer", () => {
     const { container } = render(<VideoPlayer episode={episode(orientation)} />);
     const frame = container.querySelector(".video-frame");
     expect(frame?.classList.contains("is-portrait")).toBe(orientation === "portrait");
+    expect((frame as HTMLElement).style.aspectRatio).toBe(String(16 / 9));
     expect(screen.getByLabelText("Video quality")).toBeTruthy();
     expect((container.querySelector("video source") as HTMLSourceElement).src).toBe(sources[1]!.url);
+  });
+
+  it("keeps the frame widescreen when a video reports 9:16 metadata", () => {
+    const { container } = render(<VideoPlayer episode={episode("landscape")} />);
+    const video = container.querySelector("video") as HTMLVideoElement;
+    Object.defineProperty(video, "videoWidth", { configurable: true, value: 1080 });
+    Object.defineProperty(video, "videoHeight", { configurable: true, value: 1920 });
+    fireEvent.loadedMetadata(video);
+    const frame = container.querySelector(".video-frame") as HTMLElement;
+    expect(frame.classList.contains("is-portrait")).toBe(true);
+    expect(frame.style.aspectRatio).toBe(String(16 / 9));
   });
 
   it("switches the native video source when the viewer chooses another quality", () => {
