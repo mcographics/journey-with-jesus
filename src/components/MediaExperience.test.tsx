@@ -43,6 +43,7 @@ describe("MediaExperience", () => {
 
   it("shows a single shared Comments section even when the library is empty", () => {
     render(<MediaExperience episodes={[]} />);
+    expect(screen.queryByText("Loading the media library…")).toBeNull();
     expect(screen.getAllByRole("heading", { name: "Comments" })).toHaveLength(1);
     expect(screen.getAllByRole("region", { name: "Media discussion" })).toHaveLength(1);
     expect(screen.queryByRole("navigation", { name: "Choose a discussion" })).toBeNull();
