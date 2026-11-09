@@ -387,7 +387,7 @@ test("light mode uses muted surfaces and a larger mobile media kicker", async ({
     .evaluate((element) => getComputedStyle(element).backgroundImage);
   expect(backgroundImage).toContain("linear-gradient(");
   expect(backgroundImage).not.toContain("media-page-background.webp");
-  await expect(page.locator(".media-page")).toHaveCSS("background-blend-mode", "normal");
+  await expect(page.locator(".media-page")).toHaveCSS("background-blend-mode", /^normal(?:,\s*normal)*$/);
   await expect(page.locator(".media-kicker")).toHaveCSS("font-size", "18px");
 });
 
