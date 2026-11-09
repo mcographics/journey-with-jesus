@@ -4,17 +4,13 @@ import Image from "next/image";
 import { useMemo, useState } from "react";
 import type { Episode, MediaPlaylist } from "@/data/episodes";
 
-type MediaKind = "videos" | "stories";
 type Props = {
   episodes: Episode[]; selectedId: string | null; onSelect: (episode: Episode) => void;
   playlists?: MediaPlaylist[]; selectedPlaylistId?: string; onPlaylistChange?: (id: string) => void;
-  mediaKind?: MediaKind;
 };
 
-export function EpisodePlaylist({ episodes, selectedId, onSelect, playlists = [], selectedPlaylistId = "all", onPlaylistChange, mediaKind = "stories" }: Props) {
+export function EpisodePlaylist({ episodes, selectedId, onSelect, playlists = [], selectedPlaylistId = "all", onPlaylistChange }: Props) {
   const [query, setQuery] = useState("");
-  const isStories = mediaKind === "stories";
-  const itemLabelPlural = isStories ? "stories" : "videos";
   const playlist = playlists.find((item) => item.id === selectedPlaylistId);
   const playlistEpisodes = useMemo(
     () => playlist ? episodes.filter((episode) => playlist.episodeIds.includes(episode.id)) : episodes,
@@ -28,17 +24,17 @@ export function EpisodePlaylist({ episodes, selectedId, onSelect, playlists = []
   }, [playlistEpisodes, query]);
 
   return (
-    <aside className="playlist-panel" aria-label={isStories ? "Story playlist" : "Video playlist"}>
+    <aside className="playlist-panel" aria-label="Media playlist">
       <div className="playlist-header">
         <div className="playlist-header-top">
-          <h2>{playlist?.title ?? (isStories ? "Stories" : "Videos")}</h2>
-          <span className="playlist-count">{playlistEpisodes.length} {itemLabelPlural.toUpperCase()}</span>
+          <h2>{playlist?.title ?? "Up next"}</h2>
+          <span className="playlist-count">{playlistEpisodes.length} {playlistEpisodes.length === 1 ? "ITEM" : "ITEMS"}</span>
         </div>
         {playlists.length > 0 && onPlaylistChange && (
           <label className="playlist-picker">
             <span>Playlist</span>
-            <select aria-label={isStories ? "Choose a story playlist" : "Choose a video playlist"} value={selectedPlaylistId} onChange={(event) => onPlaylistChange(event.target.value)}>
-              <option value="all">All {itemLabelPlural}</option>
+            <select aria-label="Choose a media playlist" value={selectedPlaylistId} onChange={(event) => onPlaylistChange(event.target.value)}>
+              <option value="all">All videos &amp; stories</option>
               {playlists.map((item) => <option key={item.id} value={item.id}>{item.title}</option>)}
             </select>
           </label>
@@ -47,7 +43,7 @@ export function EpisodePlaylist({ episodes, selectedId, onSelect, playlists = []
         {playlistEpisodes.length > 0 && (
           <label className="search-box">
             <Search size={15} aria-hidden="true" />
-            <input value={query} onChange={(event) => setQuery(event.target.value)} type="search" placeholder={"Search " + itemLabelPlural} aria-label={"Search " + itemLabelPlural} />
+            <input value={query} onChange={(event) => setQuery(event.target.value)} type="search" placeholder="Search videos & stories" aria-label="Search videos and stories" />
           </label>
         )}
       </div>
@@ -55,14 +51,14 @@ export function EpisodePlaylist({ episodes, selectedId, onSelect, playlists = []
         <div className="episode-empty">
           <BookOpen className="empty-icon" size={24} strokeWidth={1.4} aria-hidden="true" />
           <h3>Coming Soon</h3>
-          <p>{isStories ? "Portrait stories will appear here as they are released." : "Full-length videos will appear here as they are released."}</p>
+          <p>Videos and portrait stories will appear here as they are released.</p>
         </div>
       ) : playlistEpisodes.length === 0 ? (
-        <p className="episode-empty" role="status">This playlist is ready for {itemLabelPlural}.</p>
+        <p className="episode-empty" role="status">This playlist has no videos or stories yet.</p>
       ) : visibleEpisodes.length === 0 ? (
-        <p className="episode-empty" role="status">No {itemLabelPlural} match “{query}”.</p>
+        <p className="episode-empty" role="status">No media match “{query}”.</p>
       ) : (
-        <div className="playlist-list" aria-label={"Available " + itemLabelPlural}>
+        <div className="playlist-list" aria-label="Available videos and stories">
           {visibleEpisodes.map((episode) => (
             <button type="button" key={episode.id} aria-current={selectedId === episode.id ? "true" : undefined}
               className={"episode-card" + (selectedId === episode.id ? " is-selected" : "")} onClick={() => onSelect(episode)}>
@@ -73,7 +69,7 @@ export function EpisodePlaylist({ episodes, selectedId, onSelect, playlists = []
               </span>
               <span className="episode-copy">
                 <strong>{episode.title}</strong>
-                <small>{episode.scriptureReference ?? (isStories ? "Portrait story" : "Video " + episode.episodeNumber)} · {episode.orientation === "portrait" ? "9:16" : "16:9"}</small>
+                <small>{episode.scriptureReference ?? (episode.orientation === "portrait" ? "Portrait story" : "Video " + episode.episodeNumber)} · {episode.orientation === "portrait" ? "9:16" : "16:9"}</small>
                 {selectedId === episode.id && <span className="episode-current-label">Now playing</span>}
               </span>
             </button>
