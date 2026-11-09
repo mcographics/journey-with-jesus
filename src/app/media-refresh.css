@@ -21,7 +21,7 @@
 }
 :root body .media-page .media-stage {
   min-height: 0;
-  padding: clamp(56px, 5.3vw, 78px) 0 42px;
+  padding: clamp(44px, 3.6vw, 56px) 0 42px;
   background: transparent !important;
 }
 .media-page .media-page-width { width: min(100% - 64px, 1440px); margin-inline: auto; }
@@ -340,7 +340,7 @@
   :root body .media-page .episode-card { grid-template-columns: 106px minmax(0, 1fr); }
 }
 @media (max-width: 520px) {
-  :root body .media-page .media-stage { padding-top: 68px; padding-bottom: 26px; }
+  :root body .media-page .media-stage { padding-top: 44px; padding-bottom: 26px; }
   .media-page .media-page-width { width: min(100% - 26px, 460px); }
   .media-page .media-kind-tabs { width: 100%; margin-bottom: 20px; }
   .media-page .media-kind-tabs button { flex: 1 1 0; min-width: 0; }
@@ -384,9 +384,9 @@
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 12px;
-  min-height: 54px;
-  margin: 0 0 15px;
-  padding: 13px 19px;
+  min-height: 40px;
+  margin: 0 0 10px;
+  padding: 7px 14px;
   border: 1px solid rgba(225, 177, 89, .52);
   border-radius: 12px;
   background: linear-gradient(110deg, rgba(17, 66, 117, .8), rgba(5, 24, 51, .9));
@@ -419,7 +419,7 @@
   background: rgba(255, 255, 255, .54);
 }
 @media (max-width: 520px) {
-  .media-page .media-library-summary { padding: 10px 14px; margin: 0 0 14px; }
+  .media-page .media-library-summary { padding: 7px 12px; margin: 0 0 10px; }
   .media-page .media-library-summary-title { font-size: 13px; }
 }
 
