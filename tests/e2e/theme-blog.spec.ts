@@ -275,10 +275,19 @@ for (const { screen, viewport, expectedWidth } of [
   test(`site language dropdown uses compact width and name-to-code spacing on ${screen}`, async ({ page }) => {
     await page.setViewportSize(viewport);
     await page.goto("/company/");
+    if (screen === "desktop") {
+      await page.mouse.move(viewport.width - 3, 35);
+      await expect(page.locator(".desktop-utility-drawer")).toHaveClass(/is-open/);
+    }
     await page.locator(".site-language-toggle").click();
     const menu = page.locator(".site-language-options");
     await expect(menu).toBeVisible();
-    await expect(menu).toHaveCSS("width", `${expectedWidth}px`);
+    if (screen === "mobile") {
+      await expect(menu).toHaveCSS("width", `${expectedWidth}px`);
+    } else {
+      const triggerWidth = await page.locator(".site-language-toggle").evaluate(el => el.getBoundingClientRect().width);
+      expect(await menu.evaluate(el => el.getBoundingClientRect().width)).toBeCloseTo(triggerWidth, 0);
+    }
     const bounds = await menu.boundingBox();
     expect(bounds).not.toBeNull();
     expect(bounds!.x).toBeGreaterThanOrEqual(0);
