@@ -120,17 +120,33 @@ export function SiteLanguageSwitcher() {
   }, [languageCode, languageReady, pathname]);
 
   useEffect(() => {
+    // English is the source language, so observing every DOM mutation in that
+    // mode wastes work on every React update and animated page transition.
+    if (!languageReady || languageCode === "en") return;
+
+    // Batch third-party and React DOM changes into one translation pass per
+    // animation frame instead of repeatedly traversing the same subtree.
+    const pendingNodes = new Set<Node>();
+    let scheduledFrame = 0;
+    const flush = () => {
+      scheduledFrame = 0;
+      const nodes = Array.from(pendingNodes);
+      pendingNodes.clear();
+      nodes.forEach((node) => {
+        if (node.isConnected) translateNode(node, languageCode);
+      });
+    };
+    const queueNode = (node: Node) => {
+      pendingNodes.add(node);
+      if (!scheduledFrame) scheduledFrame = window.requestAnimationFrame(flush);
+    };
     const observer = new MutationObserver((records) => {
       for (const record of records) {
-        if (record.type === "attributes") {
-          translateNode(record.target, languageCode);
-          continue;
+        if (record.type === "attributes" || record.type === "characterData") {
+          queueNode(record.target);
+        } else {
+          record.addedNodes.forEach(queueNode);
         }
-        if (record.type === "characterData") {
-          translateNode(record.target, languageCode);
-          continue;
-        }
-        record.addedNodes.forEach((node) => translateNode(node, languageCode));
       }
     });
     const observerOptions: MutationObserverInit = {
@@ -142,8 +158,12 @@ export function SiteLanguageSwitcher() {
     };
     observer.observe(document.head, observerOptions);
     observer.observe(document.body, observerOptions);
-    return () => observer.disconnect();
-  }, [languageCode]);
+    return () => {
+      observer.disconnect();
+      if (scheduledFrame) window.cancelAnimationFrame(scheduledFrame);
+      pendingNodes.clear();
+    };
+  }, [languageCode, languageReady]);
 
   useEffect(() => {
     if (!isOpen) return;
