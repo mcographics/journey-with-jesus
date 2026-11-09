@@ -48,10 +48,11 @@ describe("MediaExperience", () => {
     expect(screen.queryByRole("heading", { name: "Video comments" })).toBeNull();
   });
 
-  it("opens the requested portrait story and selects the Stories collection", () => {
+  it("opens the requested portrait story in the unified media player", () => {
     window.history.replaceState({}, "", "/media/?episode=hope-two");
     render(<MediaExperience episodes={episodes} />);
-    expect(screen.getByRole("button", { name: /Stories/ }).getAttribute("aria-pressed")).toBe("true");
+    expect(screen.getByRole("complementary", { name: "Media playlist" })).toBeTruthy();
+    expect(screen.getByRole("button", { name: /A Story of Mercy/ })).toBeTruthy();
     expect(screen.getByRole("heading", { name: "A Story of Hope" })).toBeTruthy();
     expect(screen.getByTitle("A Story of Hope")).toBeTruthy();
     expect(window.location.search).toBe("?episode=hope-two");
@@ -59,7 +60,6 @@ describe("MediaExperience", () => {
 
   it("updates the shareable URL and responds to browser back and forward", () => {
     render(<MediaExperience episodes={episodes} />);
-    fireEvent.click(screen.getByRole("button", { name: /Stories/ }));
     fireEvent.click(screen.getByRole("button", { name: /A Story of Hope/ }));
     expect(window.location.search).toBe("?episode=hope-two");
     expect(screen.getByRole("heading", { name: "A Story of Hope" })).toBeTruthy();
@@ -67,7 +67,24 @@ describe("MediaExperience", () => {
     window.history.replaceState({}, "", "/media/?episode=parable-one");
     fireEvent(window, new PopStateEvent("popstate"));
     expect(screen.getByRole("heading", { name: "A Story of Mercy" })).toBeTruthy();
-    expect(screen.getByRole("button", { name: /Videos/ }).getAttribute("aria-pressed")).toBe("true");
+    expect(screen.getByRole("button", { name: /A Story of Hope/ })).toBeTruthy();
+    expect(screen.getByRole("complementary", { name: "Media playlist" })).toBeTruthy();
+  });
+
+  it("plays widescreen videos and portrait stories from the same playlist without switching tabs", () => {
+    const { container } = render(<MediaExperience episodes={episodes} />);
+    const playlist = screen.getByRole("complementary", { name: "Media playlist" });
+    expect(playlist.textContent).toContain("A Story of Mercy");
+    expect(playlist.textContent).toContain("A Story of Hope");
+    expect(container.querySelector(".video-frame")?.classList.contains("is-portrait")).toBe(false);
+
+    fireEvent.click(screen.getByRole("button", { name: /A Story of Hope/ }));
+    expect(container.querySelector(".video-frame")?.classList.contains("is-portrait")).toBe(true);
+    expect(screen.getByTitle("A Story of Hope")).toBeTruthy();
+
+    fireEvent.click(screen.getByRole("button", { name: /A Story of Mercy/ }));
+    expect(container.querySelector(".video-frame")?.classList.contains("is-portrait")).toBe(false);
+    expect(screen.getByRole("heading", { name: "A Story of Mercy" })).toBeTruthy();
   });
 
   it("shows only media in the selected site audio language for both YouTube and uploads", () => {
@@ -84,19 +101,19 @@ describe("MediaExperience", () => {
     fireEvent(window, new Event("site-language-change"));
     expect(screen.getByRole("heading", { name: "French YouTube" })).toBeTruthy();
     expect(screen.queryByText("English upload")).toBeNull();
-    expect(screen.getByRole("button", { name: /Videos/ }).textContent).toContain("1");
+    expect(screen.getByLabelText("Unified media library").textContent).toContain("1 title");
 
     window.localStorage.setItem("kerygmapath-language", "es");
     fireEvent(window, new Event("site-language-change"));
     expect(screen.getByRole("heading", { name: "Spanish upload" })).toBeTruthy();
     expect(screen.queryByText("French YouTube")).toBeNull();
-    expect(screen.getByRole("button", { name: /Stories/ }).textContent).toContain("1");
+    expect(screen.getByLabelText("Unified media library").textContent).toContain("1 title");
   });
 
   it("never plays a recording from another language when a requested language has no media", () => {
     window.localStorage.setItem("kerygmapath-language", "fr");
     render(<MediaExperience episodes={episodes} />);
     expect(screen.queryByRole("heading", { name: "A Story of Mercy" })).toBeNull();
-    expect(screen.getByText("No french stories are available yet.")).toBeTruthy();
+    expect(screen.getByText("No french media are available yet.")).toBeTruthy();
   });
 });
