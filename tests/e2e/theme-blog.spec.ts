@@ -90,7 +90,7 @@ test("media page uses only theme gradients in dark and light modes", async ({ pa
     const backgroundImage = await media.evaluate((node) => getComputedStyle(node).backgroundImage);
     expect(backgroundImage, `gradient missing in ${mode} mode`).toContain("linear-gradient(");
     expect(backgroundImage, `unexpected photograph in ${mode} mode`).not.toContain("media-page-background.webp");
-    await expect(media).toHaveCSS("background-blend-mode", "normal");
+    await expect(media).toHaveCSS("background-blend-mode", /^normal(?:,\s*normal)*$/);
 
     const stage = page.locator(".media-stage");
     await expect(stage).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
@@ -146,7 +146,7 @@ test("dark mode uses a clean gradient with no media photograph", async ({ page }
   const image = await media.evaluate((node) => getComputedStyle(node).backgroundImage);
   expect(image).toContain("linear-gradient(");
   expect(image).not.toContain("media-page-background.webp");
-  await expect(media).toHaveCSS("background-blend-mode", "normal");
+  await expect(media).toHaveCSS("background-blend-mode", /^normal(?:,\s*normal)*$/);
   await expect(page.locator(".media-stage")).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
   await page.goto("/company/");
   await expect(page.locator(".kerygma-company-hero-shade"))
