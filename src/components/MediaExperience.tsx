@@ -79,7 +79,6 @@ export function MediaExperience({ episodes: initialEpisodes }: { episodes: Episo
       <section className="media-stage" aria-label="Media library">
         <div className="page-width media-page-width">
           <h1 className="media-visually-hidden">Media library</h1>
-          {catalogStatus === "loading" && episodes.length === 0 && <p className="catalog-notice" role="status">Loading the media library…</p>}
           {catalogStatus === "unconfigured" && episodes.length === 0 && <p className="catalog-notice" role="status">The public media library is being prepared. Please check back soon.</p>}
           {catalogStatus === "error" && <p className="catalog-notice is-error" role="status">The media library could not be reached. Please refresh to try again.</p>}
 
