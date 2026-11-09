@@ -74,11 +74,11 @@ test("royal gradients appear on pages and controls, never over the original phot
   await expect(page.locator(".kerygma-company-hero")).toHaveCSS("background-image", "none");
   await page.goto("/media/");
   const mediaBackground = await page.locator(".media-page").evaluate((node) => getComputedStyle(node).backgroundImage);
-  expect(mediaBackground).toContain("media-page-background.webp");
-  expect(mediaBackground).not.toContain("gradient(");
+  expect(mediaBackground).toContain("linear-gradient(");
+  expect(mediaBackground).not.toContain("media-page-background.webp");
 });
 
-test("media page restores its original photograph in dark and light modes", async ({ page }) => {
+test("media page uses only theme gradients in dark and light modes", async ({ page }) => {
   for (const mode of ["dark", "light"] as const) {
     await page.goto("/media/");
     await page.evaluate((value) => {
@@ -88,8 +88,8 @@ test("media page restores its original photograph in dark and light modes", asyn
 
     const media = page.locator(".media-page");
     const backgroundImage = await media.evaluate((node) => getComputedStyle(node).backgroundImage);
-    expect(backgroundImage, `photo missing in ${mode} mode`).toContain("media-page-background.webp");
-    expect(backgroundImage, `image scrim in ${mode} mode`).not.toContain("gradient(");
+    expect(backgroundImage, `gradient missing in ${mode} mode`).toContain("linear-gradient(");
+    expect(backgroundImage, `unexpected photograph in ${mode} mode`).not.toContain("media-page-background.webp");
     await expect(media).toHaveCSS("background-blend-mode", "normal");
 
     const stage = page.locator(".media-stage");
@@ -137,15 +137,15 @@ test("dark mode uses real gold CTAs with dark readable labels", async ({ page })
     .toHaveCSS("color", "rgb(255, 224, 154)");
 });
 
-test("dark mode keeps original media imagery and excludes gold from photo overlays", async ({ page }) => {
+test("dark mode uses a clean gradient with no media photograph", async ({ page }) => {
   await page.addInitScript(() => {
     localStorage.setItem("journey-with-jesus-theme-mode", "dark");
   });
   await page.goto("/media/");
   const media = page.locator(".media-page");
   const image = await media.evaluate((node) => getComputedStyle(node).backgroundImage);
-  expect(image).toContain("media-page-background.webp");
-  expect(image).not.toContain("gradient(");
+  expect(image).toContain("linear-gradient(");
+  expect(image).not.toContain("media-page-background.webp");
   await expect(media).toHaveCSS("background-blend-mode", "normal");
   await expect(page.locator(".media-stage")).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
   await page.goto("/company/");
