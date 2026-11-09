@@ -559,3 +559,37 @@
     padding-block: clamp(36px, 6vw, 52px) clamp(48px, 7vw, 64px);
   }
 }
+
+/* Desktop Our Story: replace the boxed description with a left-to-right image blend. */
+@media (min-width: 701px) {
+  /* Shade the left image area where the story lives, then reveal the artwork to the right. */
+  :root:not([data-theme="light"]) body .storybook-section .storybook-shade {
+    background: linear-gradient(90deg,
+      rgba(5, 16, 38, .94) 0%,
+      rgba(9, 24, 49, .88) 28%,
+      rgba(11, 29, 55, .72) 46%,
+      rgba(11, 29, 55, .38) 65%,
+      rgba(11, 29, 55, .1) 82%,
+      transparent 100%) !important;
+  }
+  :root[data-theme="light"] body .storybook-section .storybook-shade {
+    background: linear-gradient(90deg,
+      rgba(239, 246, 255, .94) 0%,
+      rgba(239, 246, 255, .87) 28%,
+      rgba(233, 243, 253, .7) 46%,
+      rgba(233, 243, 253, .34) 65%,
+      rgba(233, 243, 253, .08) 82%,
+      transparent 100%) !important;
+  }
+  /* Keep text aligned on the left without a visible rectangular card or hard edge. */
+  body .storybook-section .storybook-description-panel {
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
+  }
+  body .storybook-section .storybook-description-panel::before {
+    content: none;
+  }
+}
