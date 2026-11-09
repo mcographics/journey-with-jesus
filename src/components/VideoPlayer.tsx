@@ -1,6 +1,6 @@
 "use client";
-import { Play, Video } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { Ellipsis, Play, Video } from "lucide-react";
+import { useEffect, useId, useRef, useState } from "react";
 import type { Episode } from "@/data/episodes";
 import { getDefaultVideoSource } from "@/lib/episode-navigation";
 import { parseYouTubeId } from "@/lib/youtube";
@@ -13,6 +13,8 @@ export function VideoPlayer({ episode }: VideoPlayerProps) {
   const selectedCaptionId = selectedCaptionOverride ?? episode?.captions?.find((caption) => caption.isDefault)?.id ?? episode?.captions?.[0]?.id ?? "off";
   const videoRef = useRef<HTMLVideoElement>(null);
   const shellRef = useRef<HTMLDivElement>(null);
+  const detailsId = useId();
+  const [detailsExpanded, setDetailsExpanded] = useState(false);
   // The player stays widescreen; vertical stories are letterboxed inside it.
   const [isPortrait, setIsPortrait] = useState(() => episode?.orientation === "portrait");
   const [frameSize, setFrameSize] = useState<{ width: number; height: number } | null>(null);
@@ -128,10 +130,19 @@ export function VideoPlayer({ episode }: VideoPlayerProps) {
               </select>
             </label>
           )}
+          <button type="button" className="player-details-toggle"
+            aria-label={detailsExpanded ? "Hide description and accessibility resources" : "Show description and accessibility resources"}
+            aria-expanded={detailsExpanded} aria-controls={detailsId}
+            onClick={() => setDetailsExpanded((current) => !current)}>
+            <Ellipsis size={24} aria-hidden="true" />
+          </button>
         </div>
       </div>
-      <p className="episode-description">{episode.description}</p>
-      <section className="episode-accessibility-resources" aria-label="Accessibility resources">
+      <div className="player-details" id={detailsId} hidden={!detailsExpanded} style={shellStyle}>
+        {detailsExpanded && (
+          <>
+            <p className="episode-description">{episode.description}</p>
+            <section className="episode-accessibility-resources" aria-label="Accessibility resources">
         <h3>Accessibility resources</h3>
         <p><strong>Captions:</strong> {hasYoutube
           ? "Captions are enabled automatically in the YouTube player when a caption track is available. Use the player’s CC controls to change or turn them off."
@@ -169,7 +180,10 @@ export function VideoPlayer({ episode }: VideoPlayerProps) {
             <a href={episode.aslInterpretationUrl} target="_blank" rel="noreferrer">Watch the ASL interpretation video (opens in a new tab)</a>
           </div>
         ) : <p><strong>ASL interpretation:</strong> No interpreter-produced ASL video has been supplied for this story yet.</p>}
-      </section>
+            </section>
+          </>
+        )}
+      </div>
     </section>
   );
 }
