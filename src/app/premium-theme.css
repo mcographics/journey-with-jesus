@@ -666,25 +666,30 @@
   }
 }
 
-/* Journey with Jesus text palette: use the Mission heading's bright gold for
-   both Story title lines, with white description copy on every screen size.
-   The full-height blue image overlay and all layout rules remain unchanged. */
-:root:not([data-theme="light"]) body .storybook-section .storybook-title,
-:root:not([data-theme="light"]) body .storybook-section .storybook-title em,
-:root[data-theme="light"] body .storybook-section .storybook-title,
-:root[data-theme="light"] body .storybook-section .storybook-title em {
+/* Our Story colors on every screen size and in both themes. Use the same
+   exact yellow and shadow on both title lines; do not alter their layout. */
+:root body .storybook-section #scripture-title,
+:root body .storybook-section #scripture-title em {
   color: #ffe792 !important;
-  -webkit-text-fill-color: currentColor !important;
+  -webkit-text-fill-color: #ffe792 !important;
+  text-shadow: 0 2px 3px rgba(0, 0, 0, .9),
+    0 4px 9px rgba(0, 0, 0, .55),
+    0 0 7px rgba(255, 218, 111, .2) !important;
+  background-image: none !important;
+  background-clip: border-box !important;
+  -webkit-background-clip: border-box !important;
 }
 
-:root body .storybook-section .storybook-description-panel > p {
-  color: #fff !important;
-  -webkit-text-fill-color: currentColor !important;
+/* All four paragraphs after the heading, including the larger lead sentence,
+   must stay WHITE rather than inheriting the site's broad yellow text rule.
+   The ID-linked selector beats that rule regardless of stylesheet load order. */
+:root body .storybook-section #scripture-title + .storybook-description-panel > p {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
 }
-
-/* On the light image shade, preserve readable contrast for the white copy. */
-:root[data-theme="light"] body .storybook-section .storybook-description-panel > p {
-  text-shadow: 0 1px 3px rgba(8, 25, 47, .92), 0 0 6px rgba(8, 25, 47, .62) !important;
+:root[data-theme="light"] body .storybook-section #scripture-title + .storybook-description-panel > p {
+  text-shadow: 0 1px 3px rgba(8, 25, 47, .92),
+    0 0 6px rgba(8, 25, 47, .62) !important;
 }
 
 /* Faith, Hope and Redemption stay white; only the word Love is standard red. */
