@@ -119,7 +119,11 @@ export function TeamDirectory({ fallbackMembers }: Props) {
           </details>
           <div className="team-profile-mobile-caption">
             <p className="team-profile-mobile-name">{member.name}</p>
-            <p className="team-profile-mobile-prompt">Tap circle to read more</p>
+            {role && <p className="team-profile-mobile-role">{role}</p>}
+            <p className="team-profile-mobile-prompt">
+              <span className="team-prompt-touch">Tap circle to read more</span>
+              <span className="team-prompt-desktop">Click circle to read more</span>
+            </p>
           </div>
           </div>
         );
