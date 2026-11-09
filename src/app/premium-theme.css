@@ -582,14 +582,16 @@
       transparent 100%) !important;
   }
   /* Keep text aligned on the left without a visible rectangular card or hard edge. */
-  body .storybook-section .storybook-description-panel {
+  :root:not([data-theme="light"]) body .storybook-section .storybook-description-panel,
+  :root[data-theme="light"] body .storybook-section .storybook-description-panel {
     border: 0;
     border-radius: 0;
     background: transparent;
     box-shadow: none;
     backdrop-filter: none;
   }
-  body .storybook-section .storybook-description-panel::before {
+  :root:not([data-theme="light"]) body .storybook-section .storybook-description-panel::before,
+  :root[data-theme="light"] body .storybook-section .storybook-description-panel::before {
     content: none;
   }
 }
