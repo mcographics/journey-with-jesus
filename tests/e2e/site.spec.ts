@@ -225,6 +225,33 @@ test.describe("mobile header controls and translations", () => {
   });
 });
 
+test("Media comment submit button stays gold with dark readable text in dark mode", async ({ page }) => {
+  await page.addInitScript(() => {
+    window.localStorage.setItem("journey-with-jesus-theme-mode", "dark");
+  });
+  await page.goto("/media/");
+
+  // Use the real comment form when configured. Otherwise mount the same CSS
+  // structure to check public dark-mode styling without relying on Supabase.
+  const selector = ".media-page .comment-form .comment-composer-buttons button.button-gold";
+  if (await page.locator(selector).count() === 0) {
+    await page.locator(".media-discussion").evaluate((section) => {
+      const form = document.createElement("div");
+      form.className = "comment-form";
+      form.innerHTML = '<div class="comment-composer-buttons"><button type="button" class="button button-gold">Submit for review</button></div>';
+      section.appendChild(form);
+    });
+  }
+  const submit = page.locator(selector).first();
+  await expect(submit).toBeVisible();
+  await expect(submit).toHaveCSS("color", "rgb(10, 34, 60)");
+  await expect(submit).toHaveCSS("-webkit-text-fill-color", "rgb(10, 34, 60)");
+  await expect(submit).toHaveCSS("background-image", /linear-gradient/);
+  await expect(submit).toHaveCSS("min-height", "44px");
+  const box = await submit.boundingBox();
+  expect(box?.width ?? 0).toBeGreaterThanOrEqual(160);
+});
+
 test("desktop media page fits the player and playlist without overflow", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/media/");
