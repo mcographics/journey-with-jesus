@@ -82,6 +82,53 @@ const translationLanguages = [
   ...new Set(translations.map((translation) => translation.language).filter((language) => !originalLanguageGroups.includes(language))),
 ];
 
+// Reuse parsed Bible data when switching translations. The two-entry LRU
+// avoids repeating multi-megabyte downloads without unbounded memory growth.
+const bibleRequests = new Map<string, Promise<BibleData>>();
+
+function loadBible(url: string): Promise<BibleData> {
+  const cached = bibleRequests.get(url);
+  if (cached) {
+    bibleRequests.delete(url);
+    bibleRequests.set(url, cached);
+    return cached;
+  }
+
+  const request = fetch(url)
+    .then(async (response) => {
+      if (!response.ok) throw new Error(`The Bible text could not be loaded (${response.status}).`);
+      return response.json() as Promise<BibleData>;
+    })
+    .then((data) => {
+      if (
+        !Array.isArray(data.books)
+        || data.books.length === 0
+        || data.books.length > 66
+        || !data.books.every((book) => (
+          typeof book.name === "string"
+          && Array.isArray(book.chapters)
+          && book.chapters.length > 0
+          && book.chapters.every((chapter) => Array.isArray(chapter) && chapter.every((verse) => typeof verse === "string"))
+        ))
+        || !data.redLetterSegments
+        || typeof data.redLetterSegments !== "object"
+      ) {
+        throw new Error("The Bible text file is incomplete.");
+      }
+      return data;
+    })
+    .catch((error: unknown) => {
+      if (bibleRequests.get(url) === request) bibleRequests.delete(url);
+      throw error;
+    });
+  bibleRequests.set(url, request);
+  if (bibleRequests.size > 2) {
+    const oldestUrl = bibleRequests.keys().next().value;
+    if (oldestUrl) bibleRequests.delete(oldestUrl);
+  }
+  return request;
+}
+
 function ScriptureText({ text, segments }: { text: string; segments: Array<[number, number]> }) {
   if (!segments.length) return <span translate="no">{text}</span>;
 
@@ -123,30 +170,10 @@ export function ScriptureReader({ scriptureBaseUrl }: { scriptureBaseUrl: string
 
   useEffect(() => {
     let cancelled = false;
-
     const bibleUrl = `${scriptureBaseUrl.replace(/\/+$/, "")}/${selectedTranslation.file}`;
 
-    fetch(bibleUrl)
-      .then(async (response) => {
-        if (!response.ok) throw new Error(`The Bible text could not be loaded (${response.status}).`);
-        return response.json() as Promise<BibleData>;
-      })
+    loadBible(bibleUrl)
       .then((data) => {
-        if (
-          !Array.isArray(data.books)
-          || data.books.length === 0
-          || data.books.length > 66
-          || !data.books.every((book) => (
-            typeof book.name === "string"
-            && Array.isArray(book.chapters)
-            && book.chapters.length > 0
-            && book.chapters.every((chapter) => Array.isArray(chapter) && chapter.every((verse) => typeof verse === "string"))
-          ))
-          || !data.redLetterSegments
-          || typeof data.redLetterSegments !== "object"
-        ) {
-          throw new Error("The Bible text file is incomplete.");
-        }
         if (!cancelled) {
           registerBibleBookNameAliases(data.books.map((book) => book.name));
           setBible(data);
