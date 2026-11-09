@@ -234,7 +234,7 @@ export function SiteHeader() {
       document.removeEventListener("pointerdown", onOutsideClick);
       document.removeEventListener("keydown", onEscape);
     };
-  }, [isDesktopUtilityOpen, isDesktopUtilityPinned]);
+  }, [isDesktopUtilityOpen, isDesktopUtilityPinned, normalizedPath]);
 
   const toggleDesktopUtility = () => {
     if (desktopUtilityHideTimerRef.current !== null) {
