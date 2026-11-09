@@ -42,6 +42,30 @@ describe("VideoPlayer", () => {
     expect(parseFloat(frame.style.aspectRatio)).toBeCloseTo(16 / 9);
   });
 
+  it("collapses the description and accessibility resources until the three-dot button is pressed", () => {
+    const { container } = render(<VideoPlayer episode={episode("portrait")} />);
+    const frame = container.querySelector(".video-frame") as HTMLElement;
+    const ratioBefore = frame.style.aspectRatio;
+    const toggle = screen.getByRole("button", { name: "Show description and accessibility resources" });
+    expect(toggle.getAttribute("aria-expanded")).toBe("false");
+    expect(toggle.getAttribute("aria-controls")).toBeTruthy();
+    expect(screen.queryByText("Test description")).toBeNull();
+    expect(screen.queryByRole("region", { name: "Accessibility resources" })).toBeNull();
+
+    fireEvent.click(toggle);
+    const closeToggle = screen.getByRole("button", { name: "Hide description and accessibility resources" });
+    expect(closeToggle.getAttribute("aria-expanded")).toBe("true");
+    expect(screen.getByText("Test description")).toBeTruthy();
+    expect(screen.getByRole("region", { name: "Accessibility resources" })).toBeTruthy();
+    expect(frame.style.aspectRatio).toBe(ratioBefore);
+    expect(screen.getByRole("heading", { name: "Test portrait story" })).toBeTruthy();
+
+    fireEvent.click(closeToggle);
+    expect(screen.getByRole("button", { name: "Show description and accessibility resources" }).getAttribute("aria-expanded")).toBe("false");
+    expect(screen.queryByText("Test description")).toBeNull();
+    expect(screen.queryByRole("region", { name: "Accessibility resources" })).toBeNull();
+  });
+
   it("switches the native video source when the viewer chooses another quality", () => {
     const { container } = render(<VideoPlayer episode={episode("landscape")} />);
     fireEvent.change(screen.getByLabelText("Video quality"), { target: { value: sources[0]!.url } });
@@ -71,6 +95,7 @@ describe("VideoPlayer", () => {
     expect(track?.getAttribute("srclang")).toBe("en");
     expect(track?.hasAttribute("default")).toBe(true);
     expect(screen.getByLabelText("Captions").textContent).toContain("English captions");
+    fireEvent.click(screen.getByRole("button", { name: "Show description and accessibility resources" }));
     fireEvent.click(screen.getByText("Read transcript"));
     expect(screen.getByText(/The story begins/)).toBeTruthy();
     expect(screen.getByRole("link", { name: "Download transcript" }).getAttribute("download")).toBe("test-landscape-transcript.txt");
@@ -79,6 +104,7 @@ describe("VideoPlayer", () => {
 
   it("does not invent captions, transcripts, or ASL for stories that have no supplied resources", () => {
     render(<VideoPlayer episode={episode("landscape")} />);
+    fireEvent.click(screen.getByRole("button", { name: "Show description and accessibility resources" }));
     expect(screen.getByText("No caption file has been supplied for this story yet.")).toBeTruthy();
     expect(screen.getByText("No transcript has been supplied for this story yet.")).toBeTruthy();
     expect(screen.getByText("No interpreter-produced ASL video has been supplied for this story yet.")).toBeTruthy();
