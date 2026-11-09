@@ -74,6 +74,7 @@
   grid-template-columns: minmax(0, 1fr) minmax(290px, 355px);
   gap: clamp(18px, 2vw, 30px);
   align-items: start;
+  margin-top: 50px;
 }
 .media-page .media-main, .media-page .video-player-section { min-width: 0; }
 :root body .media-page .video-shell {
