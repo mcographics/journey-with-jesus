@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import ResponsivePicture from "@/components/ResponsivePicture";
 import { ArrowRight, BookOpen, Sparkles } from "lucide-react";
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
@@ -112,14 +113,18 @@ export default function CompanyPage() {
             <Link className="kerygma-project-secondary" href="/media/">Visit the media page</Link>
           </div>
           <div className="kerygma-project-art">
-            <Image
+            <ResponsivePicture
               alt="Jesus welcomes a young man as they look across a sunlit valley toward an ancient city."
               className="kerygma-project-image"
+              fallbackSrc={`${basePath}/images/journey-with-jesus-header-1024.webp`}
               fill
               loading="lazy"
+              pictureClassName="responsive-picture-fill"
               sizes="(max-width: 800px) 100vw, 50vw"
-              src={`${basePath}/images/journey-with-jesus-header-2560.webp`}
-              unoptimized
+              webpSources={[512, 768, 1024, 1440, 1920].map((width) => ({
+                src: `${basePath}/images/journey-with-jesus-header-${width}.webp`,
+                width,
+              }))}
             />
             <span aria-hidden="true" className="kerygma-project-art-frame" />
           </div>
