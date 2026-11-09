@@ -31,20 +31,26 @@ afterEach(() => {
 });
 
 describe("MediaExperience", () => {
-  it("opens Media community as a separate view when the library is empty", () => {
+  it("shows a single shared Comments section even when the library is empty", () => {
     render(<MediaExperience episodes={[]} />);
-    fireEvent.click(screen.getByRole("button", { name: /Media community/ }));
-    expect(screen.getByRole("heading", { name: "Media community" })).toBeTruthy();
+    expect(screen.getAllByRole("heading", { name: "Comments", exact: true })).toHaveLength(1);
+    expect(screen.getAllByRole("region", { name: "Media discussion" })).toHaveLength(1);
+    expect(screen.queryByRole("navigation", { name: "Choose a discussion" })).toBeNull();
     expect(screen.queryByText("Choose a story to see its community conversation.")).toBeNull();
   });
 
-  it("keeps item comments separate from the Media community", () => {
+  it("keeps the same shared Comments section while switching videos and stories", () => {
     render(<MediaExperience episodes={episodes} />);
-    fireEvent.click(screen.getByRole("button", { name: /A Story of Mercy/ }));
-    expect(screen.getByRole("heading", { name: "Video comments" })).toBeTruthy();
+    const discussion = screen.getByRole("region", { name: "Media discussion" });
+    const comments = discussion.querySelector(".comment-section");
+    expect(comments).toBeTruthy();
+    expect(screen.getAllByRole("heading", { name: "Comments", exact: true })).toHaveLength(1);
 
-    fireEvent.click(screen.getByRole("button", { name: /Media community/ }));
-    expect(screen.getByRole("heading", { name: "Media community" })).toBeTruthy();
+    fireEvent.click(screen.getByRole("button", { name: /A Story of Hope/ }));
+    expect(discussion.querySelector(".comment-section")).toBe(comments);
+    fireEvent.click(screen.getByRole("button", { name: /A Story of Mercy/ }));
+    expect(discussion.querySelector(".comment-section")).toBe(comments);
+    expect(screen.queryByRole("heading", { name: "Story comments" })).toBeNull();
     expect(screen.queryByRole("heading", { name: "Video comments" })).toBeNull();
   });
 
