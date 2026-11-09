@@ -1,5 +1,6 @@
 "use client";
 import { BookOpen, Play, Search } from "lucide-react";
+import Image from "next/image";
 import { useMemo, useState } from "react";
 import type { Episode, MediaPlaylist } from "@/data/episodes";
 
@@ -65,7 +66,11 @@ export function EpisodePlaylist({ episodes, selectedId, onSelect, playlists = []
           {visibleEpisodes.map((episode) => (
             <button type="button" key={episode.id} aria-current={selectedId === episode.id ? "true" : undefined}
               className={"episode-card" + (selectedId === episode.id ? " is-selected" : "")} onClick={() => onSelect(episode)}>
-              <span className={"episode-art" + (episode.orientation === "portrait" ? " is-portrait" : "")} aria-hidden="true"><Play size={19} fill="currentColor" /></span>
+              <span className={"episode-art" + (episode.orientation === "portrait" ? " is-portrait" : "")} aria-hidden="true">
+                {episode.thumbnail && <Image src={episode.thumbnail} alt="" fill sizes="(max-width: 520px) 88px, 106px" unoptimized />}
+                <Play size={19} fill="currentColor" />
+                {episode.duration && <span className="episode-duration">{episode.duration}</span>}
+              </span>
               <span className="episode-copy">
                 <strong>{episode.title}</strong>
                 <small>{episode.scriptureReference ?? (isStories ? "Portrait story" : "Video " + episode.episodeNumber)} · {episode.orientation === "portrait" ? "9:16" : "16:9"}</small>
