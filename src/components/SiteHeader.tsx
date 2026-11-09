@@ -223,7 +223,12 @@ export function SiteHeader() {
     window.addEventListener("pointermove", onPointerMove, { passive: true });
     document.addEventListener("pointerdown", onOutsideClick);
     document.addEventListener("keydown", onEscape);
+    // Mark the hover controls ready only after the native pointer listener
+    // is attached. Browser tests and assistive integrations can use this
+    // to avoid racing the first client-side hydration.
+    desktopUtilityRef.current?.setAttribute("data-ready", "true");
     return () => {
+      desktopUtilityRef.current?.removeAttribute("data-ready");
       clearPendingHide();
       window.removeEventListener("pointermove", onPointerMove);
       document.removeEventListener("pointerdown", onOutsideClick);
