@@ -33,9 +33,8 @@ test("desktop utility bar is a compact horizontal row with downward menus", asyn
   const bar = page.locator(".desktop-utility-content");
   const barBox = await bar.boundingBox();
   expect(barBox).not.toBeNull();
-  // The glass ribbon now spans beneath the exposed right-edge lip. Only the
-  // control row is ~302px; the painted background also fills the handle area.
-  expect(barBox!.width).toBeLessThanOrEqual(350);
+  // Compact icon-only Explore button; glass still extends underneath the lip.
+  expect(barBox!.width).toBeLessThanOrEqual(315);
   expect(barBox!.height).toBeLessThanOrEqual(60);
   // Measure after the slide-out transition settles: the initial bounding box
   // can still be translated rightward while Playwright sees the bar as visible.
@@ -43,6 +42,11 @@ test("desktop utility bar is a compact horizontal row with downward menus", asyn
     const bounds = await bar.boundingBox();
     return bounds ? Math.round(bounds.x + bounds.width) : -1;
   }).toBe(page.viewportSize()!.width);
+  const exploreButton = bar.locator(".desktop-menu-toggle");
+  await expect(exploreButton.locator("svg.lucide-layout-grid")).toBeVisible();
+  await expect(exploreButton).not.toContainText("Menu");
+  const exploreBox = await exploreButton.boundingBox();
+  expect(exploreBox!.width).toBeLessThanOrEqual(42);
   const controls = [
     bar.locator(".site-language-toggle"),
     bar.locator(".desktop-menu-toggle"),

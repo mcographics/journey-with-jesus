@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { BookOpen, ChevronDown, Crown, Menu, Moon, Newspaper, Sun, X } from "lucide-react";
+import { BookOpen, ChevronDown, Crown, LayoutGrid, Menu, Moon, Newspaper, Sun, X } from "lucide-react";
 import { AccessibilitySettings } from "@/components/AccessibilitySettings";
 import { SiteLanguageSwitcher } from "@/components/SiteLanguageSwitcher";
 
@@ -363,14 +363,13 @@ export function SiteHeader() {
             aria-controls="desktop-navigation-options"
             aria-expanded={isDesktopMenuOpen}
             aria-label={isDesktopMenuOpen ? "Close site menu" : "Open site menu"}
+            title="Explore site pages"
             className="desktop-menu-toggle"
             onClick={() => setIsDesktopMenuOpen((open) => !open)}
             ref={desktopMenuButtonRef}
             type="button"
           >
-            {isDesktopMenuOpen ? <X aria-hidden="true" size={18} /> : <Menu aria-hidden="true" size={18} />}
-            <span>Menu</span>
-            <ChevronDown aria-hidden="true" className="desktop-menu-chevron" size={15} />
+            <LayoutGrid aria-hidden="true" size={20} strokeWidth={1.8} />
           </button>
           <nav
             aria-label="Primary navigation"

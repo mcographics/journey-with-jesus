@@ -41,12 +41,12 @@
     z-index: 1;
     top: 0;
     /* Run the same glass surface all the way under the curved side handle.
-       The original 302px control area remains unchanged, but the 45px
-       extension prevents the page banner showing through around the lip. */
+       The controls remain in one row, and the 45px glass extension
+       prevents the page banner showing through around the lip. */
     right: 0;
     box-sizing: border-box;
     display: flex;
-    width: 347px;
+    width: 307px;
     max-width: calc(100vw - 5px);
     height: 56px;
     align-items: center;
@@ -114,8 +114,8 @@
     white-space: nowrap;
   }
   .desktop-utility-content .site-language-toggle { width: 57px; padding: 0 4px; }
-  .desktop-utility-content .desktop-menu-toggle { width: 77px; gap: 5px; }
-  .desktop-utility-content .desktop-menu-toggle svg:first-child { width: 16px; }
+  .desktop-utility-content .desktop-menu-toggle { width: 39px; padding: 0; gap: 0; }
+  .desktop-utility-content .desktop-menu-toggle svg:first-child { width: 20px; }
   .desktop-utility-content .accessibility-settings-anchor { width: 39px; }
   .desktop-utility-content .accessibility-settings-trigger { width: 39px; padding: 0; }
   .desktop-utility-content .accessibility-settings-trigger > span {
