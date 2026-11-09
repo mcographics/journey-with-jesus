@@ -7,6 +7,7 @@ test("French and Spanish selections use their localized Journey with Jesus masth
   await expect.poll(() => wordmark.evaluate((image) => (image as HTMLImageElement).currentSrc))
     .toMatch(/journey-with-jesus-wordmark-640\.webp$/);
 
+  await expect(page.locator(".desktop-utility-drawer")).toHaveAttribute("data-ready", "true");
   await page.mouse.move(page.viewportSize()!.width - 3, 35);
   await expect(page.locator(".desktop-utility-drawer")).toHaveClass(/is-open/);
   await page.locator(".site-language-toggle").click();
