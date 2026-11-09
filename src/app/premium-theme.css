@@ -614,3 +614,45 @@
     content: none;
   }
 }
+
+/* Desktop Our Story: full-height blue half-panel behind the entire text column. */
+@media (min-width: 1024px) {
+  /* The entire LEFT HALF of the image remains visibly covered by translucent blue.
+     Feather only after the midpoint so it reads as a panel, not a vague image tint.
+     Because this is the section's full-height shade, it reaches its top and bottom. */
+  :root:not([data-theme="light"]) body .storybook-section .storybook-shade {
+    background: linear-gradient(90deg,
+      rgba(10, 34, 68, .92) 0%,
+      rgba(10, 34, 68, .92) 48%,
+      rgba(10, 34, 68, .74) 56%,
+      rgba(10, 34, 68, .32) 70%,
+      rgba(10, 34, 68, 0) 84%) !important;
+  }
+  :root[data-theme="light"] body .storybook-section .storybook-shade {
+    background: linear-gradient(90deg,
+      rgba(228, 240, 254, .92) 0%,
+      rgba(228, 240, 254, .92) 48%,
+      rgba(228, 240, 254, .74) 56%,
+      rgba(228, 240, 254, .32) 70%,
+      rgba(228, 240, 254, 0) 84%) !important;
+  }
+
+  /* Keep every line of the Our Story copy fully within the panel's solid half. */
+  body .storybook-section .storybook-layout {
+    grid-template-columns: minmax(0, 48%) minmax(210px, 1fr);
+  }
+  body .storybook-section .storybook-copy,
+  body .storybook-section .storybook-description-panel {
+    max-width: 100%;
+    min-width: 0;
+  }
+  /* The panel is now the full-height left side, not a separate paragraph-sized box. */
+  :root:not([data-theme="light"]) body .storybook-section .storybook-description-panel,
+  :root[data-theme="light"] body .storybook-section .storybook-description-panel {
+    background: transparent !important;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    backdrop-filter: none;
+  }
+}
