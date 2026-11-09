@@ -90,6 +90,7 @@ export function SiteLanguageSwitcher() {
   const pathname = usePathname() ?? "/";
   const rootRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
+  const lastAppliedLanguage = useRef<SiteLocale | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [languageCode, setLanguageCode] = useState<SiteLocale>("en");
   const [languageReady, setLanguageReady] = useState(false);
@@ -110,7 +111,15 @@ export function SiteLanguageSwitcher() {
 
   useEffect(() => {
     if (!languageReady) return;
-    applySiteLanguage(languageCode);
+    // Initial English pages (and English-to-English navigation) already
+    // contain their source text; do not recursively walk the whole document.
+    // Switching back from another language still restores original text.
+    if (languageCode !== "en" || (lastAppliedLanguage.current !== null && lastAppliedLanguage.current !== "en")) {
+      applySiteLanguage(languageCode);
+    } else {
+      document.documentElement.lang = "en";
+    }
+    lastAppliedLanguage.current = languageCode;
     try {
       window.localStorage.setItem("kerygmapath-language", languageCode);
     } catch {
