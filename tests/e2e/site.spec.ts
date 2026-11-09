@@ -33,8 +33,11 @@ test("desktop utility bar is a compact horizontal row with downward menus", asyn
   const bar = page.locator(".desktop-utility-content");
   const barBox = await bar.boundingBox();
   expect(barBox).not.toBeNull();
-  expect(barBox!.width).toBeLessThanOrEqual(315);
+  // The glass ribbon now spans beneath the exposed right-edge lip. Only the
+  // control row is ~302px; the painted background also fills the handle area.
+  expect(barBox!.width).toBeLessThanOrEqual(350);
   expect(barBox!.height).toBeLessThanOrEqual(60);
+  expect(barBox!.x + barBox!.width).toBeCloseTo(page.viewportSize()!.width, 0);
   const controls = [
     bar.locator(".site-language-toggle"),
     bar.locator(".desktop-menu-toggle"),
