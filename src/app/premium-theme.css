@@ -655,6 +655,13 @@
     max-width: 100%;
     min-width: 0;
   }
+  /* Move only the story text farther from the center fade. The shade panel,
+     artwork and right-side seal remain in their existing positions. At smaller
+     desktop widths, preserve the outer page gutter instead of pushing text off-screen. */
+  body .storybook-section .storybook-copy {
+    width: calc(100% - clamp(36px, 4.5vw, 68px));
+    margin-left: clamp(-28px, calc(61.44px - 6vw), 0px);
+  }
   /* Avoid a second, paragraph-sized card obscuring the full-height panel. */
   :root:not([data-theme="light"]) body .storybook-section .storybook-description-panel,
   :root[data-theme="light"] body .storybook-section .storybook-description-panel {
