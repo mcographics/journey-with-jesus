@@ -704,3 +704,52 @@
 :root[data-theme="light"] body .mission-section .mission-copy .virtue-statement > strong {
   text-shadow: 0 1px 3px rgba(8, 25, 47, .88) !important;
 }
+
+/* Mobile only: extend the existing translucent Story text surface upward so
+   it begins at “Bringing Scripture to Life,” not beneath both heading lines.
+   This is a background-only change: the title, paragraphs, and desktop image
+   panel retain their dimensions, placement, and typography. */
+@media (max-width: 700px) {
+  body .storybook-section .storybook-copy {
+    isolation: isolate;
+  }
+  body .storybook-section .storybook-copy::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    top: 48px; /* 25px Our Story label + 23px gap, exactly the title start */
+    right: 0;
+    bottom: 0;
+    left: 0;
+    border: 1px solid rgba(143, 187, 231, .25);
+    border-radius: 14px;
+    background: linear-gradient(120deg,
+      rgba(13, 32, 56, .76) 0%,
+      rgba(24, 54, 86, .64) 100%);
+    pointer-events: none;
+  }
+  /* The paragraph card no longer draws a second, lower-only background;
+     retain its padding so every text line remains exactly where it was. */
+  body .storybook-section .storybook-description-panel {
+    background: transparent !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  body .storybook-section .storybook-description-panel::before {
+    content: none !important;
+  }
+  :root[data-theme="light"] body .storybook-section .storybook-copy::before {
+    border-color: rgba(112, 157, 201, .26);
+    background: linear-gradient(120deg,
+      rgba(238, 247, 255, .80) 0%,
+      rgba(211, 231, 251, .72) 100%);
+  }
+}
+/* The smaller mobile header already uses a 17px gap below the eyebrow. */
+@media (max-width: 440px) {
+  body .storybook-section .storybook-copy::before {
+    top: 42px;
+  }
+}
