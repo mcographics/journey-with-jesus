@@ -37,7 +37,12 @@ test("desktop utility bar is a compact horizontal row with downward menus", asyn
   // control row is ~302px; the painted background also fills the handle area.
   expect(barBox!.width).toBeLessThanOrEqual(350);
   expect(barBox!.height).toBeLessThanOrEqual(60);
-  expect(barBox!.x + barBox!.width).toBeCloseTo(page.viewportSize()!.width, 0);
+  // Measure after the slide-out transition settles: the initial bounding box
+  // can still be translated rightward while Playwright sees the bar as visible.
+  await expect.poll(async () => {
+    const bounds = await bar.boundingBox();
+    return bounds ? Math.round(bounds.x + bounds.width) : -1;
+  }).toBe(page.viewportSize()!.width);
   const controls = [
     bar.locator(".site-language-toggle"),
     bar.locator(".desktop-menu-toggle"),
