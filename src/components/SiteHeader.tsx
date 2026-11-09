@@ -65,6 +65,7 @@ export function SiteHeader() {
   const [isDesktopUtilityPinned, setIsDesktopUtilityPinned] = useState(false);
   const suppressUtilityHoverRef = useRef(false);
   const desktopUtilityRef = useRef<HTMLDivElement>(null);
+  const desktopUtilityHideTimerRef = useRef<number | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobileMenuIdle, setIsMobileMenuIdle] = useState(false);
   const [themeMode, setThemeMode] = useState<ThemeMode>("auto");
@@ -172,6 +173,12 @@ export function SiteHeader() {
   // Clicking the lip pins the panel until clicked again, Escape, or outside click.
   useEffect(() => {
     const desktopViewport = window.matchMedia("(min-width: 769px)");
+    const clearPendingHide = () => {
+      if (desktopUtilityHideTimerRef.current !== null) {
+        window.clearTimeout(desktopUtilityHideTimerRef.current);
+        desktopUtilityHideTimerRef.current = null;
+      }
+    };
     const onPointerMove = (event: PointerEvent) => {
       if (!desktopViewport.matches || (event.pointerType !== "mouse" && event.pointerType !== "pen")) return;
       const insideDrawer = desktopUtilityRef.current?.contains(event.target as Node) ?? false;
@@ -181,25 +188,32 @@ export function SiteHeader() {
         if (!insideDrawer && !nearCorner) suppressUtilityHoverRef.current = false;
         return;
       }
-      if (!insideDrawer && !nearCorner) {
-        // Even a click-opened drawer retracts when the pointer moves away.
-        if (isDesktopUtilityOpen || isDesktopUtilityPinned) {
+      if (insideDrawer || nearCorner) {
+        clearPendingHide();
+        if (!isDesktopUtilityOpen) setIsDesktopUtilityOpen(true);
+        return;
+      }
+      // Brief grace period when crossing into the Menu/accessibility flyout.
+      // Otherwise the panel can disappear before a link is clicked.
+      if (isDesktopUtilityOpen && desktopUtilityHideTimerRef.current === null) {
+        desktopUtilityHideTimerRef.current = window.setTimeout(() => {
+          desktopUtilityHideTimerRef.current = null;
           setIsDesktopUtilityPinned(false);
           setIsDesktopUtilityOpen(false);
-        }
-      } else if (!isDesktopUtilityPinned && !isDesktopUtilityOpen) {
-        setIsDesktopUtilityOpen(true);
+        }, 350);
       }
     };
     const onOutsideClick = (event: PointerEvent) => {
       if (!desktopViewport.matches || !isDesktopUtilityOpen) return;
       if (!desktopUtilityRef.current?.contains(event.target as Node)) {
+        clearPendingHide();
         setIsDesktopUtilityPinned(false);
         setIsDesktopUtilityOpen(false);
       }
     };
     const onEscape = (event: KeyboardEvent) => {
       if (event.key !== "Escape" || !isDesktopUtilityOpen) return;
+      clearPendingHide();
       setIsDesktopUtilityPinned(false);
       setIsDesktopUtilityOpen(false);
       suppressUtilityHoverRef.current = true;
@@ -210,6 +224,7 @@ export function SiteHeader() {
     document.addEventListener("pointerdown", onOutsideClick);
     document.addEventListener("keydown", onEscape);
     return () => {
+      clearPendingHide();
       window.removeEventListener("pointermove", onPointerMove);
       document.removeEventListener("pointerdown", onOutsideClick);
       document.removeEventListener("keydown", onEscape);
@@ -217,6 +232,10 @@ export function SiteHeader() {
   }, [isDesktopUtilityOpen, isDesktopUtilityPinned]);
 
   const toggleDesktopUtility = () => {
+    if (desktopUtilityHideTimerRef.current !== null) {
+      window.clearTimeout(desktopUtilityHideTimerRef.current);
+      desktopUtilityHideTimerRef.current = null;
+    }
     if (isDesktopUtilityPinned) {
       suppressUtilityHoverRef.current = true;
       setIsDesktopUtilityPinned(false);
