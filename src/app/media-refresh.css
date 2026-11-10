@@ -432,6 +432,7 @@
 }
 .media-page .media-discussion .comment-section {
   max-width: 1020px;
+  margin-inline: auto;
   padding-top: 21px;
   border-top: 0;
 }
