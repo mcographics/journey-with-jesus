@@ -7,9 +7,10 @@ import type { Episode, MediaPlaylist } from "@/data/episodes";
 type Props = {
   episodes: Episode[]; selectedId: string | null; onSelect: (episode: Episode) => void;
   playlists?: MediaPlaylist[]; selectedPlaylistId?: string; onPlaylistChange?: (id: string) => void;
+  id?: string; mobileCollapsed?: boolean;
 };
 
-export function EpisodePlaylist({ episodes, selectedId, onSelect, playlists = [], selectedPlaylistId = "all", onPlaylistChange }: Props) {
+export function EpisodePlaylist({ episodes, selectedId, onSelect, playlists = [], selectedPlaylistId = "all", onPlaylistChange, id, mobileCollapsed = false }: Props) {
   const [query, setQuery] = useState("");
   const playlist = playlists.find((item) => item.id === selectedPlaylistId);
   const playlistEpisodes = useMemo(
@@ -24,7 +25,7 @@ export function EpisodePlaylist({ episodes, selectedId, onSelect, playlists = []
   }, [playlistEpisodes, query]);
 
   return (
-    <aside className="playlist-panel" aria-label="Media playlist">
+    <aside id={id} className="playlist-panel" aria-label="Media playlist" data-mobile-collapsed={mobileCollapsed ? "true" : undefined}>
       <div className="playlist-header">
         <div className="playlist-header-top">
           <h2>{playlist?.title ?? "Up next"}</h2>

@@ -2,6 +2,13 @@ import { describe, expect, it } from "vitest";
 import { registerBibleBookNameAliases, translateSiteText } from "@/data/site-translations";
 
 describe("site language translations", () => {
+  it("translates the mobile playlist controls", () => {
+    expect(translateSiteText("View playlist", "fr")).toBe("Voir la liste de lecture");
+    expect(translateSiteText("Hide playlist", "fr")).toBe("Masquer la liste de lecture");
+    expect(translateSiteText("View playlist", "es")).toBe("Ver lista de reproducción");
+    expect(translateSiteText("Hide playlist", "es")).toBe("Ocultar lista de reproducción");
+  });
+
   it("localizes book names supplied by built-in editions in other languages", () => {
     const editionBookNames = Array.from({ length: 66 }, (_, index) => `Buch ${index + 1}`);
     registerBibleBookNameAliases(editionBookNames);

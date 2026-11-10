@@ -97,11 +97,42 @@ describe("MediaExperience", () => {
 
     fireEvent.click(screen.getByRole("button", { name: /A Story of Hope/ }));
     expect(container.querySelector(".video-frame")?.classList.contains("is-portrait")).toBe(true);
+    expect(container.querySelector(".media-layout")?.classList.contains("is-portrait")).toBe(true);
     expect(screen.getByTitle("A Story of Hope")).toBeTruthy();
 
     fireEvent.click(screen.getByRole("button", { name: /A Story of Mercy/ }));
     expect(container.querySelector(".video-frame")?.classList.contains("is-portrait")).toBe(false);
+    expect(container.querySelector(".media-layout")?.classList.contains("is-portrait")).toBe(false);
     expect(screen.getByRole("heading", { name: "A Story of Mercy" })).toBeTruthy();
+  });
+
+  it("resizes the selected player and desktop layout to the orientation reported by video metadata", () => {
+    const { container } = render(<MediaExperience episodes={episodes} />);
+    const video = container.querySelector("video") as HTMLVideoElement;
+    Object.defineProperty(video, "videoWidth", { configurable: true, value: 1080 });
+    Object.defineProperty(video, "videoHeight", { configurable: true, value: 1920 });
+    fireEvent.loadedMetadata(video);
+
+    expect(container.querySelector(".video-frame")?.classList.contains("is-portrait")).toBe(true);
+    expect(parseFloat((container.querySelector(".video-frame") as HTMLElement).style.aspectRatio)).toBeCloseTo(9 / 16);
+    expect(container.querySelector(".media-layout")?.classList.contains("is-portrait")).toBe(true);
+  });
+
+  it("keeps the playlist collapsed behind a toggle and collapses it again after selection", () => {
+    render(<MediaExperience episodes={episodes} />);
+    const toggle = screen.getByRole("button", { name: "View playlist" });
+    const playlist = screen.getByRole("complementary", { name: "Media playlist" });
+    expect(toggle.getAttribute("aria-expanded")).toBe("false");
+    expect(toggle.getAttribute("aria-controls")).toBe("media-playlist");
+    expect(playlist.getAttribute("data-mobile-collapsed")).toBe("true");
+
+    fireEvent.click(toggle);
+    expect(screen.getByRole("button", { name: "Hide playlist" }).getAttribute("aria-expanded")).toBe("true");
+    expect(playlist.getAttribute("data-mobile-collapsed")).toBeNull();
+
+    fireEvent.click(screen.getByRole("button", { name: /A Story of Hope/ }));
+    expect(screen.getByRole("button", { name: "View playlist" }).getAttribute("aria-expanded")).toBe("false");
+    expect(playlist.getAttribute("data-mobile-collapsed")).toBe("true");
   });
 
   it("shows only media in the selected site audio language for both YouTube and uploads", () => {

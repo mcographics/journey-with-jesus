@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import type { Episode } from "@/data/episodes";
 import { VideoPlayer } from "@/components/VideoPlayer";
 
@@ -26,20 +26,29 @@ describe("VideoPlayer", () => {
     const { container } = render(<VideoPlayer episode={episode(orientation)} />);
     const frame = container.querySelector(".video-frame");
     expect(frame?.classList.contains("is-portrait")).toBe(orientation === "portrait");
-    expect(parseFloat((frame as HTMLElement).style.aspectRatio)).toBeCloseTo(16 / 9);
+    expect(parseFloat((frame as HTMLElement).style.aspectRatio)).toBeCloseTo(orientation === "portrait" ? 9 / 16 : 16 / 9);
     expect(screen.getByLabelText("Video quality")).toBeTruthy();
     expect((container.querySelector("video source") as HTMLSourceElement).src).toBe(sources[1]!.url);
   });
 
-  it("keeps the frame widescreen when a video reports 9:16 metadata", () => {
-    const { container } = render(<VideoPlayer episode={episode("landscape")} />);
+  it("resizes the frame and reports orientation from the loaded video metadata", () => {
+    const onOrientationChange = vi.fn();
+    const { container } = render(<VideoPlayer episode={episode("landscape")} onOrientationChange={onOrientationChange} />);
     const video = container.querySelector("video") as HTMLVideoElement;
     Object.defineProperty(video, "videoWidth", { configurable: true, value: 1080 });
     Object.defineProperty(video, "videoHeight", { configurable: true, value: 1920 });
     fireEvent.loadedMetadata(video);
     const frame = container.querySelector(".video-frame") as HTMLElement;
     expect(frame.classList.contains("is-portrait")).toBe(true);
+    expect(parseFloat(frame.style.aspectRatio)).toBeCloseTo(9 / 16);
+    expect(onOrientationChange).toHaveBeenLastCalledWith("portrait");
+
+    Object.defineProperty(video, "videoWidth", { configurable: true, value: 1920 });
+    Object.defineProperty(video, "videoHeight", { configurable: true, value: 1080 });
+    fireEvent.loadedMetadata(video);
+    expect(frame.classList.contains("is-portrait")).toBe(false);
     expect(parseFloat(frame.style.aspectRatio)).toBeCloseTo(16 / 9);
+    expect(onOrientationChange).toHaveBeenLastCalledWith("landscape");
   });
 
   it("collapses the description and accessibility resources until the three-dot button is pressed", () => {

@@ -6,8 +6,15 @@ import { getDefaultVideoSource } from "@/lib/episode-navigation";
 import { parseYouTubeId } from "@/lib/youtube";
 
 const PLAYER_RATIO = 16 / 9;
-type VideoPlayerProps = { episode: Episode | null };
-export function VideoPlayer({ episode }: VideoPlayerProps) {
+const PORTRAIT_RATIO = 9 / 16;
+type VideoOrientation = "landscape" | "portrait";
+type PlayerFrameMeasurement = { episodeId: string | null; width: number };
+type VideoPlayerProps = {
+  episode: Episode | null;
+  onOrientationChange?: (orientation: VideoOrientation) => void;
+  onFrameSizeChange?: (measurement: PlayerFrameMeasurement) => void;
+};
+export function VideoPlayer({ episode, onOrientationChange, onFrameSizeChange }: VideoPlayerProps) {
   const [selectedUrl, setSelectedUrl] = useState(() => episode ? getDefaultVideoSource(episode)?.url ?? "" : "");
   const [selectedCaptionOverride, setSelectedCaptionOverride] = useState<string | null>(null);
   const selectedCaptionId = selectedCaptionOverride ?? episode?.captions?.find((caption) => caption.isDefault)?.id ?? episode?.captions?.[0]?.id ?? "off";
@@ -15,8 +22,8 @@ export function VideoPlayer({ episode }: VideoPlayerProps) {
   const shellRef = useRef<HTMLDivElement>(null);
   const detailsId = useId();
   const [detailsExpanded, setDetailsExpanded] = useState(false);
-  // The player stays widescreen; vertical stories are letterboxed inside it.
-  const [isPortrait, setIsPortrait] = useState(() => episode?.orientation === "portrait");
+  const [aspectRatio, setAspectRatio] = useState(() => episode?.orientation === "portrait" ? PORTRAIT_RATIO : PLAYER_RATIO);
+  const isPortrait = aspectRatio < 1;
   const [frameSize, setFrameSize] = useState<{ width: number; height: number } | null>(null);
   const shellStyle = {
     width: frameSize ? `${frameSize.width}px` : "100%",
@@ -24,7 +31,7 @@ export function VideoPlayer({ episode }: VideoPlayerProps) {
     marginInline: "auto",
   } as const;
   const frameStyle = {
-    aspectRatio: String(PLAYER_RATIO),
+    aspectRatio: String(aspectRatio),
     ...(frameSize ? { width: `${frameSize.width}px`, height: `${frameSize.height}px` } : {}),
   };
 
@@ -35,9 +42,9 @@ export function VideoPlayer({ episode }: VideoPlayerProps) {
     const updateFrameSize = () => {
       const availableWidth = widthBoundary.clientWidth;
       if (!availableWidth) return;
-      const maxHeight = Math.min(window.innerHeight * 0.68, 620);
-      const width = Math.min(availableWidth, 1102, maxHeight * PLAYER_RATIO);
-      const height = width / PLAYER_RATIO;
+      const maxHeight = Math.min(window.innerHeight * (isPortrait ? 0.78 : 0.68), isPortrait ? 690 : 620);
+      const width = Math.min(availableWidth, isPortrait ? 390 : 1102, maxHeight * aspectRatio);
+      const height = width / aspectRatio;
       setFrameSize((current) =>
         current?.width === width && current.height === height ? current : { width, height },
       );
@@ -50,7 +57,11 @@ export function VideoPlayer({ episode }: VideoPlayerProps) {
       observer?.disconnect();
       window.removeEventListener("resize", updateFrameSize);
     };
-  }, []);
+  }, [aspectRatio, isPortrait]);
+
+  useEffect(() => {
+    if (frameSize) onFrameSizeChange?.({ episodeId: episode?.id ?? null, width: frameSize.width });
+  }, [episode?.id, frameSize, onFrameSizeChange]);
 
   useEffect(() => {
     const tracks = videoRef.current?.textTracks;
@@ -89,7 +100,11 @@ export function VideoPlayer({ episode }: VideoPlayerProps) {
             <video key={episode.id + "-" + selectedSource.url} ref={videoRef} crossOrigin="anonymous" controls playsInline preload="metadata" aria-label={episode.title}
               onLoadedMetadata={(event) => {
                 const { videoWidth, videoHeight } = event.currentTarget;
-                if (videoWidth > 0 && videoHeight > 0) setIsPortrait(videoWidth < videoHeight);
+                if (videoWidth > 0 && videoHeight > 0) {
+                  const orientation = videoWidth < videoHeight ? "portrait" : "landscape";
+                  setAspectRatio(orientation === "portrait" ? PORTRAIT_RATIO : PLAYER_RATIO);
+                  onOrientationChange?.(orientation);
+                }
               }}>
               <source src={selectedSource.url} />
               {episode.captions?.map((caption) => (

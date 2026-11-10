@@ -144,6 +144,8 @@ const translations: Array<[string, string, string]> = [
   ["Videos", "Vidéos", "Videos"],
   ["Stories", "Récits", "Historias"],
   ["Playlist", "Liste de lecture", "Lista de reproducción"],
+  ["View playlist", "Voir la liste de lecture", "Ver lista de reproducción"],
+  ["Hide playlist", "Masquer la liste de lecture", "Ocultar lista de reproducción"],
   ["Coming Soon", "Bientôt disponible", "Próximamente"],
   ["Now playing", "Lecture en cours", "Reproduciendo"],
   ["Your next story awaits", "Votre prochaine histoire vous attend", "Tu próxima historia te espera"],

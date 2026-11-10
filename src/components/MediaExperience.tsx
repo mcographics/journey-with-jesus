@@ -1,5 +1,7 @@
 "use client";
 import { useEffect, useState, useSyncExternalStore } from "react";
+import type { CSSProperties } from "react";
+import { ChevronDown } from "lucide-react";
 import type { Episode, MediaPlaylist } from "@/data/episodes";
 import type { SiteLocale } from "@/data/site-translations";
 import { episodeHref, resolveEpisodeId } from "@/lib/episode-navigation";
@@ -22,6 +24,9 @@ export function MediaExperience({ episodes: initialEpisodes }: { episodes: Episo
   const [locale, setLocale] = useState<SiteLocale>("en");
   const [playlists, setPlaylists] = useState<MediaPlaylist[]>([]);
   const [playlistId, setPlaylistId] = useState("all");
+  const [playlistOpen, setPlaylistOpen] = useState(false);
+  const [detectedOrientation, setDetectedOrientation] = useState<{ episodeId: string; orientation: "landscape" | "portrait" } | null>(null);
+  const [measuredPlayer, setMeasuredPlayer] = useState<{ episodeId: string | null; width: number } | null>(null);
   const [catalogStatus, setCatalogStatus] = useState<"loading" | "ready" | "unconfigured" | "error">(() =>
     initialEpisodes.length ? "ready" : isSupabaseConfigured() ? "loading" : "unconfigured",
   );
@@ -58,10 +63,25 @@ export function MediaExperience({ episodes: initialEpisodes }: { episodes: Episo
     };
   }, []);
 
+  useEffect(() => {
+    const resetPlayerWidth = () => setMeasuredPlayer(null);
+    window.addEventListener("resize", resetPlayerWidth);
+    return () => window.removeEventListener("resize", resetPlayerWidth);
+  }, []);
+
   const languageEpisodes = episodes.filter((episode) => (episode.audioLanguage ?? "en") === locale);
   const selectedId = resolveEpisodeId(search, languageEpisodes);
   const selectedEpisode = languageEpisodes.find((episode) => episode.id === selectedId) ?? null;
+  const selectedEpisodeId = selectedEpisode?.id ?? null;
+  const playerOrientation = detectedOrientation && detectedOrientation.episodeId === selectedEpisode?.id
+    ? detectedOrientation.orientation
+    : selectedEpisode?.orientation ?? "landscape";
+  const measuredPlayerWidth = measuredPlayer?.episodeId === selectedEpisodeId ? measuredPlayer.width : null;
+  const playerLayoutStyle = measuredPlayerWidth
+    ? { "--media-player-width": `${measuredPlayerWidth}px` } as CSSProperties
+    : undefined;
   const selectEpisode = (episode: Episode) => {
+    setPlaylistOpen(false);
     window.history.pushState({}, "", episodeHref(window.location.href, episode.id));
     window.dispatchEvent(new PopStateEvent("popstate"));
   };
@@ -85,12 +105,33 @@ export function MediaExperience({ episodes: initialEpisodes }: { episodes: Episo
           {catalogStatus === "ready" && languageEpisodes.length === 0 && (
             <p className="catalog-notice" role="status">No {localeName.toLowerCase()} media are available yet.</p>
           )}
-          <div className="media-layout">
+          <div
+            className={"media-layout" + (playerOrientation === "portrait" ? " is-portrait" : "") + (measuredPlayerWidth ? " has-player-width" : "")}
+            style={playerLayoutStyle}
+          >
             <div className="media-main">
-              <VideoPlayer key={"player-" + (selectedEpisode?.id ?? "none")} episode={selectedEpisode} />
+              <VideoPlayer
+                key={"player-" + (selectedEpisode?.id ?? "none")}
+                episode={selectedEpisode}
+                onFrameSizeChange={setMeasuredPlayer}
+                onOrientationChange={(orientation) => {
+                  if (selectedEpisode) setDetectedOrientation({ episodeId: selectedEpisode.id, orientation });
+                }}
+              />
+              <button
+                type="button"
+                className="media-playlist-toggle"
+                aria-expanded={playlistOpen}
+                aria-controls="media-playlist"
+                onClick={() => setPlaylistOpen((open) => !open)}
+              >
+                <span>{playlistOpen ? "Hide playlist" : "View playlist"}</span>
+                <ChevronDown aria-hidden="true" size={18} />
+              </button>
             </div>
             <EpisodePlaylist episodes={languageEpisodes} playlists={availablePlaylists} selectedPlaylistId={playlistId}
-              onPlaylistChange={setPlaylistId} selectedId={selectedId} onSelect={selectEpisode} />
+              onPlaylistChange={setPlaylistId} selectedId={selectedId} onSelect={selectEpisode}
+              id="media-playlist" mobileCollapsed={!playlistOpen} />
           </div>
         </div>
       </section>
