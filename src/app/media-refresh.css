@@ -799,26 +799,3 @@
   outline-offset: 3px;
 }
 
-
-/* In desktop portrait mode, center discussion on the vertical player's axis. */
-@media (min-width: 1000px) {
-  .media-page .media-discussion.is-portrait .comment-section {
-    width: min(100%, 640px);
-    max-width: 640px;
-    margin-left: calc((100% - min(100%, 640px)) / 2 - (305px + 18px) / 2);
-    margin-right: 0;
-  }
-}
-@media (max-width: 800px) {
-  .media-page .media-discussion.is-portrait .comment-section {
-    width: auto;
-    max-width: 1020px;
-    margin-inline: auto;
-  }
-}
-
-@media (min-width: 1081px) {
-  .media-page .media-discussion.is-portrait .comment-section {
-    margin-left: calc((100% - min(100%, 640px)) / 2 - (355px + clamp(18px, 2vw, 30px)) / 2);
-  }
-}
