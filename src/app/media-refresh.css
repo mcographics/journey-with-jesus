@@ -799,3 +799,11 @@
   outline-offset: 3px;
 }
 
+
+
+/* Preserve the original wide desktop placement for landscape comments. */
+@media (min-width: 801px) {
+  .media-page .media-discussion.is-landscape .comment-section {
+    margin-inline: 0;
+  }
+}
