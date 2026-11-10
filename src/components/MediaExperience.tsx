@@ -136,7 +136,7 @@ export function MediaExperience({ episodes: initialEpisodes }: { episodes: Episo
         </div>
       </section>
 
-      <section className="media-discussion page-width media-page-width" aria-label="Media discussion">
+      <section className={"media-discussion page-width media-page-width" + (playerOrientation === "portrait" ? " is-portrait" : "")} aria-label="Media discussion">
         <CommentSection episode={null} general title="Comments" />
       </section>
     </main>
