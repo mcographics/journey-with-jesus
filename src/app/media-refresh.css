@@ -816,3 +816,9 @@
     margin-inline: auto;
   }
 }
+
+@media (min-width: 1081px) {
+  .media-page .media-discussion.is-portrait .comment-section {
+    margin-left: calc((100% - min(100%, 640px)) / 2 - (355px + clamp(18px, 2vw, 30px)) / 2);
+  }
+}
