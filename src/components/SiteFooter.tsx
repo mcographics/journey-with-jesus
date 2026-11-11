@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { LanguageAwareLogo } from "@/components/LanguageAwareLogo";
+import { NewsletterSignup } from "@/components/NewsletterSignup";
 import SocialLinks from "@/components/SocialLinks";
 
 export function SiteFooter() {
@@ -25,6 +26,7 @@ export function SiteFooter() {
           <p className="footer-tagline">Christian animation with purpose</p>
           <p className="footer-note">Faith · Scripture · Story</p>
         </div>
+        <NewsletterSignup />
         <nav aria-label="Footer navigation" className="footer-links">
           <Link href="/">Kerygma Path</Link>
           <span aria-hidden="true">✦</span>

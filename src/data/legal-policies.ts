@@ -24,6 +24,10 @@ export const legalPolicies = [
         "body": "Supabase supports the website database and comment service. GitHub Pages and related hosting or delivery services may process technical information needed to deliver the site. Embedded media, if present, may be governed by their providers' policies."
       },
       {
+        "heading": "Newsletter",
+        "body": "If you sign up for Journey with Jesus email updates, you provide your email address and consent to receive them. Supabase processes the signup securely, and Brevo processes the address and confirmation status to send the confirmation email and manage the mailing list. Your subscription is added after you confirm. Newsletter messages include a way to unsubscribe. The signup service uses a one-way network fingerprint for abuse prevention and does not store the full network address or newsletter email in its rate-limit table."
+      },
+      {
         "heading": "Website language translation",
         "body": "If you select French or Spanish, the website displays translations included with the site. The language selector stores your preference in your browser's local storage. The selector does not send page text to an external translation service. Translations may contain errors."
       },
@@ -33,7 +37,7 @@ export const legalPolicies = [
       },
       {
         "heading": "Your choices",
-        "body": "Avoid sharing personal details in comments. You may choose not to submit comments. Browser settings may allow you to manage storage and third-party cookies."
+        "body": "Avoid sharing personal details in comments. You may choose not to submit comments or sign up for newsletter updates. You can unsubscribe from newsletter messages using the instructions included in them. Browser settings may allow you to manage storage and third-party cookies."
       },
       {
         "heading": "Contact and changes",

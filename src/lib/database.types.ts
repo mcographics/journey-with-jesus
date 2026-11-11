@@ -68,6 +68,7 @@ export type Database = {
     Views: Record<string, never>;
     Functions: {
       submit_episode_comment: { Args: { p_episode_id: string; p_display_name: string; p_body: string; p_fingerprint_hash: string }; Returns: { id: string; status: string; created_at: string }[] };
+      check_newsletter_rate_limit: { Args: { p_fingerprint_hash: string }; Returns: boolean };
       is_media_admin: { Args: Record<string, never>; Returns: boolean };
     };
     Enums: Record<string, never>;
