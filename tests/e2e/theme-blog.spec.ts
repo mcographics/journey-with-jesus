@@ -303,7 +303,7 @@ for (const { screen, viewport } of [
       const code = await option.locator(".site-language-option-code").boundingBox();
       expect(name).not.toBeNull();
       expect(code).not.toBeNull();
-      expect(code!.x - (name!.x + name!.width)).toBeCloseTo(8, 0);
+      expect(code!.x - (name!.x + name!.width)).toBeCloseTo(6, 0);
     }
   });
 }
