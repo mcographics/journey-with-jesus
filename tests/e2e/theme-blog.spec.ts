@@ -231,7 +231,7 @@ test("light mode language control and opened list use pale glass and dark text o
   await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
   const toggle = page.locator(".site-language-toggle");
   const expectDarkLabel = async () => {
-    const channels = await toggle.evaluate((node) => getComputedStyle(node).color.match(/\\d+/g)?.map(Number) ?? []);
+    const channels = await toggle.evaluate((node) => getComputedStyle(node).color.match(/\d+/g)?.map(Number) ?? []);
     expect(channels).toHaveLength(3);
     expect(Math.max(...channels)).toBeLessThan(120);
   };
