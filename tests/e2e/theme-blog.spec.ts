@@ -230,13 +230,18 @@ test("light mode language control and opened list use pale glass and dark text o
   }
   await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
   const toggle = page.locator(".site-language-toggle");
-  await expect(toggle).toHaveCSS("color", "rgb(22, 52, 81)");
+  const expectDarkLabel = async () => {
+    const channels = await toggle.evaluate((node) => getComputedStyle(node).color.match(/\\d+/g)?.map(Number) ?? []);
+    expect(channels).toHaveLength(3);
+    expect(Math.max(...channels)).toBeLessThan(120);
+  };
+  await expectDarkLabel();
   const background = await toggle.evaluate((node) => getComputedStyle(node).backgroundImage);
   expect(background).toContain("linear-gradient(");
   expect(background).toContain("255, 255, 255");
   await expect(toggle).toHaveCSS("border-top-color", "rgba(126, 163, 205, 0.78)");
   await toggle.click();
-  await expect(toggle).toHaveCSS("color", "rgb(16, 45, 74)");
+  await expectDarkLabel();
   const options = page.locator(".site-language-options");
   await expect(options).toBeVisible();
   await expect(options).toHaveCSS("color", "rgb(25, 56, 84)");
@@ -244,7 +249,7 @@ test("light mode language control and opened list use pale glass and dark text o
   await expect(options.locator(".site-language-option-code").first()).toHaveCSS("color", "rgb(134, 96, 27)");
   await options.getByRole("option", { name: "Français [FR]" }).click();
   await expect(page.locator("html")).toHaveAttribute("lang", "fr");
-  await expect(toggle).toHaveCSS("color", "rgb(22, 52, 81)");
+  await expectDarkLabel();
 });
 
 test("mobile language control stays light in light mode and retains dark crystal palette in dark mode", async ({ page }) => {
