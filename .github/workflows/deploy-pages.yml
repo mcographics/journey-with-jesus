@@ -38,7 +38,7 @@ jobs:
       - name: Unit tests
         run: npm test
       - name: Install browser for end-to-end checks
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install chromium
       - name: End-to-end checks
         run: npm run test:e2e
       - name: Build static site
