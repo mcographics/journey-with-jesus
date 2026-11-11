@@ -78,6 +78,7 @@ for (const language of [
 ]) {
   test(`${language.name} selection switches the landing and footer logos`, async ({ page }) => {
     await page.goto("/");
+    await revealDesktopControls(page);
     await page.locator(".site-language-toggle").click();
     await page.getByRole("option", { name: language.option }).click();
 
@@ -615,10 +616,14 @@ test("Meet the Team credits the founder and editor/webmaster accurately", async 
   await expect(editorCard.locator(".team-role")).toHaveText("Editor / Webmaster");
 });
 
-test("landing gateway hides site controls and footer until entering, including return navigation", async ({ page }) => {
+test("landing gateway shows shared controls while keeping the footer hidden until entering", async ({ page }) => {
   await page.goto("/");
-  await expect(page.locator(".site-header")).toHaveCSS("display", "none");
+  await expect(page.locator(".site-header")).toHaveCSS("display", "block");
   await expect(page.locator(".site-footer")).toBeHidden();
+  await revealDesktopControls(page);
+  for (const selector of [".site-language-toggle", ".desktop-menu-toggle", ".accessibility-settings-trigger", ".theme-toggle"]) {
+    await expect(page.locator(selector)).toBeVisible();
+  }
   await expect.poll(() => page.locator(".kerygma-gateway-logo").evaluate(async (element) => {
     const image = element as HTMLImageElement;
     try {
@@ -638,8 +643,10 @@ test("landing gateway hides site controls and footer until entering, including r
   await expect(page.locator(".theme-toggle")).toBeVisible();
   await page.getByRole("link", { name: "Kerygma Path home" }).click();
   await expect(page).toHaveURL(/\/$/);
-  await expect(page.locator(".site-header")).toHaveCSS("display", "none");
+  await expect(page.locator(".site-header")).toHaveCSS("display", "block");
   await expect(page.locator(".site-footer")).toBeHidden();
+  await revealDesktopControls(page);
+  await expect(page.locator(".site-language-toggle")).toBeVisible();
 });
 
 test("studio dark mode uses radiant gold details, dark readable actions and white main copy", async ({ page }) => {
