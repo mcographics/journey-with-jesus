@@ -239,7 +239,10 @@ test("light mode language control and opened list use pale glass and dark text o
   const background = await toggle.evaluate((node) => getComputedStyle(node).backgroundImage);
   expect(background).toContain("linear-gradient(");
   expect(background).toContain("255, 255, 255");
-  await expect(toggle).toHaveCSS("border-top-color", "rgba(126, 163, 205, 0.78)");
+  const expectedToggleBorder = viewport && viewport.width > 768
+    ? "rgba(159, 118, 52, 0.62)"
+    : "rgba(126, 163, 205, 0.78)";
+  await expect(toggle).toHaveCSS("border-top-color", expectedToggleBorder);
   await toggle.click();
   await expectDarkLabel();
   const options = page.locator(".site-language-options");
