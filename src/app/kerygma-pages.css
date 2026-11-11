@@ -861,18 +861,13 @@
 }
 
 
-/* The gateway keeps only the language control so visitors can choose before entering. */
-body:has(.kerygma-gateway) .site-header,
+/* Keep the shared header controls available on the landing gateway. */
 body:has(.kerygma-gateway) .site-footer {
   display: none !important;
 }
-body:has(.kerygma-gateway) .gateway-language-control {
-  position: fixed;
-  z-index: 30;
-  top: max(14px, env(safe-area-inset-top));
-  right: clamp(18px, 4vw, 48px);
-  display: flex;
-  pointer-events: auto;
+body:has(.kerygma-gateway) .site-header {
+  display: block !important;
+  z-index: 80;
 }
 
 /* Static white main copy with soft yellow labels and accents in dark mode. */
