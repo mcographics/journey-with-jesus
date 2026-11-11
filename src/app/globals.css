@@ -1546,9 +1546,9 @@ body, .home-hero, .mission-section, .site-footer, .media-page {
   .site-language-error {
     position: absolute;
     top: calc(100% + 9px);
-    left: auto;
-    right: 0;
-    max-width: calc(100vw - 24px);
+    left: 0;
+    right: auto;
+    max-width: min(174px, calc(100vw - 72px));
   }
 
   .site-language-error {
@@ -1684,12 +1684,22 @@ body, .home-hero, .mission-section, .site-footer, .media-page {
   .site-language-error {
     position: absolute;
     top: calc(100% + 9px);
-    left: auto;
-    right: 0;
-    max-width: calc(100vw - 24px);
+    left: 0;
+    right: auto;
+    max-width: min(174px, calc(100vw - 72px));
   }
 
   .site-language-error {
     width: min(168px, calc(100vw - 24px));
   }
+}
+
+
+/* Keep language controls readable in light mode. */
+:root[data-theme="light"] .site-language-toggle {
+  color: #163451;
+}
+:root[data-theme="light"] .site-language-toggle:hover:not(:disabled),
+:root[data-theme="light"] .site-language-toggle[aria-expanded="true"] {
+  color: #102d4a;
 }
