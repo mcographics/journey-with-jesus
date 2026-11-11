@@ -567,7 +567,7 @@ test("all five policy pages use flat theme-specific text colors", async ({ page 
 
     await expect(title).toBeVisible();
     await expect(sectionTitle).toBeVisible();
-    await expect(updatedDate).toHaveText("Last updated: November 6, 2026");
+    await expect(updatedDate).toHaveText("Last updated: November 11, 2026");
     for (const heading of [title, sectionTitle]) {
       await expect(heading).toHaveCSS("color", "rgb(255, 255, 255)");
       await expect(heading).toHaveCSS("-webkit-text-fill-color", "rgb(255, 255, 255)");
