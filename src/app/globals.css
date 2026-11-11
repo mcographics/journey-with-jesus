@@ -1696,10 +1696,12 @@ body, .home-hero, .mission-section, .site-footer, .media-page {
 
 
 /* Keep language controls readable in light mode. */
-:root[data-theme="light"] .site-language-toggle {
-  color: #163451;
+:root[data-theme="light"] body .site-language-toggle {
+  color: #163451 !important;
+  -webkit-text-fill-color: currentColor !important;
 }
-:root[data-theme="light"] .site-language-toggle:hover:not(:disabled),
-:root[data-theme="light"] .site-language-toggle[aria-expanded="true"] {
-  color: #102d4a;
+:root[data-theme="light"] body .site-language-toggle:hover:not(:disabled),
+:root[data-theme="light"] body .site-language-toggle[aria-expanded="true"] {
+  color: #102d4a !important;
+  -webkit-text-fill-color: currentColor !important;
 }
