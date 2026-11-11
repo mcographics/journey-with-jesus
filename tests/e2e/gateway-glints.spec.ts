@@ -20,6 +20,13 @@ test("the original language-aware logo receives a shape-masked traveling light t
 
 test("the glint mirrors translated logos without changing their artwork", async ({ page }) => {
   await page.goto("/");
+  const viewport = page.viewportSize();
+  const drawer = page.locator(".desktop-utility-drawer");
+  if (viewport && viewport.width > 768) {
+    await expect(drawer).toHaveAttribute("data-ready", "true");
+    await page.mouse.move(viewport.width - 3, 35);
+    await expect(drawer).toHaveClass(/is-open/);
+  }
   for (const [option, suffix] of [
     ["Français [FR]", "fr-840.png"],
     ["Español [ES]", "es-840.png"],
