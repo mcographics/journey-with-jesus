@@ -621,9 +621,11 @@ test("landing gateway shows shared controls while keeping the footer hidden unti
   await expect(page.locator(".site-header")).toHaveCSS("display", "block");
   await expect(page.locator(".site-footer")).toBeHidden();
   await revealDesktopControls(page);
-  for (const selector of [".site-language-toggle", ".desktop-menu-toggle", ".accessibility-settings-trigger", ".theme-toggle"]) {
+  for (const selector of [".site-language-toggle", ".accessibility-settings-trigger", ".theme-toggle"]) {
     await expect(page.locator(selector)).toBeVisible();
   }
+  await expect(page.locator(".desktop-menu-toggle")).toHaveCount(0);
+  await expect(page.locator(".mobile-menu-toggle")).toHaveCount(0);
   await expect.poll(() => page.locator(".kerygma-gateway-logo").evaluate(async (element) => {
     const image = element as HTMLImageElement;
     try {
@@ -647,6 +649,26 @@ test("landing gateway shows shared controls while keeping the footer hidden unti
   await expect(page.locator(".site-footer")).toBeHidden();
   await revealDesktopControls(page);
   await expect(page.locator(".site-language-toggle")).toBeVisible();
+  await expect(page.locator(".desktop-menu-toggle")).toHaveCount(0);
+  await expect(page.locator(".mobile-menu-toggle")).toHaveCount(0);
+});
+
+test("mobile landing gateway keeps preferences and reveals navigation only after entry", async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.goto("/");
+  await expect(page.locator(".site-footer")).toBeHidden();
+  for (const selector of [".site-language-toggle", ".accessibility-settings-trigger", ".theme-toggle"]) {
+    await expect(page.locator(selector)).toBeVisible();
+  }
+  await expect(page.locator(".desktop-menu-toggle")).toHaveCount(0);
+  await expect(page.locator(".mobile-menu-toggle")).toHaveCount(0);
+
+  await page.getByRole("link", { name: "Enter Site" }).click();
+  await expect(page).toHaveURL(/\/company\/$/);
+  const mobileMenu = page.getByRole("button", { name: "Open navigation menu" });
+  await expect(mobileMenu).toBeVisible();
+  await mobileMenu.click();
+  await expect(page.getByRole("navigation", { name: "Mobile navigation" })).toBeVisible();
 });
 
 test("studio dark mode uses radiant gold details, dark readable actions and white main copy", async ({ page }) => {

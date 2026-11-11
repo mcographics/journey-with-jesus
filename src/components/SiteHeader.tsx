@@ -52,6 +52,7 @@ export function SiteHeader() {
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
   const routePath = basePath && pathname.startsWith(basePath) ? pathname.slice(basePath.length) || "/" : pathname;
   const normalizedPath = routePath.endsWith("/") ? routePath : `${routePath}/`;
+  const isLandingPage = normalizedPath === "/";
   const isJourneySection = normalizedPath.startsWith("/projects/journey-with-jesus/")
     || normalizedPath.startsWith("/media/") || normalizedPath.startsWith("/characters/");
   const visibleNavigation = navigation.filter(({ href }) => {
@@ -347,6 +348,7 @@ export function SiteHeader() {
           </button>
           <div className="desktop-utility-content" id="desktop-utility-content">
             <SiteLanguageSwitcher />
+            {!isLandingPage && (
             <div className="desktop-navigation" ref={desktopNavigationRef}>
           <button
             aria-controls="desktop-navigation-options"
@@ -391,6 +393,7 @@ export function SiteHeader() {
             })}
           </nav>
         </div>
+            )}
         <AccessibilitySettings />
         <div className="desktop-utility-theme" ref={desktopThemeRef}>
           <button
@@ -441,6 +444,7 @@ export function SiteHeader() {
         </div>
           </div>
         </div>
+        {!isLandingPage && (
         <div
           className={`mobile-navigation${isMobileMenuIdle && !isMobileMenuOpen ? " is-idle" : ""}`}
           ref={mobileNavigationRef}
@@ -483,6 +487,7 @@ export function SiteHeader() {
             {isMobileMenuOpen ? <X aria-hidden="true" size={20} /> : <Menu aria-hidden="true" size={20} />}
           </button>
         </div>
+        )}
       </div>
     </header>
   );
