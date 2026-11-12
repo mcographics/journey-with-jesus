@@ -27,6 +27,7 @@ export function SiteFooter() {
           <p className="footer-note">Faith · Scripture · Story</p>
         </div>
         <NewsletterSignup />
+        </div>
         <nav aria-label="Footer navigation" className="footer-links">
           <Link href="/">Kerygma Path</Link>
           <span aria-hidden="true">✦</span>
@@ -52,7 +53,6 @@ export function SiteFooter() {
           Kerygma Path · Current project: Journey with Jesus · Website by{" "}
           <a href="https://mcographics.github.io/">Majestic Creations</a>
         </p>
-        </div>
       </div>
     </footer>
   );
