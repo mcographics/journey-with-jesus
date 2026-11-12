@@ -1,18 +1,88 @@
 "use client";
 
-import { useId } from "react";
+import { useEffect, useId, useState, type FormEvent } from "react";
+import Link from "next/link";
 import Script from "next/script";
 import { Mail } from "lucide-react";
 
 const REACH_FORM_ID = "46169614-b34a-4128-9bb0-2dc232611bbe";
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, "") ?? "";
+const PUBLISHABLE_KEY = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ?? "";
+const CUSTOM_ENDPOINT = SUPABASE_URL
+  ? `${SUPABASE_URL}/functions/v1/reach-newsletter-signup`
+  : "";
 
-/**
- * The public footer signup is managed by Hostinger Reach.
- * Reach handles the contact list and double opt-in email; do not submit
- * this form to the legacy Brevo/Supabase newsletter-signup function.
+/** The existing Reach embed remains live until a secure API connection is enabled.
+ * The new form is entirely styled by the Kerygma Path website, not Reach's iframe.
+ * Never put a Hostinger API token in this component or any NEXT_PUBLIC_ variable.
  */
 export function NewsletterSignup() {
   const headingId = useId();
+  const statusId = useId();
+  const [customReady, setCustomReady] = useState(false);
+  const [firstName, setFirstName] = useState("");
+  const [email, setEmail] = useState("");
+  const [consent, setConsent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    if (!CUSTOM_ENDPOINT || !PUBLISHABLE_KEY) return;
+    let active = true;
+
+    // Only show our own signup form after the backend confirms that it is
+    // configured. Until then, Hostinger's working hosted form stays in place.
+    fetch(CUSTOM_ENDPOINT, {
+      method: "GET",
+      headers: { apikey: PUBLISHABLE_KEY },
+      cache: "no-store",
+    })
+      .then(async (response) => response.ok ? response.json() : null)
+      .then((data: { ready?: boolean } | null) => {
+        if (active && data?.ready === true) setCustomReady(true);
+      })
+      .catch(() => { /* Keep the existing embed when the API is unavailable. */ });
+
+    return () => { active = false; };
+  }, []);
+
+  async function submitSignup(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!consent || sending || !CUSTOM_ENDPOINT || !PUBLISHABLE_KEY) return;
+
+    setSending(true);
+    setMessage("");
+    setError(false);
+    try {
+      const website = (event.currentTarget.elements.namedItem("website") as HTMLInputElement)?.value ?? "";
+      const response = await fetch(CUSTOM_ENDPOINT, {
+        method: "POST",
+        headers: {
+          apikey: PUBLISHABLE_KEY,
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({ email, firstName, consent, website }),
+      });
+      if (!response.ok) {
+        setError(true);
+        setMessage(response.status === 429
+          ? "Too many attempts. Please try again later."
+          : "We couldn't submit your request right now. Please try again later.");
+        if (response.status === 503) setCustomReady(false);
+        return;
+      }
+      setEmail("");
+      setFirstName("");
+      setConsent(false);
+      setMessage("Thank you! If email confirmation is required, please check your inbox.");
+    } catch {
+      setError(true);
+      setMessage("We couldn't connect right now. Please try again later.");
+    } finally {
+      setSending(false);
+    }
+  }
 
   return (
     <section aria-labelledby={headingId} className="footer-newsletter">
@@ -24,16 +94,80 @@ export function NewsletterSignup() {
         </div>
       </div>
 
-      <div
-        className="footer-reach-form"
-        data-reach-form={REACH_FORM_ID}
-        style={{ width: "100%" }}
-      />
-      <Script
-        id="hostinger-reach-embed"
-        src="https://cdn-reach.hostinger.com/js/embed.js"
-        strategy="afterInteractive"
-      />
+      {customReady ? (
+        <form
+          className="footer-custom-newsletter"
+          onSubmit={submitSignup}
+          aria-describedby={message ? statusId : undefined}
+        >
+          <div className="footer-custom-newsletter-fields">
+            <label className="visually-hidden" htmlFor="newsletter-first-name">First name (optional)</label>
+            <input
+              id="newsletter-first-name"
+              className="footer-custom-newsletter-input"
+              type="text"
+              autoComplete="given-name"
+              maxLength={80}
+              placeholder="First name (optional)"
+              value={firstName}
+              onChange={(event) => setFirstName(event.target.value)}
+            />
+            <label className="visually-hidden" htmlFor="newsletter-email">Email address</label>
+            <input
+              id="newsletter-email"
+              className="footer-custom-newsletter-input"
+              type="email"
+              autoComplete="email"
+              maxLength={254}
+              placeholder="Email address"
+              required
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+            />
+          </div>
+          <input
+            aria-hidden="true"
+            className="newsletter-honeypot"
+            tabIndex={-1}
+            name="website"
+            type="text"
+            autoComplete="off"
+          />
+          <label className="footer-custom-newsletter-consent">
+            <input
+              type="checkbox"
+              checked={consent}
+              onChange={(event) => setConsent(event.target.checked)}
+              required
+            />
+            I agree to receive occasional email updates from Kerygma Path.
+            I can unsubscribe at any time. See the{" "}
+            <Link href="/policies/privacy/">Privacy Policy</Link>.
+          </label>
+          <button className="footer-custom-newsletter-submit" type="submit" disabled={sending || !consent}>
+            {sending ? "Subscribing…" : "Subscribe"}
+          </button>
+          {message && (
+            <p id={statusId} role={error ? "alert" : "status"}
+              className={`footer-custom-newsletter-status${error ? " is-error" : ""}`}>
+              {message}
+            </p>
+          )}
+        </form>
+      ) : (
+        <>
+          <div
+            className="footer-reach-form"
+            data-reach-form={REACH_FORM_ID}
+            style={{ width: "100%" }}
+          />
+          <Script
+            id="hostinger-reach-embed"
+            src="https://cdn-reach.hostinger.com/js/embed.js"
+            strategy="afterInteractive"
+          />
+        </>
+      )}
     </section>
   );
 }
