@@ -939,7 +939,33 @@ body:has(.kerygma-gateway) .site-header {
   box-shadow: none;
 }
 #site-footer .footer-newsletter-heading { justify-content: center; text-align: center; }
-#site-footer .footer-reach-form { width: 100%; }
+/* Contain the Reach embed without clipping its fields or consent choices.
+   Hostinger manages the embedded form's own internal background. */
+#site-footer .footer-newsletter { width: min(100%, 460px); margin-inline: auto; }
+#site-footer .footer-reach-form {
+  width: 100%;
+  max-width: 460px;
+  margin-inline: auto;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+#site-footer .footer-reach-form iframe {
+  display: block;
+  width: 100% !important;
+  max-width: 100%;
+  margin-inline: auto;
+  border: 0;
+  background: transparent;
+}
+/* Reach may render fields directly rather than in a frame. Keep its own
+   colors instead of imposing footer-wide gold text on its controls. */
+:root body #site-footer .footer-reach-form :is(p, a, span, strong, b, em, small) {
+  background-image: initial !important;
+  -webkit-text-fill-color: initial !important;
+  text-shadow: initial !important;
+  filter: initial !important;
+}
 
 :root body #site-footer :is(p, a, span, strong, b, em, small) {
   background-image: none !important;
