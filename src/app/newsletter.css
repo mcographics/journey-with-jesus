@@ -15,8 +15,17 @@
 
 #site-footer .footer-custom-newsletter-fields {
   display: grid;
-  grid-template-columns: minmax(0, .85fr) minmax(0, 1.3fr);
+  grid-template-columns: minmax(0, .85fr) minmax(0, 2fr);
   gap: 9px;
+}
+
+/* Keep the action attached to the email address on desktop and mobile. */
+#site-footer .footer-custom-newsletter-email-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: stretch;
+  gap: 8px;
+  min-width: 0;
 }
 
 #site-footer .footer-custom-newsletter-input {
@@ -70,8 +79,8 @@
   justify-content: center;
   justify-self: center;
   min-height: 40px;
-  min-width: 135px;
-  padding: 0 20px;
+  min-width: 106px;
+  padding: 0 12px;
   border: 1px solid #f6de9e;
   border-radius: 4px;
   background: linear-gradient(145deg, #f4dfab, #d8ad59);
@@ -124,9 +133,10 @@
 
 @media (max-width: 580px) {
   #site-footer .footer-custom-newsletter-fields { grid-template-columns: minmax(0, 1fr); }
+  #site-footer .footer-custom-newsletter-email-row { grid-template-columns: minmax(0, 1fr) auto; gap: 7px; }
   #site-footer .footer-custom-newsletter { max-width: 100%; gap: 9px; }
   #site-footer .footer-custom-newsletter-input { height: 44px; }
-  #site-footer .footer-custom-newsletter-submit { min-height: 44px; }
+  #site-footer .footer-custom-newsletter-submit { min-height: 44px; min-width: 100px; padding-inline: 10px; }
 }
 
 /* The existing footer theme contains high-specificity text colouring rules.
