@@ -112,18 +112,23 @@ export function NewsletterSignup() {
               value={firstName}
               onChange={(event) => setFirstName(event.target.value)}
             />
-            <label className="visually-hidden" htmlFor="newsletter-email">Email address</label>
-            <input
-              id="newsletter-email"
-              className="footer-custom-newsletter-input"
-              type="email"
-              autoComplete="email"
-              maxLength={254}
-              placeholder="Email address"
-              required
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-            />
+            <div className="footer-custom-newsletter-email-row">
+              <label className="visually-hidden" htmlFor="newsletter-email">Email address</label>
+              <input
+                id="newsletter-email"
+                className="footer-custom-newsletter-input"
+                type="email"
+                autoComplete="email"
+                maxLength={254}
+                placeholder="Email address"
+                required
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+              />
+              <button className="footer-custom-newsletter-submit" type="submit" disabled={sending || !consent}>
+                {sending ? "Subscribing…" : "Subscribe"}
+              </button>
+            </div>
           </div>
           <input
             aria-hidden="true"
@@ -146,9 +151,6 @@ export function NewsletterSignup() {
               <Link href="/policies/privacy/">Privacy Policy</Link>.
             </span>
           </label>
-          <button className="footer-custom-newsletter-submit" type="submit" disabled={sending || !consent}>
-            {sending ? "Subscribing…" : "Subscribe"}
-          </button>
           {message && (
             <p id={statusId} role={error ? "alert" : "status"}
               className={`footer-custom-newsletter-status${error ? " is-error" : ""}`}>
