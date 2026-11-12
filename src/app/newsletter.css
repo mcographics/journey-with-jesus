@@ -1,0 +1,130 @@
+/* Kerygma Path newsletter form. No card, white panel or frame. */
+#site-footer .footer-custom-newsletter {
+  display: grid;
+  width: 100%;
+  max-width: 460px;
+  gap: 10px;
+  margin: 0 auto;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  text-align: left;
+}
+
+#site-footer .footer-custom-newsletter-fields {
+  display: grid;
+  grid-template-columns: minmax(0, .85fr) minmax(0, 1.3fr);
+  gap: 9px;
+}
+
+#site-footer .footer-custom-newsletter-input {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid rgba(228, 188, 112, .48);
+  border-radius: 4px;
+  background: rgba(5, 13, 26, .65);
+  color: #fff8eb;
+  font-size: 13px;
+  box-shadow: none;
+}
+
+#site-footer .footer-custom-newsletter-input::placeholder { color: #c7c9d0; opacity: 1; }
+#site-footer .footer-custom-newsletter-input:focus-visible,
+#site-footer .footer-custom-newsletter-submit:focus-visible {
+  outline: 2px solid #f6d994;
+  outline-offset: 2px;
+}
+
+#site-footer .footer-custom-newsletter-consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 11px;
+  line-height: 1.5;
+  color: #e4e5e9;
+  text-align: left;
+}
+
+#site-footer .footer-custom-newsletter-consent input {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 16px;
+  margin: 1px 0 0;
+  accent-color: #d8ad59;
+}
+
+#site-footer .footer-custom-newsletter-consent a {
+  color: #f6de9e !important;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+#site-footer .footer-custom-newsletter-submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  justify-self: center;
+  min-height: 40px;
+  min-width: 135px;
+  padding: 0 20px;
+  border: 1px solid #f6de9e;
+  border-radius: 4px;
+  background: linear-gradient(145deg, #f4dfab, #d8ad59);
+  box-shadow: none;
+  color: #141c2a;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+#site-footer .footer-custom-newsletter-submit:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+#site-footer .footer-custom-newsletter-submit:not(:disabled):hover {
+  filter: brightness(1.07);
+}
+
+#site-footer .footer-custom-newsletter-status {
+  margin: 0;
+  color: #b7e3bd !important;
+  font-size: 12px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+#site-footer .footer-custom-newsletter-status.is-error { color: #ffceba !important; }
+
+:root[data-theme="light"] #site-footer .footer-custom-newsletter-input {
+  border-color: rgba(96, 87, 63, .4);
+  background: rgba(255, 255, 255, .86);
+  color: #243248;
+}
+:root[data-theme="light"] #site-footer .footer-custom-newsletter-input::placeholder {
+  color: #626b76;
+}
+:root[data-theme="light"] #site-footer .footer-custom-newsletter-consent {
+  color: #334054;
+}
+:root[data-theme="light"] #site-footer .footer-custom-newsletter-consent a {
+  color: #78561c !important;
+}
+:root[data-theme="light"] #site-footer .footer-custom-newsletter-status {
+  color: #275b35 !important;
+}
+:root[data-theme="light"] #site-footer .footer-custom-newsletter-status.is-error {
+  color: #8a2e1c !important;
+}
+
+@media (max-width: 580px) {
+  #site-footer .footer-custom-newsletter-fields { grid-template-columns: minmax(0, 1fr); }
+  #site-footer .footer-custom-newsletter { max-width: 100%; gap: 9px; }
+  #site-footer .footer-custom-newsletter-input { height: 44px; }
+  #site-footer .footer-custom-newsletter-submit { min-height: 44px; }
+}
