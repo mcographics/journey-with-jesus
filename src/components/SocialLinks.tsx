@@ -9,7 +9,13 @@ type SocialLink = Pick<Database["public"]["Tables"]["media_social_links"]["Row"]
 const initialLinks: SocialLink[] = [
   { id: "initial-youtube", platform: "youtube", label: "YouTube", url: "https://www.youtube.com/@KerygmaPath", sort_order: 0 },
   { id: "initial-facebook", platform: "facebook", label: "Facebook", url: "https://www.facebook.com/KerygmaPath", sort_order: 1 },
+  { id: "official-instagram", platform: "instagram", label: "Instagram", url: "https://www.instagram.com/kerygma_Path/", sort_order: 2 },
+  { id: "official-threads", platform: "threads", label: "Threads", url: "https://www.threads.com/@kerygma_Path", sort_order: 3 },
 ];
+
+const newOfficialLinks = initialLinks.filter((link) =>
+  link.platform === "instagram" || link.platform === "threads",
+);
 
 export default function SocialLinks() {
   const [links, setLinks] = useState<SocialLink[]>(initialLinks);
@@ -25,7 +31,17 @@ export default function SocialLinks() {
       .order("sort_order")
       .order("label")
       .then(({ data, error }) => {
-        if (active && !error && data) setLinks(data);
+        if (active && !error && data) {
+          // Keep published Studio links, but ensure the official Instagram and
+          // Threads URLs always appear in the footer (without duplicates).
+          const existing = data.length > 0 ? data : initialLinks;
+          const otherLinks = existing.filter(
+            (link) => link.platform !== "instagram" && link.platform !== "threads",
+          );
+          setLinks([...otherLinks, ...newOfficialLinks].sort(
+            (a, b) => a.sort_order - b.sort_order,
+          ));
+        }
       });
     return () => { active = false; };
   }, []);
@@ -61,6 +77,9 @@ function SocialIcon({ platform, label }: { platform: string; label: string }) {
   }
   if (platform === "instagram") {
     return <svg aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.7" cy="6.4" r=".8" fill="currentColor" stroke="none" /></svg>;
+  }
+  if (platform === "threads") {
+    return <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M18.263 11.097c-.03-3.486-1.92-5.586-5.111-5.586-2.13 0-3.922.963-4.863 2.499l2.062 1.438c.535-.843 1.272-1.543 2.628-1.543 1.528 0 2.318.85 2.544 2.431a15 15 0 0 0-2.236-.173c-4.125 0-6.068 1.867-6.068 4.336s1.943 3.99 4.804 3.99c3.139 0 5.013-2.115 5.781-4.735.798.361 1.348 1.204 1.348 2.47 0 3.387-3.907 5.232-7.22 5.232-4.885 0-8.077-3.207-8.077-8.424 0-6.392 4.223-10.487 9.9-10.487 3.808 0 5.69 1.671 6.97 3.914l2.108-1.475C21.44 2.078 18.331 0 13.663 0 6.227 0 1.168 5.277 1.168 12.934c0 7 4.953 11.066 10.856 11.066 4.878 0 9.809-2.846 9.809-7.716 0-2.545-1.46-4.231-3.569-5.187m-6.33 4.855c-1.077 0-2.026-.512-2.026-1.453 0-1.483 1.822-1.934 3.606-1.934.678 0 1.34.045 1.927.173-.422 1.927-1.671 3.215-3.508 3.214Z" /></svg>;
   }
   if (platform === "x") {
     return <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 3h4.5L20 21h-4.5L4 3Z" /><path d="m20 3-7.4 8.3M11.3 12.5 4 21" /></svg>;
