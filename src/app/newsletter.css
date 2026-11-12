@@ -128,3 +128,24 @@
   #site-footer .footer-custom-newsletter-input { height: 44px; }
   #site-footer .footer-custom-newsletter-submit { min-height: 44px; }
 }
+
+/* The existing footer theme contains high-specificity text colouring rules.
+   Keep the consent wording readable, while preserving the themed link colour. */
+:root:not([data-theme="light"]) body #site-footer .footer-custom-newsletter-consent-copy {
+  color: #e4e5e9 !important;
+}
+:root[data-theme="light"] body #site-footer .footer-custom-newsletter-consent-copy {
+  color: #334054 !important;
+}
+:root:not([data-theme="light"]) body #site-footer p.footer-custom-newsletter-status {
+  color: #b7e3bd !important;
+}
+:root:not([data-theme="light"]) body #site-footer p.footer-custom-newsletter-status.is-error {
+  color: #ffceba !important;
+}
+:root[data-theme="light"] body #site-footer p.footer-custom-newsletter-status {
+  color: #275b35 !important;
+}
+:root[data-theme="light"] body #site-footer p.footer-custom-newsletter-status.is-error {
+  color: #8a2e1c !important;
+}
