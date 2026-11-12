@@ -140,9 +140,11 @@ export function NewsletterSignup() {
               onChange={(event) => setConsent(event.target.checked)}
               required
             />
-            I agree to receive occasional email updates from Kerygma Path.
-            I can unsubscribe at any time. See the{" "}
-            <Link href="/policies/privacy/">Privacy Policy</Link>.
+            <span className="footer-custom-newsletter-consent-copy">
+              I agree to receive occasional email updates from Kerygma Path.
+              I can unsubscribe at any time. See the{" "}
+              <Link href="/policies/privacy/">Privacy Policy</Link>.
+            </span>
           </label>
           <button className="footer-custom-newsletter-submit" type="submit" disabled={sending || !consent}>
             {sending ? "Subscribing…" : "Subscribe"}
