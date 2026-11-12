@@ -11,6 +11,7 @@ import "./accessibility.css";
 import "./scripture.css";
 import "./premium-theme.css";
 import "./desktop-utility-drawer.css";
+import "./newsletter.css";
 
 const siteUrl = "https://kerygmapath.com/";
 
