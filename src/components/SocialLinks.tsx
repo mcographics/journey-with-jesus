@@ -4,7 +4,10 @@ import { useEffect, useState } from "react";
 import type { Database } from "@/lib/database.types";
 import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
 
-type SocialLink = Pick<Database["public"]["Tables"]["media_social_links"]["Row"], "id" | "platform" | "label" | "url" | "sort_order">;
+// The footer may show official platforms that are not yet in the Studio DB enum.
+type SocialLink = Omit<Pick<Database["public"]["Tables"]["media_social_links"]["Row"], "id" | "platform" | "label" | "url" | "sort_order">, "platform"> & {
+  platform: string;
+};
 
 const initialLinks: SocialLink[] = [
   { id: "initial-youtube", platform: "youtube", label: "YouTube", url: "https://www.youtube.com/@KerygmaPath", sort_order: 0 },
