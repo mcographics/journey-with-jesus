@@ -19,7 +19,7 @@ export function NewsletterSignup() {
       <div className="footer-newsletter-heading">
         <Mail aria-hidden="true" size={18} />
         <div>
-          <h2 id={headingId}>Journey with Jesus updates</h2>
+          <h2 id={headingId}>Kerygma Path updates</h2>
           <p>New animated stories and project news, delivered occasionally.</p>
         </div>
       </div>
