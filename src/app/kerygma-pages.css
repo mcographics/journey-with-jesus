@@ -1078,3 +1078,106 @@ body:has(.kerygma-gateway) .site-header {
     margin-inline: auto;
   }
 }
+
+/* Compact shared footer: keep the logo and social row on the left,
+   put the tagline alongside the newsletter on wide screens, and retain
+   accessible form controls and all legal navigation. */
+#site-footer .footer-inner {
+  padding-block: 12px;
+  gap: 20px;
+  align-items: center;
+}
+#site-footer .kerygma-footer-brand {
+  width: 128px;
+  height: 48px;
+  aspect-ratio: auto;
+  justify-self: center;
+}
+#site-footer .footer-brand-stack { gap: 0; }
+#site-footer .footer-social-links {
+  min-height: 38px;
+  margin-top: 2px;
+}
+#site-footer .footer-content { gap: 6px; }
+#site-footer .footer-message { gap: 2px; }
+#site-footer .footer-tagline { font-size: 16px; line-height: 1.25; }
+#site-footer .footer-note { line-height: 1.35; }
+#site-footer .footer-newsletter-heading { margin-bottom: 6px; }
+#site-footer .footer-newsletter-heading h2 { font-size: 16px; }
+#site-footer .footer-newsletter-heading p {
+  margin-top: 2px;
+  font-size: 10px;
+  line-height: 1.35;
+}
+#site-footer .footer-links { gap: 2px 9px; line-height: 1.4; }
+#site-footer .footer-links a { padding-block: 2px; }
+#site-footer .footer-credits { line-height: 1.4; }
+
+@media (min-width: 1000px) {
+  #site-footer .footer-inner {
+    grid-template-columns: 222px minmax(0, 1fr);
+    gap: 22px;
+  }
+  #site-footer .footer-content {
+    display: grid;
+    grid-template-columns: minmax(190px, .7fr) minmax(0, 1.3fr);
+    align-items: center;
+    justify-items: center;
+    gap: 6px 18px;
+  }
+  #site-footer .footer-message {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  #site-footer .footer-newsletter {
+    grid-column: 2;
+    grid-row: 1;
+    width: min(100%, 460px);
+  }
+  #site-footer .footer-links {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+  #site-footer .footer-credits {
+    grid-column: 1 / -1;
+    grid-row: 3;
+  }
+}
+@media (min-width: 761px) and (max-width: 999px) {
+  #site-footer .footer-inner {
+    grid-template-columns: 215px minmax(0, 1fr);
+    gap: 15px;
+  }
+  #site-footer .footer-content { gap: 5px; }
+}
+@media (max-width: 760px) {
+  #site-footer .footer-inner {
+    grid-template-columns: minmax(0, 1fr);
+    width: calc(100% - 32px);
+    gap: 6px;
+    padding-block: 12px 16px;
+  }
+  #site-footer .kerygma-footer-brand { width: 116px; height: 45px; }
+  #site-footer .footer-social-links { gap: 7px; min-height: 36px; margin-top: 2px; }
+  #site-footer .footer-social-link { flex: 0 0 36px; width: 36px; height: 36px; }
+  #site-footer .footer-content {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 7px;
+  }
+  #site-footer .footer-message,
+  #site-footer .footer-newsletter,
+  #site-footer .footer-links,
+  #site-footer .footer-credits {
+    grid-column: 1;
+    grid-row: auto;
+  }
+  #site-footer .footer-newsletter { width: min(100%, 460px); }
+  #site-footer .footer-tagline { font-size: 15px; }
+  #site-footer .footer-note { font-size: 8px; }
+  #site-footer .footer-links {
+    min-height: 0;
+    gap: 2px 8px;
+    font-size: 10px;
+  }
+}
