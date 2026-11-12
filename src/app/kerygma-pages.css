@@ -918,14 +918,28 @@ body:has(.kerygma-gateway) .site-header {
 #site-footer .kerygma-footer-logo-picture { display: block; width: 100%; }
 #site-footer .kerygma-footer-logo { display: block; width: 100%; height: auto; }
 #site-footer .footer-brand:hover { transform: none; filter: none; }
-#site-footer .footer-content { display: grid; min-width: 0; gap: 10px; }
-#site-footer .footer-message { display: flex; flex-wrap: wrap; justify-content: flex-start; align-items: baseline; gap: 8px 18px; text-align: left; }
+/* Center every footer group within its column on desktop and mobile. */
+#site-footer .footer-brand-stack { width: 100%; justify-self: center; align-items: center; }
+#site-footer .footer-content { display: grid; min-width: 0; gap: 10px; justify-items: center; text-align: center; }
+#site-footer .footer-message { display: grid; width: 100%; justify-items: center; gap: 4px; text-align: center; }
 #site-footer .footer-tagline { font-size: 18px; }
 #site-footer .footer-note { font-size: 9px; letter-spacing: .1em; line-height: 1.6; }
-#site-footer .footer-links { justify-content: flex-start; gap: 4px 12px; min-height: 0; font-size: 11px; letter-spacing: .025em; text-align: left; }
+#site-footer .footer-links { justify-content: center; gap: 4px 12px; min-height: 0; font-size: 11px; letter-spacing: .025em; text-align: center; }
 #site-footer .footer-links a { padding-block: 5px; }
 #site-footer .footer-links span { font-size: 7px; }
-#site-footer .footer-credits { margin: 0; }
+#site-footer .footer-credits { margin: 0; text-align: center; }
+
+/* Let the Reach form blend into the footer; no surrounding signup card. */
+#site-footer .footer-newsletter {
+  width: min(100%, 610px);
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+#site-footer .footer-newsletter-heading { justify-content: center; text-align: center; }
+#site-footer .footer-reach-form { width: 100%; }
 
 :root body #site-footer :is(p, a, span, strong, b, em, small) {
   background-image: none !important;
