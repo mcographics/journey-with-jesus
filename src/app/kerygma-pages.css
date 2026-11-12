@@ -902,7 +902,7 @@ body:has(.kerygma-gateway) .site-header {
 #site-footer .footer-inner {
   width: min(1160px, calc(100% - 48px));
   min-height: 0;
-  grid-template-columns: 140px minmax(0, 1fr);
+  grid-template-columns: 240px minmax(0, 1fr);
   gap: 28px;
   padding-block: 16px;
   justify-items: stretch;
@@ -920,6 +920,20 @@ body:has(.kerygma-gateway) .site-header {
 #site-footer .footer-brand:hover { transform: none; filter: none; }
 /* Center every footer group within its column on desktop and mobile. */
 #site-footer .footer-brand-stack { width: 100%; justify-self: center; align-items: center; }
+/* The footer's five official social platforms stay on one centered line. */
+#site-footer .footer-social-links {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  width: max-content;
+  max-width: 100%;
+  margin-inline: auto;
+}
+#site-footer .footer-social-link {
+  flex: 0 0 38px;
+}
 #site-footer .footer-content { display: grid; min-width: 0; gap: 10px; justify-items: center; text-align: center; }
 #site-footer .footer-message { display: grid; width: 100%; justify-items: center; gap: 4px; text-align: center; }
 #site-footer .footer-tagline { font-size: 18px; }
