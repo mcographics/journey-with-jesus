@@ -2,7 +2,8 @@ export type CommentStatus = "pending" | "approved" | "rejected";
 export type VideoQuality = "720p" | "1080p" | "4K";
 export type MediaAudioLanguage = "en" | "fr" | "es";
 export type VideoContentType = "video/mp4" | "video/webm" | "video/quicktime";
-export type SocialPlatform = "youtube" | "facebook" | "instagram" | "tiktok" | "x" | "linkedin" | "pinterest" | "twitch" | "discord" | "bluesky" | "rumble" | "custom";
+import type { SocialPlatform } from "./social-platforms";
+export type { SocialPlatform } from "./social-platforms";
 
 export type Database = {
   public: {
