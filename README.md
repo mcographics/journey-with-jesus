@@ -33,9 +33,11 @@ For a local Supabase project, copy `.env.example` to `.env.local` and set `NEXT_
 
 ## Deploy to GitHub Pages
 
-The repository must use **Settings → Pages → Build and deployment → GitHub Actions**. A push to `main` runs the checks, exports the site with the project path `/journey-with-jesus`, and deploys the `out/` directory. The current project URL is:
+The repository must use **Settings → Pages → Build and deployment → GitHub Actions**. A push to `main` runs lint, type-checking, tests, a static build and SEO verification before deploying the `out/` directory. The production site uses the custom domain and root base path:
 
-`https://mcographics.github.io/journey-with-jesus/`
+`https://kerygmapath.com/`
+
+The workflow also supports manual deployment through **Actions → Deploy Journey with Jesus to GitHub Pages → Run workflow**. Check the latest `main` run and its `github-pages` deployment before marking a release complete.
 
 The Pages workflow includes the project's public Supabase URL and publishable key as build-time fallbacks. You can override them with repository **Actions variables** named `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`. These values are public by design; never place a secret or service-role key in the website.
 
