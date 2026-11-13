@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { BookOpen, ChevronDown, Crown, LayoutGrid, Menu, Moon, Newspaper, Sun, X } from "lucide-react";
+import { BookOpen, Building2, ChevronDown, Clapperboard, Cross, LayoutGrid, Menu, Moon, Newspaper, ShoppingBag, Sun, UserRound, X } from "lucide-react";
 import { AccessibilitySettings } from "@/components/AccessibilitySettings";
 import { SiteLanguageSwitcher } from "@/components/SiteLanguageSwitcher";
 
@@ -386,7 +386,15 @@ export function SiteHeader() {
                     ? <BookOpen aria-hidden="true" size={15} strokeWidth={1.7} />
                     : href === "/blog/"
                       ? <Newspaper aria-hidden="true" size={15} strokeWidth={1.7} />
-                      : <Crown aria-hidden="true" size={15} strokeWidth={1.7} />}
+                      : href === "/company/"
+                        ? <Building2 aria-hidden="true" size={15} strokeWidth={1.7} />
+                        : href === "/projects/journey-with-jesus/"
+                          ? <Cross aria-hidden="true" size={15} strokeWidth={1.7} />
+                          : href === "/media/"
+                            ? <Clapperboard aria-hidden="true" size={15} strokeWidth={1.7} />
+                            : href === "/store/"
+                              ? <ShoppingBag aria-hidden="true" size={15} strokeWidth={1.7} />
+                              : <UserRound aria-hidden="true" size={15} strokeWidth={1.7} />}
                   <span>{label}</span>
                 </Link>
               );
@@ -469,7 +477,15 @@ export function SiteHeader() {
                     ? <BookOpen aria-hidden="true" size={15} strokeWidth={1.7} />
                     : href === "/blog/"
                       ? <Newspaper aria-hidden="true" size={15} strokeWidth={1.7} />
-                      : <Crown aria-hidden="true" size={15} strokeWidth={1.7} />}
+                      : href === "/company/"
+                        ? <Building2 aria-hidden="true" size={15} strokeWidth={1.7} />
+                        : href === "/projects/journey-with-jesus/"
+                          ? <Cross aria-hidden="true" size={15} strokeWidth={1.7} />
+                          : href === "/media/"
+                            ? <Clapperboard aria-hidden="true" size={15} strokeWidth={1.7} />
+                            : href === "/store/"
+                              ? <ShoppingBag aria-hidden="true" size={15} strokeWidth={1.7} />
+                              : <UserRound aria-hidden="true" size={15} strokeWidth={1.7} />}
                   <span>{label}</span>
                 </Link>
               );
