@@ -29,19 +29,19 @@ export default function SocialLinks() {
     let active = true;
     void client
       .from("media_social_links")
-      .select("id, platform, label, url, sort_order")
-      .eq("published", true)
+      .select("id, platform, label, url, sort_order, published")
       .order("sort_order")
       .order("label")
       .then(({ data, error }) => {
         if (active && !error && data) {
-          // Keep published Studio links, but ensure the official Instagram and
-          // Threads URLs always appear in the footer (without duplicates).
-          const existing = data.length > 0 ? data : initialLinks;
-          const otherLinks = existing.filter(
-            (link) => link.platform !== "instagram" && link.platform !== "threads",
-          );
-          setLinks([...otherLinks, ...newOfficialLinks].sort(
+          // Respect saved Studio choices, including unpublished overrides.
+          // Only fill Instagram/Threads from approved official URLs when no
+          // Studio record exists for that platform at all.
+          const configuredPlatforms = new Set(data.map((link) => link.platform));
+          const approvedDefaults = (data.length === 0 ? initialLinks : newOfficialLinks)
+            .filter((link) => !configuredPlatforms.has(link.platform));
+          const publishedLinks = data.filter((link) => link.published && link.url);
+          setLinks([...publishedLinks, ...approvedDefaults].sort(
             (a, b) => a.sort_order - b.sort_order,
           ));
         }
