@@ -729,7 +729,11 @@ export const SOCIAL_PLATFORM_GROUPS = [
 ] as const;
 
 export type SocialPlatform = (typeof SOCIAL_PLATFORM_GROUPS)[number]["platforms"][number]["id"];
-export const SOCIAL_PLATFORM_ITEMS = SOCIAL_PLATFORM_GROUPS.flatMap((group) => group.platforms);
+type SocialPlatformEntry = (typeof SOCIAL_PLATFORM_GROUPS)[number]["platforms"][number];
+export const SOCIAL_PLATFORM_ITEMS: readonly SocialPlatformEntry[] = SOCIAL_PLATFORM_GROUPS.reduce<SocialPlatformEntry[]>(
+  (all, group) => { all.push(...group.platforms); return all; },
+  [],
+);
 export const SOCIAL_PLATFORM_LABELS = Object.fromEntries(
   SOCIAL_PLATFORM_ITEMS.map((platform) => [platform.id, platform.label]),
 ) as Record<SocialPlatform, string>;
