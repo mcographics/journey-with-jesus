@@ -23,10 +23,10 @@ test("newsletter waits after entry, dismisses, and remains reopenable after refr
   await page.keyboard.press("Escape");
   await expect(dialog).toHaveCount(0);
   await expect(reopen).toBeFocused();
+  await page.clock.resume();
   await page.reload();
-  await page.clock.runFor(1);
   await expect(reopen).toBeVisible();
-  await page.clock.runFor(15000);
+  await page.clock.fastForward(15000);
   await expect(dialog).toHaveCount(0);
   await reopen.click();
   await expect(dialog).toBeVisible();
