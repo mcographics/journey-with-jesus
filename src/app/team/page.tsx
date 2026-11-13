@@ -1,12 +1,12 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/page-metadata";
 import { Sparkles } from "lucide-react";
 import { TeamDirectory } from "@/components/TeamDirectory";
 
-export const metadata: Metadata = {
-  title: "Meet the Christian Animation Team",
-  description: "Meet the Kerygma Path creative team behind Journey with Jesus, a Christian animation project sharing Gospel stories and the life of Jesus Christ.",
-  alternates: { canonical: "/team/" },
-};
+export const metadata = pageMetadata(
+  "Meet the Christian Animation Team",
+  "Meet the Kerygma Path creative team behind Journey with Jesus, a Christian animation project sharing Gospel stories and the life of Jesus Christ.",
+  "/team/",
+);
 
 const fallbackMembers = [
   {

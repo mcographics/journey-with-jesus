@@ -57,3 +57,5 @@ jobs:
           NEXT_PUBLIC_BASE_PATH: ""
           NEXT_PUBLIC_SUPABASE_URL: ${{ vars.NEXT_PUBLIC_SUPABASE_URL || 'https://mjsccbymabkmojjqdlsw.supabase.co' }}
           NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ vars.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || 'sb_publishable_IpsxOGkItkxNP_u6DPYYgg_HAHbSzBQ' }}
+      - name: Verify exported SEO metadata
+        run: npm run check:seo

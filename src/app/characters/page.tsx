@@ -1,12 +1,12 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/page-metadata";
 import { ScrollText } from "lucide-react";
 import { CharacterCatalog } from "@/components/CharacterCatalog";
 
-export const metadata: Metadata = {
-  title: "Bible Characters & Gospel Stories",
-  description: "Meet the people of the Bible featured in Gospel stories and Journey with Jesus. Explore biblical characters and Scripture references at Kerygma Path.",
-  alternates: { canonical: "/characters/" },
-};
+export const metadata = pageMetadata(
+  "Bible Characters & Gospel Stories",
+  "Meet the people of the Bible featured in Gospel stories and Journey with Jesus. Explore biblical characters and Scripture references at Kerygma Path.",
+  "/characters/",
+);
 
 export default function CharactersPage() {
   return (

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/page-metadata";
 import Image from "next/image";
 import Link from "next/link";
 import ResponsivePicture from "@/components/ResponsivePicture";
@@ -6,12 +6,11 @@ import { ArrowRight, BookOpen, Sparkles } from "lucide-react";
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
-export const metadata: Metadata = {
-  title: "AI-Assisted Christian Animation Studio",
-  description:
-    "Meet Kerygma Path, a Christian animation studio using AI-assisted visual storytelling, character design and animation to bring biblical Gospel stories to life.",
-  alternates: { canonical: "/company/" },
-};
+export const metadata = pageMetadata(
+  "AI-Assisted Christian Animation Studio",
+  "Meet Kerygma Path, a Christian animation studio using AI-assisted visual storytelling, character design and animation to bring biblical Gospel stories to life.",
+  "/company/",
+);
 
 export default function CompanyPage() {
   return (

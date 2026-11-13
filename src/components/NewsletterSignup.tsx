@@ -9,6 +9,7 @@ import { Mail } from "lucide-react";
 import { PRIVACY_EVENT, readExternalConsent } from "@/components/PrivacyPreferences";
 
 const REACH_FORM_ID = "46169614-b34a-4128-9bb0-2dc232611bbe";
+const DISMISSED_KEY = "kerygma-newsletter-dismissed-v1";
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, "") ?? "";
 const PUBLISHABLE_KEY = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ?? "";
 const CUSTOM_ENDPOINT = SUPABASE_URL
@@ -25,8 +26,20 @@ export function NewsletterSignup() {
   const [modalOpen, setModalOpen] = useState(false);
   const [dismissed, setDismissed] = useState(false);
   const reopenRef = useRef<HTMLButtonElement>(null);
-  const dismissModal = () => { setModalOpen(false); setDismissed(true); };
+  const dismissModal = () => {
+    try { sessionStorage.setItem(DISMISSED_KEY, "yes"); } catch {}
+    setModalOpen(false);
+    setDismissed(true);
+  };
   const closeButtonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    // Restore after hydration so the server and first client render agree.
+    const timer = window.setTimeout(() => {
+      try { setDismissed(sessionStorage.getItem(DISMISSED_KEY) === "yes"); } catch {}
+    }, 0);
+    return () => window.clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     if (pathname === "/") return;
@@ -63,7 +76,8 @@ export function NewsletterSignup() {
     document.addEventListener("keydown", onKeyDown);
     return () => {
       document.body.style.overflow = previousOverflow;
-      if (previousFocus?.isConnected) previousFocus.focus();
+      if (previousFocus?.isConnected && previousFocus !== document.body) previousFocus.focus();
+      else reopenRef.current?.focus();
       document.removeEventListener("keydown", onKeyDown);
     };
   }, [modalOpen]);
