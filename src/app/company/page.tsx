@@ -7,9 +7,10 @@ import { ArrowRight, BookOpen, Sparkles } from "lucide-react";
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
 export const metadata: Metadata = {
-  title: "The Studio",
+  title: "Christian & AI-Assisted Animation Studio",
   description:
-    "Meet Kerygma Path, a Christian animation studio using AI and digital tools to bring Scripture-rooted narratives to life.",
+    "Meet Kerygma Path, a Christian animation studio using AI-assisted animation and digital art to create animated Bible stories rooted in Scripture and the Gospel.",
+  alternates: { canonical: "/company/" },
 };
 
 export default function CompanyPage() {
