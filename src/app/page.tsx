@@ -5,13 +5,15 @@ import { GreekStarfield } from "@/components/GreekStarfield";
 import { LanguageAwareLogo } from "@/components/LanguageAwareLogo";
 
 export const metadata: Metadata = {
-  title: "Kerygma Path — Christian Animation Studio",
+  title: { absolute: "Kerygma Path | Christian Animation & Bible Stories" },
   description:
-    "Kerygma Path is a Christian animation studio using AI and creative tools to bring Gospel-centered stories to life.",
+    "Discover Christian animation and AI-assisted animated Bible stories about Jesus Christ at Kerygma Path, sharing the Gospel through Scripture-rooted storytelling.",
+  alternates: { canonical: "/" },
   openGraph: {
-    title: "Kerygma Path — Christian Animation Studio",
+    title: "Kerygma Path | Christian Animation & Bible Stories",
     description:
-      "Stories of Scripture, brought to life through thoughtful Christian animation.",
+      "Christian animation and AI-assisted Bible storytelling about Jesus Christ and the Gospel.",
+    url: "/",
   },
 };
 
@@ -53,7 +55,7 @@ export default function HomePage() {
           </span>
         </h1>
         <p className="kerygma-gateway-description">
-          Scripture-rooted stories, brought to life through animation to share the Gospel.
+          Christian animation and AI-assisted Bible stories, bringing the Gospel of Jesus to life.
         </p>
         <Link className="kerygma-enter-button" href="/company/">
           <span>Enter Site</span>
