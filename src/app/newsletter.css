@@ -409,11 +409,9 @@
   #site-footer .newsletter-modal .footer-custom-newsletter-fields { grid-template-columns: minmax(0,1fr); }
 }
 /* Use the space released by the former full-size newsletter form. */
-#site-footer .footer-content { grid-template-columns: minmax(135px,1fr) auto auto; }
-#site-footer .footer-newsletter-launch { grid-column: 2; grid-row: 1; }
-#site-footer .privacy-preferences { grid-column: 3; grid-row: 1; }
+#site-footer .footer-content { grid-template-columns: minmax(135px,1fr) auto; }
+#site-footer .privacy-preferences { grid-column: 2; grid-row: 1; }
 @media (max-width: 1150px) {
   #site-footer .footer-content { grid-template-columns: minmax(0,1fr); }
-  #site-footer .footer-newsletter-launch { grid-column: 1; grid-row: auto; justify-self: center; }
   #site-footer .privacy-preferences { grid-column: 1; grid-row: auto; }
 }
