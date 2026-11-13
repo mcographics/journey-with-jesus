@@ -24,7 +24,6 @@ export function NewsletterSignup() {
   const pathname = usePathname();
   const [modalOpen, setModalOpen] = useState(false);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
-  const triggerRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (pathname === "/") return;
@@ -61,7 +60,6 @@ export function NewsletterSignup() {
     return () => {
       document.body.style.overflow = previousOverflow;
       document.removeEventListener("keydown", onKeyDown);
-      triggerRef.current?.focus();
     };
   }, [modalOpen]);
 
@@ -140,9 +138,6 @@ export function NewsletterSignup() {
 
   return (
     <>
-      <button ref={triggerRef} type="button" className="footer-newsletter-launch" onClick={() => setModalOpen(true)}>
-        <Mail aria-hidden="true" size={18} /> Sign up for updates
-      </button>
       {modalOpen && (
       <div className="newsletter-modal-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget) setModalOpen(false); }}>
       <section id="kerygma-newsletter-dialog" role="dialog" aria-modal="true" aria-labelledby={headingId} className="newsletter-modal">
