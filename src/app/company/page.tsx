@@ -39,7 +39,7 @@ export default function CompanyPage() {
             <em>Made for the screen.</em>
           </h1>
           <p className="kerygma-company-lead">
-            Kerygma Path is a Christian animation studio creating biblical stories about Jesus Christ to share the Gospel through Scripture-rooted visual storytelling.
+            Kerygma Path is a Christian animation studio devoted to sharing the Gospel through Scripture-rooted visual storytelling about Jesus Christ.
           </p>
           <p className="kerygma-company-supporting">
             We use AI and a range of creative tools to develop Christian narratives from idea to animation, with Scripture and the Gospel message guiding every step.
