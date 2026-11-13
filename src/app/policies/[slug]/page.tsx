@@ -33,7 +33,7 @@ export default async function LegalPage({ params }: { params: Promise<{ slug: st
   >
    <p><Link href="/">Journey with Jesus</Link> / Policies</p>
    <h1>{policy.title}</h1>
-   <p className="legal-policy-date">Last updated: November 11, 2026</p>
+   <p className="legal-policy-date">Last updated: {slug === "privacy" || slug === "cookies" ? "November 13, 2026" : "November 11, 2026"}</p>
    {policy.sections.map((section) => (
     <section key={section.heading} style={{ marginTop: "2rem" }}>
      <h2>{section.heading}</h2>
