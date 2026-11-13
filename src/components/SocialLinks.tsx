@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import type { Database } from "@/lib/database.types";
 import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
 
-// The footer may show official platforms that are not yet in the Studio DB enum.
+// Use approved fallback icons until the published Studio records load.
 type SocialLink = Omit<Pick<Database["public"]["Tables"]["media_social_links"]["Row"], "id" | "platform" | "label" | "url" | "sort_order">, "platform"> & {
   platform: string;
 };
@@ -16,10 +16,6 @@ const initialLinks: SocialLink[] = [
   { id: "official-threads", platform: "threads", label: "Threads", url: "https://www.threads.com/@kerygma_Path", sort_order: 3 },
 ];
 
-const newOfficialLinks = initialLinks.filter((link) =>
-  link.platform === "instagram" || link.platform === "threads",
-);
-
 export default function SocialLinks() {
   const [links, setLinks] = useState<SocialLink[]>(initialLinks);
 
@@ -29,21 +25,15 @@ export default function SocialLinks() {
     let active = true;
     void client
       .from("media_social_links")
-      .select("id, platform, label, url, sort_order, published")
+      .select("id, platform, label, url, sort_order")
+      .eq("published", true)
       .order("sort_order")
       .order("label")
       .then(({ data, error }) => {
         if (active && !error && data) {
-          // Respect saved Studio choices, including unpublished overrides.
-          // Only fill Instagram/Threads from approved official URLs when no
-          // Studio record exists for that platform at all.
-          const configuredPlatforms = new Set(data.map((link) => link.platform));
-          const approvedDefaults = (data.length === 0 ? initialLinks : newOfficialLinks)
-            .filter((link) => !configuredPlatforms.has(link.platform));
-          const publishedLinks = data.filter((link) => link.published && link.url);
-          setLinks([...publishedLinks, ...approvedDefaults].sort(
-            (a, b) => a.sort_order - b.sort_order,
-          ));
+          // Published Studio entries are authoritative, including a deliberate
+          // removal or unpublish. Previously hardcoded profiles now live in DB.
+          setLinks(data.filter((link) => link.url.startsWith("https://")));
         }
       });
     return () => { active = false; };
