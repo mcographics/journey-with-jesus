@@ -3,8 +3,10 @@ import { ScrollText } from "lucide-react";
 import { CharacterCatalog } from "@/components/CharacterCatalog";
 
 export const metadata: Metadata = {
-  title: "Meet the Characters",
-  description: "Explore the people in the Gospel story and follow their stories through the Bible.",
+  title: "Bible Characters in Journey with Jesus",
+  description:
+    "Meet Jesus, Mary, Peter and other Bible characters featured in Journey with Jesus, with Scripture references and Christian animation character stories.",
+  alternates: { canonical: "/characters/" },
 };
 
 export default function CharactersPage() {
