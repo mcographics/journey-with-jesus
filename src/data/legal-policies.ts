@@ -25,7 +25,23 @@ export const legalPolicies = [
       },
       {
         "heading": "Newsletter",
-        "body": "If you sign up for Journey with Jesus email updates, you provide your email address and consent to receive them. Supabase processes the signup securely, and Brevo processes the address and confirmation status to send the confirmation email and manage the mailing list. Your subscription is added after you confirm. Newsletter messages include a way to unsubscribe. The signup service uses a one-way network fingerprint for abuse prevention and does not store the full network address or newsletter email in its rate-limit table."
+        "body": "If you sign up for Journey with Jesus email updates, you provide your email address and consent to receive them. Depending on service availability, the signup uses a Supabase-powered form with Brevo for confirmation and list management, or an optional Hostinger Reach hosted form. The hosted form loads only after you allow external services through Privacy preferences. Confirmation and unsubscribe procedures depend on the active provider; follow the instructions in the messages you receive. The signup service uses a one-way network fingerprint for abuse prevention and does not store the full network address or newsletter email in its rate-limit table."
+      },
+      {
+        "heading": "Lawful bases for processing",
+        "body": "Where European data protection law applies, we rely on consent for optional newsletter subscriptions and optional third-party embeds; legitimate interests for site security, abuse prevention and moderation, balanced against visitors' rights; and processing needed to provide features you request. You may withdraw consent without affecting earlier lawful processing."
+      },
+      {
+        "heading": "European and UK privacy rights",
+        "body": "Depending on applicable law and circumstances, you may request access to, correction or deletion of personal information, restriction or objection to processing, and portability of information you provided. You may withdraw consent at any time and complain to your relevant data protection authority. Rights are subject to applicable exceptions and identity verification."
+      },
+      {
+        "heading": "International processing",
+        "body": "Hosting, newsletter, database and embedded-content providers may process information outside your country, including outside the EEA or UK. The applicable safeguards and locations depend on each provider's configuration and contracts; these arrangements are being reviewed and should not be assumed to have been verified."
+      },
+      {
+        "heading": "Privacy preferences and external content",
+        "body": "Use the Privacy preferences control in the footer to allow or reject the optional Hostinger Reach newsletter embed. Optional external content is disabled by default until allowed. This control does not yet cover every possible third-party integration; a full cookie and embed audit remains necessary."
       },
       {
         "heading": "Website language translation",
@@ -41,7 +57,7 @@ export const legalPolicies = [
       },
       {
         "heading": "Contact and changes",
-        "body": "A dedicated privacy contact method is not currently listed on the website. This policy may be updated when website features or data practices change."
+        "body": "A dedicated privacy contact method is not currently listed on the website. The operator must publish a working privacy contact method so visitors can exercise their rights. This policy may be updated as the website and data practices change."
       }
     ]
   },
@@ -123,7 +139,7 @@ export const legalPolicies = [
     "sections": [
       {
         "heading": "What this site uses",
-        "body": "The website uses browser storage for preferences such as light or dark appearance. Some hosting, security, database, or embedded media services may use cookies or comparable technologies."
+        "body": "The website uses local storage for appearance, accessibility, language and optional external-service consent choices. Essential security and session technologies may be used by service providers. The optional Hostinger Reach newsletter embed is not loaded until you allow external services."
       },
       {
         "heading": "Comment functionality",
@@ -140,6 +156,10 @@ export const legalPolicies = [
       {
         "heading": "Website language preference",
         "body": "The site-wide language selector stores your selected language in this browser's local storage. You can clear this preference in your browser settings; the site will then use English by default."
+      },
+      {
+        "heading": "Privacy preferences",
+        "body": "The footer Privacy preferences control lets you reject or allow the optional Hostinger Reach embed and change that choice later. The choice is stored in your browser. Rejecting optional services does not block essential website features. Previously loaded third-party cookies may need to be cleared in browser settings; withdrawing consent stops future loading by this integration, but does not erase third-party data already collected."
       },
       {
         "heading": "Third-party technologies",

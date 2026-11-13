@@ -2,6 +2,7 @@ import Link from "next/link";
 import { LanguageAwareLogo } from "@/components/LanguageAwareLogo";
 import { NewsletterSignup } from "@/components/NewsletterSignup";
 import SocialLinks from "@/components/SocialLinks";
+import { PrivacyPreferences } from "@/components/PrivacyPreferences";
 
 export function SiteFooter() {
   return (
@@ -27,6 +28,7 @@ export function SiteFooter() {
           <p className="footer-note">Faith · Scripture · Story</p>
         </div>
         <NewsletterSignup />
+        <PrivacyPreferences />
         </div>
         <nav aria-label="Footer navigation" className="footer-links">
           <Link href="/">Kerygma Path</Link>

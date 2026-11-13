@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { EnterSiteLink } from "@/components/EnterSiteLink";
 import { GreekStarfield } from "@/components/GreekStarfield";
 import { LanguageAwareLogo } from "@/components/LanguageAwareLogo";
 
@@ -57,10 +56,7 @@ export default function HomePage() {
         <p className="kerygma-gateway-description">
           Kerygma Path brings the Gospel and the life of Jesus Christ to the screen through Scripture-rooted Christian animation and AI-assisted storytelling.
         </p>
-        <Link className="kerygma-enter-button" href="/company/">
-          <span>Enter Site</span>
-          <ArrowRight aria-hidden="true" size={19} />
-        </Link>
+        <EnterSiteLink />
         <p className="kerygma-gateway-note">Faith · Story · Animation</p>
       </div>
     </main>

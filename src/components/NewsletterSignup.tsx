@@ -1,9 +1,12 @@
 "use client";
 
-import { useEffect, useId, useState, type FormEvent } from "react";
+import { useEffect, useId, useState, useRef, type FormEvent } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { ENTERED_SITE_KEY } from "@/components/EnterSiteLink";
 import Script from "next/script";
 import { Mail } from "lucide-react";
+import { PRIVACY_EVENT, readExternalConsent } from "@/components/PrivacyPreferences";
 
 const REACH_FORM_ID = "46169614-b34a-4128-9bb0-2dc232611bbe";
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, "") ?? "";
@@ -18,8 +21,57 @@ const CUSTOM_ENDPOINT = SUPABASE_URL
  */
 export function NewsletterSignup() {
   const headingId = useId();
+  const pathname = usePathname();
+  const [modalOpen, setModalOpen] = useState(false);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (pathname === "/") return;
+    let eligible = false;
+    try {
+      eligible = sessionStorage.getItem(ENTERED_SITE_KEY) === "yes"
+        && sessionStorage.getItem("kerygma-newsletter-prompted-v1") !== "yes";
+    } catch { return; }
+    if (!eligible) return;
+    const timer = window.setTimeout(() => {
+      try { sessionStorage.setItem("kerygma-newsletter-prompted-v1", "yes"); } catch {}
+      setModalOpen(true);
+    }, 10000);
+    return () => window.clearTimeout(timer);
+  }, [pathname]);
+
+  useEffect(() => {
+    if (!modalOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    closeButtonRef.current?.focus();
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setModalOpen(false);
+      if (event.key === "Tab") {
+        const dialog = document.getElementById("kerygma-newsletter-dialog");
+        const controls = Array.from(dialog?.querySelectorAll<HTMLElement>('a[href], button:not([disabled]), input:not([disabled]):not([tabindex="-1"])') ?? []);
+        const first = controls[0];
+        const last = controls[controls.length - 1];
+        if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+        else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+      }
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [modalOpen]);
+
   const statusId = useId();
   const [customReady, setCustomReady] = useState(false);
+  const [externalAllowed, setExternalAllowed] = useState(false);
+  useEffect(() => {
+    const refresh = () => setExternalAllowed(readExternalConsent());
+    const timer = window.setTimeout(refresh, 0);
+    window.addEventListener(PRIVACY_EVENT, refresh);
+    return () => { window.clearTimeout(timer); window.removeEventListener(PRIVACY_EVENT, refresh); };
+  }, []);
   const [firstName, setFirstName] = useState("");
   const [email, setEmail] = useState("");
   const [consent, setConsent] = useState(false);
@@ -85,7 +137,12 @@ export function NewsletterSignup() {
   }
 
   return (
-    <section aria-labelledby={headingId} className="footer-newsletter">
+    <>
+      {modalOpen && (
+      <div className="newsletter-modal-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget) setModalOpen(false); }}>
+      <section id="kerygma-newsletter-dialog" role="dialog" aria-modal="true" aria-labelledby={headingId} className="newsletter-modal">
+        <button ref={closeButtonRef} type="button" className="newsletter-modal-close" aria-label="Close newsletter signup" onClick={() => setModalOpen(false)}>×</button>
+        <div className="footer-newsletter">
       <div className="footer-newsletter-heading">
         <Mail aria-hidden="true" size={18} />
         <div>
@@ -158,7 +215,7 @@ export function NewsletterSignup() {
             </p>
           )}
         </form>
-      ) : (
+      ) : externalAllowed ? (
         <>
           <div
             className="footer-reach-form"
@@ -171,7 +228,13 @@ export function NewsletterSignup() {
             strategy="afterInteractive"
           />
         </>
+      ) : (
+        <p className="footer-newsletter-privacy-note">To load the external newsletter form, choose “Allow external services” under Privacy preferences. You can change this choice at any time.</p>
       )}
-    </section>
+        </div>
+      </section>
+      </div>
+      )}
+    </>
   );
 }
