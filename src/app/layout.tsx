@@ -63,6 +63,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         sameAs: [
           "https://www.facebook.com/KerygmaPath",
           "https://www.youtube.com/@KerygmaPath",
+          "https://bsky.app/profile/kerygmapath.bsky.social",
         ],
       },
     ],
