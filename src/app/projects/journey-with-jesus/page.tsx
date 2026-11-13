@@ -51,7 +51,7 @@ export default function HomePage() {
           <h1 className="visually-hidden" id="home-title">Journey with Jesus</h1>
           <p className="hero-subtitle">Experience the Gospel Through Animated Storytelling</p>
           <p className="hero-quote">“One extraordinary life. One timeless message.<br className="desktop-break" /> A journey that changes everything.”</p>
-          <p className="hero-description">Discover the life, teachings, miracles, sacrifice, and resurrection of Jesus Christ through beautiful, anime-inspired animated stories.</p>
+          <p className="hero-description">Journey with Jesus brings biblical narratives to life through beautiful, anime-inspired animation of the teachings, miracles, sacrifice, and resurrection of Jesus Christ.</p>
           <p className="hero-introduction"><em>Journey with Jesus</em> is a Christian animation project from Kerygma Path. Through cinematic visuals and AI-assisted creative tools, we explore biblical storytelling and the Gospel of Jesus Christ—inviting audiences of all ages to discover Scripture.</p>
           <Link className="button button-gold" href="/media/">
             <span>Watch the Stories</span><ArrowRight aria-hidden="true" size={18} />
