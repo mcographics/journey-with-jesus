@@ -3,8 +3,9 @@ import { Sparkles } from "lucide-react";
 import { TeamDirectory } from "@/components/TeamDirectory";
 
 export const metadata: Metadata = {
-  title: "Meet the Team",
-  description: "Meet the people bringing Journey with Jesus to life.",
+  title: "Meet the Christian Animation Team",
+  description: "Meet the Kerygma Path creative team behind Journey with Jesus, a Christian animation project sharing Gospel stories and the life of Jesus Christ.",
+  alternates: { canonical: "/team/" },
 };
 
 const fallbackMembers = [

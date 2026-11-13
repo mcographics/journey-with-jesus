@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState, type FormEvent } from "react";
 import { Check, LoaderCircle, Plus, Trash2 } from "lucide-react";
 import type { Database, SocialPlatform } from "@/lib/database.types";
 import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
+import { SOCIAL_PLATFORM_GROUPS, SOCIAL_PLATFORM_LABELS, socialPlatformUrlError } from "@/lib/social-platforms";
 
 type SocialLinkRow = Database["public"]["Tables"]["media_social_links"]["Row"];
 type BrowserSupabaseClient = NonNullable<ReturnType<typeof createBrowserSupabaseClient>>;
@@ -17,18 +18,6 @@ type SocialLinkDraft = {
   published: boolean;
 };
 
-const platformLabels: Record<SocialPlatform, string> = {
-  youtube: "YouTube",
-  facebook: "Facebook",
-  instagram: "Instagram",
-  tiktok: "TikTok",
-  x: "X",
-  linkedin: "LinkedIn",
-  pinterest: "Pinterest",
-  twitch: "Twitch",
-  discord: "Discord",
-  custom: "Custom link",
-};
 
 export function StudioSocialLinks({ client }: { client: BrowserSupabaseClient }) {
   const [links, setLinks] = useState<SocialLinkDraft[]>([]);
@@ -72,7 +61,7 @@ export function StudioSocialLinks({ client }: { client: BrowserSupabaseClient })
     const platform: SocialPlatform = "custom";
     const key = crypto.randomUUID();
     setLinks((current) => [...current, {
-      key, id: null, platform, label: "", url: "", sort_order: current.reduce((max, item) => Math.max(max, item.sort_order), -1) + 1, published: true,
+      key, id: null, platform, label: "", url: "", sort_order: current.reduce((max, item) => Math.max(max, item.sort_order), -1) + 1, published: false,
     }]);
     setNotice("");
   }
@@ -85,13 +74,22 @@ export function StudioSocialLinks({ client }: { client: BrowserSupabaseClient })
     try {
       const label = link.label.trim();
       if (!label) throw new Error("Enter a display name for this social link.");
-      let parsedUrl: URL;
-      try { parsedUrl = new URL(link.url.trim()); } catch { throw new Error("Enter a valid HTTPS link."); }
-      if (parsedUrl.protocol !== "https:") throw new Error("Social links must use HTTPS.");
+      const draftUrl = link.url.trim();
+      let validatedUrl = "";
+      if (draftUrl) {
+        let parsedUrl: URL;
+        try { parsedUrl = new URL(draftUrl); } catch { throw new Error("Enter a valid HTTPS link."); }
+        if (parsedUrl.protocol !== "https:") throw new Error("Social links must use HTTPS.");
+        validatedUrl = parsedUrl.toString();
+        const platformError = socialPlatformUrlError(link.platform, validatedUrl);
+        if (platformError) throw new Error(platformError);
+      } else if (link.published) {
+        throw new Error("Enter a profile URL before showing this link in the footer.");
+      }
       const payload = {
         platform: link.platform,
         label,
-        url: parsedUrl.toString(),
+        url: validatedUrl,
         sort_order: Math.max(0, Math.floor(Number(link.sort_order) || 0)),
         published: link.published,
       };
@@ -100,7 +98,7 @@ export function StudioSocialLinks({ client }: { client: BrowserSupabaseClient })
         : await client.from("media_social_links").insert(payload).select("id").single();
       if (result.error) throw result.error;
       if (!result.data) throw new Error("Journey Studio did not confirm that the link was saved.");
-      setNotice(`${label} saved. Published links appear in the site footer.`);
+      setNotice(`${label} saved. ${link.published ? "The link is published in the footer." : "This draft is hidden until you supply a URL and publish it."}`);
       setNoticeError(false);
       await loadLinks();
     } catch (error) {
@@ -136,7 +134,7 @@ export function StudioSocialLinks({ client }: { client: BrowserSupabaseClient })
       <div className="studio-panel">
         <div className="studio-social-manager-header">
           <div className="studio-panel-heading">
-            <div><h2 id="studio-social-heading">Social media links</h2><p>Add links here to show them beneath the Kerygma Path logo in the site footer. Unpublished links stay visible in Studio but hidden from visitors.</p></div>
+            <div><h2 id="studio-social-heading">Social media links</h2><p>Add links here to show them beneath the Kerygma Path logo in the site footer. Choose from 98 social, creative, video, and community platforms (including Bluesky and Rumble). The existing cards remain separate. Save an unpublished draft without a URL, then publish only verified official profiles.</p></div>
         </div>
           <button className="studio-small-button" type="button" onClick={addLink}><Plus size={15} />Add social link</button>
         </div>
@@ -157,17 +155,21 @@ export function StudioSocialLinks({ client }: { client: BrowserSupabaseClient })
               <label>Platform
                 <select value={link.platform} onChange={(event) => {
                   const platform = event.target.value as SocialPlatform;
-                  const wasDefault = link.label === platformLabels[link.platform];
-                  updateDraft(link.key, { platform, label: wasDefault ? platformLabels[platform] : link.label });
+                  const wasDefault = !link.label.trim() || link.label === SOCIAL_PLATFORM_LABELS[link.platform];
+                  updateDraft(link.key, { platform, label: wasDefault ? SOCIAL_PLATFORM_LABELS[platform] : link.label });
                 }}>
-                  {(Object.entries(platformLabels) as [SocialPlatform, string][]).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+                  {SOCIAL_PLATFORM_GROUPS.map((group) => (
+                    <optgroup key={group.label} label={group.label}>
+                      {group.platforms.map((platform) => <option key={platform.id} value={platform.id}>{platform.label}</option>)}
+                    </optgroup>
+                  ))}
                 </select>
               </label>
               <label>Display name
                 <input value={link.label} onChange={(event) => updateDraft(link.key, { label: event.target.value })} maxLength={80} required placeholder="e.g. Instagram" />
               </label>
               <label className="studio-span-two">Page URL
-                <input type="url" value={link.url} onChange={(event) => updateDraft(link.key, { url: event.target.value })} maxLength={2048} required placeholder="https://…" />
+                <input type="url" value={link.url} onChange={(event) => updateDraft(link.key, { url: event.target.value })} maxLength={2048} required={link.published} placeholder={link.platform === "bluesky" ? "https://bsky.app/profile/your-handle" : link.platform === "rumble" ? "https://rumble.com/c/your-channel" : "https://…"} />
               </label>
               <label className="studio-social-order">Display order
                 <input type="number" min="0" step="1" value={link.sort_order} onChange={(event) => updateDraft(link.key, { sort_order: Number(event.target.value) })} />

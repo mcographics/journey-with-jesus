@@ -18,22 +18,22 @@ const siteUrl = "https://kerygmapath.com/";
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Kerygma Path — Christian Animation Studio",
+    default: "Kerygma Path | Christian Animation & Gospel Stories",
     template: "%s | Kerygma Path",
   },
-  description: "Kerygma Path is a Christian animation studio sharing the Gospel through Scripture-rooted animated storytelling.",
+  description: "Kerygma Path creates Christian animation and AI-assisted Gospel storytelling rooted in Scripture, including the Journey with Jesus animated project.",
   applicationName: "Kerygma Path",
   openGraph: {
     type: "website",
     siteName: "Kerygma Path",
-    title: "Kerygma Path — Christian Animation Studio",
-    description: "Christian animation sharing the Gospel through Scripture-rooted storytelling.",
+    title: "Kerygma Path | Christian Animation & Gospel Stories",
+    description: "Christian animation, AI-assisted Gospel storytelling, and Journey with Jesus—a Scripture-rooted project about the life of Jesus Christ.",
     url: siteUrl,
   },
   twitter: {
     card: "summary",
-    title: "Kerygma Path — Christian Animation Studio",
-    description: "Christian animation sharing the Gospel through Scripture-rooted storytelling.",
+    title: "Kerygma Path | Christian Animation & Gospel Stories",
+    description: "Explore Christian animation, the Gospel, and Journey with Jesus at Kerygma Path.",
   },
 };
 
@@ -45,10 +45,28 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const websiteStructuredData = {
     "@context": "https://schema.org",
-    "@type": "WebSite",
-    name: "Kerygma Path",
-    description: "Kerygma Path is a Christian animation studio sharing the Gospel through Scripture-rooted storytelling.",
-    url: siteUrl,
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": `${siteUrl}#website`,
+        name: "Kerygma Path",
+        url: siteUrl,
+        description: "Christian animation and AI-assisted Gospel storytelling rooted in Scripture.",
+        publisher: { "@id": `${siteUrl}#organization` },
+      },
+      {
+        "@type": "Organization",
+        "@id": `${siteUrl}#organization`,
+        name: "Kerygma Path",
+        url: siteUrl,
+        description: "A Christian animation studio creating Scripture-rooted Gospel stories.",
+        sameAs: [
+          "https://www.facebook.com/KerygmaPath",
+          "https://www.youtube.com/@KerygmaPath",
+          "https://bsky.app/profile/kerygmapath.bsky.social",
+        ],
+      },
+    ],
   };
 
   return (

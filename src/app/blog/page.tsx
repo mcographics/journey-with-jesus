@@ -3,9 +3,10 @@ import Link from "next/link";
 import { ArrowRight, BookOpen, Clapperboard, Compass, Sparkles, Users } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Blog",
+  title: "Studio Blog — Christian Animation & AI",
   description:
-    "Follow Kerygma Path's studio progress, creative process, project plans, and news.",
+    "Follow Kerygma Path news, Journey with Jesus development, Christian animation, AI-assisted storytelling and the creative process behind Gospel stories.",
+  alternates: { canonical: "/blog/" },
 };
 
 const updateTopics = [

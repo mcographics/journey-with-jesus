@@ -7,9 +7,10 @@ import { ArrowRight, BookOpen, Sparkles } from "lucide-react";
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
 export const metadata: Metadata = {
-  title: "The Studio",
+  title: "AI-Assisted Christian Animation Studio",
   description:
-    "Meet Kerygma Path, a Christian animation studio using AI and digital tools to bring Scripture-rooted narratives to life.",
+    "Meet Kerygma Path, a Christian animation studio using AI-assisted visual storytelling, character design and animation to bring biblical Gospel stories to life.",
+  alternates: { canonical: "/company/" },
 };
 
 export default function CompanyPage() {
@@ -38,7 +39,7 @@ export default function CompanyPage() {
             <em>Made for the screen.</em>
           </h1>
           <p className="kerygma-company-lead">
-            Kerygma Path is a Christian animation studio devoted to sharing the Gospel through powerful, Scripture-rooted storytelling.
+            Kerygma Path is a Christian animation studio devoted to sharing the Gospel through Scripture-rooted visual storytelling about Jesus Christ.
           </p>
           <p className="kerygma-company-supporting">
             We use AI and a range of creative tools to develop Christian narratives from idea to animation, with Scripture and the Gospel message guiding every step.
