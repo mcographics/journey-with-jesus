@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState, type FormEvent } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState, type ChangeEvent, type FormEvent, type InputHTMLAttributes } from "react";
 import { Check, LoaderCircle, Plus, Trash2 } from "lucide-react";
 import type { Database, SocialPlatform } from "@/lib/database.types";
 import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
@@ -18,6 +18,45 @@ type SocialLinkDraft = {
   published: boolean;
 };
 
+
+
+/**
+ * Keep the insertion point stable when a controlled input re-renders.
+ * A pointer tap or keyboard navigation remains authoritative: selection is
+ * captured only for the actual edit and restored only while still focused.
+ */
+function EditableSocialTextInput({
+  value,
+  onValueChange,
+  ...props
+}: Omit<InputHTMLAttributes<HTMLInputElement>, "value" | "onChange"> & {
+  value: string;
+  onValueChange: (value: string) => void;
+}) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const pendingSelection = useRef<{ value: string; start: number; end: number; direction: "forward" | "backward" | "none" } | null>(null);
+
+  useLayoutEffect(() => {
+    const input = inputRef.current;
+    const pending = pendingSelection.current;
+    if (!input || !pending || input !== document.activeElement || pending.value !== value) return;
+    pendingSelection.current = null;
+    input.setSelectionRange(pending.start, pending.end, pending.direction);
+  }, [value]);
+
+  function handleChange(event: ChangeEvent<HTMLInputElement>) {
+    const input = event.currentTarget;
+    pendingSelection.current = {
+      value: input.value,
+      start: input.selectionStart ?? input.value.length,
+      end: input.selectionEnd ?? input.value.length,
+      direction: input.selectionDirection ?? "none",
+    };
+    onValueChange(input.value);
+  }
+
+  return <input {...props} ref={inputRef} value={value} onChange={handleChange} />;
+}
 
 export function StudioSocialLinks({ client }: { client: BrowserSupabaseClient }) {
   const [links, setLinks] = useState<SocialLinkDraft[]>([]);
@@ -166,10 +205,10 @@ export function StudioSocialLinks({ client }: { client: BrowserSupabaseClient })
                 </select>
               </label>
               <label>Display name
-                <input value={link.label} onChange={(event) => updateDraft(link.key, { label: event.target.value })} maxLength={80} required placeholder="e.g. Instagram" />
+                <EditableSocialTextInput value={link.label} onValueChange={(value) => updateDraft(link.key, { label: value })} maxLength={80} required placeholder="e.g. Instagram" />
               </label>
               <label className="studio-span-two">Page URL
-                <input type="url" value={link.url} onChange={(event) => updateDraft(link.key, { url: event.target.value })} maxLength={2048} required={link.published} placeholder={link.platform === "bluesky" ? "https://bsky.app/profile/your-handle" : link.platform === "rumble" ? "https://rumble.com/c/your-channel" : "https://…"} />
+                <EditableSocialTextInput type="url" value={link.url} onValueChange={(value) => updateDraft(link.key, { url: value })} maxLength={2048} required={link.published} placeholder={link.platform === "bluesky" ? "https://bsky.app/profile/your-handle" : link.platform === "rumble" ? "https://rumble.com/c/your-channel" : "https://…"} />
               </label>
               <label className="studio-social-order">Display order
                 <input type="number" min="0" step="1" value={link.sort_order} onChange={(event) => updateDraft(link.key, { sort_order: Number(event.target.value) })} />
