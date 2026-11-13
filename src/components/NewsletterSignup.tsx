@@ -23,6 +23,9 @@ export function NewsletterSignup() {
   const headingId = useId();
   const pathname = usePathname();
   const [modalOpen, setModalOpen] = useState(false);
+  const [dismissed, setDismissed] = useState(false);
+  const reopenRef = useRef<HTMLButtonElement>(null);
+  const dismissModal = () => { setModalOpen(false); setDismissed(true); };
   const closeButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
@@ -43,10 +46,11 @@ export function NewsletterSignup() {
   useEffect(() => {
     if (!modalOpen) return;
     const previousOverflow = document.body.style.overflow;
+    const previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     document.body.style.overflow = "hidden";
     closeButtonRef.current?.focus();
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setModalOpen(false);
+      if (event.key === "Escape") dismissModal();
       if (event.key === "Tab") {
         const dialog = document.getElementById("kerygma-newsletter-dialog");
         const controls = Array.from(dialog?.querySelectorAll<HTMLElement>('a[href], button:not([disabled]), input:not([disabled]):not([tabindex="-1"])') ?? []);
@@ -59,6 +63,7 @@ export function NewsletterSignup() {
     document.addEventListener("keydown", onKeyDown);
     return () => {
       document.body.style.overflow = previousOverflow;
+      if (previousFocus?.isConnected) previousFocus.focus();
       document.removeEventListener("keydown", onKeyDown);
     };
   }, [modalOpen]);
@@ -138,10 +143,15 @@ export function NewsletterSignup() {
 
   return (
     <>
+      {dismissed && !modalOpen && (
+        <button ref={reopenRef} type="button" className="footer-newsletter-launch" onClick={() => setModalOpen(true)}>
+          <Mail aria-hidden="true" size={17} /> Sign up for updates
+        </button>
+      )}
       {modalOpen && (
-      <div className="newsletter-modal-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget) setModalOpen(false); }}>
+      <div className="newsletter-modal-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget) dismissModal(); }}>
       <section id="kerygma-newsletter-dialog" role="dialog" aria-modal="true" aria-labelledby={headingId} className="newsletter-modal">
-        <button ref={closeButtonRef} type="button" className="newsletter-modal-close" aria-label="Close newsletter signup" onClick={() => setModalOpen(false)}>×</button>
+        <button ref={closeButtonRef} type="button" className="newsletter-modal-close" aria-label="Close newsletter signup" onClick={dismissModal}>×</button>
         <div className="footer-newsletter">
       <div className="footer-newsletter-heading">
         <Mail aria-hidden="true" size={18} />
