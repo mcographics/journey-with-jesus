@@ -25,7 +25,6 @@ export function NewsletterSignup() {
   const pathname = usePathname();
   const [modalOpen, setModalOpen] = useState(false);
   const [dismissed, setDismissed] = useState(false);
-  const reopenRef = useRef<HTMLButtonElement>(null);
   const dismissModal = () => {
     try { sessionStorage.setItem(DISMISSED_KEY, "yes"); } catch {}
     setModalOpen(false);
@@ -77,7 +76,7 @@ export function NewsletterSignup() {
     return () => {
       document.body.style.overflow = previousOverflow;
       if (previousFocus?.isConnected && previousFocus !== document.body) previousFocus.focus();
-      else reopenRef.current?.focus();
+      else document.querySelector<HTMLButtonElement>(".footer-newsletter-launch")?.focus();
       document.removeEventListener("keydown", onKeyDown);
     };
   }, [modalOpen]);
@@ -158,7 +157,7 @@ export function NewsletterSignup() {
   return (
     <>
       {dismissed && !modalOpen && (
-        <button ref={reopenRef} type="button" className="footer-newsletter-launch" onClick={() => setModalOpen(true)}>
+        <button type="button" className="footer-newsletter-launch" onClick={() => setModalOpen(true)}>
           <Mail aria-hidden="true" size={17} /> Sign up for updates
         </button>
       )}
