@@ -25,7 +25,7 @@ export const legalPolicies = [
       },
       {
         "heading": "Newsletter",
-        "body": "If you sign up for Journey with Jesus email updates, you provide your email address and consent to receive them. Supabase processes the signup securely, and Brevo processes the address and confirmation status to send the confirmation email and manage the mailing list. Your subscription is added after you confirm. Newsletter messages include a way to unsubscribe. The signup service uses a one-way network fingerprint for abuse prevention and does not store the full network address or newsletter email in its rate-limit table."
+        "body": "If you sign up for Journey with Jesus email updates, you provide your email address and consent to receive them. Depending on service availability, the signup uses a Supabase-powered form with Brevo for confirmation and list management, or an optional Hostinger Reach hosted form. The hosted form loads only after you allow external services through Privacy preferences. Confirmation and unsubscribe procedures depend on the active provider; follow the instructions in the messages you receive. The signup service uses a one-way network fingerprint for abuse prevention and does not store the full network address or newsletter email in its rate-limit table."
       },
       {
         "heading": "Lawful bases for processing",
