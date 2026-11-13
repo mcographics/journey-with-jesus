@@ -14,11 +14,13 @@ const imageSources = (stem: string, widths: number[]): PictureCandidate[] =>
   }));
 
 export const metadata: Metadata = {
-  title: "Journey with Jesus — A Kerygma Path Project",
-  description: "Discover Journey with Jesus, Kerygma Path's animated project sharing the life and message of Jesus Christ.",
+  title: "Journey with Jesus — Animated Gospel Stories",
+  description: "Discover Journey with Jesus, Kerygma Path’s Christian animation project exploring the life, teachings, miracles and resurrection of Jesus Christ.",
+  alternates: { canonical: "/projects/journey-with-jesus/" },
   openGraph: {
-    title: "Journey with Jesus — A Kerygma Path Project",
-    description: "Discover Journey with Jesus, Kerygma Path's animated project sharing the life and message of Jesus Christ.",
+    title: "Journey with Jesus | Christian Gospel Animation",
+    description: "Explore an animated Gospel storytelling project about the life and message of Jesus Christ from Kerygma Path.",
+    url: "/projects/journey-with-jesus/",
   },
 };
 
@@ -50,7 +52,7 @@ export default function HomePage() {
           <p className="hero-subtitle">Experience the Gospel Through Animated Storytelling</p>
           <p className="hero-quote">“One extraordinary life. One timeless message.<br className="desktop-break" /> A journey that changes everything.”</p>
           <p className="hero-description">Discover the life, teachings, miracles, sacrifice, and resurrection of Jesus Christ through beautiful, anime-inspired animated stories.</p>
-          <p className="hero-introduction"><em>Journey with Jesus</em> brings biblical narratives to life through cinematic visuals, emotional storytelling, and a fresh artistic perspective—inviting audiences of all ages to experience the message of the Gospel.</p>
+          <p className="hero-introduction"><em>Journey with Jesus</em> is a Christian animation project from Kerygma Path. Through cinematic visuals and AI-assisted creative tools, we explore biblical storytelling and the Gospel of Jesus Christ—inviting audiences of all ages to discover Scripture.</p>
           <Link className="button button-gold" href="/media/">
             <span>Watch the Stories</span><ArrowRight aria-hidden="true" size={18} />
           </Link>
