@@ -14,11 +14,15 @@ const imageSources = (stem: string, widths: number[]): PictureCandidate[] =>
   }));
 
 export const metadata: Metadata = {
-  title: "Journey with Jesus — A Kerygma Path Project",
-  description: "Discover Journey with Jesus, Kerygma Path's animated project sharing the life and message of Jesus Christ.",
+  title: "Journey with Jesus — Animated Bible Stories",
+  description:
+    "Explore Journey with Jesus, Kerygma Path's Christian animation project bringing the life, teachings, miracles and Gospel of Jesus Christ to the screen.",
+  alternates: { canonical: "/projects/journey-with-jesus/" },
   openGraph: {
-    title: "Journey with Jesus — A Kerygma Path Project",
-    description: "Discover Journey with Jesus, Kerygma Path's animated project sharing the life and message of Jesus Christ.",
+    title: "Journey with Jesus — Animated Bible Stories",
+    description:
+      "An animated journey through the life and Gospel of Jesus Christ, created by Kerygma Path.",
+    url: "/projects/journey-with-jesus/",
   },
 };
 
