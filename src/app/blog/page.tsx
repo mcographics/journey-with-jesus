@@ -1,13 +1,12 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/page-metadata";
 import Link from "next/link";
 import { ArrowRight, BookOpen, Clapperboard, Compass, Sparkles, Users } from "lucide-react";
 
-export const metadata: Metadata = {
-  title: "Studio Blog — Christian Animation & AI",
-  description:
-    "Follow Kerygma Path news, Journey with Jesus development, Christian animation, AI-assisted storytelling and the creative process behind Gospel stories.",
-  alternates: { canonical: "/blog/" },
-};
+export const metadata = pageMetadata(
+  "Studio Blog — Christian Animation & AI",
+  "Follow Kerygma Path news, Journey with Jesus development, Christian animation, AI-assisted storytelling and the creative process behind Gospel stories.",
+  "/blog/",
+);
 
 const updateTopics = [
   {
