@@ -41,6 +41,8 @@ export function SiteFooter() {
           <span aria-hidden="true">✦</span>
           <Link href="/studio/">Upper Room</Link>
           <span aria-hidden="true">✦</span>
+          <Link href="/contact/">Contact Us</Link>
+          <span aria-hidden="true">✦</span>
           <Link href="/policies/privacy/">Privacy</Link>
           <span aria-hidden="true">✦</span>
           <Link href="/policies/terms/">Terms</Link>
