@@ -7,3 +7,7 @@ verify_jwt = false
 [functions.newsletter-signup]
 # The Edge Function validates the publishable key with `withSupabase`.
 verify_jwt = false
+
+[functions.contact-inquiry]
+# The Edge Function validates the publishable key with `withSupabase`.
+verify_jwt = false
