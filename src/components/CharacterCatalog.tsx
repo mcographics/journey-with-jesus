@@ -19,6 +19,37 @@ const defaults: PublicCharacter[] = [
   { id: "beloved-disciple", name: "The Beloved Disciple", role: "A witness in John’s Gospel", summary: "John’s Gospel uses this title for a close disciple who appears at key moments in Jesus’ final days and resurrection story.", scripture_references: "John 13:23 · 19:26–27 · 20:2–8 · 21:7, 20–24", portrait_url: null },
 ];
 
+function EricJourneyFeature() {
+  return (
+    <section className="eric-journey" aria-labelledby="eric-journey-title">
+      <div className="eric-journey-portrait">
+        <Image
+          src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/images/eric-oberhausen-portrait.webp`}
+          alt="Illustrated portrait of Eric, the curious traveler on the road with Jesus"
+          fill
+          sizes="(max-width: 700px) 100vw, (max-width: 900px) 42vw, 430px"
+          unoptimized
+        />
+        <span className="eric-journey-portrait-label">The journey begins</span>
+      </div>
+      <div className="eric-journey-copy">
+        <p className="eric-journey-kicker">Meet Eric <span>·</span> The story’s main character</p>
+        <h2 id="eric-journey-title">A curious heart on the road with Jesus</h2>
+        <div className="eric-journey-backstory">
+          <p>In this original, Scripture-inspired story, Eric is a thoughtful traveler with a sincere faith and questions he has never quite been able to settle. When he encounters Jesus, he joins Him on the road—through crowded streets, villages, and quiet stretches of wilderness—hoping to understand the words he has heard.</p>
+          <p>As the journey unfolds, Eric asks about faith, purpose, suffering, forgiveness, and what it means to love his neighbour. He learns by listening to Jesus and seeing how He treats the people they meet: with mercy, truth, and compassion. Eric does not begin with every answer; he grows as he follows, finding that each conversation invites him to trust and take the next step.</p>
+        </div>
+        <div className="eric-journey-conversation" aria-label="A dramatized conversation inspired by Matthew 7:7">
+          <p className="eric-journey-conversation-kicker">A conversation along the way</p>
+          <p className="eric-dialogue-line"><span>Eric</span>“Jesus, how can I know the way when I still have so many questions?”</p>
+          <p className="eric-dialogue-line eric-dialogue-jesus"><span>Jesus</span>“Ask, and it shall be given you; seek, and ye shall find.” <strong>Matthew 7:7</strong></p>
+          <p className="eric-journey-conversation-note">An imagined exchange shaped by the words of Scripture.</p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function CharacterCard({ character }: { character: PublicCharacter }) {
   const [expanded, setExpanded] = useState(false);
   const detailsId = useId();
@@ -116,10 +147,13 @@ export function CharacterCatalog() {
   }, []);
 
   return (
-    <div className="character-grid">
-      {characters.map((character) => (
-        <CharacterCard character={character} key={character.id} />
-      ))}
-    </div>
+    <>
+      <EricJourneyFeature />
+      <div className="character-grid">
+        {characters.map((character) => (
+          <CharacterCard character={character} key={character.id} />
+        ))}
+      </div>
+    </>
   );
 }

@@ -136,6 +136,79 @@
 
 .character-portrait-image { display: block; width: 100%; max-height: 310px; aspect-ratio: 4 / 3; object-fit: contain; object-position: center; border-bottom: 1px solid rgba(238, 221, 174, .15); }
 
+.eric-journey {
+  display: grid;
+  grid-template-columns: minmax(0, .82fr) minmax(0, 1.18fr);
+  overflow: hidden;
+  margin: 0 0 38px;
+  border: 1px solid rgba(238, 221, 174, .2);
+  border-radius: 16px;
+  background: radial-gradient(ellipse at 78% 0%, rgba(228, 188, 112, .08), transparent 43%), linear-gradient(145deg, rgba(20, 30, 49, .96), rgba(13, 21, 36, .99));
+  box-shadow: 0 20px 48px rgba(2, 6, 15, .24);
+}
+.eric-journey-portrait {
+  position: relative;
+  min-width: 0;
+  min-height: 540px;
+  overflow: hidden;
+  border-right: 1px solid rgba(238, 221, 174, .16);
+  background: radial-gradient(ellipse at 50% 34%, rgba(228, 188, 112, .16), transparent 61%), linear-gradient(160deg, #1a2940, #101827);
+}
+.eric-journey-portrait img { object-fit: contain; object-position: center; }
+.eric-journey-portrait-label {
+  position: absolute;
+  z-index: 1;
+  right: 17px;
+  bottom: 17px;
+  left: 17px;
+  width: fit-content;
+  padding: 8px 11px;
+  border: 1px solid rgba(243, 213, 149, .4);
+  border-radius: 999px;
+  background: rgba(7, 12, 24, .75);
+  color: #f0dcae;
+  font-size: 9px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  backdrop-filter: blur(7px);
+}
+.eric-journey-copy { align-self: center; padding: clamp(25px, 3.5vw, 44px); }
+.eric-journey-kicker { margin: 0 0 13px; color: var(--gold); font-size: 9px; font-weight: 600; letter-spacing: .15em; text-transform: uppercase; }
+.eric-journey-kicker span { padding-inline: 4px; color: var(--gold-bright); }
+.eric-journey-copy h2 { margin: 0; color: #f1eadb; font-family: var(--serif); font-size: clamp(29px, 3.4vw, 43px); font-weight: 400; letter-spacing: -.035em; line-height: 1.1; }
+.eric-journey-backstory { margin-top: 18px; color: #c5cad2; font-size: 13px; line-height: 1.8; }
+.eric-journey-backstory p { margin: 0 0 12px; }
+.eric-journey-backstory p:last-child { margin-bottom: 0; }
+.eric-journey-conversation { margin-top: 22px; padding: 17px 19px; border: 1px solid rgba(238, 221, 174, .14); border-left: 2px solid var(--gold-bright); border-radius: 0 10px 10px 0; background: rgba(4, 10, 20, .35); }
+.eric-journey-conversation-kicker { margin: 0 0 12px; color: var(--gold-bright); font-size: 9px; font-weight: 600; letter-spacing: .13em; text-transform: uppercase; }
+.eric-dialogue-line { margin: 0 0 11px; color: #e1e3e7; font-family: var(--serif); font-size: 15px; line-height: 1.55; }
+.eric-dialogue-line > span { display: block; margin-bottom: 3px; color: var(--gold-bright); font-family: inherit; font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; }
+.eric-dialogue-jesus { margin-bottom: 0; color: #f0bbb6; }
+.eric-dialogue-jesus > span { color: #df817b; }
+.eric-dialogue-jesus strong { display: inline-block; margin-left: 5px; color: #d6b775; font-family: inherit; font-size: 10px; font-weight: 500; }
+.eric-journey-conversation-note { margin: 12px 0 0; color: #929aa7; font-size: 9px; line-height: 1.5; }
+:root[data-theme="light"] .eric-journey { border-color: rgba(178, 133, 36, .2); background: radial-gradient(ellipse at 78% 0%, rgba(164, 120, 43, .09), transparent 43%), linear-gradient(145deg, rgba(247, 249, 252, .98), rgba(234, 240, 247, .98)); box-shadow: 0 16px 36px rgba(18, 31, 47, .1); }
+:root[data-theme="light"] .eric-journey-portrait { border-color: rgba(178, 133, 36, .2); background: radial-gradient(ellipse at 50% 34%, rgba(164, 120, 43, .14), transparent 61%), linear-gradient(160deg, #e3eaf3, #d7e0ec); }
+:root[data-theme="light"] .eric-journey-copy h2 { color: #273346; }
+:root[data-theme="light"] .eric-journey-backstory { color: #566171; }
+:root[data-theme="light"] .eric-journey-conversation { border-color: rgba(178, 133, 36, .18); border-left-color: #a67b2e; background: rgba(255, 255, 255, .57); }
+:root[data-theme="light"] .eric-journey-conversation-kicker,
+:root[data-theme="light"] .eric-dialogue-line > span { color: #795b2c; }
+:root[data-theme="light"] .eric-dialogue-line { color: #364253; }
+:root[data-theme="light"] .eric-dialogue-jesus { color: #8e3732; }
+:root[data-theme="light"] .eric-dialogue-jesus > span { color: #9f3c35; }
+:root[data-theme="light"] .eric-dialogue-jesus strong { color: #795b2c; }
+:root[data-theme="light"] .eric-journey-conversation-note { color: #687281; }
+@media (max-width: 700px) {
+  .eric-journey { grid-template-columns: minmax(0, 1fr); margin-bottom: 28px; }
+  .eric-journey-portrait { min-height: 0; height: clamp(340px, 112vw, 500px); border-right: 0; border-bottom: 1px solid rgba(238, 221, 174, .16); }
+  .eric-journey-copy { padding: 24px 20px 25px; }
+  .eric-journey-copy h2 { font-size: clamp(29px, 8vw, 38px); }
+  .eric-journey-backstory { font-size: 12px; }
+  .eric-journey-conversation { margin-top: 18px; padding: 15px; }
+  .eric-dialogue-line { font-size: 14px; }
+}
+
 
 /* Keep editorial pages and cards cool in light mode; gold stays on accents. */
 :root[data-theme="light"] .editorial-page {
