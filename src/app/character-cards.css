@@ -151,3 +151,47 @@
   .character-card .character-card-copy,
   .character-card.is-expanded .character-card-copy { transition: none; }
 }
+
+
+/* Eric uses the same fixed-size, expandable dossier as the other characters. */
+.eric-character-portrait-label {
+  position: absolute;
+  z-index: 2;
+  top: 14px;
+  left: 14px;
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 5px;
+  max-width: calc(100% - 28px);
+  padding: 8px 11px;
+  border: 1px solid rgba(243, 213, 149, .48);
+  border-radius: 8px;
+  background: rgba(8, 15, 28, .83);
+  color: #fff1d1;
+  font-size: 12px;
+  font-weight: 700;
+  backdrop-filter: blur(8px);
+}
+.eric-character-portrait-label span {
+  font-size: 10px;
+  font-weight: 500;
+}
+.eric-dossier-heading {
+  margin: 9px 0 0;
+  color: var(--gold-bright);
+  font-family: var(--serif);
+  font-size: 17px;
+  line-height: 1.35;
+}
+.character-card-copy .eric-journey-backstory {
+  margin-top: 12px;
+  font-size: 12px;
+  line-height: 1.65;
+}
+.character-card-copy .eric-journey-conversation {
+  margin-top: 16px;
+  padding: 12px;
+}
+.character-card-copy .eric-dialogue-line { font-size: 13px; }
+:root[data-theme="light"] .eric-dossier-heading { color: #795b2c; }
