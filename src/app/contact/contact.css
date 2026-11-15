@@ -85,3 +85,15 @@
   .contact-card { padding: 23px 19px; }
   .contact-submit { width: 100%; }
 }
+
+/* Keep the submit CTA legible despite the site's global gold/blue text overrides. */
+:root[data-theme="light"] body .contact-submit,
+:root:not([data-theme="light"]) body .contact-submit {
+  color: #162238 !important;
+  -webkit-text-fill-color: #162238 !important;
+  text-shadow: none !important;
+}
+:root:not([data-theme="light"]) body .contact-form :is(input:not([type="checkbox"]), textarea) {
+  color: #f9fafb !important;
+  -webkit-text-fill-color: #f9fafb !important;
+}
