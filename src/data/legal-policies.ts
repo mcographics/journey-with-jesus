@@ -9,23 +9,27 @@ export const legalPolicies = [
       },
       {
         "heading": "Information you provide",
-        "body": "When you submit a community comment, you provide a display name and comment text. No account is required to comment. Please do not include sensitive personal information in public submissions."
+        "body": "When you submit a community comment, you provide a display name and comment text. No account is required to comment. If you use the Contact Us form, you provide your name, email address, subject, and message. Please avoid including sensitive personal information unless necessary for your inquiry."
       },
       {
         "heading": "Technical information",
-        "body": "The comment service uses technical request information to help prevent repeated submissions and abuse. The submission service generates a one-way fingerprint of the requesting network address for rate limiting. Hosting and service providers may also process ordinary server logs."
+        "body": "Comment and contact submission services use technical request information to prevent abuse, including one-way fingerprints of requesting network addresses for rate limiting. The contact service does not store the original network address or message body in its rate-limit table. Hosting and service providers may also process ordinary server logs."
       },
       {
         "heading": "How information is used",
-        "body": "Submitted comments are reviewed before public display. Approved comments may appear publicly with the display name and submission date. Comments can be hidden or rejected. Information is used to operate, secure, and moderate the website."
+        "body": "Submitted comments are reviewed before public display. Approved comments may appear publicly with the display name and submission date. Comments can be hidden or rejected. Contact inquiries are used privately to respond to visitors and are not published. Information is also used to operate and secure the website."
       },
       {
         "heading": "Service providers",
-        "body": "Supabase supports the website database and comment service. GitHub Pages and related hosting or delivery services may process technical information needed to deliver the site. Embedded media, if present, may be governed by their providers' policies."
+        "body": "Supabase supports the website database, comment service, and contact form request processing. When contact email delivery is configured, Resend processes submitted names, email addresses, subject lines, and messages to deliver inquiries to the studio inbox; Google/Gmail then processes messages received there. GitHub Pages and related hosting or delivery services may process technical information needed to deliver the site. Embedded media, if present, may be governed by their providers' policies."
       },
       {
         "heading": "Newsletter",
         "body": "If you sign up for Journey with Jesus email updates, you provide your email address and consent to receive them. Depending on service availability, the signup uses a Supabase-powered form with Brevo for confirmation and list management, or an optional Hostinger Reach hosted form. The hosted form loads only after you allow external services through Privacy preferences. Confirmation and unsubscribe procedures depend on the active provider; follow the instructions in the messages you receive. The signup service uses a one-way network fingerprint for abuse prevention and does not store the full network address or newsletter email in its rate-limit table."
+      },
+      {
+        "heading": "Contact inquiries",
+        "body": "If you use the Contact Us form, your name, email address, subject and message are submitted to our Supabase-hosted contact function and, when enabled, delivered by Resend to the studio's Gmail inbox. Your email address is used to reply to your inquiry. We do not publish contact submissions or add you to a newsletter simply for contacting us. The form uses an anti-spam field and a one-way network fingerprint for submission limits; messages are not stored in the website database. Email records may be retained in the recipient's inbox and by delivery providers in accordance with their practices. The form is unavailable unless its delivery service is configured."
       },
       {
         "heading": "Lawful bases for processing",
@@ -49,7 +53,7 @@ export const legalPolicies = [
       },
       {
         "heading": "Retention and requests",
-        "body": "Comment records may remain in the moderation system after being hidden or rejected. A specific retention period has not yet been established. Requests to review, correct, or remove a comment may be sent through a public contact method if one is published on the website."
+        "body": "Comment records may remain in the moderation system after being hidden or rejected. Contact inquiries may remain in the studio email inbox and service-provider logs until deleted under applicable practices. Specific retention periods have not yet been established. Use the Contact Us link in the footer to request review, correction, or deletion of information where applicable."
       },
       {
         "heading": "Your choices",
@@ -57,7 +61,7 @@ export const legalPolicies = [
       },
       {
         "heading": "Contact and changes",
-        "body": "A dedicated privacy contact method is not currently listed on the website. The operator must publish a working privacy contact method so visitors can exercise their rights. This policy may be updated as the website and data practices change."
+        "body": "The Contact Us page linked from the footer is intended for privacy requests and other inquiries when its delivery service is available. If the form reports a service outage, please try again later. This policy may be updated as the website and its data practices change."
       }
     ]
   },
@@ -99,7 +103,7 @@ export const legalPolicies = [
       },
       {
         "heading": "Updates and contact",
-        "body": "These terms may change as the website develops. The website does not currently list a dedicated contact channel for questions about these terms."
+        "body": "These terms may change as the website develops. Please use the Contact Us link in the footer to ask questions about these terms when the contact service is available."
       }
     ]
   },
@@ -129,7 +133,7 @@ export const legalPolicies = [
       },
       {
         "heading": "Reporting concerns",
-        "body": "The website does not currently list a dedicated reporting method for moderation concerns. If someone is in immediate danger, contact local emergency services."
+        "body": "Use the Contact Us link in the website footer to report moderation concerns when the contact service is available. If someone is in immediate danger, contact local emergency services."
       }
     ]
   },
@@ -189,7 +193,7 @@ export const legalPolicies = [
       },
       {
         "heading": "Copyright concerns",
-        "body": "The website does not currently list a dedicated rights-contact method. A notice should identify the material, the location of the alleged infringement, and a way to respond. Applicable legal procedures will be respected."
+        "body": "Use the Contact Us link in the website footer to report copyright concerns when the contact service is available. A notice should identify the material, the location of the alleged infringement, and a way to respond. Applicable legal procedures will be respected."
       }
     ]
   }
