@@ -41,6 +41,15 @@ jobs:
         run: npx playwright install chromium
       - name: End-to-end checks
         run: npm run test:e2e
+      - name: Verify Turnstile site key is configured
+        env:
+          TURNSTILE_SITE_KEY: ${{ vars.NEXT_PUBLIC_TURNSTILE_SITE_KEY }}
+        run: |
+          if [ -z "$TURNSTILE_SITE_KEY" ]; then
+            echo "::error::Missing GitHub Actions repository variable NEXT_PUBLIC_TURNSTILE_SITE_KEY. CAPTCHA protection cannot work without a Site Key in the website build."
+            exit 1
+          fi
+          echo "Turnstile public Site Key is configured."
       - name: Build static site
         run: npm run build
         env:
@@ -55,7 +64,10 @@ jobs:
       - name: Upload static export
         uses: actions/upload-pages-artifact@v5
         with:
+          name: github-pages-${{ github.run_attempt }}
           path: out
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v5.0.1
+        with:
+          artifact_name: github-pages-${{ github.run_attempt }}
