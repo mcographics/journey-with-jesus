@@ -3,6 +3,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import "./globals.css";
 import "./media-studio.css";
+import "./studio-login.css";
 import "./editorial-pages.css";
 import "./character-cards.css";
 import "./kerygma-pages.css";

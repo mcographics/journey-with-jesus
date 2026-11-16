@@ -1,0 +1,105 @@
+/* Kerygma Creative HQ login: vivid, legible digital rain over near-black navy. */
+.studio-page.studio-login-page {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 92px);
+  padding: 108px 20px 88px;
+  overflow: hidden;
+  color: #f5f5f5;
+  background: #01030a;
+}
+.studio-digital-rain {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.studio-login-page::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  content: "";
+  pointer-events: none;
+  background: linear-gradient(90deg, rgba(0, 1, 7, .04), rgba(0, 2, 9, .26) 30%, rgba(0, 2, 9, .26) 70%, rgba(0, 1, 7, .04));
+}
+.studio-login-page .studio-login-card {
+  width: min(100%, 522px);
+  margin: 0 auto;
+  padding: clamp(24px, 4vw, 35px);
+  border: 1px solid rgba(245, 201, 95, .8);
+  border-radius: 12px;
+  color: #f5f5f5;
+  background: rgba(1, 7, 22, .88);
+  box-shadow: 0 0 0 1px rgba(252, 202, 82, .12), 0 0 48px rgba(4, 80, 205, .35), 0 24px 110px rgba(0, 0, 0, .8);
+  backdrop-filter: blur(13px);
+}
+.studio-login-brand { text-align: center; }
+.studio-login-brand .studio-mark {
+  margin: 0 auto 15px;
+  color: #ffd56f;
+  border-color: #f5c45e;
+  box-shadow: 0 0 23px rgba(251, 197, 63, .29);
+}
+.studio-login-brand .media-kicker { color: #f4c866; letter-spacing: .19em; font-size: 10px; }
+.studio-login-brand h1 {
+  margin: 10px 0 10px;
+  font: 400 clamp(32px, 5vw, 46px) / 1.05 var(--serif);
+  color: #fff3d6;
+  text-shadow: 0 0 17px rgba(255, 202, 90, .22);
+}
+.studio-login-brand > p:last-child { margin: 0; color: #c8d8f5; font-size: 12px; line-height: 1.6; }
+.studio-login-methods { display: grid; gap: 11px; margin-top: 24px; }
+.studio-login-method {
+  padding: 15px 16px;
+  border: 1px solid rgba(77, 149, 255, .39);
+  border-radius: 8px;
+  background: rgba(3, 15, 41, .9);
+}
+.studio-login-method-active { border-color: rgba(252, 209, 105, .78); background: rgba(13, 24, 49, .96); }
+.studio-login-method-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.studio-login-method-heading > span { display: inline-flex; align-items: center; gap: 9px; color: #f6f7ff; font-size: 13px; }
+.studio-login-method-heading svg { color: #72b9ff; }
+.studio-login-method-active .studio-login-method-heading svg { color: #ffcc67; }
+.studio-login-method-heading small { flex: 0 0 auto; color: #a7cfff; font-size: 9px; letter-spacing: .09em; }
+.studio-login-method-active .studio-login-method-heading small { color: #ffce70; }
+.studio-login-method > p { margin: 9px 0 0; color: #b5c5df; font-size: 11px; line-height: 1.6; }
+.studio-login-page .studio-sign-in { margin-top: 14px; gap: 10px; }
+.studio-login-page .studio-sign-in label { color: #e9e9f5; font-size: 11px; }
+.studio-login-page .studio-sign-in input { min-height: 43px; border: 1px solid #5276b6; border-radius: 6px; color: white; background: #061129; font-size: 13px; }
+.studio-login-page .studio-sign-in input:focus-visible { outline: 2px solid #6db5ff; outline-offset: 2px; }
+.studio-login-page .studio-sign-in button {
+  width: 100%; min-height: 42px; justify-content: center; border-radius: 6px;
+  color: #101d32; background: #f3c660; font-weight: 700;
+}
+.studio-login-page .studio-sign-in button:hover:not(:disabled) { background: #ffe29d; }
+.studio-login-secondary-button {
+  width: 100%; min-height: 36px; margin-top: 12px;
+  border: 1px solid #517bac; border-radius: 5px;
+  background: rgba(34, 81, 155, .15);
+  color: #d9e8ff; font-size: 11px;
+}
+.studio-login-secondary-button:disabled { cursor: not-allowed; opacity: .78; }
+.studio-login-footnote { margin: 17px 0 0; text-align: center; color: #aec5ed; font-size: 10px; line-height: 1.5; }
+.studio-login-page .studio-notice { border-radius: 6px; color: #fff0c2; background: rgba(9, 22, 53, .98); }
+.studio-login-page .studio-notice.is-error { color: #ffc3bd; }
+@media (max-width: 600px) {
+  .studio-page.studio-login-page { padding: 94px 12px 65px; }
+  .studio-login-page .studio-login-card { padding: 22px 18px; }
+  .studio-login-method { padding: 13px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .studio-login-page *, .studio-login-page *::before, .studio-login-page *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+  }
+}
+/* The login always uses its dark digital environment, even if the public site is set to light mode. */
+:root[data-theme="light"] .studio-page.studio-login-page { color: #f5f5f5; background: #01030a; }
+:root[data-theme="light"] .studio-login-page .studio-login-card { color: #f5f5f5; border-color: rgba(245, 201, 95, .8); background: rgba(1, 7, 22, .88); }
+:root[data-theme="light"] .studio-login-page .studio-sign-in input { color: #fff; border-color: #5276b6; background: #061129; }

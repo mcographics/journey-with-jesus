@@ -1,6 +1,6 @@
 "use client";
 import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
-import { Check, Eye, EyeOff, Film, ListVideo, LoaderCircle, LockKeyhole, LogOut, Mail, MessageCircle, Plus, Share2, Trash2, UploadCloud, Users, X } from "lucide-react";
+import { Check, Eye, EyeOff, Film, KeyRound, ListVideo, LoaderCircle, LockKeyhole, LogOut, Mail, MessageCircle, Plus, Share2, ShieldCheck, Trash2, UploadCloud, Users, X } from "lucide-react";
 import type { Session } from "@supabase/supabase-js";
 import type { Database, MediaAudioLanguage, VideoContentType, VideoQuality } from "@/lib/database.types";
 import { createBrowserSupabaseClient, isSupabaseConfigured } from "@/lib/supabase/browser";
@@ -8,6 +8,7 @@ import { formatStudioError, getImageUploadInfo, getPublicStoragePath } from "@/l
 import { uploadVideoResumable } from "@/lib/supabase/resumable-upload";
 import { createStorageObjectId } from "@/lib/storage-object-id";
 import { StudioCharacters } from "@/components/StudioCharacters";
+import { StudioDigitalRain } from "@/components/StudioDigitalRain";
 import { StudioStaff } from "@/components/StudioStaff";
 import { StudioSocialLinks } from "@/components/StudioSocialLinks";
 import { parseYouTubeId, youtubeWatchUrl } from "@/lib/youtube";
@@ -249,7 +250,7 @@ export function StudioExperience() {
   async function deleteEpisode(episode: StudioEpisode) {
     if (!client || busyEpisodeId || savingEpisode || uploadQuality) return;
     const confirmed = window.confirm(
-      'Permanently delete "' + episode.title + '"? This removes the story, its playlist entries, comments, caption files, transcript, and uploaded media from Journey Studio. This cannot be undone. Videos hosted on YouTube will not be deleted.'
+      'Permanently delete "' + episode.title + '"? This removes the story, its playlist entries, comments, caption files, transcript, and uploaded media from Kerygma Creative HQ. This cannot be undone. Videos hosted on YouTube will not be deleted.'
     );
     if (!confirmed) return;
     setBusyEpisodeId(episode.id);
@@ -640,16 +641,36 @@ export function StudioExperience() {
   if (authLoading) return <main id="main-content" className="studio-page"><div className="studio-gate" role="status"><LoaderCircle className="studio-spin" /><p>Checking Studio access…</p></div></main>;
 
   if (!session) return (
-    <main id="main-content" className="studio-page">
-      <section className="studio-gate">
-        <span className="studio-mark"><LockKeyhole size={24} /></span>
-        <p className="media-kicker">PRIVATE ADMIN AREA</p><h1>Journey Studio</h1>
-        <p>Request a sign-in link with an email already invited by the site owner. Public visitors can watch and comment without an account.</p>
+    <main id="main-content" className="studio-page studio-login-page">
+      <StudioDigitalRain />
+      <section className="studio-gate studio-login-card" aria-labelledby="studio-login-title">
+        <div className="studio-login-brand">
+          <span className="studio-mark"><LockKeyhole size={24} /></span>
+          <p className="media-kicker">KERYGMA PATH / PRIVATE ADMIN AREA</p>
+          <h1 id="studio-login-title">Kerygma Creative HQ</h1>
+          <p>Secure creative workspace for invited administrators.</p>
+        </div>
         {notice && <p className={"studio-notice" + (noticeError ? " is-error" : "")} role="status">{notice}</p>}
-        <form className="studio-sign-in" onSubmit={requestSignIn}>
-          <label>Email address<input type="email" value={email} onChange={(event) => setEmail(event.target.value)} autoComplete="email" required /></label>
-          <button className="button button-gold" type="submit" disabled={sendingLink}><Mail size={16} />{sendingLink ? "Sending link…" : "Email me a sign-in link"}</button>
-        </form>
+        <div className="studio-login-methods">
+          <section className="studio-login-method" aria-label="Passkey sign-in">
+            <div className="studio-login-method-heading"><span><KeyRound size={18} /> <strong>Passkey</strong></span><small>COMING SOON</small></div>
+            <p>Device PIN, fingerprint, or face recognition, once passkeys are configured and tested.</p>
+            <button className="studio-login-secondary-button" type="button" disabled>Sign in with passkey — coming soon</button>
+          </section>
+          <section className="studio-login-method studio-login-method-active" aria-label="Email Magic Link sign-in">
+            <div className="studio-login-method-heading"><span><Mail size={18} /> <strong>Magic Link</strong></span><small>AVAILABLE NOW</small></div>
+            <p>Request a secure, one-time sign-in link with your approved email address.</p>
+            <form className="studio-sign-in" onSubmit={requestSignIn}>
+              <label>Email address<input type="email" value={email} onChange={(event) => setEmail(event.target.value)} autoComplete="email" placeholder="you@example.com" required /></label>
+              <button className="button button-gold" type="submit" disabled={sendingLink}><Mail size={16} />{sendingLink ? "Sending link…" : "Email me a sign-in link"}</button>
+            </form>
+          </section>
+          <section className="studio-login-method" aria-label="Microsoft Authenticator two-factor verification">
+            <div className="studio-login-method-heading"><span><ShieldCheck size={18} /> <strong>Microsoft Authenticator</strong></span><small>PLANNED</small></div>
+            <p>Extra verification after sign-in. Two-factor authentication is not active yet.</p>
+          </section>
+        </div>
+        <p className="studio-login-footnote">Private access is restricted to approved studio administrators.</p>
       </section>
     </main>
   );
@@ -658,7 +679,7 @@ export function StudioExperience() {
     <main id="main-content" className="studio-page">
       <section className="studio-gate">
         <span className="studio-mark"><LockKeyhole size={24} /></span><h1>Studio access is restricted</h1>
-        <p>This signed-in account is not listed as a Journey Studio admin.</p>
+        <p>This signed-in account is not listed as a Kerygma Creative HQ admin.</p>
         {notice && <p className="studio-notice is-error" role="status">{notice}</p>}
         <button className="button button-outline" onClick={() => void signOut()}><LogOut size={16} />Sign out</button>
       </section>
@@ -677,7 +698,7 @@ export function StudioExperience() {
     <main id="main-content" className="studio-page">
       <div className="page-width">
         <header className="studio-topbar">
-          <div><p className="media-kicker">PRIVATE ADMIN AREA</p><h1>Journey Studio</h1><p>Upload video versions, organize public playlists, edit character dossiers, and review community comments.</p></div>
+          <div><p className="media-kicker">PRIVATE ADMIN AREA</p><h1>Kerygma Creative HQ</h1><p>Upload video versions, organize public playlists, edit character dossiers, and review community comments.</p></div>
           <div className="studio-account"><span>{session.user.email}</span><button className="button button-outline" onClick={() => void signOut()}><LogOut size={15} />Sign out</button></div>
         </header>
         {notice && <p className={"studio-notice" + (noticeError ? " is-error" : "")} role="status">{notice}</p>}
