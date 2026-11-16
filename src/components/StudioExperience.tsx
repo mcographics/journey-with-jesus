@@ -1,6 +1,6 @@
 "use client";
 import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
-import { Check, Eye, EyeOff, Film, KeyRound, ListVideo, LoaderCircle, LockKeyhole, LogOut, Mail, MessageCircle, Plus, Share2, ShieldCheck, Trash2, UploadCloud, Users, X } from "lucide-react";
+import { ArrowLeft, Check, ChevronRight, Eye, EyeOff, Film, KeyRound, ListVideo, LoaderCircle, LockKeyhole, LogOut, Mail, MessageCircle, Plus, Share2, ShieldCheck, Trash2, UploadCloud, Users, X } from "lucide-react";
 import type { Session } from "@supabase/supabase-js";
 import type { Database, MediaAudioLanguage, VideoContentType, VideoQuality } from "@/lib/database.types";
 import { createBrowserSupabaseClient, isSupabaseConfigured } from "@/lib/supabase/browser";
@@ -27,6 +27,7 @@ type EpisodeForm = {
 };
 type PlaylistForm = { id: string; title: string; description: string; order: string; published: boolean; episodeIds: string[] };
 type Section = "episodes" | "playlists" | "comments" | "characters" | "staff" | "socials";
+type LoginMethod = "magic-link" | "passkey" | "authenticator";
 const qualities: VideoQuality[] = ["720p", "1080p", "4K"];
 const freshEpisode = (): EpisodeForm => ({ id: "", title: "", description: "", scripture: "", thumbnail: "", youtubeUrl: "", transcript: "", aslUrl: "", duration: "", number: "1", orientation: "landscape", audioLanguage: "en", published: false });
 const freshPlaylist = (): PlaylistForm => ({ id: "", title: "", description: "", order: "0", published: false, episodeIds: [] });
@@ -40,6 +41,7 @@ export function StudioExperience() {
   const [notice, setNotice] = useState("");
   const [noticeError, setNoticeError] = useState(false);
   const [sendingLink, setSendingLink] = useState(false);
+  const [loginMethod, setLoginMethod] = useState<LoginMethod | null>(null);
   const [section, setSection] = useState<Section>("episodes");
   const [studioMediaKind, setStudioMediaKind] = useState<"landscape" | "portrait">("landscape");
   const [episodes, setEpisodes] = useState<StudioEpisode[]>([]);
@@ -645,31 +647,64 @@ export function StudioExperience() {
       <StudioDigitalRain />
       <section className="studio-gate studio-login-card" aria-labelledby="studio-login-title">
         <div className="studio-login-brand">
-          <span className="studio-mark"><LockKeyhole size={24} /></span>
+          <span className="studio-mark"><LockKeyhole size={21} /></span>
           <p className="media-kicker">KERYGMA PATH / PRIVATE ADMIN AREA</p>
           <h1 id="studio-login-title">Kerygma Creative HQ</h1>
-          <p>Secure creative workspace for invited administrators.</p>
+          <p>Secure creative workspace for approved administrators.</p>
         </div>
         {notice && <p className={"studio-notice" + (noticeError ? " is-error" : "")} role="status">{notice}</p>}
-        <div className="studio-login-methods">
-          <section className="studio-login-method" aria-label="Passkey sign-in">
-            <div className="studio-login-method-heading"><span><KeyRound size={18} /> <strong>Passkey</strong></span><small>COMING SOON</small></div>
-            <p>Device PIN, fingerprint, or face recognition, once passkeys are configured and tested.</p>
-            <button className="studio-login-secondary-button" type="button" disabled>Sign in with passkey — coming soon</button>
-          </section>
-          <section className="studio-login-method studio-login-method-active" aria-label="Email Magic Link sign-in">
-            <div className="studio-login-method-heading"><span><Mail size={18} /> <strong>Magic Link</strong></span><small>AVAILABLE NOW</small></div>
-            <p>Request a secure, one-time sign-in link with your approved email address.</p>
-            <form className="studio-sign-in" onSubmit={requestSignIn}>
-              <label>Email address<input type="email" value={email} onChange={(event) => setEmail(event.target.value)} autoComplete="email" placeholder="you@example.com" required /></label>
-              <button className="button button-gold" type="submit" disabled={sendingLink}><Mail size={16} />{sendingLink ? "Sending link…" : "Email me a sign-in link"}</button>
-            </form>
-          </section>
-          <section className="studio-login-method" aria-label="Microsoft Authenticator two-factor verification">
-            <div className="studio-login-method-heading"><span><ShieldCheck size={18} /> <strong>Microsoft Authenticator</strong></span><small>PLANNED</small></div>
-            <p>Extra verification after sign-in. Two-factor authentication is not active yet.</p>
-          </section>
-        </div>
+        {!loginMethod ? (
+          <div className="studio-login-selection">
+            <h2>Choose your login method</h2>
+            <div className="studio-login-choices" role="group" aria-label="Choose your login method">
+              <button type="button" className="studio-login-choice" onClick={() => setLoginMethod("magic-link")}>
+                <span className="studio-login-choice-icon"><Mail size={20} /></span>
+                <span className="studio-login-choice-copy"><strong>Magic Link</strong><small>Email sign-in link</small></span>
+                <span className="studio-login-choice-tag is-available">AVAILABLE</span>
+                <ChevronRight size={17} aria-hidden="true" />
+              </button>
+              <button type="button" className="studio-login-choice" onClick={() => setLoginMethod("passkey")}>
+                <span className="studio-login-choice-icon"><KeyRound size={20} /></span>
+                <span className="studio-login-choice-copy"><strong>Passkey</strong><small>PIN, fingerprint or face</small></span>
+                <span className="studio-login-choice-tag">SOON</span>
+                <ChevronRight size={17} aria-hidden="true" />
+              </button>
+              <button type="button" className="studio-login-choice" onClick={() => setLoginMethod("authenticator")}>
+                <span className="studio-login-choice-icon"><ShieldCheck size={20} /></span>
+                <span className="studio-login-choice-copy"><strong>Microsoft Authenticator</strong><small>Additional verification</small></span>
+                <span className="studio-login-choice-tag">PLANNED</span>
+                <ChevronRight size={17} aria-hidden="true" />
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="studio-login-selected">
+            <button type="button" className="studio-login-back" onClick={() => setLoginMethod(null)}>
+              <ArrowLeft size={16} aria-hidden="true" /> Back to login methods
+            </button>
+            <section className="studio-login-method" aria-label={loginMethod === "magic-link" ? "Magic Link sign-in" : loginMethod === "passkey" ? "Passkey sign-in" : "Microsoft Authenticator verification"}>
+              <div className="studio-login-method-heading">
+                <span>{loginMethod === "magic-link" ? <Mail size={20} /> : loginMethod === "passkey" ? <KeyRound size={20} /> : <ShieldCheck size={20} />}
+                  <strong>{loginMethod === "magic-link" ? "Magic Link" : loginMethod === "passkey" ? "Passkey" : "Microsoft Authenticator"}</strong>
+                </span>
+                <small>{loginMethod === "magic-link" ? "AVAILABLE NOW" : loginMethod === "passkey" ? "COMING SOON" : "PLANNED"}</small>
+              </div>
+              {loginMethod === "magic-link" ? (
+                <>
+                  <p>Enter your approved email to receive a one-time sign-in link.</p>
+                  <form className="studio-sign-in" onSubmit={requestSignIn}>
+                    <label>Email address<input type="email" value={email} onChange={(event) => setEmail(event.target.value)} autoComplete="email" placeholder="you@example.com" required /></label>
+                    <button className="button button-gold" type="submit" disabled={sendingLink}><Mail size={16} />{sendingLink ? "Sending link…" : "Email me a sign-in link"}</button>
+                  </form>
+                </>
+              ) : loginMethod === "passkey" ? (
+                <p className="studio-login-unavailable">Passkey sign-in with your device PIN, fingerprint or face is coming soon. For now, return and choose Magic Link.</p>
+              ) : (
+                <p className="studio-login-unavailable">Microsoft Authenticator is planned as an extra security step after sign-in. It is not an active login method yet. For now, use Magic Link.</p>
+              )}
+            </section>
+          </div>
+        )}
         <p className="studio-login-footnote">Private access is restricted to approved studio administrators.</p>
       </section>
     </main>
