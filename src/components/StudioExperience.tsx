@@ -9,6 +9,8 @@ import { uploadVideoResumable } from "@/lib/supabase/resumable-upload";
 import { createStorageObjectId } from "@/lib/storage-object-id";
 import { StudioCharacters } from "@/components/StudioCharacters";
 import { StudioDigitalRain } from "@/components/StudioDigitalRain";
+import { StudioMfaChallenge, StudioMfaEnrollment } from "@/components/StudioAuthenticator";
+import { StudioTurnstile } from "@/components/StudioTurnstile";
 import { StudioStaff } from "@/components/StudioStaff";
 import { StudioSocialLinks } from "@/components/StudioSocialLinks";
 import { parseYouTubeId, youtubeWatchUrl } from "@/lib/youtube";
@@ -29,6 +31,7 @@ type PlaylistForm = { id: string; title: string; description: string; order: str
 type Section = "episodes" | "playlists" | "comments" | "characters" | "staff" | "socials";
 type LoginMethod = "magic-link" | "passkey" | "authenticator";
 const qualities: VideoQuality[] = ["720p", "1080p", "4K"];
+const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "";
 const freshEpisode = (): EpisodeForm => ({ id: "", title: "", description: "", scripture: "", thumbnail: "", youtubeUrl: "", transcript: "", aslUrl: "", duration: "", number: "1", orientation: "landscape", audioLanguage: "en", published: false });
 const freshPlaylist = (): PlaylistForm => ({ id: "", title: "", description: "", order: "0", published: false, episodeIds: [] });
 
@@ -37,6 +40,10 @@ export function StudioExperience() {
   const [session, setSession] = useState<Session | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [mfaPending, setMfaPending] = useState(false);
+  const [showAuthenticatorSettings, setShowAuthenticatorSettings] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState("");
+  const [captchaResetCounter, setCaptchaResetCounter] = useState(0);
   const [email, setEmail] = useState("");
   const [notice, setNotice] = useState("");
   const [noticeError, setNoticeError] = useState(false);
@@ -98,11 +105,25 @@ export function StudioExperience() {
     const verifyAdmin = async (nextSession: Session | null) => {
       setSession(nextSession);
       setIsAdmin(false);
+      setMfaPending(false);
       if (!nextSession) { if (active) setAuthLoading(false); return; }
       setAuthLoading(true);
       const { data, error } = await client.from("media_admins").select("user_id").eq("user_id", nextSession.user.id).maybeSingle();
       if (!active) return;
-      setIsAdmin(!error && Boolean(data));
+      const approved = !error && Boolean(data);
+      if (approved) {
+        const assurance = await client.auth.mfa.getAuthenticatorAssuranceLevel();
+        if (!active) return;
+        if (assurance.error || !assurance.data) {
+          setNotice("Additional account security could not be checked. Please sign in again.");
+          setNoticeError(true);
+          setIsAdmin(false);
+          setAuthLoading(false);
+          return;
+        }
+        setMfaPending(assurance.data.nextLevel === "aal2" && assurance.data.currentLevel !== "aal2");
+      }
+      setIsAdmin(approved);
       setAuthLoading(false);
       if (error) { setNotice("Studio access could not be checked. Try signing in again."); setNoticeError(true); }
     };
@@ -115,6 +136,7 @@ export function StudioExperience() {
     const { data: authData } = client.auth.onAuthStateChange((_event, nextSession) => {
       setSession(nextSession);
       setIsAdmin(false);
+      setMfaPending(false);
       setAuthLoading(Boolean(nextSession));
       window.setTimeout(() => { void verifyAdmin(nextSession); }, 0);
     });
@@ -155,14 +177,19 @@ export function StudioExperience() {
   }, [client]);
 
   useEffect(() => {
-    if (!isAdmin) return;
+    if (!isAdmin || mfaPending) return;
     const timer = window.setTimeout(() => { void loadStudioData(); }, 0);
     return () => window.clearTimeout(timer);
-  }, [isAdmin, loadStudioData]);
+  }, [isAdmin, mfaPending, loadStudioData]);
 
   async function requestSignIn(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!client) return;
+    if (turnstileSiteKey && !captchaToken) {
+      setNotice("Complete the human verification before requesting a Magic Link.");
+      setNoticeError(true);
+      return;
+    }
     setSendingLink(true); setNotice(""); setNoticeError(false);
     const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
     const redirectPath = basePath.replace(/\/$/, "") + "/studio/";
@@ -170,7 +197,7 @@ export function StudioExperience() {
     try {
       const { error } = await client.auth.signInWithOtp({
         email: email.trim(),
-        options: { emailRedirectTo: redirect, shouldCreateUser: false },
+        options: { emailRedirectTo: redirect, shouldCreateUser: false, ...(turnstileSiteKey ? { captchaToken } : {}) },
       });
       if (error) {
         setNotice(signInErrorMessage(error.code, error.message));
@@ -183,6 +210,8 @@ export function StudioExperience() {
       setNoticeError(true);
     } finally {
       setSendingLink(false);
+      setCaptchaToken("");
+      setCaptchaResetCounter((value) => value + 1);
     }
   }
 
@@ -240,7 +269,7 @@ export function StudioExperience() {
   async function signOut() {
     if (!client) return;
     await client.auth.signOut();
-    setIsAdmin(false); setSession(null); setNotice("You are signed out of Studio.");
+    setIsAdmin(false); setSession(null); setMfaPending(false); setNotice("You are signed out of Studio.");
   }
 
   function editEpisode(episode: StudioEpisode) {
@@ -626,10 +655,10 @@ export function StudioExperience() {
     setPlaylistItems(data ?? []);
   }, [client]);
   useEffect(() => {
-    if (!isAdmin) return;
+    if (!isAdmin || mfaPending) return;
     const timer = window.setTimeout(() => { void loadPlaylistItems(); }, 0);
     return () => window.clearTimeout(timer);
-  }, [isAdmin, loadPlaylistItems]);
+  }, [isAdmin, mfaPending, loadPlaylistItems]);
 
   function movePlaylistItem(index: number, direction: -1 | 1) {
     setPlaylistForm((current) => {
@@ -724,8 +753,8 @@ export function StudioExperience() {
               </button>
               <button type="button" className="studio-login-choice" onClick={() => setLoginMethod("authenticator")}>
                 <span className="studio-login-choice-icon"><ShieldCheck size={20} /></span>
-                <span className="studio-login-choice-copy"><strong>Microsoft Authenticator</strong><small>Additional verification</small></span>
-                <span className="studio-login-choice-tag">PLANNED</span>
+                <span className="studio-login-choice-copy"><strong>Microsoft Authenticator</strong><small>Six-digit second step</small></span>
+                <span className="studio-login-choice-tag is-available">AFTER SIGN-IN</span>
                 <ChevronRight size={17} aria-hidden="true" />
               </button>
             </div>
@@ -740,14 +769,15 @@ export function StudioExperience() {
                 <span>{loginMethod === "magic-link" ? <Mail size={20} /> : loginMethod === "passkey" ? <KeyRound size={20} /> : <ShieldCheck size={20} />}
                   <strong>{loginMethod === "magic-link" ? "Magic Link" : loginMethod === "passkey" ? "Passkey" : "Microsoft Authenticator"}</strong>
                 </span>
-                <small>{loginMethod === "magic-link" ? "AVAILABLE NOW" : loginMethod === "passkey" ? "EXPERIMENTAL" : "PLANNED"}</small>
+                <small>{loginMethod === "magic-link" ? "AVAILABLE NOW" : loginMethod === "passkey" ? "EXPERIMENTAL" : "AFTER SIGN-IN"}</small>
               </div>
               {loginMethod === "magic-link" ? (
                 <>
                   <p>Enter your approved email to receive a one-time sign-in link.</p>
                   <form className="studio-sign-in" onSubmit={requestSignIn}>
                     <label>Email address<input type="email" value={email} onChange={(event) => setEmail(event.target.value)} autoComplete="email" placeholder="you@example.com" required /></label>
-                    <button className="button button-gold" type="submit" disabled={sendingLink}><Mail size={16} />{sendingLink ? "Sending link…" : "Email me a sign-in link"}</button>
+                    {turnstileSiteKey && <StudioTurnstile siteKey={turnstileSiteKey} onToken={setCaptchaToken} resetCounter={captchaResetCounter} />}
+                    <button className="button button-gold" type="submit" disabled={sendingLink || (Boolean(turnstileSiteKey) && !captchaToken)}><Mail size={16} />{sendingLink ? "Sending link…" : "Email me a sign-in link"}</button>
                   </form>
                 </>
               ) : loginMethod === "passkey" ? (
@@ -760,7 +790,10 @@ export function StudioExperience() {
                   <p className="studio-login-passkey-hint">First time? Sign in with Magic Link, then select “Add passkey” in your Studio account. This experimental option also requires passkeys enabled in Supabase.</p>
                 </>
               ) : (
-                <p className="studio-login-unavailable">Microsoft Authenticator is planned as an extra security step after sign-in. It is not an active login method yet. For now, use Magic Link.</p>
+                <>
+                  <p>Microsoft Authenticator provides an additional six-digit verification step after signing in with Magic Link or a passkey. Once signed in, choose “Set up Microsoft Authenticator” in your Studio account.</p>
+                  <button type="button" className="button button-gold" onClick={() => setLoginMethod("magic-link")}>Continue with Magic Link</button>
+                </>
               )}
             </section>
           </div>
@@ -781,6 +814,12 @@ export function StudioExperience() {
     </main>
   );
 
+  if (mfaPending) return <StudioMfaChallenge client={client} onVerified={() => {
+    setMfaPending(false);
+    setNotice("Second-factor verification successful.");
+    setNoticeError(false);
+  }} onSignOut={() => void signOut()} />;
+
   const visibleEpisodes = episodes.filter((episode) => episode.orientation === studioMediaKind);
   const selectedPlaylistOrientation = playlistForm.episodeIds
     .map((id) => episodes.find((episode) => episode.id === id)?.orientation)
@@ -794,9 +833,10 @@ export function StudioExperience() {
       <div className="page-width">
         <header className="studio-topbar">
           <div><p className="media-kicker">PRIVATE ADMIN AREA</p><h1>Kerygma Creative HQ</h1><p>Upload video versions, organize public playlists, edit character dossiers, and review community comments.</p></div>
-          <div className="studio-account"><span>{session.user.email}</span><button className="button button-outline" type="button" onClick={() => void registerStudioPasskey()} disabled={registeringPasskey}><KeyRound size={15} />{registeringPasskey ? "Registering…" : "Add passkey"}</button><button className="button button-outline" onClick={() => void signOut()}><LogOut size={15} />Sign out</button></div>
+          <div className="studio-account"><span>{session.user.email}</span><button className="button button-outline" type="button" onClick={() => void registerStudioPasskey()} disabled={registeringPasskey}><KeyRound size={15} />{registeringPasskey ? "Registering…" : "Add passkey"}</button><button type="button" className="button button-outline" onClick={() => setShowAuthenticatorSettings((value) => !value)}><ShieldCheck size={15} />Microsoft Authenticator</button><button className="button button-outline" onClick={() => void signOut()}><LogOut size={15} />Sign out</button></div>
         </header>
         {notice && <p className={"studio-notice" + (noticeError ? " is-error" : "")} role="status">{notice}</p>}
+        {showAuthenticatorSettings && <StudioMfaEnrollment client={client} onEnabled={() => { setNotice("Authenticator enabled for this administrator."); setNoticeError(false); }} />}
         <div className="studio-tabs" role="tablist" aria-label="Studio tools">
           <button type="button" role="tab" aria-selected={section === "episodes"} onClick={() => setSection("episodes")}><Film size={16} />Videos <span>{episodes.length}</span></button>
           <button type="button" role="tab" aria-selected={section === "playlists"} onClick={() => setSection("playlists")}><ListVideo size={16} />Playlists <span>{playlists.length}</span></button>
