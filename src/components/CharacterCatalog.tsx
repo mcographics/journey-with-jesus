@@ -73,9 +73,11 @@ function CharacterCard({ character }: { character: PublicCharacter }) {
   const toggle = () => setExpanded((current) => !current);
   const isJesus = isJesusCharacter(character);
   const isEric = isEricCharacter(character);
-  const portraitSrc = isEric
-    ? `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/images/eric-oberhausen-portrait.webp`
-    : character.portrait_url;
+  const portraitSrc = isJesus
+    ? `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/images/jesus-character-primary.webp`
+    : isEric
+      ? `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/images/eric-oberhausen-portrait.webp`
+      : character.portrait_url;
 
   const portrait = portraitSrc ? (
     <Image
