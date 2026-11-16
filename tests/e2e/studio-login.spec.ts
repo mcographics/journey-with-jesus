@@ -44,3 +44,28 @@ test("Studio method picker remains compact on mobile", async ({ page }) => {
   await expect(page.getByRole("textbox", { name: "Email address" })).toBeVisible();
   await expect(page.getByRole("contentinfo")).toBeVisible();
 });
+
+test("Studio footer finishes flush with the page on desktop and mobile", async ({ page }) => {
+  for (const size of [
+    { width: 1440, height: 900 },
+    { width: 375, height: 812 },
+  ]) {
+    await page.setViewportSize(size);
+    await page.goto("/studio/");
+
+    const picker = page.getByRole("group", { name: "Choose your login method" });
+    test.skip(!(await picker.isVisible()), "Studio authentication is not configured for this test deployment.");
+    const footer = page.locator("footer.site-footer");
+    await expect(footer).toBeAttached();
+    await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+    const metrics = await page.evaluate(() => {
+      const footer = document.querySelector("footer.site-footer");
+      if (!footer) throw new Error("Site footer is missing");
+      const pageEnd = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
+      const footerEnd = footer.getBoundingClientRect().bottom + window.scrollY;
+      return { gap: pageEnd - footerEnd, viewportGap: window.innerHeight - footer.getBoundingClientRect().bottom, documentEnd: pageEnd };
+    });
+    expect(metrics.gap, "Unexpected gap under footer at " + size.width + "px").toBeLessThanOrEqual(2);
+    expect(metrics.viewportGap, "Unexpected blank space after footer at " + size.width + "px").toBeLessThanOrEqual(2);
+  }
+});

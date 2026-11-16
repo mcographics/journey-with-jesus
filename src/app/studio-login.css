@@ -1,3 +1,19 @@
+/*
+ * On a short Studio login page, the natural document height can be shorter
+ * than the viewport. Stretch only this route's main region so the existing
+ * footer follows it at the bottom with no empty page background underneath.
+ * Allow real content to make the page taller and scroll when necessary.
+ */
+body:has(> main.studio-login-page) {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+body > main.studio-login-page {
+  flex: 1 0 auto;
+}
+
 /* Kerygma Creative HQ: compact two-step secure login. */
 .studio-page.studio-login-page {
   position: relative;
