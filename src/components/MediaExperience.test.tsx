@@ -71,7 +71,7 @@ describe("MediaExperience", () => {
     expect(screen.getByRole("complementary", { name: "Media playlist" })).toBeTruthy();
     expect(screen.getByRole("button", { name: /A Story of Mercy/ })).toBeTruthy();
     expect(screen.getByRole("heading", { name: "A Story of Hope" })).toBeTruthy();
-    expect(screen.getByTitle("A Story of Hope")).toBeTruthy();
+    expect(screen.getByRole("button", { name: "Play A Story of Hope" })).toBeTruthy();
     expect(window.location.search).toBe("?episode=hope-two");
   });
 
@@ -98,7 +98,7 @@ describe("MediaExperience", () => {
     fireEvent.click(screen.getByRole("button", { name: /A Story of Hope/ }));
     expect(container.querySelector(".video-frame")?.classList.contains("is-portrait")).toBe(true);
     expect(container.querySelector(".media-layout")?.classList.contains("is-portrait")).toBe(true);
-    expect(screen.getByTitle("A Story of Hope")).toBeTruthy();
+    expect(screen.getByRole("button", { name: "Play A Story of Hope" })).toBeTruthy();
 
     fireEvent.click(screen.getByRole("button", { name: /A Story of Mercy/ }));
     expect(container.querySelector(".video-frame")?.classList.contains("is-portrait")).toBe(false);
