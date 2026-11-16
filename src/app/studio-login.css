@@ -210,3 +210,16 @@ body > main.studio-login-page {
 /* The passkey sign-in action is available in the experimental login panel. */
 .studio-login-method > .button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; margin-top: 12px; }
 .studio-login-method > .studio-login-passkey-hint { margin-top: 12px; font-size: 10px; opacity: .92; }
+
+/* Authenticator enrolment and second-factor flow. */
+.studio-mfa-settings { margin: 16px 0; padding: 20px; }
+.studio-mfa-settings > p { line-height: 1.5; }
+.studio-mfa-enrollment { display: grid; gap: 12px; margin-top: 14px; }
+.studio-mfa-qr { width: min(220px, 100%); height: auto; padding: 10px; border-radius: 8px; background: #fff; }
+.studio-mfa-secret { display: block; max-width: 100%; padding: 12px; border: 1px solid #8493ab; border-radius: 6px; overflow-wrap: anywhere; user-select: all; }
+.studio-mfa-enrollment .studio-sign-in { display: grid; gap: 12px; max-width: 420px; }
+.studio-mfa-enrollment input { display: block; width: 100%; max-width: 240px; }
+.studio-captcha { display: grid; gap: 8px; margin: 10px 0; min-height: 60px; }
+.studio-login-page .studio-gate .studio-sign-in { display: grid; gap: 12px; margin: 16px 0; }
+.studio-login-page .studio-gate .studio-sign-in input,
+.studio-login-page .studio-gate .studio-sign-in select { width: 100%; min-height: 42px; }
