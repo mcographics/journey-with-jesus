@@ -27,8 +27,9 @@ export function StudioTurnstile({
   const container = useRef<HTMLDivElement>(null);
   const widgetId = useRef<string | null>(null);
   const callback = useRef(onToken);
-  callback.current = onToken;
   const [loadError, setLoadError] = useState(false);
+
+  useEffect(() => { callback.current = onToken; }, [onToken]);
 
   useEffect(() => {
     let active = true;
