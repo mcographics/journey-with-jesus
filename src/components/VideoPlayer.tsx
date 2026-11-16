@@ -1,5 +1,6 @@
 "use client";
 import { Ellipsis, Play, Video } from "lucide-react";
+import Image from "next/image";
 import { useEffect, useId, useRef, useState } from "react";
 import type { Episode } from "@/data/episodes";
 import { getDefaultVideoSource } from "@/lib/episode-navigation";
@@ -22,6 +23,7 @@ export function VideoPlayer({ episode, onOrientationChange, onFrameSizeChange }:
   const shellRef = useRef<HTMLDivElement>(null);
   const detailsId = useId();
   const [detailsExpanded, setDetailsExpanded] = useState(false);
+  const [activatedYoutubeId, setActivatedYoutubeId] = useState<string | null>(null);
   const [aspectRatio, setAspectRatio] = useState(() => episode?.orientation === "portrait" ? PORTRAIT_RATIO : PLAYER_RATIO);
   const isPortrait = aspectRatio < 1;
   const [frameSize, setFrameSize] = useState<{ width: number; height: number } | null>(null);
@@ -85,6 +87,7 @@ export function VideoPlayer({ episode, onOrientationChange, onFrameSizeChange }:
     : episode.videoUrl ? [{ label: "Original", url: episode.videoUrl }] : [];
   const selectedSource = sources.find((source) => source.url === selectedUrl) ?? sources[0];
   const hasYoutube = Boolean(episode.youtubeId);
+  const youtubePosterSrc = episode.thumbnail || `https://i.ytimg.com/vi/${encodeURIComponent(episode.youtubeId ?? "")}/hqdefault.jpg`;
   const aslYoutubeId = episode.aslInterpretationUrl ? parseYouTubeId(episode.aslInterpretationUrl) : null;
 
   return (
@@ -92,10 +95,27 @@ export function VideoPlayer({ episode, onOrientationChange, onFrameSizeChange }:
       <div className="video-shell" ref={shellRef} style={shellStyle}>
         <div className={"video-frame" + (isPortrait ? " is-portrait" : "")} style={frameStyle}>
           {hasYoutube ? (
-            <iframe key={episode.youtubeId}
-              src={"https://www.youtube-nocookie.com/embed/" + encodeURIComponent(episode.youtubeId!) + "?rel=0&modestbranding=1&cc_load_policy=1"}
-              title={episode.title} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowFullScreen referrerPolicy="strict-origin-when-cross-origin" />
+            activatedYoutubeId === episode.youtubeId ? (
+              <iframe key={episode.youtubeId}
+                src={"https://www.youtube-nocookie.com/embed/" + encodeURIComponent(episode.youtubeId!) + "?rel=0&modestbranding=1&cc_load_policy=1&autoplay=1&playsinline=1"}
+                title={episode.title} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen referrerPolicy="strict-origin-when-cross-origin" />
+            ) : (
+              <button type="button" className="youtube-player-poster" aria-label={`Play ${episode.title}`} onClick={() => setActivatedYoutubeId(episode.youtubeId!)}>
+                <Image
+                  src={youtubePosterSrc}
+                  alt=""
+                  fill
+                  sizes="(max-width: 800px) 100vw, (max-width: 1100px) calc(100vw - 400px), 800px"
+                  unoptimized
+                  fetchPriority="high"
+                />
+                <span className="youtube-player-poster-action" aria-hidden="true">
+                  <span className="youtube-player-poster-play"><Play size={28} fill="currentColor" /></span>
+                  <span>Play video</span>
+                </span>
+              </button>
+            )
           ) : selectedSource ? (
             <video key={episode.id + "-" + selectedSource.url} ref={videoRef} crossOrigin="anonymous" controls playsInline preload="metadata" aria-label={episode.title}
               onLoadedMetadata={(event) => {

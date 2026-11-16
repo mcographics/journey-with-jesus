@@ -79,16 +79,23 @@ function CharacterCard({ character }: { character: PublicCharacter }) {
     : isEric
       ? `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/images/eric-oberhausen-portrait.webp`
       : character.portrait_url;
+  const portraitSrcSet = portraitSrc && /\/images\/(jesus-character-primary|eric-oberhausen-portrait|adam-portrait|eve-portrait|samson-portrait)\.webp$/.test(portraitSrc)
+    ? [480, 720, 941].map((width) => `${portraitSrc.replace(/\.webp$/, `-${width}.webp`)} ${width}w`).join(", ")
+    : null;
+  const portraitSizes = "(max-width: 560px) calc(100vw - 36px), (max-width: 700px) 560px, (max-width: 900px) calc((100vw - 76px) / 2), (max-width: 1100px) calc((100vw - 96px) / 3), 360px";
 
   const portrait = portraitSrc ? (
-    <Image
-      className="character-portrait-image"
-      src={portraitSrc}
-      alt={character.name}
-      fill
-      sizes="(max-width: 700px) calc(100vw - 36px), (max-width: 900px) 50vw, 33vw"
-      unoptimized
-    />
+    <picture className="character-portrait-picture">
+      {portraitSrcSet && <source type="image/webp" srcSet={portraitSrcSet} sizes={portraitSizes} />}
+      <Image
+        className="character-portrait-image"
+        src={portraitSrc}
+        alt={character.name}
+        fill
+        sizes={portraitSizes}
+        unoptimized
+      />
+    </picture>
   ) : (
     <span className="character-portrait-placeholder" aria-hidden="true">
       {character.name.split(/\s+/).map((word) => word[0]).slice(0, 2).join("")}
@@ -116,7 +123,7 @@ function CharacterCard({ character }: { character: PublicCharacter }) {
           <XrayReveal
             className="character-xray-layer"
             imageFit="contain"
-            imageSrc={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/images/jesus-character-xray.webp`}
+            imageSrc={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/images/jesus-character-xray-720.webp`}
           >
             {portrait}
           </XrayReveal>
