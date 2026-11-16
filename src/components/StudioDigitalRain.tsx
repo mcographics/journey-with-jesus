@@ -1,6 +1,11 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import {
+  SCRIPTURAL_WORDS,
+  WORD_DURATION_MS,
+  getWordRevealState,
+} from "@/lib/studio-word-reveal";
 
 type Stream = {
   x: number;
@@ -10,12 +15,10 @@ type Stream = {
   gold: boolean;
 };
 
-type Word = { text: string; hebrew?: boolean };
-type FeaturedWord = Word & {
+type FeaturedWord = (typeof SCRIPTURAL_WORDS)[number] & {
   x: number;
   y: number;
   start: number;
-  end: number;
   gold: boolean;
 };
 
@@ -24,19 +27,6 @@ const greek = "ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩαβγδεζηθ�
 const hebrew = "אבגדהוזחטיכלמנסעפצקרשת";
 const symbols = [...latin, ...greek, ...hebrew];
 const glyph = () => symbols[Math.floor(Math.random() * symbols.length)];
-
-/* Short Biblical-language words associated with Jesus, light, truth, love,
-   grace, peace, mercy, holiness and life; not invented quotations. */
-const scripturalWords: Word[] = [
-  { text: "Ἰησοῦς" }, { text: "Χριστός" }, { text: "κύριος" },
-  { text: "ἀγάπη" }, { text: "φῶς" }, { text: "ζωή" },
-  { text: "ἀλήθεια" }, { text: "ἔλεος" }, { text: "ἅγιος" },
-  { text: "χάρις" }, { text: "εἰρήνη" },
-  { text: "ישוע", hebrew: true }, { text: "משיח", hebrew: true },
-  { text: "אהבה", hebrew: true }, { text: "שלום", hebrew: true },
-  { text: "חסד", hebrew: true }, { text: "אור", hebrew: true },
-  { text: "קדוש", hebrew: true }, { text: "אמת", hebrew: true },
-];
 
 export function StudioDigitalRain() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -123,10 +113,10 @@ export function StudioDigitalRain() {
         }
       }
 
-      /* Word flashes are infrequent, so the descending code remains dominant.
-         Place them near the outer edges on desktop, away from the login card. */
-      if (advance && now >= nextWord) {
-        const word = scripturalWords[Math.floor(Math.random() * scripturalWords.length)];
+      /* Feature one translated biblical-language word at a time, without
+         disrupting the falling code or covering the centered login card. */
+      if (advance && !featured && now >= nextWord) {
+        const word = SCRIPTURAL_WORDS[Math.floor(Math.random() * SCRIPTURAL_WORDS.length)];
         const side = Math.random() < 0.5 ? -1 : 1;
         const positionX = width >= 980
           ? width / 2 + side * (width * (0.31 + Math.random() * 0.10))
@@ -136,27 +126,83 @@ export function StudioDigitalRain() {
           x: positionX,
           y: height * (0.22 + Math.random() * 0.55),
           start: now,
-          end: now + 1750,
           gold: Math.random() < 0.48,
         };
-        nextWord = now + 8500 + Math.random() * 5500;
+        nextWord = now + 10500 + Math.random() * 4500;
       }
-      if (featured && now < featured.end) {
-        const elapsed = now - featured.start;
-        const remaining = featured.end - now;
-        const alpha = Math.min(1, elapsed / 180, remaining / 420);
-        ctx.globalAlpha = Math.max(0, alpha);
-        ctx.font = 'bold 27px "Segoe UI", "Noto Sans Hebrew", "Noto Sans", sans-serif';
-        ctx.direction = featured.hebrew ? "rtl" : "ltr";
-        ctx.textAlign = "center";
-        const halfWidth = ctx.measureText(featured.text).width / 2;
-        const safeX = Math.min(Math.max(featured.x, halfWidth + 12), Math.max(halfWidth + 12, width - halfWidth - 12));
-        ctx.shadowBlur = 25;
-        ctx.shadowColor = featured.gold ? "#ffd151" : "#3198ff";
-        ctx.fillStyle = featured.gold ? "#fff1a3" : "#e1f5ff";
-        ctx.fillText(featured.text, safeX, featured.y);
-      } else if (featured && now >= featured.end) {
-        featured = null;
+
+      if (featured) {
+        const state = getWordRevealState(now - featured.start);
+        if (state.stage === "done" || now - featured.start >= WORD_DURATION_MS) {
+          featured = null;
+        } else {
+          ctx.save();
+          ctx.globalAlpha = state.alpha;
+          ctx.font = `bold ${width < 480 ? 23 : 28}px "Segoe UI", "Noto Sans Hebrew", "Noto Sans", sans-serif`;
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          ctx.shadowBlur = 24;
+          ctx.shadowColor = featured.gold ? "#ffd151" : "#3198ff";
+          ctx.fillStyle = featured.gold ? "#fff1a3" : "#e1f5ff";
+          const maxTextWidth = Math.max(1, width - 24);
+          const fullTextWidth = Math.min(
+            Math.max(ctx.measureText(featured.text).width, ctx.measureText(featured.english).width),
+            maxTextWidth,
+          );
+          const halfWidth = fullTextWidth / 2;
+          const safeX = Math.min(Math.max(featured.x, halfWidth + 12), width - halfWidth - 12);
+          const safeY = Math.min(Math.max(featured.y, 30), Math.max(30, height - 30));
+          const drawLabel = (text: string, rtl: boolean) => {
+            ctx.direction = rtl ? "rtl" : "ltr";
+            ctx.fillText(text, safeX, safeY, maxTextWidth);
+          };
+
+          if (state.stage === "original") {
+            drawLabel(featured.text, Boolean(featured.hebrew));
+          } else if (state.stage === "english") {
+            drawLabel(featured.english, false);
+          } else {
+            // The advancing light converts each covered portion into English.
+            const left = safeX - halfWidth - 8;
+            const span = fullTextWidth + 16;
+            const sweepX = left + span * state.sweepProgress;
+
+            ctx.save();
+            ctx.beginPath();
+            ctx.rect(left, safeY - 36, Math.max(0, sweepX - left), 72);
+            ctx.clip();
+            drawLabel(featured.english, false);
+            ctx.restore();
+
+            ctx.save();
+            ctx.beginPath();
+            ctx.rect(sweepX, safeY - 36, Math.max(0, left + span - sweepX), 72);
+            ctx.clip();
+            drawLabel(featured.text, Boolean(featured.hebrew));
+            ctx.restore();
+
+            // A soft traveling glint reads as illumination, not a harsh flash.
+            ctx.save();
+            ctx.globalAlpha = state.alpha * 0.85;
+            ctx.shadowBlur = 0;
+            const glow = ctx.createRadialGradient(sweepX, safeY, 0, sweepX, safeY, 42);
+            glow.addColorStop(0, "rgba(255,255,238,.85)");
+            glow.addColorStop(0.24, featured.gold ? "rgba(255,207,103,.45)" : "rgba(97,180,255,.45)");
+            glow.addColorStop(1, "rgba(255,255,255,0)");
+            ctx.fillStyle = glow;
+            ctx.fillRect(sweepX - 42, safeY - 42, 84, 84);
+            ctx.strokeStyle = featured.gold ? "#fff2bf" : "#d6f2ff";
+            ctx.lineWidth = 1.2;
+            ctx.beginPath();
+            ctx.moveTo(sweepX, safeY - 16);
+            ctx.lineTo(sweepX, safeY + 16);
+            ctx.moveTo(sweepX - 9, safeY);
+            ctx.lineTo(sweepX + 9, safeY);
+            ctx.stroke();
+            ctx.restore();
+          }
+          ctx.restore();
+        }
       }
       ctx.direction = "ltr";
       ctx.globalAlpha = 1;
