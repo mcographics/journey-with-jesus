@@ -36,7 +36,10 @@ The public-facing page must not claim that email delivery works until a test con
 
 ## Deployment notes
 
-The form will be disabled and clearly state it is temporarily unavailable unless the
-Edge Function GET returns `{ "ready": true }`. This prevents loss of messages during
-setup or when a provider configuration is missing. If Resend credentials are not set,
-**do not mark the entire email-delivery feature complete**.
+The form inputs, consent checkbox, and Send Message button remain interactive even if
+the Edge Function readiness check fails or times out. Visitors can compose a message
+without being locked out. Submitting still requires valid fields and consent; if the
+service is missing or unavailable, a clear error is shown and the text is preserved.
+A success message appears only after the delivery endpoint returns HTTP 202.
+If Resend credentials are not set, **do not mark the entire email-delivery feature
+complete**.
