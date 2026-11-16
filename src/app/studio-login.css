@@ -205,3 +205,8 @@ body > main.studio-login-page {
 :root[data-theme="light"] .studio-login-page .studio-login-card > .studio-login-footnote { color: #506782; }
 :root[data-theme="light"] .studio-login-page .studio-notice { color: #5b451d; background: #fff3d7; border-color: #b58d3e; }
 :root[data-theme="light"] .studio-login-page .studio-notice.is-error { color: #8b251b; background: #fff0ed; border-color: #cd8b83; }
+
+
+/* The passkey sign-in action is available in the experimental login panel. */
+.studio-login-method > .button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; margin-top: 12px; }
+.studio-login-method > .studio-login-passkey-hint { margin-top: 12px; font-size: 10px; opacity: .92; }

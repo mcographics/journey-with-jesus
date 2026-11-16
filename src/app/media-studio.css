@@ -521,3 +521,9 @@
 .studio-media-kind-tabs button span { color: #989da6; font-size: 9px; }
 :root[data-theme="light"] .studio-media-kind-tabs button { color: #596574; border-color: rgba(178, 133, 36, .19); }
 :root[data-theme="light"] .studio-media-kind-tabs button[aria-pressed="true"] { color: #725424; background: rgba(188, 146, 65, .1); }
+
+
+/* Keep passkey enrollment and logout usable across compact Studio viewports. */
+.studio-account { flex-wrap: wrap; }
+.studio-account .button { display: inline-flex; align-items: center; gap: 7px; white-space: nowrap; }
+@media (max-width: 560px) { .studio-account { justify-content: flex-start; gap: 10px; } .studio-account > span { flex-basis: 100%; overflow-wrap: anywhere; } }

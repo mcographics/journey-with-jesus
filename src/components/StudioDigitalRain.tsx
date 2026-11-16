@@ -177,30 +177,63 @@ export function StudioDigitalRain() {
           const sweepX = left + (right - left) * reveal.sweepProgress;
           drawClippedWord(word.original, Boolean(word.hebrew), sweepX, right);
           drawClippedWord(word.english, false, left, sweepX);
-          // A narrow luminous band and crossing rays act like light
-          // passing through the letters to reveal their English meaning.
-          ctx.save();
-          ctx.globalCompositeOperation = "lighter";
-          ctx.globalAlpha = reveal.opacity * (0.6 + 0.35 * Math.sin(Math.PI * reveal.sweepProgress));
-          const ray = ctx.createLinearGradient(sweepX - 32, word.y, sweepX + 32, word.y);
-          ray.addColorStop(0, "rgba(70,155,255,0)");
-          ray.addColorStop(0.45, "rgba(175,223,255,.23)");
-          ray.addColorStop(0.5, "rgba(255,251,222,.8)");
-          ray.addColorStop(0.55, "rgba(175,223,255,.23)");
-          ray.addColorStop(1, "rgba(70,155,255,0)");
-          ctx.fillStyle = ray;
-          ctx.fillRect(sweepX - 32, word.y - fontSize * 1.1, 64, fontSize * 2.2);
-          ctx.shadowBlur = 19;
-          ctx.shadowColor = "#f4ebbe";
-          ctx.strokeStyle = "rgba(255,250,221,.9)";
-          ctx.lineWidth = 1.2;
-          ctx.beginPath();
-          ctx.moveTo(sweepX, word.y - fontSize * 1.14);
-          ctx.lineTo(sweepX, word.y + fontSize * 1.14);
-          ctx.moveTo(sweepX - 12, word.y);
-          ctx.lineTo(sweepX + 12, word.y);
-          ctx.stroke();
-          ctx.restore();
+          // Emit light from within the individual glyph nearest the translation
+          // boundary, rather than painting a vertical scanning band over the word.
+          const illuminateLetter = (text: string, rtl: boolean, isEnglish: boolean) => {
+            ctx.save();
+            ctx.font = "bold " + fontSize + "px " + fontFamily;
+            ctx.direction = "ltr";
+            ctx.textAlign = "center";
+            const characters = [...text];
+            const ordered = rtl ? characters.reverse() : characters;
+            const advances = ordered.map((character) => ctx.measureText(character).width);
+            const sum = advances.reduce((total, advance) => total + advance, 0);
+            let position = safeX - sum / 2;
+            let closest: { letter: string; center: number; distance: number } | null = null;
+
+            for (let i = 0; i < ordered.length; i++) {
+              const center = position + advances[i] / 2;
+              position += advances[i];
+              // Illuminate only the character that is being translated right now.
+              if ((isEnglish && center > sweepX + 7) || (!isEnglish && center < sweepX - 7)) continue;
+              const distance = Math.abs(center - sweepX);
+              if (!closest || distance < closest.distance) closest = { letter: ordered[i], center, distance };
+            }
+            if (closest) {
+              const intensity = Math.max(0, 1 - closest.distance / (fontSize * 1.25));
+              if (intensity > 0.1) {
+                const x = closest.center;
+                const alpha = reveal.opacity * intensity * .78;
+                ctx.globalCompositeOperation = "lighter";
+                ctx.globalAlpha = alpha;
+                ctx.shadowBlur = 12 + intensity * 18;
+                ctx.shadowColor = word.gold ? "#ffe7a7" : "#a9e6ff";
+                ctx.fillStyle = word.gold ? "#fff9de" : "#f2fcff";
+                ctx.fillText(closest.letter, x, word.y);
+
+                // Four short light rays bloom from the illuminated letter itself.
+                // They never form an uninterrupted stripe through empty space.
+                const r = fontSize * (.24 + intensity * .18);
+                ctx.globalAlpha = alpha * .47;
+                ctx.shadowBlur = 9;
+                ctx.strokeStyle = word.gold ? "#fff1c7" : "#d4f6ff";
+                ctx.lineWidth = .8;
+                ctx.beginPath();
+                ctx.moveTo(x - r * .35, word.y - r * .35);
+                ctx.lineTo(x - r, word.y - r * 1.05);
+                ctx.moveTo(x + r * .35, word.y - r * .35);
+                ctx.lineTo(x + r, word.y - r * 1.05);
+                ctx.moveTo(x - r * .35, word.y + r * .35);
+                ctx.lineTo(x - r, word.y + r * 1.05);
+                ctx.moveTo(x + r * .35, word.y + r * .35);
+                ctx.lineTo(x + r, word.y + r * 1.05);
+                ctx.stroke();
+              }
+            }
+            ctx.restore();
+          };
+          illuminateLetter(word.original, Boolean(word.hebrew), false);
+          illuminateLetter(word.english, false, true);
         }
       } else if (featured && now >= featured.end) {
         featured = null;

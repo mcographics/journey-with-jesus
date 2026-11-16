@@ -41,6 +41,8 @@ export function StudioExperience() {
   const [notice, setNotice] = useState("");
   const [noticeError, setNoticeError] = useState(false);
   const [sendingLink, setSendingLink] = useState(false);
+  const [signingInWithPasskey, setSigningInWithPasskey] = useState(false);
+  const [registeringPasskey, setRegisteringPasskey] = useState(false);
   const [loginMethod, setLoginMethod] = useState<LoginMethod | null>(null);
   const [section, setSection] = useState<Section>("episodes");
   const [studioMediaKind, setStudioMediaKind] = useState<"landscape" | "portrait">("landscape");
@@ -181,6 +183,57 @@ export function StudioExperience() {
       setNoticeError(true);
     } finally {
       setSendingLink(false);
+    }
+  }
+
+  async function signInUsingPasskey() {
+    if (!client) return;
+    setNotice("");
+    setNoticeError(false);
+    if (!window.isSecureContext || !window.PublicKeyCredential) {
+      setNotice("Passkeys require a secure HTTPS page and a browser with WebAuthn support. You can still use Magic Link.");
+      setNoticeError(true);
+      return;
+    }
+    setSigningInWithPasskey(true);
+    try {
+      const { error } = await client.auth.signInWithPasskey();
+      if (error) {
+        setNotice(passkeyErrorMessage(error.code, error.message));
+        setNoticeError(true);
+      }
+      // onAuthStateChange verifies Studio administrator membership before admitting the user.
+    } catch (error) {
+      setNotice(passkeyErrorMessage(undefined, errorMessage(error)));
+      setNoticeError(true);
+    } finally {
+      setSigningInWithPasskey(false);
+    }
+  }
+
+  async function registerStudioPasskey() {
+    if (!client || !session || !isAdmin) return;
+    if (!window.isSecureContext || !window.PublicKeyCredential) {
+      setNotice("This browser cannot register a passkey. Use an HTTPS page and a WebAuthn-capable browser.");
+      setNoticeError(true);
+      return;
+    }
+    setNotice("");
+    setNoticeError(false);
+    setRegisteringPasskey(true);
+    try {
+      const { error } = await client.auth.registerPasskey();
+      if (error) {
+        setNotice(passkeyErrorMessage(error.code, error.message));
+        setNoticeError(true);
+      } else {
+        setNotice("Passkey registered. Next time, choose Passkey on the Studio login screen to sign in with this device or password manager.");
+      }
+    } catch (error) {
+      setNotice(passkeyErrorMessage(undefined, errorMessage(error)));
+      setNoticeError(true);
+    } finally {
+      setRegisteringPasskey(false);
     }
   }
 
@@ -666,7 +719,7 @@ export function StudioExperience() {
               <button type="button" className="studio-login-choice" onClick={() => setLoginMethod("passkey")}>
                 <span className="studio-login-choice-icon"><KeyRound size={20} /></span>
                 <span className="studio-login-choice-copy"><strong>Passkey</strong><small>PIN, fingerprint or face</small></span>
-                <span className="studio-login-choice-tag">SOON</span>
+                <span className="studio-login-choice-tag is-available">EXPERIMENTAL</span>
                 <ChevronRight size={17} aria-hidden="true" />
               </button>
               <button type="button" className="studio-login-choice" onClick={() => setLoginMethod("authenticator")}>
@@ -687,7 +740,7 @@ export function StudioExperience() {
                 <span>{loginMethod === "magic-link" ? <Mail size={20} /> : loginMethod === "passkey" ? <KeyRound size={20} /> : <ShieldCheck size={20} />}
                   <strong>{loginMethod === "magic-link" ? "Magic Link" : loginMethod === "passkey" ? "Passkey" : "Microsoft Authenticator"}</strong>
                 </span>
-                <small>{loginMethod === "magic-link" ? "AVAILABLE NOW" : loginMethod === "passkey" ? "COMING SOON" : "PLANNED"}</small>
+                <small>{loginMethod === "magic-link" ? "AVAILABLE NOW" : loginMethod === "passkey" ? "EXPERIMENTAL" : "PLANNED"}</small>
               </div>
               {loginMethod === "magic-link" ? (
                 <>
@@ -698,7 +751,14 @@ export function StudioExperience() {
                   </form>
                 </>
               ) : loginMethod === "passkey" ? (
-                <p className="studio-login-unavailable">Passkey sign-in with your device PIN, fingerprint or face is coming soon. For now, return and choose Magic Link.</p>
+                <>
+                  <p>Use a registered passkey to sign in securely with your device PIN, fingerprint, face, or security key.</p>
+                  <button type="button" className="button button-gold" onClick={() => void signInUsingPasskey()} disabled={signingInWithPasskey}>
+                    {signingInWithPasskey ? <LoaderCircle className="studio-spin" size={16} /> : <KeyRound size={16} />}
+                    {signingInWithPasskey ? "Waiting for passkey…" : "Sign in with passkey"}
+                  </button>
+                  <p className="studio-login-passkey-hint">First time? Sign in with Magic Link, then select “Add passkey” in your Studio account. This experimental option also requires passkeys enabled in Supabase.</p>
+                </>
               ) : (
                 <p className="studio-login-unavailable">Microsoft Authenticator is planned as an extra security step after sign-in. It is not an active login method yet. For now, use Magic Link.</p>
               )}
@@ -734,7 +794,7 @@ export function StudioExperience() {
       <div className="page-width">
         <header className="studio-topbar">
           <div><p className="media-kicker">PRIVATE ADMIN AREA</p><h1>Kerygma Creative HQ</h1><p>Upload video versions, organize public playlists, edit character dossiers, and review community comments.</p></div>
-          <div className="studio-account"><span>{session.user.email}</span><button className="button button-outline" onClick={() => void signOut()}><LogOut size={15} />Sign out</button></div>
+          <div className="studio-account"><span>{session.user.email}</span><button className="button button-outline" type="button" onClick={() => void registerStudioPasskey()} disabled={registeringPasskey}><KeyRound size={15} />{registeringPasskey ? "Registering…" : "Add passkey"}</button><button className="button button-outline" onClick={() => void signOut()}><LogOut size={15} />Sign out</button></div>
         </header>
         {notice && <p className={"studio-notice" + (noticeError ? " is-error" : "")} role="status">{notice}</p>}
         <div className="studio-tabs" role="tablist" aria-label="Studio tools">
@@ -944,6 +1004,24 @@ function slugify(value: string): string {
 }
 function errorMessage(error: unknown): string {
   return formatStudioError(error, "Studio could not complete that request.");
+}
+
+function passkeyErrorMessage(code?: string, fallback?: string): string {
+  switch (code) {
+    case "passkey_disabled":
+      return "Passkeys are not enabled for this Supabase project yet. Enable Authentication → Passkeys and configure kerygmapath.com as the relying party; Magic Link remains available.";
+    case "webauthn_credential_not_found":
+      return "This passkey is not registered for a Studio account. Sign in with Magic Link and add a passkey in Studio first.";
+    case "webauthn_credential_exists":
+      return "This passkey is already registered to your account.";
+    case "webauthn_challenge_expired":
+    case "webauthn_challenge_not_found":
+      return "The passkey verification challenge expired. Please try again.";
+    case "webauthn_verification_failed":
+      return "The passkey could not be verified. Retry or use Magic Link.";
+    default:
+      return fallback || "Passkey authentication could not be completed. You can still use Magic Link.";
+  }
 }
 
 function signInErrorMessage(code?: string, fallback?: string): string {
