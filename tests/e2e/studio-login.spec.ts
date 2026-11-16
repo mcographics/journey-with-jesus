@@ -7,6 +7,7 @@ test("Creative HQ login reveals only the chosen method and preserves the footer"
 
   await expect(page.getByRole("heading", { name: "Choose your login method" })).toBeVisible();
   await expect(picker.getByRole("button")).toHaveCount(3);
+  await expect(picker.getByText(/AVAILABLE|EXPERIMENTAL|PLANNED/)).toHaveCount(0);
   await expect(page.getByRole("contentinfo")).toBeVisible();
 
   await picker.getByRole("button", { name: /Passkey/ }).click();
@@ -18,6 +19,8 @@ test("Creative HQ login reveals only the chosen method and preserves the footer"
   await picker.getByRole("button", { name: /Microsoft Authenticator/ }).click();
   await expect(page.getByLabel("Microsoft Authenticator verification")).toBeVisible();
   await expect(page.getByRole("textbox", { name: "Email address" })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Use passkey" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Use Magic Link" })).toBeVisible();
   await page.getByRole("button", { name: "Back to login methods" }).click();
 
   await picker.getByRole("button", { name: /Passkey/ }).click();

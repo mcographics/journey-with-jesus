@@ -9,6 +9,7 @@ import { uploadVideoResumable } from "@/lib/supabase/resumable-upload";
 import { createStorageObjectId } from "@/lib/storage-object-id";
 import { StudioCharacters } from "@/components/StudioCharacters";
 import { StudioDigitalRain } from "@/components/StudioDigitalRain";
+import { StudioMfaGate, StudioMfaSettings } from "@/components/StudioMfa";
 import { StudioStaff } from "@/components/StudioStaff";
 import { StudioSocialLinks } from "@/components/StudioSocialLinks";
 import { parseYouTubeId, youtubeWatchUrl } from "@/lib/youtube";
@@ -37,6 +38,7 @@ export function StudioExperience() {
   const [session, setSession] = useState<Session | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [mfaRequired, setMfaRequired] = useState(false);
   const [email, setEmail] = useState("");
   const [notice, setNotice] = useState("");
   const [noticeError, setNoticeError] = useState(false);
@@ -102,7 +104,21 @@ export function StudioExperience() {
       setAuthLoading(true);
       const { data, error } = await client.from("media_admins").select("user_id").eq("user_id", nextSession.user.id).maybeSingle();
       if (!active) return;
-      setIsAdmin(!error && Boolean(data));
+      const approved = !error && Boolean(data);
+      if (approved) {
+        const { data: assurance, error: assuranceError } = await client.auth.mfa.getAuthenticatorAssuranceLevel();
+        if (!active) return;
+        // Fail closed if the account's current MFA protection cannot be checked.
+        setMfaRequired(Boolean(assuranceError) || !assurance ||
+          (assurance.nextLevel === "aal2" && assurance.currentLevel !== "aal2"));
+        if (assuranceError) {
+          setNotice("Could not check your account's authenticator requirement. Sign out and try again.");
+          setNoticeError(true);
+        }
+      } else {
+        setMfaRequired(false);
+      }
+      setIsAdmin(approved);
       setAuthLoading(false);
       if (error) { setNotice("Studio access could not be checked. Try signing in again."); setNoticeError(true); }
     };
@@ -155,10 +171,10 @@ export function StudioExperience() {
   }, [client]);
 
   useEffect(() => {
-    if (!isAdmin) return;
+    if (!isAdmin || mfaRequired) return;
     const timer = window.setTimeout(() => { void loadStudioData(); }, 0);
     return () => window.clearTimeout(timer);
-  }, [isAdmin, loadStudioData]);
+  }, [isAdmin, mfaRequired, loadStudioData]);
 
   async function requestSignIn(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -240,7 +256,7 @@ export function StudioExperience() {
   async function signOut() {
     if (!client) return;
     await client.auth.signOut();
-    setIsAdmin(false); setSession(null); setNotice("You are signed out of Studio.");
+    setIsAdmin(false); setMfaRequired(false); setSession(null); setNotice("You are signed out of Studio.");
   }
 
   function editEpisode(episode: StudioEpisode) {
@@ -713,19 +729,16 @@ export function StudioExperience() {
               <button type="button" className="studio-login-choice" onClick={() => setLoginMethod("magic-link")}>
                 <span className="studio-login-choice-icon"><Mail size={20} /></span>
                 <span className="studio-login-choice-copy"><strong>Magic Link</strong><small>Email sign-in link</small></span>
-                <span className="studio-login-choice-tag is-available">AVAILABLE</span>
                 <ChevronRight size={17} aria-hidden="true" />
               </button>
               <button type="button" className="studio-login-choice" onClick={() => setLoginMethod("passkey")}>
                 <span className="studio-login-choice-icon"><KeyRound size={20} /></span>
                 <span className="studio-login-choice-copy"><strong>Passkey</strong><small>PIN, fingerprint or face</small></span>
-                <span className="studio-login-choice-tag is-available">EXPERIMENTAL</span>
                 <ChevronRight size={17} aria-hidden="true" />
               </button>
               <button type="button" className="studio-login-choice" onClick={() => setLoginMethod("authenticator")}>
                 <span className="studio-login-choice-icon"><ShieldCheck size={20} /></span>
                 <span className="studio-login-choice-copy"><strong>Microsoft Authenticator</strong><small>Additional verification</small></span>
-                <span className="studio-login-choice-tag">PLANNED</span>
                 <ChevronRight size={17} aria-hidden="true" />
               </button>
             </div>
@@ -740,7 +753,6 @@ export function StudioExperience() {
                 <span>{loginMethod === "magic-link" ? <Mail size={20} /> : loginMethod === "passkey" ? <KeyRound size={20} /> : <ShieldCheck size={20} />}
                   <strong>{loginMethod === "magic-link" ? "Magic Link" : loginMethod === "passkey" ? "Passkey" : "Microsoft Authenticator"}</strong>
                 </span>
-                <small>{loginMethod === "magic-link" ? "AVAILABLE NOW" : loginMethod === "passkey" ? "EXPERIMENTAL" : "PLANNED"}</small>
               </div>
               {loginMethod === "magic-link" ? (
                 <>
@@ -757,10 +769,16 @@ export function StudioExperience() {
                     {signingInWithPasskey ? <LoaderCircle className="studio-spin" size={16} /> : <KeyRound size={16} />}
                     {signingInWithPasskey ? "Waiting for passkey…" : "Sign in with passkey"}
                   </button>
-                  <p className="studio-login-passkey-hint">First time? Sign in with Magic Link, then select “Add passkey” in your Studio account. This experimental option also requires passkeys enabled in Supabase.</p>
+                  <p className="studio-login-passkey-hint">First time? Sign in with Magic Link, then select “Add passkey” in your Studio account. Passkeys must be enabled by the Studio administrator in Supabase.</p>
                 </>
               ) : (
-                <p className="studio-login-unavailable">Microsoft Authenticator is planned as an extra security step after sign-in. It is not an active login method yet. For now, use Magic Link.</p>
+                <>
+                   <p>Microsoft Authenticator is an optional six-digit security check for approved Studio administrators. Sign in first using a passkey or Magic Link, then enable it from your Studio account.</p>
+                   <div className="studio-mfa-login-actions">
+                     <button type="button" className="button button-gold" onClick={() => setLoginMethod("passkey")}>Use passkey</button>
+                     <button type="button" className="button button-outline" onClick={() => setLoginMethod("magic-link")}>Use Magic Link</button>
+                   </div>
+                 </>
               )}
             </section>
           </div>
@@ -781,6 +799,10 @@ export function StudioExperience() {
     </main>
   );
 
+  if (mfaRequired) return (
+    <StudioMfaGate client={client} onVerified={() => setMfaRequired(false)} onSignOut={() => void signOut()} />
+  );
+
   const visibleEpisodes = episodes.filter((episode) => episode.orientation === studioMediaKind);
   const selectedPlaylistOrientation = playlistForm.episodeIds
     .map((id) => episodes.find((episode) => episode.id === id)?.orientation)
@@ -794,7 +816,7 @@ export function StudioExperience() {
       <div className="page-width">
         <header className="studio-topbar">
           <div><p className="media-kicker">PRIVATE ADMIN AREA</p><h1>Kerygma Creative HQ</h1><p>Upload video versions, organize public playlists, edit character dossiers, and review community comments.</p></div>
-          <div className="studio-account"><span>{session.user.email}</span><button className="button button-outline" type="button" onClick={() => void registerStudioPasskey()} disabled={registeringPasskey}><KeyRound size={15} />{registeringPasskey ? "Registering…" : "Add passkey"}</button><button className="button button-outline" onClick={() => void signOut()}><LogOut size={15} />Sign out</button></div>
+          <div className="studio-account"><span>{session.user.email}</span><button className="button button-outline" type="button" onClick={() => void registerStudioPasskey()} disabled={registeringPasskey}><KeyRound size={15} />{registeringPasskey ? "Registering…" : "Add passkey"}</button><StudioMfaSettings client={client} onNotice={reportStudioNotice} /><button className="button button-outline" onClick={() => void signOut()}><LogOut size={15} />Sign out</button></div>
         </header>
         {notice && <p className={"studio-notice" + (noticeError ? " is-error" : "")} role="status">{notice}</p>}
         <div className="studio-tabs" role="tablist" aria-label="Studio tools">
