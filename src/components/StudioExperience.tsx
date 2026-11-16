@@ -9,6 +9,7 @@ import { uploadVideoResumable } from "@/lib/supabase/resumable-upload";
 import { createStorageObjectId } from "@/lib/storage-object-id";
 import { StudioCharacters } from "@/components/StudioCharacters";
 import { StudioDigitalRain } from "@/components/StudioDigitalRain";
+import { StudioTurnstile } from "@/components/StudioTurnstile";
 import { StudioMfaGate, StudioMfaSettings } from "@/components/StudioMfa";
 import { StudioStaff } from "@/components/StudioStaff";
 import { StudioSocialLinks } from "@/components/StudioSocialLinks";
@@ -30,6 +31,7 @@ type PlaylistForm = { id: string; title: string; description: string; order: str
 type Section = "episodes" | "playlists" | "comments" | "characters" | "staff" | "socials";
 type LoginMethod = "magic-link" | "passkey" | "authenticator";
 const qualities: VideoQuality[] = ["720p", "1080p", "4K"];
+const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "";
 const freshEpisode = (): EpisodeForm => ({ id: "", title: "", description: "", scripture: "", thumbnail: "", youtubeUrl: "", transcript: "", aslUrl: "", duration: "", number: "1", orientation: "landscape", audioLanguage: "en", published: false });
 const freshPlaylist = (): PlaylistForm => ({ id: "", title: "", description: "", order: "0", published: false, episodeIds: [] });
 
@@ -43,6 +45,8 @@ export function StudioExperience() {
   const [notice, setNotice] = useState("");
   const [noticeError, setNoticeError] = useState(false);
   const [sendingLink, setSendingLink] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState("");
+  const [captchaResetCounter, setCaptchaResetCounter] = useState(0);
   const [signingInWithPasskey, setSigningInWithPasskey] = useState(false);
   const [registeringPasskey, setRegisteringPasskey] = useState(false);
   const [loginMethod, setLoginMethod] = useState<LoginMethod | null>(null);
@@ -179,6 +183,11 @@ export function StudioExperience() {
   async function requestSignIn(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!client) return;
+    if (turnstileSiteKey && !captchaToken) {
+      setNotice("Complete the human verification before requesting a Magic Link.");
+      setNoticeError(true);
+      return;
+    }
     setSendingLink(true); setNotice(""); setNoticeError(false);
     const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
     const redirectPath = basePath.replace(/\/$/, "") + "/studio/";
@@ -186,7 +195,7 @@ export function StudioExperience() {
     try {
       const { error } = await client.auth.signInWithOtp({
         email: email.trim(),
-        options: { emailRedirectTo: redirect, shouldCreateUser: false },
+        options: { emailRedirectTo: redirect, shouldCreateUser: false, ...(turnstileSiteKey ? { captchaToken } : {}) },
       });
       if (error) {
         setNotice(signInErrorMessage(error.code, error.message));
@@ -199,6 +208,8 @@ export function StudioExperience() {
       setNoticeError(true);
     } finally {
       setSendingLink(false);
+      setCaptchaToken("");
+      setCaptchaResetCounter((count) => count + 1);
     }
   }
 
@@ -759,7 +770,8 @@ export function StudioExperience() {
                   <p>Enter your approved email to receive a one-time sign-in link.</p>
                   <form className="studio-sign-in" onSubmit={requestSignIn}>
                     <label>Email address<input type="email" value={email} onChange={(event) => setEmail(event.target.value)} autoComplete="email" placeholder="you@example.com" required /></label>
-                    <button className="button button-gold" type="submit" disabled={sendingLink}><Mail size={16} />{sendingLink ? "Sending link…" : "Email me a sign-in link"}</button>
+                    {turnstileSiteKey && <StudioTurnstile siteKey={turnstileSiteKey} onToken={setCaptchaToken} resetCounter={captchaResetCounter} />}
+                    <button className="button button-gold" type="submit" disabled={sendingLink || (Boolean(turnstileSiteKey) && !captchaToken)}><Mail size={16} />{sendingLink ? "Sending link…" : "Email me a sign-in link"}</button>
                   </form>
                 </>
               ) : loginMethod === "passkey" ? (
