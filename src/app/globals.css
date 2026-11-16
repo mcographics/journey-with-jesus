@@ -202,6 +202,18 @@ button { color: inherit; }
 .footer-security a:hover { color: #fff2d3; text-decoration-color: currentColor; }
 :root[data-theme="light"] .footer-security { color: #4d5868; }
 :root[data-theme="light"] .footer-security a { color: #75551f; }
+/* Compact, clearly scoped attributions: Cloudflare protects traffic, Aikido scans code. */
+.footer-bottom { grid-column: 2 / -1; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; column-gap: 14px; row-gap: 5px; min-width: 0; text-align: center; }
+.footer-credits { margin: 0; line-height: 1.4; }
+.footer-protection { display: inline-flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 7px; color: #bdc7d2; font-size: 10px; line-height: 1.35; }
+.footer-protection a { display: inline-flex; align-items: center; justify-content: center; gap: 5px; color: inherit; text-decoration: none; }
+.footer-protection a:hover { color: #fff2d3; }
+.footer-protection a:focus-visible { outline: 2px solid var(--gold-bright); outline-offset: 3px; }
+.footer-protection-cloudflare svg { flex: 0 0 auto; }
+.footer-protection-aikido img { display: block; width: auto; height: 18px; max-width: 92px; }
+.footer-protection-divider { color: #b5a16e; }
+:root[data-theme="light"] .footer-protection { color: #4d5868; }
+:root[data-theme="light"] .footer-protection a:hover { color: #75551f; }
 .footer-links { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 7px 12px; color: #c1c3ca; font-size: 12px; letter-spacing: .06em; text-align: center; }
 .footer-links span { color: #e4bc70; font-size: 9px; }
 .footer-links a { padding-block: 4px; transition: color .2s ease; }
@@ -376,6 +388,8 @@ button { color: inherit; }
   .footer-brand-stack { transform: translateY(4px); }
   .footer-brand { width: min(280px, 84vw); }
   .footer-content { grid-column: auto; gap: 10px; }
+  .footer-bottom { grid-column: auto; row-gap: 8px; }
+  .footer-protection { font-size: 10px; }
   .footer-message { gap: 6px; }
   .footer-tagline { font-size: 18px; }
   .footer-note { font-size: 9px; letter-spacing: .11em; }
