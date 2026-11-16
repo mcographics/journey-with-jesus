@@ -12,24 +12,37 @@ type Props = {
 
 export function EpisodePlaylist({ episodes, selectedId, onSelect, playlists = [], selectedPlaylistId = "all", onPlaylistChange, id, mobileCollapsed = false }: Props) {
   const [query, setQuery] = useState("");
+  const [formatSelection, setFormatSelection] = useState<{ selectedId: string | null; format: "videos" | "shorts" | null }>(() => ({ selectedId, format: null }));
   const playlist = playlists.find((item) => item.id === selectedPlaylistId);
+  const selectedEpisode = episodes.find((episode) => episode.id === selectedId);
+  const selectedFormat = selectedEpisode?.orientation === "portrait" ? "shorts" : "videos";
+  if (formatSelection.selectedId !== selectedId) setFormatSelection({ selectedId, format: null });
+  const activeFormat = formatSelection.format ?? selectedFormat;
   const playlistEpisodes = useMemo(
     () => playlist ? episodes.filter((episode) => playlist.episodeIds.includes(episode.id)) : episodes,
     [episodes, playlist],
   );
+  const formatEpisodes = useMemo(
+    () => playlistEpisodes.filter((episode) => (episode.orientation === "portrait") === (activeFormat === "shorts")),
+    [playlistEpisodes, activeFormat],
+  );
   const visibleEpisodes = useMemo(() => {
     const normalized = query.trim().toLocaleLowerCase();
-    if (!normalized) return playlistEpisodes;
-    return playlistEpisodes.filter((episode) => [episode.title, episode.description, episode.scriptureReference]
+    if (!normalized) return formatEpisodes;
+    return formatEpisodes.filter((episode) => [episode.title, episode.description, episode.scriptureReference]
       .some((value) => value?.toLocaleLowerCase().includes(normalized)));
-  }, [playlistEpisodes, query]);
+  }, [formatEpisodes, query]);
+  const formatLabel = activeFormat === "shorts"
+    ? formatEpisodes.length === 1 ? "SHORT" : "SHORTS"
+    : formatEpisodes.length === 1 ? "VIDEO" : "VIDEOS";
+  const searchLabel = activeFormat === "shorts" ? "shorts" : "videos";
 
   return (
     <aside id={id} className="playlist-panel" aria-label="Media playlist" data-mobile-collapsed={mobileCollapsed ? "true" : undefined}>
       <div className="playlist-header">
         <div className="playlist-header-top">
           <h2>{playlist?.title ?? "Up next"}</h2>
-          <span className="playlist-count">{playlistEpisodes.length} {playlistEpisodes.length === 1 ? "ITEM" : "ITEMS"}</span>
+          <span className="playlist-count">{formatEpisodes.length} {formatLabel}</span>
         </div>
         {playlists.length > 0 && onPlaylistChange && (
           <label className="playlist-picker">
@@ -42,10 +55,20 @@ export function EpisodePlaylist({ episodes, selectedId, onSelect, playlists = []
         )}
         {playlist?.description && <p className="playlist-description">{playlist.description}</p>}
         {playlistEpisodes.length > 0 && (
-          <label className="search-box">
-            <Search size={15} aria-hidden="true" />
-            <input value={query} onChange={(event) => setQuery(event.target.value)} type="search" placeholder="Search videos & stories" aria-label="Search videos and stories" />
-          </label>
+          <>
+            <div className="media-kind-tabs playlist-format-tabs" role="group" aria-label="Filter playlist by format">
+              <button type="button" aria-pressed={activeFormat === "videos"} onClick={() => setFormatSelection({ selectedId, format: "videos" })}>
+                Videos <small>16:9</small>
+              </button>
+              <button type="button" aria-pressed={activeFormat === "shorts"} onClick={() => setFormatSelection({ selectedId, format: "shorts" })}>
+                Shorts <small>9:16</small>
+              </button>
+            </div>
+            <label className="search-box">
+              <Search size={15} aria-hidden="true" />
+              <input value={query} onChange={(event) => setQuery(event.target.value)} type="search" placeholder={`Search ${searchLabel}`} aria-label={`Search ${searchLabel}`} />
+            </label>
+          </>
         )}
       </div>
       {episodes.length === 0 ? (
@@ -56,10 +79,14 @@ export function EpisodePlaylist({ episodes, selectedId, onSelect, playlists = []
         </div>
       ) : playlistEpisodes.length === 0 ? (
         <p className="episode-empty" role="status">This playlist has no videos or stories yet.</p>
+      ) : formatEpisodes.length === 0 ? (
+        <p className="episode-empty" role="status">
+          {activeFormat === "shorts" ? "No 9:16 Shorts" : "No 16:9 videos"} {playlist ? "in this playlist" : "available"} yet.
+        </p>
       ) : visibleEpisodes.length === 0 ? (
-        <p className="episode-empty" role="status">No media match “{query}”.</p>
+        <p className="episode-empty" role="status">No {searchLabel} match “{query}”.</p>
       ) : (
-        <div className="playlist-list" aria-label="Available videos and stories">
+        <div className="playlist-list" aria-label={`Available ${searchLabel}`}>
           {visibleEpisodes.map((episode) => (
             <button type="button" key={episode.id} aria-current={selectedId === episode.id ? "true" : undefined}
               className={"episode-card" + (selectedId === episode.id ? " is-selected" : "")} onClick={() => onSelect(episode)}>

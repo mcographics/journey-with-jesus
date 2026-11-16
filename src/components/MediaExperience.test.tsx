@@ -57,8 +57,10 @@ describe("MediaExperience", () => {
     expect(comments).toBeTruthy();
     expect(screen.getAllByRole("heading", { name: "Comments" })).toHaveLength(1);
 
+    fireEvent.click(screen.getByRole("button", { name: /Shorts/ }));
     fireEvent.click(screen.getByRole("button", { name: /A Story of Hope/ }));
     expect(discussion.querySelector(".comment-section")).toBe(comments);
+    fireEvent.click(screen.getByRole("button", { name: /Videos/ }));
     fireEvent.click(screen.getByRole("button", { name: /A Story of Mercy/ }));
     expect(discussion.querySelector(".comment-section")).toBe(comments);
     expect(screen.queryByRole("heading", { name: "Story comments" })).toBeNull();
@@ -69,7 +71,9 @@ describe("MediaExperience", () => {
     window.history.replaceState({}, "", "/media/?episode=hope-two");
     render(<MediaExperience episodes={episodes} />);
     expect(screen.getByRole("complementary", { name: "Media playlist" })).toBeTruthy();
-    expect(screen.getByRole("button", { name: /A Story of Mercy/ })).toBeTruthy();
+    expect(screen.queryByRole("button", { name: /A Story of Mercy/ })).toBeNull();
+    expect(screen.getByRole("button", { name: /Shorts/ }).getAttribute("aria-pressed")).toBe("true");
+    expect(screen.getByRole("button", { name: /A Story of Hope.*9:16/ })).toBeTruthy();
     expect(screen.getByRole("heading", { name: "A Story of Hope" })).toBeTruthy();
     expect(screen.getByRole("button", { name: "Play A Story of Hope" })).toBeTruthy();
     expect(window.location.search).toBe("?episode=hope-two");
@@ -77,6 +81,7 @@ describe("MediaExperience", () => {
 
   it("updates the shareable URL and responds to browser back and forward", () => {
     render(<MediaExperience episodes={episodes} />);
+    fireEvent.click(screen.getByRole("button", { name: /Shorts/ }));
     fireEvent.click(screen.getByRole("button", { name: /A Story of Hope/ }));
     expect(window.location.search).toBe("?episode=hope-two");
     expect(screen.getByRole("heading", { name: "A Story of Hope" })).toBeTruthy();
@@ -84,22 +89,30 @@ describe("MediaExperience", () => {
     window.history.replaceState({}, "", "/media/?episode=parable-one");
     fireEvent(window, new PopStateEvent("popstate"));
     expect(screen.getByRole("heading", { name: "A Story of Mercy" })).toBeTruthy();
-    expect(screen.getByRole("button", { name: /A Story of Hope/ })).toBeTruthy();
+    expect(screen.queryByRole("button", { name: /A Story of Hope.*9:16/ })).toBeNull();
+    expect(screen.getByRole("button", { name: /A Story of Mercy/ })).toBeTruthy();
+    expect(screen.getByRole("button", { name: /Videos/ }).getAttribute("aria-pressed")).toBe("true");
     expect(screen.getByRole("complementary", { name: "Media playlist" })).toBeTruthy();
   });
 
-  it("plays widescreen videos and portrait stories from the same playlist without switching tabs", () => {
+  it("separates widescreen videos and portrait Shorts and follows the selected format", () => {
     const { container } = render(<MediaExperience episodes={episodes} />);
     const playlist = screen.getByRole("complementary", { name: "Media playlist" });
     expect(playlist.textContent).toContain("A Story of Mercy");
-    expect(playlist.textContent).toContain("A Story of Hope");
+    expect(screen.queryByRole("button", { name: /A Story of Hope/ })).toBeNull();
+    expect(screen.getByRole("button", { name: /Videos/ }).getAttribute("aria-pressed")).toBe("true");
     expect(container.querySelector(".video-frame")?.classList.contains("is-portrait")).toBe(false);
 
+    fireEvent.click(screen.getByRole("button", { name: /Shorts/ }));
+    expect(screen.getByRole("button", { name: /A Story of Hope/ })).toBeTruthy();
+    expect(screen.queryByRole("button", { name: /A Story of Mercy/ })).toBeNull();
     fireEvent.click(screen.getByRole("button", { name: /A Story of Hope/ }));
     expect(container.querySelector(".video-frame")?.classList.contains("is-portrait")).toBe(true);
     expect(container.querySelector(".media-layout")?.classList.contains("is-portrait")).toBe(true);
+    expect(screen.getByRole("button", { name: /Shorts/ }).getAttribute("aria-pressed")).toBe("true");
     expect(screen.getByRole("button", { name: "Play A Story of Hope" })).toBeTruthy();
 
+    fireEvent.click(screen.getByRole("button", { name: /Videos/ }));
     fireEvent.click(screen.getByRole("button", { name: /A Story of Mercy/ }));
     expect(container.querySelector(".video-frame")?.classList.contains("is-portrait")).toBe(false);
     expect(container.querySelector(".media-layout")?.classList.contains("is-portrait")).toBe(false);
@@ -130,6 +143,7 @@ describe("MediaExperience", () => {
     expect(screen.getByRole("button", { name: "Hide playlist" }).getAttribute("aria-expanded")).toBe("true");
     expect(playlist.getAttribute("data-mobile-collapsed")).toBeNull();
 
+    fireEvent.click(screen.getByRole("button", { name: /Shorts/ }));
     fireEvent.click(screen.getByRole("button", { name: /A Story of Hope/ }));
     expect(screen.getByRole("button", { name: "View playlist" }).getAttribute("aria-expanded")).toBe("false");
     expect(playlist.getAttribute("data-mobile-collapsed")).toBe("true");
@@ -149,13 +163,13 @@ describe("MediaExperience", () => {
     fireEvent(window, new Event("site-language-change"));
     expect(screen.getByRole("heading", { name: "French YouTube" })).toBeTruthy();
     expect(screen.queryByText("English upload")).toBeNull();
-    expect(screen.getByRole("complementary", { name: "Media playlist" }).textContent).toContain("1 ITEM");
+    expect(screen.getByRole("complementary", { name: "Media playlist" }).textContent).toContain("1 VIDEO");
 
     window.localStorage.setItem("kerygmapath-language", "es");
     fireEvent(window, new Event("site-language-change"));
     expect(screen.getByRole("heading", { name: "Spanish upload" })).toBeTruthy();
     expect(screen.queryByText("French YouTube")).toBeNull();
-    expect(screen.getByRole("complementary", { name: "Media playlist" }).textContent).toContain("1 ITEM");
+    expect(screen.getByRole("complementary", { name: "Media playlist" }).textContent).toContain("1 SHORT");
   });
 
   it("never plays a recording from another language when a requested language has no media", () => {

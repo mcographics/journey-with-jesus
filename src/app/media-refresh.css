@@ -241,6 +241,26 @@
 .media-page .playlist-description { margin: 10px 0 4px; font-size: 12px; }
 .media-page .playlist-picker { font-size: 12px; }
 .media-page .playlist-picker select { width: 100%; max-width: none; }
+.media-page .playlist-format-tabs {
+  display: flex;
+  width: 100%;
+  gap: 5px;
+  margin: 14px 0 0;
+  padding: 4px;
+  border-radius: 11px;
+}
+.media-page .playlist-format-tabs button {
+  display: inline-flex;
+  min-width: 0;
+  min-height: 40px;
+  flex: 1 1 0;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 8px;
+  white-space: nowrap;
+}
+.media-page .playlist-format-tabs button small { display: grid; place-items: center; }
 .media-page .search-box { margin-top: 15px; }
 .media-page .search-box input {
   min-height: 43px;
@@ -446,6 +466,7 @@
   .media-page .episode-accessibility-resources { padding: 17px; }
   .media-page .playlist-header { padding: 17px 14px 14px; }
   .media-page .playlist-header h2 { font-size: 23px; }
+  .media-page .playlist-format-tabs { margin-bottom: 0; }
   :root body .media-page .episode-card { grid-template-columns: 88px minmax(0, 1fr); }
   .media-page .episode-copy strong { font-size: 12px; }
   .media-page .episode-copy small { font-size: 10px; }
