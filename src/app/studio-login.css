@@ -102,7 +102,7 @@
 
 /* Keep the private login within a normal desktop viewport; allow natural
    scrolling on short screens, zoomed displays, and mobile. */
-body:has(.studio-login-page) > .site-footer { display: none; }
+/* Keep the shared footer visible on the Studio login page. */
 
 .studio-page.studio-login-page {
   min-height: calc(100dvh - 86px);
