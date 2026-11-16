@@ -99,7 +99,103 @@
     transition-duration: .01ms !important;
   }
 }
-/* The login always uses its dark digital environment, even if the public site is set to light mode. */
-:root[data-theme="light"] .studio-page.studio-login-page { color: #f5f5f5; background: #01030a; }
-:root[data-theme="light"] .studio-login-page .studio-login-card { color: #f5f5f5; border-color: rgba(245, 201, 95, .8); background: rgba(1, 7, 22, .88); }
-:root[data-theme="light"] .studio-login-page .studio-sign-in input { color: #fff; border-color: #5276b6; background: #061129; }
+
+/* Keep the private login within a normal desktop viewport; allow natural
+   scrolling on short screens, zoomed displays, and mobile. */
+body:has(.studio-login-page) > .site-footer { display: none; }
+
+.studio-page.studio-login-page {
+  min-height: calc(100dvh - 86px);
+  padding: 15px 16px 20px;
+}
+.studio-login-page .studio-login-card {
+  padding: clamp(15px, 2.7vh, 24px) clamp(17px, 3vw, 27px);
+}
+.studio-login-brand .studio-mark {
+  width: 37px;
+  height: 37px;
+  margin-bottom: 8px;
+}
+.studio-login-brand h1 {
+  margin: 5px 0 6px;
+  font-size: clamp(29px, 4vw, 39px);
+}
+.studio-login-brand > p:last-child { line-height: 1.45; }
+.studio-login-methods { gap: 8px; margin-top: 14px; }
+.studio-login-method { padding: 10px 13px; }
+.studio-login-method > p { margin-top: 5px; line-height: 1.45; }
+.studio-login-page .studio-sign-in { margin-top: 9px; gap: 7px; }
+.studio-login-page .studio-sign-in input { min-height: 38px; }
+.studio-login-page .studio-sign-in button { min-height: 38px; }
+.studio-login-secondary-button { min-height: 32px; margin-top: 8px; }
+.studio-login-footnote { margin-top: 11px; line-height: 1.45; }
+
+@media (max-width: 600px) {
+  .studio-page.studio-login-page { min-height: calc(100dvh - 70px); padding: 18px 12px 24px; }
+  .studio-login-page .studio-login-card { padding: 17px 14px; }
+  .studio-login-method { padding: 11px; }
+}
+@media (max-height: 650px) and (min-width: 601px) {
+  .studio-page.studio-login-page { min-height: auto; padding-block: 10px 14px; }
+  .studio-login-page .studio-login-card { padding-block: 14px; }
+  .studio-login-brand h1 { font-size: 31px; }
+  .studio-login-methods { margin-top: 11px; gap: 7px; }
+  .studio-login-method { padding-block: 8px; }
+}
+
+/* In light mode every nested surface, label and input must be light too.
+   Preserve the black Matrix environment behind the card. */
+:root[data-theme="light"] .studio-page.studio-login-page .studio-login-card {
+  color: #182d47;
+  background: rgba(248, 251, 255, .97);
+  border-color: #bc913a;
+  box-shadow: 0 0 0 1px rgba(171, 121, 32, .14), 0 0 42px rgba(27, 102, 208, .24), 0 20px 65px rgba(0,0,0,.44);
+}
+:root[data-theme="light"] .studio-login-page .studio-login-brand .studio-mark {
+  color: #946416;
+  border-color: #bf9034;
+  background: #fff5d7;
+  box-shadow: 0 0 14px rgba(222, 164, 59, .2);
+}
+:root[data-theme="light"] .studio-login-page .studio-login-brand .media-kicker { color: #8a5d18; }
+:root[data-theme="light"] .studio-login-page .studio-login-brand h1 { color: #132b4d; text-shadow: none; }
+:root[data-theme="light"] .studio-login-page .studio-login-brand > p:last-child { color: #50647b; }
+:root[data-theme="light"] .studio-login-page .studio-login-method {
+  color: #1b344f;
+  background: rgba(239, 246, 255, .98);
+  border-color: #9db8dd;
+}
+:root[data-theme="light"] .studio-login-page .studio-login-method-active {
+  background: #fffaf0;
+  border-color: #b8892b;
+}
+:root[data-theme="light"] .studio-login-page .studio-login-method-heading > span { color: #17314d; }
+:root[data-theme="light"] .studio-login-page .studio-login-method-heading svg { color: #2263ab; }
+:root[data-theme="light"] .studio-login-page .studio-login-method-active .studio-login-method-heading svg { color: #926117; }
+:root[data-theme="light"] .studio-login-page .studio-login-method-heading small { color: #345e88; }
+:root[data-theme="light"] .studio-login-page .studio-login-method-active .studio-login-method-heading small { color: #835817; }
+:root[data-theme="light"] .studio-login-page .studio-login-method > p { color: #425b75; }
+:root[data-theme="light"] .studio-login-page .studio-sign-in label { color: #233d5a; }
+:root[data-theme="light"] .studio-page.studio-login-page .studio-sign-in input {
+  color: #152b44;
+  background: #fff;
+  border-color: #87a8ce;
+}
+:root[data-theme="light"] .studio-login-page .studio-sign-in input::placeholder { color: #71849a; }
+:root[data-theme="light"] .studio-login-page .studio-sign-in button { background: #edbd52; color: #172843; }
+:root[data-theme="light"] .studio-login-page .studio-login-secondary-button {
+  color: #445d7b;
+  background: #e6eef8;
+  border-color: #a4b9d2;
+}
+:root[data-theme="light"] .studio-login-page .studio-login-footnote { color: #415c77; }
+:root[data-theme="light"] .studio-login-page .studio-notice {
+  color: #5b451d;
+  background: #fff3d7;
+  border-color: #b58d3e;
+}
+:root[data-theme="light"] .studio-login-page .studio-notice.is-error {
+  color: #8b251b;
+  background: #fff0ed;
+  border-color: #cd8b83;
+}

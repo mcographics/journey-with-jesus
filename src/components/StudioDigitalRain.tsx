@@ -10,8 +10,33 @@ type Stream = {
   gold: boolean;
 };
 
-const alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ+-*/#@%$";
-const glyph = () => alphabet[Math.floor(Math.random() * alphabet.length)];
+type Word = { text: string; hebrew?: boolean };
+type FeaturedWord = Word & {
+  x: number;
+  y: number;
+  start: number;
+  end: number;
+  gold: boolean;
+};
+
+const latin = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ+-*/#@%$";
+const greek = "ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩαβγδεζηθικλμνξοπρστυφχψω";
+const hebrew = "אבגדהוזחטיכלמנסעפצקרשת";
+const symbols = [...latin, ...greek, ...hebrew];
+const glyph = () => symbols[Math.floor(Math.random() * symbols.length)];
+
+/* Short Biblical-language words associated with Jesus, light, truth, love,
+   grace, peace, mercy, holiness and life; not invented quotations. */
+const scripturalWords: Word[] = [
+  { text: "Ἰησοῦς" }, { text: "Χριστός" }, { text: "κύριος" },
+  { text: "ἀγάπη" }, { text: "φῶς" }, { text: "ζωή" },
+  { text: "ἀλήθεια" }, { text: "ἔλεος" }, { text: "ἅγιος" },
+  { text: "χάρις" }, { text: "εἰρήνη" },
+  { text: "ישוע", hebrew: true }, { text: "משיח", hebrew: true },
+  { text: "אהבה", hebrew: true }, { text: "שלום", hebrew: true },
+  { text: "חסד", hebrew: true }, { text: "אור", hebrew: true },
+  { text: "קדוש", hebrew: true }, { text: "אמת", hebrew: true },
+];
 
 export function StudioDigitalRain() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -33,6 +58,8 @@ export function StudioDigitalRain() {
     let glitchUntil = 0;
     let glitchColumn = -1;
     let glitchOffset = 0;
+    let nextWord = 0;
+    let featured: FeaturedWord | null = null;
 
     const resize = () => {
       const bounds = canvas.getBoundingClientRect();
@@ -50,7 +77,9 @@ export function StudioDigitalRain() {
         gold: Math.random() < 0.24,
       }));
       previousTime = 0;
+      featured = null;
       nextGlitch = performance.now() + 1900 + Math.random() * 2600;
+      nextWord = performance.now() + 4500 + Math.random() * 3000;
     };
 
     const paint = (now: number, advance: boolean) => {
@@ -60,7 +89,7 @@ export function StudioDigitalRain() {
       ctx.shadowBlur = 0;
       ctx.fillStyle = "#01030a";
       ctx.fillRect(0, 0, width, height);
-      ctx.font = 'bold 18px ui-monospace, SFMono-Regular, Consolas, monospace';
+      ctx.font = 'bold 18px "Segoe UI", "Noto Sans Hebrew", ui-monospace, monospace';
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
 
@@ -93,6 +122,43 @@ export function StudioDigitalRain() {
           ctx.fillText(glyph(), stream.x + (glitch ? 3 : 0), y);
         }
       }
+
+      /* Word flashes are infrequent, so the descending code remains dominant.
+         Place them near the outer edges on desktop, away from the login card. */
+      if (advance && now >= nextWord) {
+        const word = scripturalWords[Math.floor(Math.random() * scripturalWords.length)];
+        const side = Math.random() < 0.5 ? -1 : 1;
+        const positionX = width >= 980
+          ? width / 2 + side * (width * (0.31 + Math.random() * 0.10))
+          : width * (0.18 + Math.random() * 0.64);
+        featured = {
+          ...word,
+          x: positionX,
+          y: height * (0.22 + Math.random() * 0.55),
+          start: now,
+          end: now + 1750,
+          gold: Math.random() < 0.48,
+        };
+        nextWord = now + 8500 + Math.random() * 5500;
+      }
+      if (featured && now < featured.end) {
+        const elapsed = now - featured.start;
+        const remaining = featured.end - now;
+        const alpha = Math.min(1, elapsed / 180, remaining / 420);
+        ctx.globalAlpha = Math.max(0, alpha);
+        ctx.font = 'bold 27px "Segoe UI", "Noto Sans Hebrew", "Noto Sans", sans-serif';
+        ctx.direction = featured.hebrew ? "rtl" : "ltr";
+        ctx.textAlign = "center";
+        const halfWidth = ctx.measureText(featured.text).width / 2;
+        const safeX = Math.min(Math.max(featured.x, halfWidth + 12), Math.max(halfWidth + 12, width - halfWidth - 12));
+        ctx.shadowBlur = 25;
+        ctx.shadowColor = featured.gold ? "#ffd151" : "#3198ff";
+        ctx.fillStyle = featured.gold ? "#fff1a3" : "#e1f5ff";
+        ctx.fillText(featured.text, safeX, featured.y);
+      } else if (featured && now >= featured.end) {
+        featured = null;
+      }
+      ctx.direction = "ltr";
       ctx.globalAlpha = 1;
       ctx.shadowBlur = 0;
     };
