@@ -171,9 +171,9 @@ export function StudioMfaEnrollment({
       <p>Add an extra verification step to your private Studio account using a six-digit code. This works with Microsoft Authenticator and other standard TOTP apps. Keep your existing Magic Link and passkey sign-in methods.</p>
       {notice && <p className={"studio-notice" + (isError ? " is-error" : "")} role="status">{notice}</p>}
       {loading ? <p>Checking authenticator setup…</p> : verified.length > 0 && <p role="status">Authenticator enabled: {verified.map((factor) => factor.friendly_name || "Authenticator").join(", ")}</p>}
-      {!loading && !factorId && verified.length === 0 &&
+      {!loading && !factorId &&
         <button type="button" className="button button-outline" disabled={busy} onClick={() => void start()}>
-          {busy ? "Preparing…" : "Set up Microsoft Authenticator"}
+          {busy ? "Preparing…" : verified.length > 0 ? "Add backup authenticator" : "Set up Microsoft Authenticator"}
         </button>}
       {!loading && factorId && (
         <div className="studio-mfa-enrollment">
