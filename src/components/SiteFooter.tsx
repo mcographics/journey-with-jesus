@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ShieldCheck } from "lucide-react";
 import { LanguageAwareLogo } from "@/components/LanguageAwareLogo";
 import { NewsletterSignup } from "@/components/NewsletterSignup";
 import SocialLinks from "@/components/SocialLinks";
@@ -57,6 +58,13 @@ export function SiteFooter() {
           Kerygma Path · Current project: Journey with Jesus · Website by{" "}
           <a href="https://mcographics.github.io/">Majestic Creations</a>
         </p>
+        <div className="footer-security" aria-label="Studio sign-in security">
+          <ShieldCheck size={16} strokeWidth={1.8} aria-hidden="true" />
+          <p>
+            Studio login uses bot verification by{" "}
+            <a href="https://www.cloudflare.com/application-services/products/turnstile/" target="_blank" rel="noopener noreferrer">Cloudflare Turnstile</a>.
+          </p>
+        </div>
       </div>
     </footer>
   );
