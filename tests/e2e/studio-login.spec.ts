@@ -20,6 +20,11 @@ test("Creative HQ login reveals only the chosen method and preserves the footer"
   await expect(page.getByRole("textbox", { name: "Email address" })).toHaveCount(0);
   await page.getByRole("button", { name: "Back to login methods" }).click();
 
+  await picker.getByRole("button", { name: /Passkey/ }).click();
+  await expect(page.getByRole("button", { name: "Sign in with passkey" })).toBeVisible();
+  await expect(page.getByText(/First time\? Sign in with Magic Link/)).toBeVisible();
+  await page.getByRole("button", { name: "Back to login methods" }).click();
+
   await picker.getByRole("button", { name: /Magic Link/ }).click();
   await expect(page.getByLabel("Magic Link sign-in")).toBeVisible();
   await expect(page.getByRole("textbox", { name: "Email address" })).toBeVisible();
