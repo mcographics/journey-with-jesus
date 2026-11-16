@@ -55,7 +55,7 @@ test("Contact fields remain clickable and editable even if the message service i
   await expect(send).toBeEnabled();
   await send.click();
 
-  await expect(page.getByRole("alert")).toContainText(/not sent|could not be sent/i);
+  await expect(page.locator(".contact-feedback[role='alert']")).toContainText(/not sent|could not be sent/i);
   await expect(name).toHaveValue("Contact visitor");
   await expect(message).toHaveValue("This is a test message, which should remain editable.");
   await expect(consent).toBeChecked();
