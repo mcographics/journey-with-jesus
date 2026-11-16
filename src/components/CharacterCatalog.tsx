@@ -73,6 +73,7 @@ function CharacterCard({ character }: { character: PublicCharacter }) {
   const toggle = () => setExpanded((current) => !current);
   const isJesus = isJesusCharacter(character);
   const isEric = isEricCharacter(character);
+  const isPortrait = isJesus || isEric || ["adam", "eve", "samson"].includes(character.id);
   const portraitSrc = isJesus
     ? `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/images/jesus-character-primary.webp`
     : isEric
@@ -95,7 +96,7 @@ function CharacterCard({ character }: { character: PublicCharacter }) {
   );
 
   return (
-    <article className={`character-card${isJesus ? " is-jesus" : ""}${expanded ? " is-expanded" : ""}`}>
+    <article className={`character-card${isPortrait ? " is-portrait" : ""}${expanded ? " is-expanded" : ""}`}>
       <button
         type="button"
         className="character-portrait-trigger"
