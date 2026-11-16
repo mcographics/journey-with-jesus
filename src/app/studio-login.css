@@ -249,3 +249,7 @@ body > main.studio-login-page {
 @media (max-width: 600px) {
   .studio-mfa-panel { right: -18px; }
 }
+
+/* Account controls must wrap safely on narrow viewports when MFA is enabled. */
+.studio-account { flex-wrap: wrap; }
+.studio-account > span { overflow-wrap: anywhere; }
