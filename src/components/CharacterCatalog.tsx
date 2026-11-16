@@ -95,7 +95,7 @@ function CharacterCard({ character }: { character: PublicCharacter }) {
   );
 
   return (
-    <article className={`character-card${expanded ? " is-expanded" : ""}`}>
+    <article className={`character-card${isJesus ? " is-jesus" : ""}${expanded ? " is-expanded" : ""}`}>
       <button
         type="button"
         className="character-portrait-trigger"

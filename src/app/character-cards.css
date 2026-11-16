@@ -10,6 +10,11 @@
   grid-template-rows: minmax(0, .38fr) minmax(0, .62fr);
 }
 
+.character-card.is-jesus:not(.is-expanded) {
+  height: auto;
+  aspect-ratio: 941 / 1908;
+}
+
 .character-portrait-trigger {
   position: relative;
   display: block;
