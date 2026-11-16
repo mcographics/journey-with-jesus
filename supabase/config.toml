@@ -11,3 +11,13 @@ verify_jwt = false
 [functions.contact-inquiry]
 # The Edge Function validates the publishable key with `withSupabase`.
 verify_jwt = false
+
+# Experimental WebAuthn passkeys for the Kerygma Creative HQ Studio.
+# The hosted project must separately enable Authentication > Passkeys in the Supabase dashboard.
+[auth.passkey]
+enabled = true
+
+[auth.webauthn]
+rp_display_name = "Kerygma Creative HQ"
+rp_id = "kerygmapath.com"
+rp_origins = ["https://kerygmapath.com"]
