@@ -179,7 +179,7 @@ export function StudioMfaSettings({ client, onNotice }: {
             <form className="studio-mfa-enroll" onSubmit={(event) => void finishEnrollment(event)}>
               <p>On your phone, open Microsoft Authenticator, add an account, and choose to scan a QR code.</p>
               <Image src={pending.qr} alt="QR code to register this authenticator" width={184} height={184} unoptimized />
-              <details><summary>Can't scan the code? Enter setup key manually</summary>
+              <details><summary>Cannot scan the code? Enter setup key manually</summary>
                 <code>{pending.secret}</code>
               </details>
               <label>Six-digit code from the app
