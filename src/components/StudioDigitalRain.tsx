@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { getWordRevealFrame, scriptureWords, wordRevealDurationMs, type ScriptureWord } from "@/lib/studio-digital-rain-words";
 
 type Stream = {
   x: number;
@@ -10,8 +11,7 @@ type Stream = {
   gold: boolean;
 };
 
-type Word = { text: string; hebrew?: boolean };
-type FeaturedWord = Word & {
+type FeaturedWord = ScriptureWord & {
   x: number;
   y: number;
   start: number;
@@ -24,19 +24,6 @@ const greek = "ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩαβγδεζηθ�
 const hebrew = "אבגדהוזחטיכלמנסעפצקרשת";
 const symbols = [...latin, ...greek, ...hebrew];
 const glyph = () => symbols[Math.floor(Math.random() * symbols.length)];
-
-/* Short Biblical-language words associated with Jesus, light, truth, love,
-   grace, peace, mercy, holiness and life; not invented quotations. */
-const scripturalWords: Word[] = [
-  { text: "Ἰησοῦς" }, { text: "Χριστός" }, { text: "κύριος" },
-  { text: "ἀγάπη" }, { text: "φῶς" }, { text: "ζωή" },
-  { text: "ἀλήθεια" }, { text: "ἔλεος" }, { text: "ἅγιος" },
-  { text: "χάρις" }, { text: "εἰρήνη" },
-  { text: "ישוע", hebrew: true }, { text: "משיח", hebrew: true },
-  { text: "אהבה", hebrew: true }, { text: "שלום", hebrew: true },
-  { text: "חסד", hebrew: true }, { text: "אור", hebrew: true },
-  { text: "קדוש", hebrew: true }, { text: "אמת", hebrew: true },
-];
 
 export function StudioDigitalRain() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -123,10 +110,10 @@ export function StudioDigitalRain() {
         }
       }
 
-      /* Word flashes are infrequent, so the descending code remains dominant.
-         Place them near the outer edges on desktop, away from the login card. */
-      if (advance && now >= nextWord) {
-        const word = scripturalWords[Math.floor(Math.random() * scripturalWords.length)];
+      /* Spotlight words are infrequent to preserve the descending code.
+         A light sweep actually replaces the ancient characters with English. */
+      if (advance && now >= nextWord && !featured) {
+        const word = scriptureWords[Math.floor(Math.random() * scriptureWords.length)];
         const side = Math.random() < 0.5 ? -1 : 1;
         const positionX = width >= 980
           ? width / 2 + side * (width * (0.31 + Math.random() * 0.10))
@@ -136,25 +123,85 @@ export function StudioDigitalRain() {
           x: positionX,
           y: height * (0.22 + Math.random() * 0.55),
           start: now,
-          end: now + 1750,
+          end: now + wordRevealDurationMs,
           gold: Math.random() < 0.48,
         };
-        nextWord = now + 8500 + Math.random() * 5500;
+        nextWord = featured.end + 3100 + Math.random() * 4200;
       }
+
       if (featured && now < featured.end) {
-        const elapsed = now - featured.start;
-        const remaining = featured.end - now;
-        const alpha = Math.min(1, elapsed / 180, remaining / 420);
-        ctx.globalAlpha = Math.max(0, alpha);
-        ctx.font = 'bold 27px "Segoe UI", "Noto Sans Hebrew", "Noto Sans", sans-serif';
-        ctx.direction = featured.hebrew ? "rtl" : "ltr";
-        ctx.textAlign = "center";
-        const halfWidth = ctx.measureText(featured.text).width / 2;
-        const safeX = Math.min(Math.max(featured.x, halfWidth + 12), Math.max(halfWidth + 12, width - halfWidth - 12));
-        ctx.shadowBlur = 25;
-        ctx.shadowColor = featured.gold ? "#ffd151" : "#3198ff";
-        ctx.fillStyle = featured.gold ? "#fff1a3" : "#e1f5ff";
-        ctx.fillText(featured.text, safeX, featured.y);
+        const word = featured;
+        const reveal = getWordRevealFrame(now - word.start);
+        const fontFamily = '"Segoe UI", "Noto Sans Hebrew", "Noto Sans", sans-serif';
+        let fontSize = width < 550 ? 24 : 27;
+        ctx.font = "bold " + fontSize + "px " + fontFamily;
+        const initialWidth = Math.max(
+          ctx.measureText(word.original).width,
+          ctx.measureText(word.english).width,
+        );
+        // Keep longer English translations inside the canvas on narrow phones.
+        fontSize = Math.max(15, Math.min(fontSize, Math.floor(fontSize * Math.min(1, (width - 30) / Math.max(1, initialWidth)))));
+        ctx.font = "bold " + fontSize + "px " + fontFamily;
+        const textWidth = Math.max(
+          ctx.measureText(word.original).width,
+          ctx.measureText(word.english).width,
+        );
+        const halfWidth = textWidth / 2;
+        const safeX = Math.min(Math.max(word.x, halfWidth + 15), Math.max(halfWidth + 15, width - halfWidth - 15));
+        const left = safeX - halfWidth - 5;
+        const right = safeX + halfWidth + 5;
+        const hue = word.gold ? "#fff1a3" : "#e1f5ff";
+        const glow = word.gold ? "#ffd151" : "#3198ff";
+        const drawClippedWord = (text: string, rtl: boolean, startX: number, endX: number) => {
+          if (endX <= startX) return;
+          ctx.save();
+          ctx.beginPath();
+          ctx.rect(startX, word.y - fontSize * 1.25, endX - startX, fontSize * 2.5);
+          ctx.clip();
+          ctx.globalAlpha = reveal.opacity;
+          ctx.font = "bold " + fontSize + "px " + fontFamily;
+          ctx.direction = rtl ? "rtl" : "ltr";
+          ctx.textAlign = "center";
+          ctx.shadowBlur = 24;
+          ctx.shadowColor = glow;
+          ctx.fillStyle = hue;
+          ctx.fillText(text, safeX, word.y);
+          ctx.restore();
+        };
+
+        if (reveal.stage === "original") {
+          drawClippedWord(word.original, Boolean(word.hebrew), left, right);
+        } else if (reveal.stage === "english") {
+          drawClippedWord(word.english, false, left, right);
+        } else {
+          const sweepX = left + (right - left) * reveal.sweepProgress;
+          drawClippedWord(word.original, Boolean(word.hebrew), sweepX, right);
+          drawClippedWord(word.english, false, left, sweepX);
+          // A narrow luminous band and crossing rays act like light
+          // passing through the letters to reveal their English meaning.
+          ctx.save();
+          ctx.globalCompositeOperation = "lighter";
+          ctx.globalAlpha = reveal.opacity * (0.6 + 0.35 * Math.sin(Math.PI * reveal.sweepProgress));
+          const ray = ctx.createLinearGradient(sweepX - 32, word.y, sweepX + 32, word.y);
+          ray.addColorStop(0, "rgba(70,155,255,0)");
+          ray.addColorStop(0.45, "rgba(175,223,255,.23)");
+          ray.addColorStop(0.5, "rgba(255,251,222,.8)");
+          ray.addColorStop(0.55, "rgba(175,223,255,.23)");
+          ray.addColorStop(1, "rgba(70,155,255,0)");
+          ctx.fillStyle = ray;
+          ctx.fillRect(sweepX - 32, word.y - fontSize * 1.1, 64, fontSize * 2.2);
+          ctx.shadowBlur = 19;
+          ctx.shadowColor = "#f4ebbe";
+          ctx.strokeStyle = "rgba(255,250,221,.9)";
+          ctx.lineWidth = 1.2;
+          ctx.beginPath();
+          ctx.moveTo(sweepX, word.y - fontSize * 1.14);
+          ctx.lineTo(sweepX, word.y + fontSize * 1.14);
+          ctx.moveTo(sweepX - 12, word.y);
+          ctx.lineTo(sweepX + 12, word.y);
+          ctx.stroke();
+          ctx.restore();
+        }
       } else if (featured && now >= featured.end) {
         featured = null;
       }
