@@ -103,6 +103,13 @@ test("footer stays centered and newsletter/privacy dialogs stay in the viewport 
   expect(footerRect).not.toBeNull();
   expect(desktopLogo!.y).toBeGreaterThanOrEqual(footerRect!.y);
   expect(desktopLogo!.y + desktopLogo!.height + 10).toBeLessThanOrEqual(desktopTagline!.y);
+  // Measure the rendered picture/image too, not only its former fixed-height link.
+  const desktopPicture = footer.locator(".kerygma-footer-logo-picture");
+  await expect(desktopPicture).toHaveCSS("position", "static");
+  const desktopImage = await footer.locator(".kerygma-footer-logo").boundingBox();
+  expect(desktopImage).not.toBeNull();
+  expect(desktopImage!.height).toBeGreaterThan(65);
+  expect(desktopImage!.y + desktopImage!.height + 10).toBeLessThanOrEqual(desktopTagline!.y);
   expect(desktopTagline!.y + desktopTagline!.height + 10).toBeLessThanOrEqual(desktopSocials!.y);
   const signup = footer.getByRole("button", { name: "Sign up for updates" });
   await expect(signup).toHaveCSS("border-top-width", "0px");
@@ -152,6 +159,11 @@ test("footer navigation stays centered and compact on a phone", async ({ page })
   expect(mobileFooterRect).not.toBeNull();
   expect(mobileLogo!.y).toBeGreaterThanOrEqual(mobileFooterRect!.y);
   expect(mobileLogo!.y + mobileLogo!.height + 8).toBeLessThanOrEqual(mobileTagline!.y);
+  await expect(footer.locator(".kerygma-footer-logo-picture")).toHaveCSS("position", "static");
+  const mobileImage = await footer.locator(".kerygma-footer-logo").boundingBox();
+  expect(mobileImage).not.toBeNull();
+  expect(mobileImage!.height).toBeGreaterThan(60);
+  expect(mobileImage!.y + mobileImage!.height + 8).toBeLessThanOrEqual(mobileTagline!.y);
   expect(mobileTagline!.y + mobileTagline!.height + 10).toBeLessThanOrEqual(mobileSocials!.y);
   const mobileAikido = await footer.locator(".footer-protection-aikido").boundingBox();
   const mobilePrivacy = await footer.locator(".privacy-preferences").boundingBox();
