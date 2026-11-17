@@ -170,7 +170,7 @@
   justify-items: stretch;
   column-gap: 6px;
   row-gap: 2px;
-  padding-block: 36px 10px;
+  padding-block: 56px 10px;
 }
 #site-footer .footer-brand-stack {
   grid-column: 1;
@@ -196,7 +196,8 @@
   text-align: center;
 }
 #site-footer .kerygma-footer-brand {
-  top: 0;
+  /* Shift the logo alone above the tagline; preserve the tagline and icons. */
+  top: -12px;
   width: min(230px, 100%);
   height: auto;
   min-height: 0;
@@ -371,7 +372,7 @@
     width: calc(100% - 36px);
     grid-template-columns: minmax(170px, 1fr) minmax(0, 4.8fr) minmax(170px, 1fr);
     column-gap: 5px;
-    padding-block: 36px 9px;
+    padding-block: 56px 9px;
   }
   #site-footer .footer-social-links { flex-wrap: wrap; max-width: 190px; }
   #site-footer .footer-links-row { gap: 2px 6px; }
@@ -384,7 +385,7 @@
     justify-items: center;
     row-gap: 4px;
     /* Leave enough headroom for the raised logo on narrow screens. */
-    padding-block: 32px 12px;
+    padding-block: 48px 12px;
   }
   #site-footer .footer-brand-stack {
     grid-column: 1;
@@ -399,7 +400,7 @@
     width: min(214px, 100%);
     height: auto;
     aspect-ratio: 3 / 1;
-    top: 0;
+    top: -10px;
   }
   #site-footer .footer-brand-tagline { font-size: 11px; }
   #site-footer .footer-social-links {
