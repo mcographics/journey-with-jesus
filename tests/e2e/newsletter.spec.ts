@@ -97,11 +97,12 @@ test("footer stays centered and newsletter/privacy dialogs stay in the viewport 
   await expect(brandTagline).toHaveText("CHRISTIAN ANIMATION WITH PURPOSE");
   await expect(footer.locator(".footer-brand-heading")).toHaveCSS("top", "-26px");
   expect(desktopLogo!.width).toBeGreaterThanOrEqual(225);
+  await expect(footer.locator(".kerygma-footer-brand")).toHaveCSS("top", "-12px");
   // Raised logo, then tagline, then icons: each has its own clear space.
   const footerRect = await footer.boundingBox();
   expect(footerRect).not.toBeNull();
   expect(desktopLogo!.y).toBeGreaterThanOrEqual(footerRect!.y);
-  expect(desktopLogo!.y + desktopLogo!.height).toBeLessThanOrEqual(desktopTagline!.y + 1);
+  expect(desktopLogo!.y + desktopLogo!.height + 10).toBeLessThanOrEqual(desktopTagline!.y);
   expect(desktopTagline!.y + desktopTagline!.height + 10).toBeLessThanOrEqual(desktopSocials!.y);
   const signup = footer.getByRole("button", { name: "Sign up for updates" });
   await expect(signup).toHaveCSS("border-top-width", "0px");
@@ -146,10 +147,11 @@ test("footer navigation stays centered and compact on a phone", async ({ page })
   await expect(footer.locator(".footer-brand-tagline")).toHaveText("CHRISTIAN ANIMATION WITH PURPOSE");
   await expect(footer.locator(".footer-brand-heading")).toHaveCSS("top", "-22px");
   expect(mobileLogo!.width).toBeGreaterThanOrEqual(205);
+  await expect(footer.locator(".kerygma-footer-brand")).toHaveCSS("top", "-10px");
   const mobileFooterRect = await footer.boundingBox();
   expect(mobileFooterRect).not.toBeNull();
   expect(mobileLogo!.y).toBeGreaterThanOrEqual(mobileFooterRect!.y);
-  expect(mobileLogo!.y + mobileLogo!.height).toBeLessThanOrEqual(mobileTagline!.y + 1);
+  expect(mobileLogo!.y + mobileLogo!.height + 8).toBeLessThanOrEqual(mobileTagline!.y);
   expect(mobileTagline!.y + mobileTagline!.height + 10).toBeLessThanOrEqual(mobileSocials!.y);
   const mobileAikido = await footer.locator(".footer-protection-aikido").boundingBox();
   const mobilePrivacy = await footer.locator(".privacy-preferences").boundingBox();
