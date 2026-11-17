@@ -551,3 +551,32 @@
   #site-footer .newsletter-modal { padding: 32px 16px 20px; }
   #site-footer .newsletter-modal .footer-custom-newsletter-fields { grid-template-columns: minmax(0,1fr); }
 }
+
+/* Modal heading: keep the envelope beside the title rather than at the far
+   left of the centred description. Works at desktop and mobile widths. */
+#site-footer .newsletter-modal .footer-newsletter-heading {
+  justify-content: center;
+  text-align: center;
+}
+#site-footer .newsletter-modal .footer-newsletter-title-group {
+  width: 100%;
+  min-width: 0;
+  text-align: center;
+}
+#site-footer .newsletter-modal .footer-newsletter-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+#site-footer .newsletter-modal .footer-newsletter-title-row svg {
+  flex: 0 0 auto;
+  margin-top: 0;
+}
+#site-footer .newsletter-modal .footer-newsletter-title-row h2 {
+  margin: 0;
+}
+#site-footer .newsletter-modal .footer-newsletter-title-group > p {
+  margin: 4px 0 0;
+  text-align: center;
+}
