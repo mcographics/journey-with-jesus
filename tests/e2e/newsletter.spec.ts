@@ -78,6 +78,15 @@ test("footer stays centered and newsletter/privacy dialogs stay in the viewport 
   expect(Math.abs((privacyRect!.y + privacyRect!.height / 2) - (linksRect!.y + linksRect!.height / 2))).toBeLessThanOrEqual(24);
   const signup = footer.getByRole("button", { name: "Sign up for updates" });
   await expect(signup).toHaveCSS("border-top-width", "0px");
+  const signupBox = await signup.boundingBox();
+  const tagline = footer.locator(".footer-tagline");
+  const taglineBox = await tagline.boundingBox();
+  expect(signupBox).not.toBeNull();
+  expect(taglineBox).not.toBeNull();
+  // The newsletter action sits above the smaller tagline on all screen sizes.
+  expect(signupBox!.y + signupBox!.height).toBeLessThan(taglineBox!.y);
+  const taglineSize = parseFloat(await tagline.evaluate((node) => getComputedStyle(node).fontSize));
+  expect(taglineSize).toBeLessThanOrEqual(14);
   await signup.click();
   await expect(page.getByRole("dialog", { name: "Kerygma Path updates" })).toBeInViewport();
   await page.getByRole("button", { name: "Close newsletter signup" }).click();
@@ -98,5 +107,13 @@ test("footer navigation stays centered and compact on a phone", async ({ page })
     expect(Math.abs((rect!.x + rect!.width / 2) - (layout!.x + layout!.width / 2))).toBeLessThanOrEqual(12);
   }
   await expect(footer.locator(".footer-links-row")).toHaveCount(2);
-  await expect(footer.getByRole("button", { name: "Sign up for updates" })).toHaveCSS("border-top-width", "0px");
+  const signup = footer.getByRole("button", { name: "Sign up for updates" });
+  await expect(signup).toHaveCSS("border-top-width", "0px");
+  const tagline = footer.locator(".footer-tagline");
+  const signupBox = await signup.boundingBox();
+  const taglineBox = await tagline.boundingBox();
+  expect(signupBox).not.toBeNull();
+  expect(taglineBox).not.toBeNull();
+  expect(signupBox!.y + signupBox!.height).toBeLessThan(taglineBox!.y);
+  await expect(tagline).toHaveCSS("font-size", "13px");
 });
