@@ -88,3 +88,50 @@ for (const viewport of viewports) {
     });
   }
 }
+
+/* The Our Mission garden should use the same enlarged crop in light and dark
+   themes on desktop/tablet, rather than reverting to the old framed 4:3 view. */
+for (const viewport of [
+  { name: "desktop", width: 1440, height: 1000 },
+  { name: "tablet", width: 900, height: 1000 },
+]) {
+  for (const theme of ["dark", "light"] as const) {
+    test(`Our Mission uses the expanded garden artwork on ${viewport.name} in ${theme} mode`, async ({ page }) => {
+      await page.addInitScript((mode) => {
+        window.localStorage.setItem("journey-with-jesus-theme-mode", mode);
+      }, theme);
+      await page.setViewportSize({ width: viewport.width, height: viewport.height });
+      await page.goto("/projects/journey-with-jesus/");
+
+      const art = page.locator(".mission-art");
+      const image = art.locator("img.mission-landscape");
+      await art.scrollIntoViewIfNeeded();
+      await image.evaluate(async (element) => (element as HTMLImageElement).decode());
+
+      const layout = await art.evaluate((element) => {
+        const style = getComputedStyle(element);
+        const image = element.querySelector("img.mission-landscape") as HTMLImageElement;
+        const box = element.getBoundingClientRect();
+        return {
+          aspectRatio: style.aspectRatio,
+          borderWidth: style.borderTopWidth,
+          borderRadius: style.borderTopLeftRadius,
+          objectFit: getComputedStyle(image).objectFit,
+          objectPosition: getComputedStyle(image).objectPosition,
+          imageSource: new URL(image.currentSrc).pathname,
+          artWidth: box.width,
+          viewportWidth: window.innerWidth,
+        };
+      });
+
+      expect(layout.aspectRatio).toBe("16 / 9");
+      expect(layout.borderWidth).toBe("0px");
+      expect(layout.borderRadius).toBe("0px");
+      expect(layout.objectFit).toBe("cover");
+      expect(layout.objectPosition).toBe("42% 54%");
+      expect(layout.imageSource).toContain("/images/mission-garden-");
+      expect(layout.artWidth).toBeGreaterThan(viewport.width * (viewport.name === "desktop" ? 0.35 : 0.85));
+      expect(layout.artWidth).toBeLessThanOrEqual(layout.viewportWidth + 2);
+    });
+  }
+}

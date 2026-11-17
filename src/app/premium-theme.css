@@ -560,6 +560,64 @@
   }
 }
 
+/* Light-mode Our Mission uses the same enlarged garden artwork geometry as
+   dark mode. Keep the light palette and a pale right-edge fade; do not alter
+   the existing compact mobile composition. */
+@media (min-width: 701px) {
+  :root[data-theme="light"] body:has(.home-hero) .mission-inner {
+    --mission-page-gutter: max(28px, calc((100vw - 1160px) / 2));
+    grid-template-columns: minmax(0, 1.4fr) minmax(460px, 1fr);
+    align-items: stretch;
+    gap: clamp(28px, 3.3vw, 48px);
+    padding-block: 0;
+  }
+  :root[data-theme="light"] body:has(.home-hero) .mission-art {
+    min-height: clamp(400px, 36vw, 560px);
+    aspect-ratio: 16 / 9;
+    width: calc(100% + var(--mission-page-gutter));
+    margin-inline-start: calc(0px - var(--mission-page-gutter));
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+  :root[data-theme="light"] body:has(.home-hero) .mission-landscape {
+    object-position: 42% 54%;
+  }
+  :root[data-theme="light"] body:has(.home-hero) .mission-art-frame {
+    inset: 10px 0 10px 10px;
+    border: 0;
+    border-block: 1px solid rgba(181, 144, 80, .55);
+    border-inline-start: 1px solid rgba(181, 144, 80, .55);
+    border-radius: 0;
+  }
+  :root[data-theme="light"] body:has(.home-hero) .mission-art::after {
+    background:
+      linear-gradient(90deg, transparent 58%, rgba(248, 249, 247, .08) 68%, rgba(248, 249, 247, .34) 82%, rgba(248, 249, 247, .78) 94%, #f8f9f7 100%),
+      linear-gradient(125deg, rgba(255, 240, 213, .1), transparent 28%, transparent 58%) !important;
+  }
+  :root[data-theme="light"] body:has(.home-hero) .mission-copy {
+    transform: translateX(20px);
+  }
+}
+
+@media (min-width: 701px) and (max-width: 1320px) {
+  :root[data-theme="light"] body:has(.home-hero) .mission-inner {
+    --mission-page-gutter: max(18px, calc((100vw - 1160px) / 2));
+    width: min(1160px, calc(100% - 36px));
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+  :root[data-theme="light"] body:has(.home-hero) .mission-art {
+    width: calc(100% + var(--mission-page-gutter) + var(--mission-page-gutter));
+    min-height: 0;
+    margin-inline-start: calc(0px - var(--mission-page-gutter));
+  }
+  :root[data-theme="light"] body:has(.home-hero) .mission-copy {
+    align-self: stretch;
+    padding-block: clamp(36px, 6vw, 52px) clamp(48px, 7vw, 64px);
+  }
+}
+
 /* Desktop Our Story: retain a readable, semi-transparent text panel.
    Its blue surface visibly covers the left copy and softly dissolves into the
    untouched artwork on the right. The original mobile layout stays unchanged. */
