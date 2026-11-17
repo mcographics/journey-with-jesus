@@ -423,6 +423,9 @@
     grid-row: auto;
     justify-self: auto;
     align-self: auto;
+    /* Bring the mobile social icons closer to the purpose tagline. */
+    position: relative;
+    top: -8px;
     max-width: 100%;
     flex-wrap: wrap;
     justify-content: center;
