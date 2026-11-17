@@ -357,7 +357,7 @@
   grid-column: 3;
   grid-row: 3;
   position: relative;
-  top: -6px;
+  top: -16px;
   justify-self: end;
   align-self: center;
   justify-content: flex-end;
@@ -458,13 +458,25 @@
     grid-row: 5;
     top: 0;
     justify-self: center;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
     justify-content: center;
     margin-top: 0;
     text-align: center;
-    row-gap: 3px;
+    row-gap: 5px;
   }
+  /* Mobile security order: Aikido and privacy first, Cloudflare last. */
   #site-footer .footer-protection-tail {
+    order: 1;
     justify-content: center;
+  }
+  #site-footer .footer-protection-tail > .footer-protection-divider:first-child {
+    display: none;
+  }
+  #site-footer .footer-protection-cloudflare {
+    order: 2;
   }
 }
 
