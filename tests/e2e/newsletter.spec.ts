@@ -58,7 +58,15 @@ test("footer stays centered and newsletter/privacy dialogs stay in the viewport 
     const centreOffset = (rect!.x + rect!.width / 2) - (layout!.x + layout!.width / 2);
     expect(Math.abs(centreOffset)).toBeLessThanOrEqual(12);
   }
-  await footer.getByRole("button", { name: "Sign up for updates" }).click();
+  const linksRect = await footer.locator(".footer-links").boundingBox();
+  const privacyRect = await footer.locator(".privacy-preferences").boundingBox();
+  expect(linksRect).not.toBeNull();
+  expect(privacyRect).not.toBeNull();
+  expect(privacyRect!.x).toBeGreaterThan(linksRect!.x + linksRect!.width);
+  expect(Math.abs((privacyRect!.y + privacyRect!.height / 2) - (linksRect!.y + linksRect!.height / 2))).toBeLessThanOrEqual(24);
+  const signup = footer.getByRole("button", { name: "Sign up for updates" });
+  await expect(signup).toHaveCSS("border-top-width", "0px");
+  await signup.click();
   await expect(page.getByRole("dialog", { name: "Kerygma Path updates" })).toBeInViewport();
   await page.getByRole("button", { name: "Close newsletter signup" }).click();
   await footer.getByRole("button", { name: "Privacy preferences" }).click();
