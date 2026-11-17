@@ -75,11 +75,13 @@ test("footer stays centered and newsletter/privacy dialogs stay in the viewport 
   const footerBottomRect = await footer.locator(".footer-bottom").boundingBox();
   expect(protectionRect).not.toBeNull();
   expect(footerBottomRect).not.toBeNull();
-  // The security strip is aligned with the social icon row, rather than below it.
+  // Security is just above the social icons, with a controlled 6px lift.
   const socialRect = await footer.locator(".footer-social-links").boundingBox();
   expect(socialRect).not.toBeNull();
-  expect(Math.abs((protectionRect!.y + protectionRect!.height / 2) -
-    (socialRect!.y + socialRect!.height / 2))).toBeLessThanOrEqual(4);
+  await expect(footer.locator(".footer-protection")).toHaveCSS("top", "-6px");
+  const desktopOffset = (protectionRect!.y + protectionRect!.height / 2) -
+    (socialRect!.y + socialRect!.height / 2);
+  expect(Math.abs(desktopOffset + 6)).toBeLessThanOrEqual(4);
   expect(protectionRect!.x).toBeGreaterThanOrEqual(footerBottomRect!.x + footerBottomRect!.width - 12);
   expect(Math.abs(protectionRect!.x + protectionRect!.width - (layout!.x + layout!.width))).toBeLessThanOrEqual(12);
   const privacyRect = await footer.locator(".privacy-preferences").boundingBox();
@@ -159,10 +161,11 @@ test("desktop footer tagline stays on one line at a narrower desktop width", asy
   const social = await footer.locator(".footer-social-links").boundingBox();
   expect(protection).not.toBeNull();
   expect(social).not.toBeNull();
-  // At narrower desktop widths the group may wrap internally, but its row
-  // remains vertically aligned with the social icons.
-  expect(Math.abs((protection!.y + protection!.height / 2) -
-    (social!.y + social!.height / 2))).toBeLessThanOrEqual(4);
+  // Keep the same subtle lift at a narrower desktop viewport.
+  await expect(footer.locator(".footer-protection")).toHaveCSS("top", "-6px");
+  const narrowOffset = (protection!.y + protection!.height / 2) -
+    (social!.y + social!.height / 2);
+  expect(Math.abs(narrowOffset + 6)).toBeLessThanOrEqual(4);
 });
 
 
@@ -185,6 +188,7 @@ test("footer navigation stays centered and compact on a phone", async ({ page })
   // On phones the entire protection group follows the centered credits.
   expect(protectionBox!.y).toBeGreaterThanOrEqual(creditBox!.y + creditBox!.height);
   await expect(footer.locator(".footer-protection")).toHaveCSS("margin-top", "0px");
+  await expect(footer.locator(".footer-protection")).toHaveCSS("top", "0px");
   const mobileLogo = await footer.locator(".kerygma-footer-brand").boundingBox();
   const mobileTagline = await footer.locator(".footer-brand-tagline").boundingBox();
   const mobileSocials = await footer.locator(".footer-social-links").boundingBox();
