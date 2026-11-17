@@ -11,17 +11,20 @@ export function SiteFooter() {
     <footer className="site-footer" id="site-footer">
       <div className="footer-inner">
         <div className="footer-brand-stack">
-        <Link aria-label="Kerygma Path home" className="footer-brand kerygma-footer-brand" href="/">
-          <LanguageAwareLogo
-            alt=""
-            className="kerygma-footer-logo"
-            height={724}
-            loading="lazy"
-            pictureClassName="kerygma-footer-logo-picture"
-            sizes="(max-width: 700px) 260px, 340px"
-            width={2172}
-          />
-        </Link>
+          <div className="footer-brand-heading">
+            <Link aria-label="Kerygma Path home" className="footer-brand kerygma-footer-brand" href="/">
+              <LanguageAwareLogo
+                alt=""
+                className="kerygma-footer-logo"
+                height={724}
+                loading="lazy"
+                pictureClassName="kerygma-footer-logo-picture"
+                sizes="(max-width: 700px) 220px, 240px"
+                width={2172}
+              />
+            </Link>
+            <p className="footer-brand-tagline">CHRISTIAN ANIMATION WITH PURPOSE</p>
+          </div>
           <SocialLinks />
         </div>
         <div className="footer-content">
@@ -35,7 +38,6 @@ export function SiteFooter() {
                 <a href="https://www.cloudflare.com/application-services/products/turnstile/" target="_blank" rel="noopener noreferrer">Cloudflare Turnstile</a>.
               </p>
             </div>
-            <p className="footer-tagline">Christian animation with purpose</p>
           </div>
         </div>
         <nav aria-label="Footer navigation" className="footer-links">
