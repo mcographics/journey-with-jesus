@@ -25,6 +25,13 @@ for (const viewport of viewports) {
       await expect(heading).toBeVisible();
       await expect(action).toBeVisible();
       await expect(action).toHaveAttribute("href", "/media/");
+      // The CTA belongs underneath the left text block, not in a right-hand column.
+      const headingBounds = await heading.boundingBox();
+      const actionBounds = await action.boundingBox();
+      expect(headingBounds).not.toBeNull();
+      expect(actionBounds).not.toBeNull();
+      expect(Math.abs(actionBounds!.x - headingBounds!.x)).toBeLessThanOrEqual(3);
+      expect(actionBounds!.y).toBeGreaterThanOrEqual(headingBounds!.y + headingBounds!.height + 10);
 
       const positions = await section.evaluate((element) => {
         const image = element.querySelector("img.invitation-background") as HTMLImageElement;
@@ -56,6 +63,16 @@ for (const viewport of viewports) {
       expect(positions.contentOverImage).toBe(true);
       expect(positions.shadePosition).toBe("absolute");
       expect(positions.shadeBackground).toContain("linear-gradient(");
+      if (viewport.name === "desktop") {
+        // Light mode must be substantially clearer; dark shading fades out by the right side.
+        if (theme === "light") {
+          expect(positions.shadeBackground).toContain("242, 248, 255, 0.42");
+          expect(positions.shadeBackground).toContain("234, 244, 254, 0.3");
+        } else {
+          expect(positions.shadeBackground).toContain("5, 17, 35, 0.72");
+          expect(positions.shadeBackground).toContain("6, 22, 45, 0.05");
+        }
+      }
       expect(positions.imageLayer).toBeLessThan(positions.shadeLayer);
       expect(positions.shadeLayer).toBeLessThan(positions.contentLayer);
       if (theme === "light") {
