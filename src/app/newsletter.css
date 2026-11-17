@@ -356,6 +356,8 @@
 #site-footer .footer-inner > .footer-protection {
   grid-column: 3;
   grid-row: 3;
+  position: relative;
+  top: -6px;
   justify-self: end;
   align-self: center;
   justify-content: flex-end;
@@ -454,6 +456,7 @@
   #site-footer .footer-inner > .footer-protection {
     grid-column: 1;
     grid-row: 5;
+    top: 0;
     justify-self: center;
     justify-content: center;
     margin-top: 0;
