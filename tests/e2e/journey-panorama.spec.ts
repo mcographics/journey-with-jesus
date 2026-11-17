@@ -2,6 +2,7 @@ import { expect, test } from "@playwright/test";
 
 const viewports = [
   { name: "desktop", width: 1440, height: 1000 },
+  { name: "wide desktop", width: 1920, height: 1080 },
   { name: "mobile", width: 390, height: 844 },
 ];
 
@@ -60,6 +61,21 @@ for (const viewport of viewports) {
       expect(positions.source).toMatch(/\/images\/biblical-history-panorama-\d+\.webp$/);
       expect(positions.objectFit).toBe("cover");
       expect(positions.imageCoversSection).toBe(true);
+      // On desktop, give the wide panorama its natural 2048:877 height, so
+      // object-fit: cover doesn't trim the lamb or bottom of the artwork.
+      if (viewport.width >= 1200) {
+        const ratio = await section.evaluate((element) => {
+          const img = element.querySelector("img.invitation-background") as HTMLImageElement;
+          const width = element.getBoundingClientRect().width;
+          const height = element.getBoundingClientRect().height;
+          return {
+            actualHeight: height,
+            uncroppedHeight: width * img.naturalHeight / img.naturalWidth,
+          };
+        });
+        expect(ratio.actualHeight).toBeGreaterThanOrEqual(ratio.uncroppedHeight - 2);
+        expect(ratio.actualHeight).toBeLessThanOrEqual(ratio.uncroppedHeight + 4);
+      }
       expect(positions.contentOverImage).toBe(true);
       expect(positions.shadePosition).toBe("absolute");
       expect(positions.shadeBackground).toContain("linear-gradient(");
