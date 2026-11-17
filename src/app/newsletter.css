@@ -353,11 +353,13 @@
 }
 /* Desktop: security and privacy sit in the same grid row as the social icons.
    Keep the protection group right-aligned while the credits remain centered. */
+/* Align the security strip vertically with the "Website by Majestic Creations"
+   credit in the same desktop grid row, without moving its mobile counterpart. */
 #site-footer .footer-inner > .footer-protection {
   grid-column: 3;
   grid-row: 3;
   position: relative;
-  top: -16px;
+  top: 0;
   justify-self: end;
   align-self: center;
   justify-content: flex-end;
