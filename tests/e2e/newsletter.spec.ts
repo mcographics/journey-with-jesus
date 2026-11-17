@@ -65,7 +65,7 @@ test("footer stays centered and newsletter/privacy dialogs stay in the viewport 
     expect(rect).not.toBeNull();
     expect(Math.abs((rect!.x + rect!.width / 2) - (layout!.x + layout!.width / 2))).toBeLessThanOrEqual(12);
   }
-  const brandRect = await footer.locator(".footer-brand-stack").boundingBox();
+  const brandRect = await footer.locator(".footer-brand-heading").boundingBox();
   const contentRect = await footer.locator(".footer-content").boundingBox();
   expect(brandRect).not.toBeNull();
   expect(contentRect).not.toBeNull();
@@ -75,8 +75,11 @@ test("footer stays centered and newsletter/privacy dialogs stay in the viewport 
   const footerBottomRect = await footer.locator(".footer-bottom").boundingBox();
   expect(protectionRect).not.toBeNull();
   expect(footerBottomRect).not.toBeNull();
-  // Security services are on the last line, below the centered footer credits.
-  expect(protectionRect!.y).toBeGreaterThanOrEqual(footerBottomRect!.y + footerBottomRect!.height + 4);
+  // The security strip is aligned with the social icon row, rather than below it.
+  const socialRect = await footer.locator(".footer-social-links").boundingBox();
+  expect(socialRect).not.toBeNull();
+  expect(Math.abs((protectionRect!.y + protectionRect!.height / 2) -
+    (socialRect!.y + socialRect!.height / 2))).toBeLessThanOrEqual(4);
   expect(protectionRect!.x).toBeGreaterThanOrEqual(footerBottomRect!.x + footerBottomRect!.width - 12);
   expect(Math.abs(protectionRect!.x + protectionRect!.width - (layout!.x + layout!.width))).toBeLessThanOrEqual(12);
   const privacyRect = await footer.locator(".privacy-preferences").boundingBox();
@@ -152,6 +155,14 @@ test("desktop footer tagline stays on one line at a narrower desktop width", asy
   expect(taglineBox!.x).toBeGreaterThanOrEqual(footerBox!.x);
   expect(taglineBox!.x + taglineBox!.width).toBeLessThanOrEqual(footerBox!.x + footerBox!.width);
   expect(imageBox!.y + imageBox!.height + 6).toBeLessThanOrEqual(taglineBox!.y);
+  const protection = await footer.locator(".footer-protection").boundingBox();
+  const social = await footer.locator(".footer-social-links").boundingBox();
+  expect(protection).not.toBeNull();
+  expect(social).not.toBeNull();
+  // At narrower desktop widths the group may wrap internally, but its row
+  // remains vertically aligned with the social icons.
+  expect(Math.abs((protection!.y + protection!.height / 2) -
+    (social!.y + social!.height / 2))).toBeLessThanOrEqual(4);
 });
 
 
