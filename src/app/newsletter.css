@@ -175,7 +175,7 @@
 #site-footer .footer-brand-stack {
   grid-column: 1;
   grid-row: 1 / 4;
-  justify-self: center;
+  justify-self: end;
   align-self: center;
   gap: 1px;
   transform: none;
@@ -185,6 +185,11 @@
   height: 48px;
   min-height: 0;
   aspect-ratio: auto;
+}
+/* Enlarge only the painted logo, not its layout box or the footer height. */
+#site-footer .kerygma-footer-logo-picture {
+  transform: scale(1.16);
+  transform-origin: center bottom;
 }
 #site-footer .footer-social-links {
   min-height: 32px;
@@ -248,49 +253,62 @@
 #site-footer .footer-links {
   grid-column: 2;
   grid-row: 2;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: center;
   justify-self: center;
   width: 100%;
   min-height: 0;
   margin: 0;
-  gap: 2px 7px;
+  gap: 2px;
   font-size: 10px;
   letter-spacing: .01em;
   line-height: 1.2;
   text-align: center;
   transform: none;
 }
-#site-footer .footer-links span { font-size: 8px; }
-#site-footer .footer-links a { padding-block: 2px; }
+/* Two deliberate, near-equal lines replace accidental long/short wrapping. */
+#site-footer .footer-links-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 2px 8px;
+  min-width: 0;
+  max-width: 100%;
+}
+#site-footer .footer-links-row > span { font-size: 8px; }
+#site-footer .footer-links a { padding-block: 1px; }
 #site-footer .privacy-preferences {
   grid-column: 3;
   grid-row: 2;
   display: inline-flex;
   align-items: center;
-  justify-self: end;
+  justify-self: start;
   align-self: center;
-  margin: 0;
+  margin: 0 0 0 8px;
   transform: none;
 }
 #site-footer .footer-bottom {
   grid-column: 2;
   grid-row: 3;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  justify-items: center;
-  gap: 2px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  column-gap: 14px;
+  row-gap: 2px;
   width: 100%;
   min-width: 0;
   text-align: center;
   transform: none;
 }
 #site-footer .footer-credits {
-  grid-column: 1;
   margin: 0;
   font-size: 9px;
   line-height: 1.2;
 }
 #site-footer .footer-protection {
-  grid-column: 1;
   gap: 5px;
   font-size: 9px;
   line-height: 1.2;
@@ -306,7 +324,7 @@
     padding-block: 9px;
   }
   #site-footer .footer-social-links { flex-wrap: wrap; max-width: 190px; }
-  #site-footer .footer-links { gap: 2px 6px; }
+  #site-footer .footer-links-row { gap: 2px 6px; }
 }
 @media (max-width: 900px) {
   #site-footer .footer-inner {
@@ -314,7 +332,7 @@
     grid-template-columns: minmax(0, 1fr);
     grid-template-rows: auto auto auto auto auto;
     justify-items: center;
-    row-gap: 5px;
+    row-gap: 4px;
     padding-block: 10px 12px;
   }
   #site-footer .footer-brand-stack {
@@ -348,13 +366,20 @@
   #site-footer .footer-links {
     grid-column: 1;
     grid-row: 3;
-    gap: 3px 8px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 2px 7px;
     font-size: 10px;
   }
+  /* Keep mobile links compact: flow together, centered, without forced extra rows. */
+  #site-footer .footer-links-row { display: contents; }
   #site-footer .privacy-preferences {
     grid-column: 1;
     grid-row: 4;
     justify-self: center;
+    margin-left: 0;
   }
   #site-footer .footer-bottom {
     grid-column: 1;
