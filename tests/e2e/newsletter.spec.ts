@@ -219,7 +219,11 @@ test("footer navigation stays centered and compact on a phone", async ({ page })
   expect(mobileImage).not.toBeNull();
   expect(mobileImage!.height).toBeGreaterThan(60);
   expect(mobileImage!.y + mobileImage!.height + 8).toBeLessThanOrEqual(mobileTagline!.y);
-  expect(mobileTagline!.y + mobileTagline!.height + 10).toBeLessThanOrEqual(mobileSocials!.y);
+  await expect(footer.locator(".footer-social-links")).toHaveCSS("top", "-8px");
+  // The icons are tucked closer to the tagline without touching the text.
+  const mobileSocialGap = mobileSocials!.y - (mobileTagline!.y + mobileTagline!.height);
+  expect(mobileSocialGap).toBeGreaterThanOrEqual(6);
+  expect(mobileSocialGap).toBeLessThanOrEqual(24);
   const mobileAikido = await footer.locator(".footer-protection-aikido").boundingBox();
   const mobilePrivacy = await footer.locator(".privacy-preferences").boundingBox();
   const mobileCloudflare = await footer.locator(".footer-protection-cloudflare").boundingBox();
