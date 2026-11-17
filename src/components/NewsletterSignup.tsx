@@ -153,9 +153,11 @@ export function NewsletterSignup() {
         <button ref={closeButtonRef} type="button" className="newsletter-modal-close" aria-label="Close newsletter signup" onClick={dismissModal}>×</button>
         <div className="footer-newsletter">
       <div className="footer-newsletter-heading">
-        <Mail aria-hidden="true" size={18} />
-        <div>
-          <h2 id={headingId}>Kerygma Path updates</h2>
+        <div className="footer-newsletter-title-group">
+          <div className="footer-newsletter-title-row">
+            <Mail aria-hidden="true" size={18} />
+            <h2 id={headingId}>Kerygma Path updates</h2>
+          </div>
           <p>New animated stories and project news, delivered occasionally.</p>
         </div>
       </div>
