@@ -292,11 +292,13 @@
    protection row wraps on a narrow phone. */
 #site-footer .footer-protection-tail {
   display: inline-flex;
-  flex-wrap: wrap;
+  flex: 0 0 auto;
+  flex-wrap: nowrap;
   align-items: center;
   justify-content: flex-end;
-  gap: 3px 6px;
-  max-width: 100%;
+  gap: 6px;
+  max-width: none;
+  white-space: nowrap;
 }
 #site-footer .footer-protection-tail .footer-protection-aikido { white-space: nowrap; }
 #site-footer .footer-protection-tail .privacy-preferences {
