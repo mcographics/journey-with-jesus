@@ -153,16 +153,16 @@ button { color: inherit; }
 .virtue-statement { margin-top: 24px !important; color: var(--gold-bright) !important; font: 19px var(--serif) !important; }
 .virtue-description { margin-top: -4px !important; color: #d1ccc0 !important; font-family: var(--serif); font-style: italic; }
 
-/* Give the artwork more vertical room on desktop without distorting its proportions. */
-.invitation-section { position: relative; isolation: isolate; min-height: clamp(640px, 50vw, 820px); display: flex; overflow: hidden; background: #091326; }
-.invitation-background { z-index: -2; object-fit: cover; object-position: center 49%; }
-.invitation-shade { position: absolute; z-index: -1; inset: 0; background: linear-gradient(90deg, rgba(5, 10, 24, .94) 0%, rgba(5, 10, 24, .82) 28%, rgba(5, 10, 24, .58) 43%, rgba(5, 10, 24, .16) 72%, rgba(5, 10, 24, .04) 100%), linear-gradient(0deg, rgba(5, 10, 24, .46), transparent 58%); pointer-events: none; }
-.invitation-content { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 28px; padding-block: clamp(112px, 10vw, 150px) 78px; }
+/* Show the complete panorama at native proportions, with the invitation below it. */
+.invitation-section { position: relative; isolation: isolate; display: flex; flex-direction: column; background: #091326; }
+.invitation-picture { display: block; width: 100%; }
+.invitation-background { display: block; width: 100%; height: auto; object-fit: contain; object-position: center; }
+.invitation-content { position: relative; z-index: 1; width: min(100% - 56px, 1160px); margin-inline: auto; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: clamp(24px, 4vw, 56px); padding-block: clamp(36px, 5vw, 64px); }
 .invitation-heading { max-width: 650px; }
-.invitation-heading .eyebrow { color: #f3d595; text-shadow: 0 2px 12px rgba(0, 0, 0, .65); }
-.invitation-heading h2 { margin: 0; color: #fff9ec; font-size: clamp(36px, 3.4vw, 46px); text-shadow: 0 2px 18px rgba(0, 0, 0, .55); }
-.invitation-heading h2 em { color: #f2cb7f; text-shadow: 0 2px 18px rgba(0, 0, 0, .7); }
-.invitation-heading > p:last-child { max-width: 590px; margin: 17px 0 0; color: #f1eee8; text-shadow: 0 1px 9px rgba(0, 0, 0, .9); }
+.invitation-heading .eyebrow { color: #f3d595; }
+.invitation-heading h2 { margin: 0; color: #fff9ec; font-size: clamp(36px, 3.4vw, 46px); }
+.invitation-heading h2 em { color: #f2cb7f; }
+.invitation-heading > p:last-child { max-width: 590px; margin: 17px 0 0; color: #f1eee8; }
 .media-invitation { display: flex; align-items: center; gap: 14px; flex: 0 0 auto; min-width: 240px; min-height: 64px; padding: 15px 18px; border: 1px solid rgba(255, 226, 165, .8); border-radius: 4px; background: rgba(8, 14, 28, .8); box-shadow: inset 0 0 0 2px rgba(255, 231, 173, .07), 0 8px 26px rgba(0, 0, 0, .34); backdrop-filter: blur(5px); transition: border-color .2s, background .2s, box-shadow .2s, transform .2s; }
 .media-invitation:hover { transform: translateY(-2px); border-color: #fff0bd; background: rgba(11, 20, 37, .94); box-shadow: inset 0 0 0 2px rgba(255, 231, 173, .12), 0 12px 30px rgba(0, 0, 0, .44); }
 .invitation-icon, .invitation-arrow { color: var(--gold); }
@@ -376,11 +376,7 @@ button { color: inherit; }
   .mission-inner { padding-block: 58px; grid-template-columns: 1fr; gap: 28px; }
   .mission-art { min-height: clamp(220px, 70vw, 280px); }
   .mission-copy .section-index { margin-bottom: 18px; }
-  .invitation-section { min-height: 0; }
-  .invitation-background { object-position: 52% center; }
-  .invitation-shade { background: linear-gradient(0deg, rgba(5, 10, 24, .99) 0%, rgba(5, 10, 24, .9) 39%, rgba(5, 10, 24, .58) 66%, rgba(5, 10, 24, .14) 100%); }
-  /* Allow the image a taller visual opening before the invitation copy on mobile. */
-  .invitation-content { gap: 24px; padding-block: clamp(330px, 90vw, 460px) 70px; }
+  .invitation-content { grid-template-columns: minmax(0, 1fr); align-items: start; gap: 24px; padding-block: 36px 44px; }
   .invitation-heading { max-width: 100%; }
   .invitation-heading .eyebrow { margin-bottom: 18px; font-size: 10px; }
   .invitation-heading h2 { font-size: clamp(32px, 8vw, 39px); line-height: 1.12; }
@@ -633,9 +629,6 @@ button { color: inherit; }
 :root[data-theme="light"] .mission-art { background: color-mix(in srgb, #e2eaf3 calc(100% - var(--light-surface-mix, 0%)), #aeb6c2 var(--light-surface-mix, 0%)); }
 
 :root[data-theme="light"] .invitation-section { background: color-mix(in srgb, #e9eff5 calc(100% - var(--light-surface-mix, 0%)), #aeb6c2 var(--light-surface-mix, 0%)); }
-:root[data-theme="light"] .invitation-shade {
-  background: linear-gradient(90deg, rgba(242, 246, 250, .4) 0%, rgba(242, 246, 250, .3) 32%, rgba(242, 246, 250, .12) 49%, rgba(242, 246, 250, .02) 78%, transparent 100%), linear-gradient(0deg, rgba(232, 239, 246, .1), transparent 58%);
-}
 :root[data-theme="light"] .invitation-heading .eyebrow { color: #795b2c; text-shadow: 0 1px 8px rgba(242, 246, 250, .84); }
 :root[data-theme="light"] .invitation-heading h2 { color: #202b3b; text-shadow: 0 1px 12px rgba(242, 246, 250, .78); }
 :root[data-theme="light"] .invitation-heading h2 em { color: #936b27; text-shadow: 0 1px 10px rgba(242, 246, 250, .76); }
@@ -1177,11 +1170,8 @@ body, .home-hero, .mission-section, .site-footer, .media-page {
 }
 
 
-/* Show the full homepage image color without the vignette overlays. */
-.storybook-shade,
-.invitation-shade {
-  display: none !important;
-}
+/* Show the full storybook image color without its vignette overlay. */
+.storybook-shade { display: none !important; }
 
 /* Give the story heading a crisp black shadow while preserving dark-mode shimmer. */
 :root[data-theme="light"] body #scripture-title,
@@ -1218,16 +1208,6 @@ body, .home-hero, .mission-section, .site-footer, .media-page {
   -webkit-text-fill-color: currentColor !important;
 }
 
-
-/* Keep invitation copy inside the open space on the left of the background art. */
-@media (min-width: 701px) {
-  .invitation-content {
-    transform: translateX(-16px);
-  }
-  .invitation-heading {
-    max-width: min(500px, 48vw);
-  }
-}
 
 /* Match the dark-mode shimmer to the footer wordmark's brighter yellow-gold. */
 
@@ -1271,28 +1251,6 @@ body, .home-hero, .mission-section, .site-footer, .media-page {
 :root[data-theme="light"] .storybook-description-panel::before {
   background: radial-gradient(ellipse at center, rgba(139, 189, 238, .24) 0%, rgba(139, 189, 238, .12) 62%, transparent 100%);
 }
-
-/* Add a black shadow to the full text block over the bottom image; the adjacent button is untouched. */
-:root[data-theme="light"] body .invitation-heading,
-:root:not([data-theme="light"]) body .invitation-heading {
-  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, .96)) drop-shadow(0 4px 7px rgba(0, 0, 0, .68));
-}
-
-
-/* Improve contrast for the small description above the bottom-image button. */
-:root[data-theme="light"] body .invitation-heading > p:last-child,
-:root:not([data-theme="light"]) body .invitation-heading > p:last-child {
-  color: #ffffff !important;
-  -webkit-text-fill-color: currentColor !important;
-  background: none;
-  border: 0;
-  border-radius: 0;
-  padding: 0;
-  box-shadow: none;
-  backdrop-filter: none;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, .98), 0 3px 6px rgba(0, 0, 0, .86) !important;
-}
-
 
 /* Keep the Our Story label white and its sparkle bright gold in both themes. */
 :root[data-theme="light"] body .storybook-eyebrow > span,
@@ -1754,4 +1712,16 @@ body, .home-hero, .mission-section, .site-footer, .media-page {
 :root[data-theme="light"] body .site-language-toggle[aria-expanded="true"] {
   color: #102d4a !important;
   -webkit-text-fill-color: currentColor !important;
+}
+
+/* Stack the invitation copy below the panorama on tablets and phones. */
+@media (max-width: 1100px) {
+  .invitation-content {
+    width: min(100% - 36px, 920px);
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+    gap: 24px;
+    padding-block: clamp(32px, 5vw, 56px);
+  }
+  .invitation-heading { max-width: 650px; }
 }

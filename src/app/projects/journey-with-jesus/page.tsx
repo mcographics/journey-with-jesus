@@ -12,6 +12,7 @@ const imageSources = (stem: string, widths: number[]): PictureCandidate[] =>
     src: `${basePath}/images/${stem}-${width}.webp`,
     width,
   }));
+const biblicalHistoryWidths = [480, 768, 1024, 1440, 2048];
 
 export const metadata: Metadata = {
   title: "Journey with Jesus — Animated Gospel Stories",
@@ -131,17 +132,17 @@ export default function HomePage() {
 
       <section className="invitation-section" aria-labelledby="invitation-title">
         <ResponsivePicture
-          alt="The risen Jesus welcomes his followers at sunset as an angel opens the empty tomb."
+          alt="A biblical history panorama leading from Eden to the risen Jesus, with biblical figures, a lamb, angels, and the heavenly city."
           className="invitation-background"
-          fill
-          fallbackSrc={`${basePath}/images/resurrection-at-sunset-fallback.jpg`}
+          width={2048}
+          height={877}
+          fallbackSrc={`${basePath}/images/biblical-history-panorama-fallback.png`}
           loading="lazy"
-          pictureClassName="responsive-picture-fill"
-          sizes="(max-width: 700px) 100vw, 130vw"
-          webpSources={imageSources("resurrection-at-sunset", [960, 1280, 1920, 2560, 3200, 3840])}
-          mobileWebpSources={imageSources("resurrection-at-sunset-mobile", [400, 600, 790])}
+          pictureClassName="invitation-picture"
+          sizes="100vw"
+          webpSources={imageSources("biblical-history-panorama", biblicalHistoryWidths)}
+          mobileWebpSources={imageSources("biblical-history-panorama", biblicalHistoryWidths)}
         />
-        <div className="invitation-shade" aria-hidden="true" />
         <div className="page-width invitation-content">
           <div className="invitation-heading">
             <p className="eyebrow"><Sparkles size={14} aria-hidden="true" /> BEGIN YOUR JOURNEY</p>
