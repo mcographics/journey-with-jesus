@@ -206,13 +206,21 @@
 #site-footer .footer-content {
   grid-column: 2;
   grid-row: 1;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  justify-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   gap: 2px;
   width: 100%;
   text-align: center;
   transform: none;
+}
+/* Explicit flex order wins over legacy grid placement rules so the
+   newsletter launch stays above the tagline at every viewport size. */
+#site-footer .footer-content > .footer-newsletter-launch {
+  order: 0;
+}
+#site-footer .footer-content > .footer-message {
+  order: 1;
 }
 #site-footer .footer-message {
   width: 100%;
