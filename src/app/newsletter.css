@@ -163,8 +163,8 @@
 /* Compact footer: one true page centre, balanced side columns and no
    transforms on ancestors of fixed-position newsletter/privacy dialogs. */
 #site-footer .footer-inner {
-  width: min(1600px, calc(100% - 40px));
-  grid-template-columns: minmax(256px, 1fr) minmax(0, 4.8fr) minmax(256px, 1fr);
+  width: min(1440px, calc(100% - 40px));
+  grid-template-columns: minmax(260px, 1fr) minmax(0, 3.2fr) minmax(260px, 1fr);
   grid-template-rows: auto auto auto;
   align-items: center;
   justify-items: stretch;
@@ -262,8 +262,12 @@
 #site-footer .footer-links span { font-size: 8px; }
 #site-footer .footer-links a { padding-block: 2px; }
 #site-footer .privacy-preferences {
+  grid-column: 3;
+  grid-row: 2;
   display: inline-flex;
   align-items: center;
+  justify-self: end;
+  align-self: center;
   margin: 0;
   transform: none;
 }
@@ -308,7 +312,7 @@
   #site-footer .footer-inner {
     width: min(calc(100% - 36px), 560px);
     grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: auto auto auto auto;
+    grid-template-rows: auto auto auto auto auto;
     justify-items: center;
     row-gap: 5px;
     padding-block: 10px 12px;
@@ -347,15 +351,20 @@
     gap: 3px 8px;
     font-size: 10px;
   }
-  #site-footer .footer-bottom {
+  #site-footer .privacy-preferences {
     grid-column: 1;
     grid-row: 4;
+    justify-self: center;
+  }
+  #site-footer .footer-bottom {
+    grid-column: 1;
+    grid-row: 5;
     row-gap: 4px;
   }
 }
 
 /* Keep the consent control aligned with the footer navigation. */
-#site-footer .privacy-preferences-trigger { display:inline-flex; min-height:21px; align-items:center; gap:4px; padding:1px 2px; border:0; border-radius:0; background:transparent; color:inherit; cursor:pointer; font:inherit; line-height:1.2; }
+#site-footer .privacy-preferences-trigger { display:inline-flex; min-height:30px; align-items:center; gap:5px; padding:5px 9px; border:1px solid rgba(228,188,112,.5); border-radius:4px; background:transparent; color:inherit; cursor:pointer; font-size:10px; line-height:1.2; }
 #site-footer .privacy-preferences-trigger svg { width:12px; height:12px; }
 #site-footer .privacy-preferences-trigger:hover { color:var(--gold-bright); }
 #site-footer .privacy-preferences-trigger:focus-visible { outline:2px solid var(--gold-bright); outline-offset:2px; }
