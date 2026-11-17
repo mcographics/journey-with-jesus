@@ -91,7 +91,9 @@ test("footer stays centered and newsletter/privacy dialogs stay in the viewport 
   const desktopSocials = await footer.locator(".footer-social-links").boundingBox();
   expect(desktopLogo).not.toBeNull();
   expect(desktopSocials).not.toBeNull();
-  expect(desktopLogo!.y + desktopLogo!.height + 8).toBeLessThanOrEqual(desktopSocials!.y);
+  // The logo is raised without shifting the social links into its artwork.
+  await expect(footer.locator(".kerygma-footer-brand")).toHaveCSS("top", "-14px");
+  expect(desktopLogo!.y + desktopLogo!.height + 16).toBeLessThanOrEqual(desktopSocials!.y);
   const signup = footer.getByRole("button", { name: "Sign up for updates" });
   await expect(signup).toHaveCSS("border-top-width", "0px");
   const signupBox = await signup.boundingBox();
@@ -135,7 +137,9 @@ test("footer navigation stays centered and compact on a phone", async ({ page })
   expect(mobileSocials).not.toBeNull();
   // The enlarged logo has its own layout space, rather than overlapping icons.
   expect(mobileLogo!.width).toBeGreaterThanOrEqual(150);
-  expect(mobileLogo!.y + mobileLogo!.height + 10).toBeLessThanOrEqual(mobileSocials!.y);
+  // Mobile also raises the logo while reserving room above it.
+  await expect(footer.locator(".kerygma-footer-brand")).toHaveCSS("top", "-12px");
+  expect(mobileLogo!.y + mobileLogo!.height + 16).toBeLessThanOrEqual(mobileSocials!.y);
   const mobileAikido = await footer.locator(".footer-protection-aikido").boundingBox();
   const mobilePrivacy = await footer.locator(".privacy-preferences").boundingBox();
   expect(mobileAikido).not.toBeNull();
