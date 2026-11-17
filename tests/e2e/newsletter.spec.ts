@@ -181,11 +181,17 @@ test("Aikido footer attribution is navy in light mode and unchanged in dark mode
   const label = page.locator("#site-footer .footer-protection-aikido > span");
   const logo = page.locator("#site-footer .footer-protection-aikido img");
 
-  await page.evaluate(() => { document.documentElement.dataset.theme = "light"; });
+  // Use the site's persisted theme preference instead of mutating the DOM:
+  // the theme controller can legitimately overwrite manual attribute changes.
+  await page.evaluate(() => localStorage.setItem("journey-with-jesus-theme-mode", "light"));
+  await page.reload();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
   await expect(label).toHaveCSS("color", "rgb(36, 79, 118)");
   await expect(logo).toHaveCSS("filter", /invert/);
 
-  await page.evaluate(() => { document.documentElement.dataset.theme = "dark"; });
+  await page.evaluate(() => localStorage.setItem("journey-with-jesus-theme-mode", "dark"));
+  await page.reload();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   await expect(logo).toHaveCSS("filter", "none");
 });
 
