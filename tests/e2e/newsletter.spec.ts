@@ -270,3 +270,30 @@ test("footer navigation stays centered and compact on a phone", async ({ page })
   await expect(footer.locator(".footer-brand-tagline")).toHaveCSS("font-size", "11px");
   await expect(footer.locator(".footer-brand-tagline")).toHaveCSS("white-space", "nowrap");
 });
+
+test("privacy dialog wraps content and scrolls vertically without sideways overflow", async ({ page }) => {
+  await page.setViewportSize({ width: 360, height: 380 });
+  await page.goto("/company/");
+  await page.locator("#site-footer .privacy-preferences-trigger").click();
+
+  const dialog = page.getByRole("dialog", { name: "Privacy preferences" });
+  await expect(dialog).toBeVisible();
+  const dimensions = await dialog.evaluate((element) => {
+    const style = getComputedStyle(element);
+    return {
+      clientWidth: element.clientWidth,
+      scrollWidth: element.scrollWidth,
+      clientHeight: element.clientHeight,
+      scrollHeight: element.scrollHeight,
+      overflowX: style.overflowX,
+      overflowY: style.overflowY,
+      whiteSpace: style.whiteSpace,
+    };
+  });
+  expect(dimensions.whiteSpace).toBe("normal");
+  expect(dimensions.overflowX).toBe("hidden");
+  expect(dimensions.overflowY).toBe("auto");
+  expect(dimensions.scrollWidth).toBeLessThanOrEqual(dimensions.clientWidth + 1);
+  expect(dimensions.scrollHeight).toBeGreaterThan(dimensions.clientHeight);
+  await expect(dialog.getByText("This setting controls the optional Hostinger Reach embed", { exact: false })).toBeVisible();
+});
