@@ -183,7 +183,7 @@ test("Aikido footer attribution is navy in light mode and unchanged in dark mode
 
   await page.evaluate(() => { document.documentElement.dataset.theme = "light"; });
   await expect(label).toHaveCSS("color", "rgb(36, 79, 118)");
-  await expect(logo).toHaveCSS("filter", /invert\\(/);
+  await expect(logo).toHaveCSS("filter", /invert/);
 
   await page.evaluate(() => { document.documentElement.dataset.theme = "dark"; });
   await expect(logo).toHaveCSS("filter", "none");
