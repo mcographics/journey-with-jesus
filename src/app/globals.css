@@ -157,8 +157,8 @@ button { color: inherit; }
 .invitation-section { position: relative; isolation: isolate; display: flex; min-height: clamp(500px, 39vw, 650px); align-items: center; overflow: hidden; background: #091326; }
 .invitation-picture { position: absolute; z-index: 0; inset: 0; display: block; width: 100%; height: 100%; }
 .invitation-background { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; }
-.invitation-shade { position: absolute; z-index: 1; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgba(5, 17, 35, .94) 0%, rgba(8, 25, 48, .88) 40%, rgba(6, 23, 47, .72) 70%, rgba(6, 22, 45, .67) 100%), linear-gradient(180deg, rgba(3, 11, 24, .15), rgba(3, 11, 24, .45)); }
-:root[data-theme="light"] .invitation-shade { background: linear-gradient(90deg, rgba(242, 248, 255, .94) 0%, rgba(234, 244, 254, .89) 40%, rgba(225, 239, 253, .76) 70%, rgba(223, 238, 252, .7) 100%), linear-gradient(180deg, rgba(245, 250, 255, .15), rgba(227, 241, 255, .35)); }
+.invitation-shade { position: absolute; z-index: 1; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgba(5, 17, 35, .80) 0%, rgba(8, 25, 48, .70) 40%, rgba(6, 23, 47, .40) 70%, rgba(6, 22, 45, .15) 100%), linear-gradient(180deg, rgba(3, 11, 24, .08), rgba(3, 11, 24, .18)); }
+:root[data-theme="light"] .invitation-shade { background: linear-gradient(90deg, rgba(242, 248, 255, .86) 0%, rgba(234, 244, 254, .76) 40%, rgba(225, 239, 253, .43) 70%, rgba(223, 238, 252, .16) 100%), linear-gradient(180deg, rgba(245, 250, 255, .06), rgba(227, 241, 255, .14)); }
 .invitation-content { position: relative; z-index: 2; width: min(100% - 56px, 1160px); margin-inline: auto; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: clamp(24px, 4vw, 56px); padding-block: clamp(64px, 7vw, 110px); }
 .invitation-heading { max-width: 650px; }
 .invitation-heading .eyebrow { color: #f3d595; }
@@ -1732,7 +1732,7 @@ body, .home-hero, .mission-section, .site-footer, .media-page {
 @media (max-width: 700px) {
   .invitation-section { min-height: clamp(560px, 130vw, 680px); }
   .invitation-background { object-position: 54% center; }
-  .invitation-shade { background: linear-gradient(180deg, rgba(5, 17, 35, .92), rgba(8, 25, 48, .86) 52%, rgba(5, 17, 35, .92)); }
-  :root[data-theme="light"] .invitation-shade { background: linear-gradient(180deg, rgba(242, 248, 255, .93), rgba(231, 243, 255, .86) 52%, rgba(239, 248, 255, .93)); }
+  .invitation-shade { background: linear-gradient(180deg, rgba(5, 17, 35, .82), rgba(8, 25, 48, .67) 52%, rgba(5, 17, 35, .80)); }
+  :root[data-theme="light"] .invitation-shade { background: linear-gradient(180deg, rgba(242, 248, 255, .86), rgba(231, 243, 255, .69) 52%, rgba(239, 248, 255, .84)); }
   .invitation-content { padding-block: 64px; }
 }
