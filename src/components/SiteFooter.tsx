@@ -38,7 +38,6 @@ export function SiteFooter() {
           </div>
           <NewsletterSignup />
         </div>
-        <PrivacyPreferences />
         <nav aria-label="Footer navigation" className="footer-links">
           <Link href="/">Kerygma Path</Link>
           <span aria-hidden="true">✦</span>
@@ -61,6 +60,8 @@ export function SiteFooter() {
           <Link href="/policies/cookies/">Cookies</Link>
           <span aria-hidden="true">✦</span>
           <Link href="/policies/copyright/">Copyright</Link>
+          <span aria-hidden="true">✦</span>
+          <PrivacyPreferences />
         </nav>
         <div className="footer-bottom">
           <p className="footer-note footer-credits">
