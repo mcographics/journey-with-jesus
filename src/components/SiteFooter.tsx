@@ -39,27 +39,30 @@ export function SiteFooter() {
           <NewsletterSignup />
         </div>
         <nav aria-label="Footer navigation" className="footer-links">
-          <Link href="/">Kerygma Path</Link>
-          <span aria-hidden="true">✦</span>
-          <Link href="/company/">The Studio</Link>
-          <span aria-hidden="true">✦</span>
-          <Link href="/projects/journey-with-jesus/">Journey with Jesus</Link>
-          <span aria-hidden="true">✦</span>
-          <Link href="/media/">Media</Link>
-          <span aria-hidden="true">✦</span>
-          <Link href="/studio/">Upper Room</Link>
-          <span aria-hidden="true">✦</span>
-          <Link href="/contact/">Contact Us</Link>
-          <span aria-hidden="true">✦</span>
-          <Link href="/policies/privacy/">Privacy</Link>
-          <span aria-hidden="true">✦</span>
-          <Link href="/policies/terms/">Terms</Link>
-          <span aria-hidden="true">✦</span>
-          <Link href="/policies/community-guidelines/">Community Guidelines</Link>
-          <span aria-hidden="true">✦</span>
-          <Link href="/policies/cookies/">Cookies</Link>
-          <span aria-hidden="true">✦</span>
-          <Link href="/policies/copyright/">Copyright</Link>
+          <div className="footer-links-row">
+            <Link href="/">Kerygma Path</Link>
+            <span aria-hidden="true">✦</span>
+            <Link href="/company/">The Studio</Link>
+            <span aria-hidden="true">✦</span>
+            <Link href="/projects/journey-with-jesus/">Journey with Jesus</Link>
+            <span aria-hidden="true">✦</span>
+            <Link href="/media/">Media</Link>
+            <span aria-hidden="true">✦</span>
+            <Link href="/studio/">Upper Room</Link>
+          </div>
+          <div className="footer-links-row">
+            <Link href="/contact/">Contact Us</Link>
+            <span aria-hidden="true">✦</span>
+            <Link href="/policies/privacy/">Privacy</Link>
+            <span aria-hidden="true">✦</span>
+            <Link href="/policies/terms/">Terms</Link>
+            <span aria-hidden="true">✦</span>
+            <Link href="/policies/community-guidelines/">Community Guidelines</Link>
+            <span aria-hidden="true">✦</span>
+            <Link href="/policies/cookies/">Cookies</Link>
+            <span aria-hidden="true">✦</span>
+            <Link href="/policies/copyright/">Copyright</Link>
+          </div>
         </nav>
         <PrivacyPreferences />
         <div className="footer-bottom">
