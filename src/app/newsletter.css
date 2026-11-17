@@ -186,6 +186,8 @@
   height: auto;
   min-height: 0;
   aspect-ratio: 3 / 1;
+  /* Raise only the logo: social links retain their own layout position. */
+  top: -14px;
 }
 /* Size the logo in the layout instead of scaling its paint over the social icons. */
 #site-footer .kerygma-footer-logo-picture {
@@ -363,19 +365,21 @@
     grid-template-rows: auto auto auto auto auto;
     justify-items: center;
     row-gap: 4px;
-    padding-block: 10px 12px;
+    /* Leave enough headroom for the raised logo on narrow screens. */
+    padding-block: 16px 12px;
   }
   #site-footer .footer-brand-stack {
     grid-column: 1;
     grid-row: 1;
     justify-self: center;
     gap: 18px;
-    margin-top: -8px;
+    margin-top: -4px;
   }
   #site-footer .kerygma-footer-brand {
     width: 162px;
     height: auto;
     aspect-ratio: 3 / 1;
+    top: -12px;
   }
   #site-footer .footer-social-links {
     max-width: 100%;
