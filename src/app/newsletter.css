@@ -381,7 +381,7 @@
   -webkit-text-fill-color: currentColor !important;
 }
 :root[data-theme="light"] #site-footer .footer-protection-aikido img {
-  filter: brightness(0) saturate(100%) invert(27%) sepia(30%) saturate(1321%) hue-rotate(169deg) brightness(94%) contrast(93%);
+  filter: brightness(0) saturate(100%) invert(51%) sepia(42%) saturate(595%) hue-rotate(167deg) brightness(54%) contrast(108%);
 }
 
 /* At narrower desktop widths let the links wrap rather than shifting centre. */
