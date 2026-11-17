@@ -71,6 +71,13 @@ test("footer stays centered and newsletter/privacy dialogs stay in the viewport 
   expect(contentRect).not.toBeNull();
   expect(brandRect!.x + brandRect!.width).toBeLessThanOrEqual(contentRect!.x + 12);
   const linksRect = await footer.locator(".footer-links").boundingBox();
+  const protectionRect = await footer.locator(".footer-protection").boundingBox();
+  const footerBottomRect = await footer.locator(".footer-bottom").boundingBox();
+  expect(protectionRect).not.toBeNull();
+  expect(footerBottomRect).not.toBeNull();
+  // Security services belong in the right desktop column, separate from centered credits.
+  expect(protectionRect!.x).toBeGreaterThanOrEqual(footerBottomRect!.x + footerBottomRect!.width - 12);
+  expect(Math.abs(protectionRect!.x + protectionRect!.width - (layout!.x + layout!.width))).toBeLessThanOrEqual(12);
   const privacyRect = await footer.locator(".privacy-preferences").boundingBox();
   const aikidoRect = await footer.locator(".footer-protection-aikido").boundingBox();
   expect(linksRect).not.toBeNull();
@@ -110,12 +117,18 @@ test("footer navigation stays centered and compact on a phone", async ({ page })
   const footer = page.locator("#site-footer");
   const layout = await footer.locator(".footer-inner").boundingBox();
   expect(layout).not.toBeNull();
-  for (const selector of [".footer-brand-stack", ".footer-content", ".footer-links", ".footer-bottom"]) {
+  for (const selector of [".footer-brand-stack", ".footer-content", ".footer-links", ".footer-bottom", ".footer-protection"]) {
     const rect = await footer.locator(selector).boundingBox();
     expect(rect).not.toBeNull();
     expect(Math.abs((rect!.x + rect!.width / 2) - (layout!.x + layout!.width / 2))).toBeLessThanOrEqual(12);
   }
   await expect(footer.locator(".footer-links-row")).toHaveCount(2);
+  const creditBox = await footer.locator(".footer-bottom").boundingBox();
+  const protectionBox = await footer.locator(".footer-protection").boundingBox();
+  expect(creditBox).not.toBeNull();
+  expect(protectionBox).not.toBeNull();
+  // On phones the entire protection group follows the centered credits.
+  expect(protectionBox!.y).toBeGreaterThanOrEqual(creditBox!.y + creditBox!.height);
   const mobileLogo = await footer.locator(".kerygma-footer-brand").boundingBox();
   const mobileSocials = await footer.locator(".footer-social-links").boundingBox();
   expect(mobileLogo).not.toBeNull();
