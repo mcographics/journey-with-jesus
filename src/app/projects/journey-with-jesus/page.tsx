@@ -143,6 +143,7 @@ export default function HomePage() {
           webpSources={imageSources("biblical-history-panorama", biblicalHistoryWidths)}
           mobileWebpSources={imageSources("biblical-history-panorama", biblicalHistoryWidths)}
         />
+        <div className="invitation-shade" aria-hidden="true" />
         <div className="page-width invitation-content">
           <div className="invitation-heading">
             <p className="eyebrow"><Sparkles size={14} aria-hidden="true" /> BEGIN YOUR JOURNEY</p>
