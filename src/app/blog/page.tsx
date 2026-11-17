@@ -56,7 +56,7 @@ export default function BlogPage() {
               GitHub Pages successfully deployed these changes on November 17.
             </p>
             <p>
-              <strong>Pages, links, and search visibility.</strong> We reviewed the site's public routes and
+              <strong>Pages, links, and search visibility.</strong> We reviewed the site&apos;s public routes and
               navigation, including the Company, Blog, Contact, Media, Characters, Team, Scripture reader,
               project, and policy pages. The Contact page is now included in the XML sitemap and SEO checks.
               A new release check inspects exported pages for broken internal links and missing local assets
@@ -67,7 +67,7 @@ export default function BlogPage() {
               checking, unit tests, browser-based interaction tests, production builds, and SEO validation.
               These checks cover important responsive and accessible interactions, such as navigation,
               footer controls, and newsletter behaviour. We also clarified the development documentation
-              to use the site's current domain for the private Studio.
+              to use the site&apos;s current domain for the private Studio.
             </p>
             <p>
               <strong>Behind the scenes.</strong> We checked the connected content database and its running
