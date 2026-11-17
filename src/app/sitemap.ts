@@ -8,6 +8,7 @@ export const dynamic = "force-static";
 const publicPaths = [
   "/",
   "/blog/",
+  "/contact/",
   "/characters/",
   "/company/",
   "/media/",
