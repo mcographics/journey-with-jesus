@@ -75,13 +75,17 @@ test("footer stays centered and newsletter/privacy dialogs stay in the viewport 
   const footerBottomRect = await footer.locator(".footer-bottom").boundingBox();
   expect(protectionRect).not.toBeNull();
   expect(footerBottomRect).not.toBeNull();
-  // The security strip now sits 16px above the social icon centres.
-  const socialRect = await footer.locator(".footer-social-links").boundingBox();
-  expect(socialRect).not.toBeNull();
-  await expect(footer.locator(".footer-protection")).toHaveCSS("top", "-16px");
+  // The security group sits on the same horizontal level as the website credit.
+  await expect(footer.locator(".footer-protection")).toHaveCSS("top", "0px");
+  const majesticCredit = footer.locator(".footer-credits a[href='https://majesticcreations.org/']");
+  const majesticRect = await majesticCredit.boundingBox();
+  expect(majesticRect).not.toBeNull();
   const desktopOffset = (protectionRect!.y + protectionRect!.height / 2) -
-    (socialRect!.y + socialRect!.height / 2);
-  expect(Math.abs(desktopOffset + 16)).toBeLessThanOrEqual(4);
+    (majesticRect!.y + majesticRect!.height / 2);
+  expect(Math.abs(desktopOffset)).toBeLessThanOrEqual(5);
+  await expect(footer.locator(".footer-credits a[href='/projects/journey-with-jesus/']"))
+    .toHaveText("Journey with Jesus");
+  await expect(majesticCredit).toHaveText("Majestic Creations");
   expect(protectionRect!.x).toBeGreaterThanOrEqual(footerBottomRect!.x + footerBottomRect!.width - 12);
   expect(Math.abs(protectionRect!.x + protectionRect!.width - (layout!.x + layout!.width))).toBeLessThanOrEqual(12);
   const privacyRect = await footer.locator(".privacy-preferences").boundingBox();
@@ -161,11 +165,14 @@ test("desktop footer tagline stays on one line at a narrower desktop width", asy
   const social = await footer.locator(".footer-social-links").boundingBox();
   expect(protection).not.toBeNull();
   expect(social).not.toBeNull();
-  // Preserve the new 16px lift at a narrower desktop viewport.
-  await expect(footer.locator(".footer-protection")).toHaveCSS("top", "-16px");
+  // At 1024px, the strip remains vertically aligned with the footer credit.
+  await expect(footer.locator(".footer-protection")).toHaveCSS("top", "0px");
+  const credit = await footer.locator(".footer-credits a[href='https://majesticcreations.org/']").boundingBox();
+  expect(credit).not.toBeNull();
   const narrowOffset = (protection!.y + protection!.height / 2) -
-    (social!.y + social!.height / 2);
-  expect(Math.abs(narrowOffset + 16)).toBeLessThanOrEqual(4);
+    (credit!.y + credit!.height / 2);
+  expect(Math.abs(narrowOffset)).toBeLessThanOrEqual(5);
+  expect(social!.height).toBeGreaterThan(0);
 });
 
 
@@ -185,8 +192,12 @@ test("footer navigation stays centered and compact on a phone", async ({ page })
   const protectionBox = await footer.locator(".footer-protection").boundingBox();
   expect(creditBox).not.toBeNull();
   expect(protectionBox).not.toBeNull();
-  // On phones the entire protection group follows the centered credits.
+  // On phones the security group still follows the centered credits.
   expect(protectionBox!.y).toBeGreaterThanOrEqual(creditBox!.y + creditBox!.height);
+  await expect(footer.locator(".footer-credits a[href='/projects/journey-with-jesus/']"))
+    .toHaveText("Journey with Jesus");
+  await expect(footer.locator(".footer-credits a[href='https://majesticcreations.org/']"))
+    .toHaveText("Majestic Creations");
   await expect(footer.locator(".footer-protection")).toHaveCSS("margin-top", "0px");
   await expect(footer.locator(".footer-protection")).toHaveCSS("top", "0px");
   const mobileLogo = await footer.locator(".kerygma-footer-brand").boundingBox();
@@ -208,7 +219,11 @@ test("footer navigation stays centered and compact on a phone", async ({ page })
   expect(mobileImage).not.toBeNull();
   expect(mobileImage!.height).toBeGreaterThan(60);
   expect(mobileImage!.y + mobileImage!.height + 8).toBeLessThanOrEqual(mobileTagline!.y);
-  expect(mobileTagline!.y + mobileTagline!.height + 10).toBeLessThanOrEqual(mobileSocials!.y);
+  await expect(footer.locator(".footer-social-links")).toHaveCSS("top", "-8px");
+  // The icons are tucked closer to the tagline without touching the text.
+  const mobileSocialGap = mobileSocials!.y - (mobileTagline!.y + mobileTagline!.height);
+  expect(mobileSocialGap).toBeGreaterThanOrEqual(6);
+  expect(mobileSocialGap).toBeLessThanOrEqual(24);
   const mobileAikido = await footer.locator(".footer-protection-aikido").boundingBox();
   const mobilePrivacy = await footer.locator(".privacy-preferences").boundingBox();
   const mobileCloudflare = await footer.locator(".footer-protection-cloudflare").boundingBox();

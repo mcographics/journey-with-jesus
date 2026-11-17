@@ -68,8 +68,10 @@ export function SiteFooter() {
         </nav>
         <div className="footer-bottom">
           <p className="footer-note footer-credits">
-            Kerygma Path · Current project: Journey with Jesus · Website by{" "}
-            <a href="https://mcographics.github.io/">Majestic Creations</a>
+            Kerygma Path · Current project:{" "}
+            <Link href="/projects/journey-with-jesus/">Journey with Jesus</Link>
+            {" "}· Website by{" "}
+            <a href="https://majesticcreations.org/">Majestic Creations</a>
           </p>
         </div>
         <div className="footer-protection" aria-label="Website security services">
