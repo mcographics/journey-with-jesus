@@ -72,10 +72,19 @@ test("footer stays centered and newsletter/privacy dialogs stay in the viewport 
   expect(brandRect!.x + brandRect!.width).toBeLessThanOrEqual(contentRect!.x + 12);
   const linksRect = await footer.locator(".footer-links").boundingBox();
   const privacyRect = await footer.locator(".privacy-preferences").boundingBox();
+  const aikidoRect = await footer.locator(".footer-protection-aikido").boundingBox();
   expect(linksRect).not.toBeNull();
   expect(privacyRect).not.toBeNull();
-  expect(privacyRect!.x).toBeGreaterThan(linksRect!.x + linksRect!.width);
-  expect(Math.abs((privacyRect!.y + privacyRect!.height / 2) - (linksRect!.y + linksRect!.height / 2))).toBeLessThanOrEqual(24);
+  expect(aikidoRect).not.toBeNull();
+  // Privacy preferences belongs in the bottom protection row, to the right of Aikido.
+  expect(privacyRect!.x).toBeGreaterThanOrEqual(aikidoRect!.x + aikidoRect!.width - 1);
+  expect(Math.abs((privacyRect!.y + privacyRect!.height / 2) - (aikidoRect!.y + aikidoRect!.height / 2))).toBeLessThanOrEqual(12);
+  await expect(footer.locator(".privacy-preferences-trigger")).toHaveCSS("border-top-width", "0px");
+  const desktopLogo = await footer.locator(".kerygma-footer-brand").boundingBox();
+  const desktopSocials = await footer.locator(".footer-social-links").boundingBox();
+  expect(desktopLogo).not.toBeNull();
+  expect(desktopSocials).not.toBeNull();
+  expect(desktopLogo!.y + desktopLogo!.height + 8).toBeLessThanOrEqual(desktopSocials!.y);
   const signup = footer.getByRole("button", { name: "Sign up for updates" });
   await expect(signup).toHaveCSS("border-top-width", "0px");
   const signupBox = await signup.boundingBox();
@@ -101,12 +110,26 @@ test("footer navigation stays centered and compact on a phone", async ({ page })
   const footer = page.locator("#site-footer");
   const layout = await footer.locator(".footer-inner").boundingBox();
   expect(layout).not.toBeNull();
-  for (const selector of [".footer-brand-stack", ".footer-content", ".footer-links", ".privacy-preferences", ".footer-bottom"]) {
+  for (const selector of [".footer-brand-stack", ".footer-content", ".footer-links", ".footer-bottom"]) {
     const rect = await footer.locator(selector).boundingBox();
     expect(rect).not.toBeNull();
     expect(Math.abs((rect!.x + rect!.width / 2) - (layout!.x + layout!.width / 2))).toBeLessThanOrEqual(12);
   }
   await expect(footer.locator(".footer-links-row")).toHaveCount(2);
+  const mobileLogo = await footer.locator(".kerygma-footer-brand").boundingBox();
+  const mobileSocials = await footer.locator(".footer-social-links").boundingBox();
+  expect(mobileLogo).not.toBeNull();
+  expect(mobileSocials).not.toBeNull();
+  // The enlarged logo has its own layout space, rather than overlapping icons.
+  expect(mobileLogo!.width).toBeGreaterThanOrEqual(150);
+  expect(mobileLogo!.y + mobileLogo!.height + 10).toBeLessThanOrEqual(mobileSocials!.y);
+  const mobileAikido = await footer.locator(".footer-protection-aikido").boundingBox();
+  const mobilePrivacy = await footer.locator(".privacy-preferences").boundingBox();
+  expect(mobileAikido).not.toBeNull();
+  expect(mobilePrivacy).not.toBeNull();
+  expect(mobilePrivacy!.x).toBeGreaterThanOrEqual(mobileAikido!.x + mobileAikido!.width - 1);
+  expect(Math.abs((mobilePrivacy!.y + mobilePrivacy!.height / 2) - (mobileAikido!.y + mobileAikido!.height / 2))).toBeLessThanOrEqual(12);
+  await expect(footer.locator(".privacy-preferences-trigger")).toHaveCSS("border-top-width", "0px");
   const signup = footer.getByRole("button", { name: "Sign up for updates" });
   await expect(signup).toHaveCSS("border-top-width", "0px");
   const tagline = footer.locator(".footer-tagline");
