@@ -60,9 +60,8 @@ export function SiteFooter() {
           <Link href="/policies/cookies/">Cookies</Link>
           <span aria-hidden="true">✦</span>
           <Link href="/policies/copyright/">Copyright</Link>
-          <span aria-hidden="true">✦</span>
-          <PrivacyPreferences />
         </nav>
+        <PrivacyPreferences />
         <div className="footer-bottom">
           <p className="footer-note footer-credits">
             Kerygma Path · Current project: Journey with Jesus · Website by{" "}
