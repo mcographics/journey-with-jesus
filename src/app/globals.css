@@ -1431,17 +1431,12 @@ body, .home-hero, .mission-section, .site-footer, .media-page {
 }
 
 
-/* Keep the footer logo's click target within the visible logo height. */
-.footer-brand {
-  height: 52px;
-  aspect-ratio: auto;
-}
+/* Keep the complete logo image in normal layout flow. The former fixed-height
+   link and absolutely centred picture let the painted logo overlap its tagline. */
 .footer-brand .kerygma-footer-logo-picture {
-  position: absolute;
-  top: 50%;
-  left: 0;
+  position: static;
   width: 100%;
-  transform: translateY(-50%);
+  transform: none;
   pointer-events: none;
 }
 .footer-brand .kerygma-footer-logo {
