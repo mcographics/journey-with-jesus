@@ -25,8 +25,8 @@ export function SiteFooter() {
           <SocialLinks />
         </div>
         <div className="footer-content">
+          <NewsletterSignup />
           <div className="footer-message">
-            <p className="footer-tagline">Christian animation with purpose</p>
             <p className="footer-note">Faith · Scripture · Story</p>
             <div className="footer-security" aria-label="Studio sign-in security">
               <ShieldCheck size={16} strokeWidth={1.8} aria-hidden="true" />
@@ -35,8 +35,8 @@ export function SiteFooter() {
                 <a href="https://www.cloudflare.com/application-services/products/turnstile/" target="_blank" rel="noopener noreferrer">Cloudflare Turnstile</a>.
               </p>
             </div>
+            <p className="footer-tagline">Christian animation with purpose</p>
           </div>
-          <NewsletterSignup />
         </div>
         <nav aria-label="Footer navigation" className="footer-links">
           <div className="footer-links-row">
