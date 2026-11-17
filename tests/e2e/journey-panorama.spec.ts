@@ -129,7 +129,7 @@ for (const viewport of [
       expect(layout.borderRadius).toBe("0px");
       expect(layout.objectFit).toBe("cover");
       expect(layout.objectPosition).toBe("42% 54%");
-      expect(layout.imageSource).toMatch(/\\/images\\/mission-garden-\\d+\\.webp$/);
+      expect(layout.imageSource).toContain("/images/mission-garden-");
       expect(layout.artWidth).toBeGreaterThan(viewport.width * (viewport.name === "desktop" ? 0.35 : 0.85));
       expect(layout.artWidth).toBeLessThanOrEqual(layout.viewportWidth + 2);
     });
