@@ -58,6 +58,18 @@ test("footer stays centered and newsletter/privacy dialogs stay in the viewport 
     const centreOffset = (rect!.x + rect!.width / 2) - (layout!.x + layout!.width / 2);
     expect(Math.abs(centreOffset)).toBeLessThanOrEqual(12);
   }
+  const navRows = footer.locator(".footer-links-row");
+  await expect(navRows).toHaveCount(2);
+  for (const row of await navRows.all()) {
+    const rect = await row.boundingBox();
+    expect(rect).not.toBeNull();
+    expect(Math.abs((rect!.x + rect!.width / 2) - (layout!.x + layout!.width / 2))).toBeLessThanOrEqual(12);
+  }
+  const brandRect = await footer.locator(".footer-brand-stack").boundingBox();
+  const contentRect = await footer.locator(".footer-content").boundingBox();
+  expect(brandRect).not.toBeNull();
+  expect(contentRect).not.toBeNull();
+  expect(brandRect!.x + brandRect!.width).toBeLessThanOrEqual(contentRect!.x + 12);
   const linksRect = await footer.locator(".footer-links").boundingBox();
   const privacyRect = await footer.locator(".privacy-preferences").boundingBox();
   expect(linksRect).not.toBeNull();
@@ -71,4 +83,20 @@ test("footer stays centered and newsletter/privacy dialogs stay in the viewport 
   await page.getByRole("button", { name: "Close newsletter signup" }).click();
   await footer.getByRole("button", { name: "Privacy preferences" }).click();
   await expect(page.getByRole("dialog", { name: "Privacy preferences" })).toBeInViewport();
+});
+
+
+test("footer navigation stays centered and compact on a phone", async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.goto("/company/");
+  const footer = page.locator("#site-footer");
+  const layout = await footer.locator(".footer-inner").boundingBox();
+  expect(layout).not.toBeNull();
+  for (const selector of [".footer-brand-stack", ".footer-content", ".footer-links", ".privacy-preferences", ".footer-bottom"]) {
+    const rect = await footer.locator(selector).boundingBox();
+    expect(rect).not.toBeNull();
+    expect(Math.abs((rect!.x + rect!.width / 2) - (layout!.x + layout!.width / 2))).toBeLessThanOrEqual(12);
+  }
+  await expect(footer.locator(".footer-links-row")).toHaveCount(2);
+  await expect(footer.getByRole("button", { name: "Sign up for updates" })).toHaveCSS("border-top-width", "0px");
 });
