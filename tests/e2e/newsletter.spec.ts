@@ -176,6 +176,19 @@ test("desktop footer tagline stays on one line at a narrower desktop width", asy
 });
 
 
+test("Aikido footer attribution is navy in light mode and unchanged in dark mode", async ({ page }) => {
+  await page.goto("/company/");
+  const label = page.locator("#site-footer .footer-protection-aikido > span");
+  const logo = page.locator("#site-footer .footer-protection-aikido img");
+
+  await page.evaluate(() => { document.documentElement.dataset.theme = "light"; });
+  await expect(label).toHaveCSS("color", "rgb(36, 79, 118)");
+  await expect(logo).toHaveCSS("filter", /invert\\(/);
+
+  await page.evaluate(() => { document.documentElement.dataset.theme = "dark"; });
+  await expect(logo).toHaveCSS("filter", "none");
+});
+
 test("footer navigation stays centered and compact on a phone", async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 812 });
   await page.goto("/company/");
