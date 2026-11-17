@@ -62,3 +62,5 @@ jobs:
           NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ vars.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || 'sb_publishable_IpsxOGkItkxNP_u6DPYYgg_HAHbSzBQ' }}
       - name: Verify exported SEO metadata
         run: npm run check:seo
+      - name: Check exported internal links and assets
+        run: npm run check:links

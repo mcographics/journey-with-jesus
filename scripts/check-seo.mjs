@@ -3,7 +3,7 @@ import { readFile } from "node:fs/promises";
 import { JSDOM } from "jsdom";
 
 const origin = "https://kerygmapath.com";
-const paths = ["/", "/company/", "/projects/journey-with-jesus/", "/media/", "/blog/", "/characters/", "/word/", "/team/"];
+const paths = ["/", "/company/", "/projects/journey-with-jesus/", "/media/", "/blog/", "/contact/", "/characters/", "/word/", "/team/"];
 const titles = new Set();
 const descriptions = new Set();
 for (const path of paths) {

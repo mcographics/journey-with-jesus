@@ -47,7 +47,7 @@ Visitors can browse videos and submit comments without signing in. The Media com
 
 The private Studio lives at:
 
-`https://mcographics.github.io/journey-with-jesus/studio`
+`https://kerygmapath.com/studio/`
 
 It is not linked in the public header. Sign-in uses an email magic link, and database/storage policies check an explicit admin list. A hidden URL is not the access control.
 
@@ -58,7 +58,7 @@ The repository includes the media and comment database migrations. To make uploa
 1. The current Pages workflow is wired to the project's public Supabase URL and publishable key. You can override either value with the matching GitHub repository Actions variable. For local development, set both in `.env.local`.
 2. Link the Supabase CLI to that project and apply the migrations with `supabase link --project-ref <project-ref>` and `supabase db push`.
 3. Deploy the anonymous comment function with `supabase functions deploy submit-comment`. Set `RATE_LIMIT_SALT` to a random secret of at least 32 characters and set `ALLOWED_ORIGINS` to `https://mcographics.github.io` plus any exact local development origins.
-4. In Supabase Auth, enable email sign-in, invite the owner's email, and add `https://mcographics.github.io/journey-with-jesus/studio` to the allowed redirect URLs. The Studio sign-in form only accepts an existing Auth user.
+4. In Supabase Auth, enable email sign-in, invite the owner's email, and add `https://kerygmapath.com/studio/` to the allowed redirect URLs. The Studio sign-in form only accepts an existing Auth user.
 5. In the Supabase SQL editor, grant that invited account Studio access:
    `insert into public.media_admins (user_id) select id from auth.users where email = 'OWNER_EMAIL';`
    Replace `OWNER_EMAIL` with the invited admin's address. Repeat only for people who should manage videos and comments.
