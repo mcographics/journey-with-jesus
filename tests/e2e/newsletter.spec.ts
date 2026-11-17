@@ -96,22 +96,28 @@ test("footer stays centered and newsletter/privacy dialogs stay in the viewport 
   expect(desktopTagline).not.toBeNull();
   expect(desktopSocials).not.toBeNull();
   await expect(brandTagline).toHaveText("CHRISTIAN ANIMATION WITH PURPOSE");
-  await expect(footer.locator(".footer-brand-heading")).toHaveCSS("top", "-26px");
+  await expect(footer.locator(".footer-brand-heading")).toHaveCSS("top", "0px");
   expect(desktopLogo!.width).toBeGreaterThanOrEqual(225);
-  await expect(footer.locator(".kerygma-footer-brand")).toHaveCSS("top", "-12px");
+  await expect(footer.locator(".kerygma-footer-brand")).toHaveCSS("top", "-6px");
   // Raised logo, then tagline, then icons: each has its own clear space.
   const footerRect = await footer.boundingBox();
   expect(footerRect).not.toBeNull();
   expect(desktopLogo!.y).toBeGreaterThanOrEqual(footerRect!.y);
-  expect(desktopLogo!.y + desktopLogo!.height + 10).toBeLessThanOrEqual(desktopTagline!.y);
+  expect(desktopLogo!.y + desktopLogo!.height + 6).toBeLessThanOrEqual(desktopTagline!.y);
   // Measure the rendered picture/image too, not only its former fixed-height link.
   const desktopPicture = footer.locator(".kerygma-footer-logo-picture");
   await expect(desktopPicture).toHaveCSS("position", "static");
   const desktopImage = await footer.locator(".kerygma-footer-logo").boundingBox();
   expect(desktopImage).not.toBeNull();
   expect(desktopImage!.height).toBeGreaterThan(65);
-  expect(desktopImage!.y + desktopImage!.height + 10).toBeLessThanOrEqual(desktopTagline!.y);
-  expect(desktopTagline!.y + desktopTagline!.height + 10).toBeLessThanOrEqual(desktopSocials!.y);
+  expect(desktopImage!.y + desktopImage!.height + 6).toBeLessThanOrEqual(desktopTagline!.y);
+  expect(desktopTagline!.y + desktopTagline!.height + 2).toBeLessThanOrEqual(desktopSocials!.y);
+  await expect(brandTagline).toHaveCSS("white-space", "nowrap");
+  const desktopLineHeight = await brandTagline.evaluate((node) => parseFloat(getComputedStyle(node).lineHeight));
+  expect(desktopTagline!.height).toBeLessThanOrEqual(desktopLineHeight + 1);
+  // Prevent reintroduction of the excessively tall desktop footer.
+  await expect(footer.locator(".footer-inner")).toHaveCSS("padding-top", "20px");
+  expect(footerRect!.height).toBeLessThanOrEqual(225);
   const signup = footer.getByRole("button", { name: "Sign up for updates" });
   await expect(signup).toHaveCSS("border-top-width", "0px");
   const signupBox = await signup.boundingBox();
@@ -125,6 +131,27 @@ test("footer stays centered and newsletter/privacy dialogs stay in the viewport 
   await page.getByRole("button", { name: "Close newsletter signup" }).click();
   await footer.getByRole("button", { name: "Privacy preferences" }).click();
   await expect(page.getByRole("dialog", { name: "Privacy preferences" })).toBeInViewport();
+});
+
+
+test("desktop footer tagline stays on one line at a narrower desktop width", async ({ page }) => {
+  await page.setViewportSize({ width: 1024, height: 768 });
+  await page.goto("/company/");
+  const footer = page.locator("#site-footer");
+  const tagline = footer.locator(".footer-brand-tagline");
+  const taglineBox = await tagline.boundingBox();
+  const imageBox = await footer.locator(".kerygma-footer-logo").boundingBox();
+  const footerBox = await footer.boundingBox();
+  expect(taglineBox).not.toBeNull();
+  expect(imageBox).not.toBeNull();
+  expect(footerBox).not.toBeNull();
+  await expect(tagline).toHaveText("CHRISTIAN ANIMATION WITH PURPOSE");
+  await expect(tagline).toHaveCSS("white-space", "nowrap");
+  const lineHeight = await tagline.evaluate((node) => parseFloat(getComputedStyle(node).lineHeight));
+  expect(taglineBox!.height).toBeLessThanOrEqual(lineHeight + 1);
+  expect(taglineBox!.x).toBeGreaterThanOrEqual(footerBox!.x);
+  expect(taglineBox!.x + taglineBox!.width).toBeLessThanOrEqual(footerBox!.x + footerBox!.width);
+  expect(imageBox!.y + imageBox!.height + 6).toBeLessThanOrEqual(taglineBox!.y);
 });
 
 
@@ -182,4 +209,5 @@ test("footer navigation stays centered and compact on a phone", async ({ page })
   expect(messageBox).not.toBeNull();
   expect(signupBox!.y + signupBox!.height).toBeLessThanOrEqual(messageBox!.y);
   await expect(footer.locator(".footer-brand-tagline")).toHaveCSS("font-size", "11px");
+  await expect(footer.locator(".footer-brand-tagline")).toHaveCSS("white-space", "nowrap");
 });
