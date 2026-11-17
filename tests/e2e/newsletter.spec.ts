@@ -75,7 +75,8 @@ test("footer stays centered and newsletter/privacy dialogs stay in the viewport 
   const footerBottomRect = await footer.locator(".footer-bottom").boundingBox();
   expect(protectionRect).not.toBeNull();
   expect(footerBottomRect).not.toBeNull();
-  // Security services belong in the right desktop column, separate from centered credits.
+  // Security services are on the last line, below the centered footer credits.
+  expect(protectionRect!.y).toBeGreaterThanOrEqual(footerBottomRect!.y + footerBottomRect!.height + 4);
   expect(protectionRect!.x).toBeGreaterThanOrEqual(footerBottomRect!.x + footerBottomRect!.width - 12);
   expect(Math.abs(protectionRect!.x + protectionRect!.width - (layout!.x + layout!.width))).toBeLessThanOrEqual(12);
   const privacyRect = await footer.locator(".privacy-preferences").boundingBox();
@@ -145,6 +146,7 @@ test("footer navigation stays centered and compact on a phone", async ({ page })
   expect(protectionBox).not.toBeNull();
   // On phones the entire protection group follows the centered credits.
   expect(protectionBox!.y).toBeGreaterThanOrEqual(creditBox!.y + creditBox!.height);
+  await expect(footer.locator(".footer-protection")).toHaveCSS("margin-top", "0px");
   const mobileLogo = await footer.locator(".kerygma-footer-brand").boundingBox();
   const mobileTagline = await footer.locator(".footer-brand-tagline").boundingBox();
   const mobileSocials = await footer.locator(".footer-social-links").boundingBox();
