@@ -64,7 +64,6 @@ export function SiteFooter() {
             <Link href="/policies/copyright/">Copyright</Link>
           </div>
         </nav>
-        <PrivacyPreferences />
         <div className="footer-bottom">
           <p className="footer-note footer-credits">
             Kerygma Path · Current project: Journey with Jesus · Website by{" "}
@@ -78,8 +77,9 @@ export function SiteFooter() {
               </svg>
               <span>Protected by Cloudflare</span>
             </a>
-            <span className="footer-protection-divider" aria-hidden="true">·</span>
-            <a className="footer-protection-aikido" href="https://www.aikido.dev/" target="_blank" rel="noopener noreferrer" aria-label="Source code scanned with Aikido Security">
+            <div className="footer-protection-tail">
+              <span className="footer-protection-divider" aria-hidden="true">·</span>
+              <a className="footer-protection-aikido" href="https://www.aikido.dev/" target="_blank" rel="noopener noreferrer" aria-label="Source code scanned with Aikido Security">
               <span>Code scanned by</span>
               <Image
                 src="https://cdn.prod.website-files.com/642adcaf364024654c71df23/6433ffea7b5ef2bfa23c74a9_aikido%20light.svg"
@@ -88,7 +88,10 @@ export function SiteFooter() {
                 height={23}
                 unoptimized
               />
-            </a>
+              </a>
+              <span className="footer-protection-divider" aria-hidden="true">·</span>
+              <PrivacyPreferences />
+            </div>
           </div>
         </div>
       </div>
