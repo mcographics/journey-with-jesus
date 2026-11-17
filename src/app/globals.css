@@ -161,7 +161,8 @@ button { color: inherit; }
 .invitation-shade { position: absolute; z-index: 1; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgba(5, 17, 35, .72) 0%, rgba(8, 25, 48, .56) 25%, rgba(6, 23, 47, .25) 45%, rgba(6, 22, 45, .05) 65%, transparent 100%), linear-gradient(180deg, rgba(3, 11, 24, .04), rgba(3, 11, 24, .09)); }
 :root[data-theme="light"] .invitation-shade { background: linear-gradient(90deg, rgba(242, 248, 255, .42) 0%, rgba(234, 244, 254, .30) 28%, rgba(225, 239, 253, .13) 55%, rgba(223, 238, 252, .02) 82%, transparent 100%), linear-gradient(180deg, rgba(245, 250, 255, .02), rgba(227, 241, 255, .04)); }
 .invitation-content { position: relative; z-index: 2; width: min(100% - 56px, 1160px); margin-inline: auto; display: grid; grid-template-columns: minmax(0, 1fr); align-items: start; justify-items: start; gap: 24px; padding-block: clamp(64px, 7vw, 110px); }
-.invitation-heading { max-width: 650px; }
+/* Shadow the rendered lettering as a group so the gold text gradient remains intact. */
+.invitation-heading { max-width: 650px; filter: drop-shadow(0 2px 3px rgba(0, 0, 0, .86)) drop-shadow(0 0 5px rgba(0, 0, 0, .48)); }
 .invitation-heading .eyebrow { color: #f3d595; }
 .invitation-heading h2 { margin: 0; color: #fff9ec; font-size: clamp(36px, 3.4vw, 46px); }
 .invitation-heading h2 em { color: #f2cb7f; }
@@ -632,6 +633,8 @@ button { color: inherit; }
 :root[data-theme="light"] .mission-art { background: color-mix(in srgb, #e2eaf3 calc(100% - var(--light-surface-mix, 0%)), #aeb6c2 var(--light-surface-mix, 0%)); }
 
 :root[data-theme="light"] .invitation-section { background: color-mix(in srgb, #e9eff5 calc(100% - var(--light-surface-mix, 0%)), #aeb6c2 var(--light-surface-mix, 0%)); }
+/* Black lettering shadow improves contrast over the light-mode panorama. */
+:root[data-theme="light"] .invitation-heading { filter: drop-shadow(0 2px 3px rgba(0, 0, 0, .82)) drop-shadow(0 0 4px rgba(0, 0, 0, .32)); }
 :root[data-theme="light"] .invitation-heading .eyebrow { color: #795b2c; text-shadow: 0 1px 8px rgba(242, 246, 250, .84); }
 :root[data-theme="light"] .invitation-heading h2 { color: #202b3b; text-shadow: 0 1px 12px rgba(242, 246, 250, .78); }
 :root[data-theme="light"] .invitation-heading h2 em { color: #936b27; text-shadow: 0 1px 10px rgba(242, 246, 250, .76); }

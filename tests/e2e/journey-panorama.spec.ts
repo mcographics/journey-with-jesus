@@ -24,6 +24,10 @@ for (const viewport of viewports) {
       await expect(image).toHaveAttribute("alt", /^A biblical history panorama/);
       await image.evaluate(async (element) => (element as HTMLImageElement).decode());
       await expect(heading).toBeVisible();
+      // Black drop shadow must remain in both themes without changing text colors.
+      const headingShadow = await heading.evaluate((element) => getComputedStyle(element).filter);
+      expect(headingShadow).toContain("drop-shadow(");
+      expect(headingShadow).toContain("rgba(0, 0, 0,");
       await expect(action).toBeVisible();
       await expect(action).toHaveAttribute("href", "/media/");
       // The CTA belongs underneath the left text block, not in a right-hand column.
