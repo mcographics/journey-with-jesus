@@ -387,7 +387,7 @@
   font-size:12px; font-weight:600; white-space:nowrap;
 }
 #site-footer .footer-newsletter-launch:hover { color:#fff2d3; }
-#site-footer .footer-newsletter-launch:focus-visible { outline:2px solid var(--gold-bright); outline-offset:2px; }
+#site-footer .footer-newsletter-launch:focus-visible { outline: none; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; }
 #site-footer .newsletter-modal-backdrop {
   position: fixed; inset: 0; z-index: 10001; display: flex; align-items: center;
   justify-content: center; padding: 16px; background: rgba(0,0,0,.74);
