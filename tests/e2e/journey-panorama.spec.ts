@@ -28,6 +28,11 @@ for (const viewport of viewports) {
       const headingShadow = await heading.evaluate((element) => getComputedStyle(element).filter);
       expect(headingShadow).toContain("drop-shadow(");
       expect(headingShadow).toContain("rgba(0, 0, 0,");
+      if (theme === "light") {
+        // The light-mode lettering needs a crisp black edge, not a diffuse glow.
+        expect(headingShadow).toContain("1px 2px 0px");
+        expect(headingShadow).toContain("0px 1px 1px");
+      }
       await expect(action).toBeVisible();
       await expect(action).toHaveAttribute("href", "/media/");
       // The CTA belongs underneath the left text block, not in a right-hand column.

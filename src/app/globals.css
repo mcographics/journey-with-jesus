@@ -634,7 +634,7 @@ button { color: inherit; }
 
 :root[data-theme="light"] .invitation-section { background: color-mix(in srgb, #e9eff5 calc(100% - var(--light-surface-mix, 0%)), #aeb6c2 var(--light-surface-mix, 0%)); }
 /* Black lettering shadow improves contrast over the light-mode panorama. */
-:root[data-theme="light"] .invitation-heading { filter: drop-shadow(0 2px 3px rgba(0, 0, 0, .82)) drop-shadow(0 0 4px rgba(0, 0, 0, .32)); }
+:root[data-theme="light"] .invitation-heading { filter: drop-shadow(1px 2px 0 rgba(0, 0, 0, .96)) drop-shadow(0 1px 1px rgba(0, 0, 0, .78)); }
 :root[data-theme="light"] .invitation-heading .eyebrow { color: #795b2c; text-shadow: 0 1px 8px rgba(242, 246, 250, .84); }
 :root[data-theme="light"] .invitation-heading h2 { color: #202b3b; text-shadow: 0 1px 12px rgba(242, 246, 250, .78); }
 :root[data-theme="light"] .invitation-heading h2 em { color: #936b27; text-shadow: 0 1px 10px rgba(242, 246, 250, .76); }
