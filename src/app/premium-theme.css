@@ -301,7 +301,7 @@
 /* Never tint photos; the original Media Library image is one untouched layer
    and the media stage is transparent. Both themes retain the photo. */
 :root:not([data-theme="light"]) body :is(
-  .storybook-shade, .invitation-shade
+  .storybook-shade
 ) { background: rgba(0, 0, 0, .26) !important; }
 :root:not([data-theme="light"]) body :is(
   .kerygma-company-hero-shade, .kerygma-gateway-shade
