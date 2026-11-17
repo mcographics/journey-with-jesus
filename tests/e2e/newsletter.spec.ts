@@ -88,23 +88,29 @@ test("footer stays centered and newsletter/privacy dialogs stay in the viewport 
   expect(Math.abs((privacyRect!.y + privacyRect!.height / 2) - (aikidoRect!.y + aikidoRect!.height / 2))).toBeLessThanOrEqual(12);
   await expect(footer.locator(".privacy-preferences-trigger")).toHaveCSS("border-top-width", "0px");
   const desktopLogo = await footer.locator(".kerygma-footer-brand").boundingBox();
+  const brandTagline = footer.locator(".footer-brand-stack .footer-brand-tagline");
+  const desktopTagline = await brandTagline.boundingBox();
   const desktopSocials = await footer.locator(".footer-social-links").boundingBox();
   expect(desktopLogo).not.toBeNull();
+  expect(desktopTagline).not.toBeNull();
   expect(desktopSocials).not.toBeNull();
-  // The logo is raised without shifting the social links into its artwork.
-  await expect(footer.locator(".kerygma-footer-brand")).toHaveCSS("top", "-14px");
-  expect(desktopLogo!.y + desktopLogo!.height + 16).toBeLessThanOrEqual(desktopSocials!.y);
+  await expect(brandTagline).toHaveText("CHRISTIAN ANIMATION WITH PURPOSE");
+  await expect(footer.locator(".footer-brand-heading")).toHaveCSS("top", "-26px");
+  expect(desktopLogo!.width).toBeGreaterThanOrEqual(225);
+  // Raised logo, then tagline, then icons: each has its own clear space.
+  const footerRect = await footer.boundingBox();
+  expect(footerRect).not.toBeNull();
+  expect(desktopLogo!.y).toBeGreaterThanOrEqual(footerRect!.y);
+  expect(desktopLogo!.y + desktopLogo!.height).toBeLessThanOrEqual(desktopTagline!.y + 1);
+  expect(desktopTagline!.y + desktopTagline!.height + 10).toBeLessThanOrEqual(desktopSocials!.y);
   const signup = footer.getByRole("button", { name: "Sign up for updates" });
   await expect(signup).toHaveCSS("border-top-width", "0px");
   const signupBox = await signup.boundingBox();
-  const tagline = footer.locator(".footer-tagline");
-  const taglineBox = await tagline.boundingBox();
+  const messageBox = await footer.locator(".footer-message").boundingBox();
   expect(signupBox).not.toBeNull();
-  expect(taglineBox).not.toBeNull();
-  // The newsletter action sits above the smaller tagline on all screen sizes.
-  expect(signupBox!.y + signupBox!.height).toBeLessThan(taglineBox!.y);
-  const taglineSize = parseFloat(await tagline.evaluate((node) => getComputedStyle(node).fontSize));
-  expect(taglineSize).toBeLessThanOrEqual(14);
+  expect(messageBox).not.toBeNull();
+  // Newsletter remains at the top of the center footer column.
+  expect(signupBox!.y + signupBox!.height).toBeLessThanOrEqual(messageBox!.y);
   await signup.click();
   await expect(page.getByRole("dialog", { name: "Kerygma Path updates" })).toBeInViewport();
   await page.getByRole("button", { name: "Close newsletter signup" }).click();
@@ -132,14 +138,19 @@ test("footer navigation stays centered and compact on a phone", async ({ page })
   // On phones the entire protection group follows the centered credits.
   expect(protectionBox!.y).toBeGreaterThanOrEqual(creditBox!.y + creditBox!.height);
   const mobileLogo = await footer.locator(".kerygma-footer-brand").boundingBox();
+  const mobileTagline = await footer.locator(".footer-brand-tagline").boundingBox();
   const mobileSocials = await footer.locator(".footer-social-links").boundingBox();
   expect(mobileLogo).not.toBeNull();
+  expect(mobileTagline).not.toBeNull();
   expect(mobileSocials).not.toBeNull();
-  // The enlarged logo has its own layout space, rather than overlapping icons.
-  expect(mobileLogo!.width).toBeGreaterThanOrEqual(150);
-  // Mobile also raises the logo while reserving room above it.
-  await expect(footer.locator(".kerygma-footer-brand")).toHaveCSS("top", "-12px");
-  expect(mobileLogo!.y + mobileLogo!.height + 16).toBeLessThanOrEqual(mobileSocials!.y);
+  await expect(footer.locator(".footer-brand-tagline")).toHaveText("CHRISTIAN ANIMATION WITH PURPOSE");
+  await expect(footer.locator(".footer-brand-heading")).toHaveCSS("top", "-22px");
+  expect(mobileLogo!.width).toBeGreaterThanOrEqual(205);
+  const mobileFooterRect = await footer.boundingBox();
+  expect(mobileFooterRect).not.toBeNull();
+  expect(mobileLogo!.y).toBeGreaterThanOrEqual(mobileFooterRect!.y);
+  expect(mobileLogo!.y + mobileLogo!.height).toBeLessThanOrEqual(mobileTagline!.y + 1);
+  expect(mobileTagline!.y + mobileTagline!.height + 10).toBeLessThanOrEqual(mobileSocials!.y);
   const mobileAikido = await footer.locator(".footer-protection-aikido").boundingBox();
   const mobilePrivacy = await footer.locator(".privacy-preferences").boundingBox();
   expect(mobileAikido).not.toBeNull();
@@ -149,11 +160,10 @@ test("footer navigation stays centered and compact on a phone", async ({ page })
   await expect(footer.locator(".privacy-preferences-trigger")).toHaveCSS("border-top-width", "0px");
   const signup = footer.getByRole("button", { name: "Sign up for updates" });
   await expect(signup).toHaveCSS("border-top-width", "0px");
-  const tagline = footer.locator(".footer-tagline");
   const signupBox = await signup.boundingBox();
-  const taglineBox = await tagline.boundingBox();
+  const messageBox = await footer.locator(".footer-message").boundingBox();
   expect(signupBox).not.toBeNull();
-  expect(taglineBox).not.toBeNull();
-  expect(signupBox!.y + signupBox!.height).toBeLessThan(taglineBox!.y);
-  await expect(tagline).toHaveCSS("font-size", "13px");
+  expect(messageBox).not.toBeNull();
+  expect(signupBox!.y + signupBox!.height).toBeLessThanOrEqual(messageBox!.y);
+  await expect(footer.locator(".footer-brand-tagline")).toHaveCSS("font-size", "11px");
 });
