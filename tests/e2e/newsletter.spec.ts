@@ -75,13 +75,13 @@ test("footer stays centered and newsletter/privacy dialogs stay in the viewport 
   const footerBottomRect = await footer.locator(".footer-bottom").boundingBox();
   expect(protectionRect).not.toBeNull();
   expect(footerBottomRect).not.toBeNull();
-  // Security is just above the social icons, with a controlled 6px lift.
+  // The security strip now sits 16px above the social icon centres.
   const socialRect = await footer.locator(".footer-social-links").boundingBox();
   expect(socialRect).not.toBeNull();
-  await expect(footer.locator(".footer-protection")).toHaveCSS("top", "-6px");
+  await expect(footer.locator(".footer-protection")).toHaveCSS("top", "-16px");
   const desktopOffset = (protectionRect!.y + protectionRect!.height / 2) -
     (socialRect!.y + socialRect!.height / 2);
-  expect(Math.abs(desktopOffset + 6)).toBeLessThanOrEqual(4);
+  expect(Math.abs(desktopOffset + 16)).toBeLessThanOrEqual(4);
   expect(protectionRect!.x).toBeGreaterThanOrEqual(footerBottomRect!.x + footerBottomRect!.width - 12);
   expect(Math.abs(protectionRect!.x + protectionRect!.width - (layout!.x + layout!.width))).toBeLessThanOrEqual(12);
   const privacyRect = await footer.locator(".privacy-preferences").boundingBox();
@@ -161,11 +161,11 @@ test("desktop footer tagline stays on one line at a narrower desktop width", asy
   const social = await footer.locator(".footer-social-links").boundingBox();
   expect(protection).not.toBeNull();
   expect(social).not.toBeNull();
-  // Keep the same subtle lift at a narrower desktop viewport.
+  // Preserve the new 16px lift at a narrower desktop viewport.
   await expect(footer.locator(".footer-protection")).toHaveCSS("top", "-6px");
   const narrowOffset = (protection!.y + protection!.height / 2) -
     (social!.y + social!.height / 2);
-  expect(Math.abs(narrowOffset + 6)).toBeLessThanOrEqual(4);
+  expect(Math.abs(narrowOffset + 16)).toBeLessThanOrEqual(4);
 });
 
 
@@ -211,8 +211,18 @@ test("footer navigation stays centered and compact on a phone", async ({ page })
   expect(mobileTagline!.y + mobileTagline!.height + 10).toBeLessThanOrEqual(mobileSocials!.y);
   const mobileAikido = await footer.locator(".footer-protection-aikido").boundingBox();
   const mobilePrivacy = await footer.locator(".privacy-preferences").boundingBox();
+  const mobileCloudflare = await footer.locator(".footer-protection-cloudflare").boundingBox();
+  const mobileTail = await footer.locator(".footer-protection-tail").boundingBox();
   expect(mobileAikido).not.toBeNull();
   expect(mobilePrivacy).not.toBeNull();
+  expect(mobileCloudflare).not.toBeNull();
+  expect(mobileTail).not.toBeNull();
+  // Mobile reverses the two security lines: Aikido/privacy above Cloudflare.
+  await expect(footer.locator(".footer-protection")).toHaveCSS("flex-direction", "column");
+  await expect(footer.locator(".footer-protection-cloudflare")).toHaveCSS("order", "2");
+  await expect(footer.locator(".footer-protection-tail")).toHaveCSS("order", "1");
+  await expect(footer.locator(".footer-protection-tail > .footer-protection-divider").first()).toBeHidden();
+  expect(mobileCloudflare!.y).toBeGreaterThanOrEqual(mobileTail!.y + mobileTail!.height + 4);
   expect(mobilePrivacy!.x).toBeGreaterThanOrEqual(mobileAikido!.x + mobileAikido!.width - 1);
   expect(Math.abs((mobilePrivacy!.y + mobilePrivacy!.height / 2) - (mobileAikido!.y + mobileAikido!.height / 2))).toBeLessThanOrEqual(12);
   await expect(footer.locator(".privacy-preferences-trigger")).toHaveCSS("border-top-width", "0px");
