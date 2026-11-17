@@ -374,6 +374,16 @@
 }
 #site-footer .footer-protection-aikido img { height: 16px; max-width: 80px; }
 
+/* The Aikido light wordmark is a pale SVG: tint it navy in light mode,
+   matching the site's light-theme footer text while preserving dark mode. */
+:root[data-theme="light"] body #site-footer .footer-protection-aikido > span {
+  color: var(--text-primary) !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+:root[data-theme="light"] #site-footer .footer-protection-aikido img {
+  filter: brightness(0) saturate(100%) invert(27%) sepia(30%) saturate(1321%) hue-rotate(169deg) brightness(94%) contrast(93%);
+}
+
 /* At narrower desktop widths let the links wrap rather than shifting centre. */
 @media (min-width: 901px) and (max-width: 1300px) {
   #site-footer .footer-inner {
