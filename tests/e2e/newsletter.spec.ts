@@ -162,7 +162,7 @@ test("desktop footer tagline stays on one line at a narrower desktop width", asy
   expect(protection).not.toBeNull();
   expect(social).not.toBeNull();
   // Preserve the new 16px lift at a narrower desktop viewport.
-  await expect(footer.locator(".footer-protection")).toHaveCSS("top", "-6px");
+  await expect(footer.locator(".footer-protection")).toHaveCSS("top", "-16px");
   const narrowOffset = (protection!.y + protection!.height / 2) -
     (social!.y + social!.height / 2);
   expect(Math.abs(narrowOffset + 16)).toBeLessThanOrEqual(4);
