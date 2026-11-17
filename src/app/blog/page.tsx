@@ -38,6 +38,56 @@ export default function BlogPage() {
           </p>
         </header>
 
+        <article aria-labelledby="blog-maintenance-title" className="blog-welcome blog-maintenance-post" id="maintenance-2026-11-17">
+          <div aria-hidden="true" className="blog-welcome-mark"><Sparkles size={25} strokeWidth={1.5} /></div>
+          <div className="blog-welcome-copy">
+            <p className="blog-post-kicker"><time dateTime="2026-11-17">November 17, 2026</time> · Website update</p>
+            <h2 id="blog-maintenance-title">Website maintenance: stronger checks, clearer links, and dependable publishing</h2>
+            <p>
+              We have completed a new maintenance pass on the Kerygma Path website. Our goal is straightforward:
+              make it easier to explore our work, keep the site reliable across devices, and catch problems before
+              future changes reach visitors.
+            </p>
+            <p>
+              <strong>Recent footer improvements.</strong> The Journey with Jesus project title now links directly
+              to its project page, the Majestic Creations credit opens the current studio website, and the
+              Cloudflare and Aikido security credits have been refined for desktop and mobile. We also improved
+              the contrast of the Aikido attribution in light mode while preserving its dark-mode appearance.
+              GitHub Pages successfully deployed these changes on November 17.
+            </p>
+            <p>
+              <strong>Pages, links, and search visibility.</strong> We reviewed the site's public routes and
+              navigation, including the Company, Blog, Contact, Media, Characters, Team, Scripture reader,
+              project, and policy pages. The Contact page is now included in the XML sitemap and SEO checks.
+              A new release check inspects exported pages for broken internal links and missing local assets
+              before publication, alongside existing page metadata and search-engine checks.
+            </p>
+            <p>
+              <strong>Quality checks and accessibility.</strong> The publishing pipeline runs linting, type
+              checking, unit tests, browser-based interaction tests, production builds, and SEO validation.
+              These checks cover important responsive and accessible interactions, such as navigation,
+              footer controls, and newsletter behaviour. We also clarified the development documentation
+              to use the site's current domain for the private Studio.
+            </p>
+            <p>
+              <strong>Behind the scenes.</strong> We checked the connected content database and its running
+              functions for media, comments, contact inquiries, and newsletter forms. We reviewed database
+              access rules and security and performance advisories without changing visitor information or
+              altering moderation records. Some optional security settings and database optimizations remain
+              under review rather than being described as resolved.
+            </p>
+            <p>
+              <strong>What we are still monitoring.</strong> Automated checks can catch many problems, but
+              they cannot replace live checks of third-party destinations, real-device loading performance,
+              and every network condition. We will continue to review those areas as the studio grows.
+              Thank you for following Kerygma Path and <em>Journey with Jesus</em>.
+            </p>
+            <Link className="blog-studio-link" href="/contact/">
+              <span>Questions or feedback? Contact the studio</span><ArrowRight aria-hidden="true" size={17} />
+            </Link>
+          </div>
+        </article>
+
         <article aria-labelledby="blog-welcome-title" className="blog-welcome">
           <div aria-hidden="true" className="blog-welcome-mark"><BookOpen size={25} strokeWidth={1.5} /></div>
           <div className="blog-welcome-copy">
