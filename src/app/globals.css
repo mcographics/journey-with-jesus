@@ -153,7 +153,8 @@ button { color: inherit; }
 .virtue-statement { margin-top: 24px !important; color: var(--gold-bright) !important; font: 19px var(--serif) !important; }
 .virtue-description { margin-top: -4px !important; color: #d1ccc0 !important; font-family: var(--serif); font-style: italic; }
 
-.invitation-section { position: relative; isolation: isolate; min-height: clamp(520px, 42vw, 680px); display: flex; overflow: hidden; background: #091326; }
+/* Give the artwork more vertical room on desktop without distorting its proportions. */
+.invitation-section { position: relative; isolation: isolate; min-height: clamp(640px, 50vw, 820px); display: flex; overflow: hidden; background: #091326; }
 .invitation-background { z-index: -2; object-fit: cover; object-position: center 49%; }
 .invitation-shade { position: absolute; z-index: -1; inset: 0; background: linear-gradient(90deg, rgba(5, 10, 24, .94) 0%, rgba(5, 10, 24, .82) 28%, rgba(5, 10, 24, .58) 43%, rgba(5, 10, 24, .16) 72%, rgba(5, 10, 24, .04) 100%), linear-gradient(0deg, rgba(5, 10, 24, .46), transparent 58%); pointer-events: none; }
 .invitation-content { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 28px; padding-block: clamp(112px, 10vw, 150px) 78px; }
@@ -378,7 +379,8 @@ button { color: inherit; }
   .invitation-section { min-height: 0; }
   .invitation-background { object-position: 52% center; }
   .invitation-shade { background: linear-gradient(0deg, rgba(5, 10, 24, .99) 0%, rgba(5, 10, 24, .9) 39%, rgba(5, 10, 24, .58) 66%, rgba(5, 10, 24, .14) 100%); }
-  .invitation-content { gap: 24px; padding-block: clamp(270px, 76vw, 390px) 58px; }
+  /* Allow the image a taller visual opening before the invitation copy on mobile. */
+  .invitation-content { gap: 24px; padding-block: clamp(330px, 90vw, 460px) 70px; }
   .invitation-heading { max-width: 100%; }
   .invitation-heading .eyebrow { margin-bottom: 18px; font-size: 10px; }
   .invitation-heading h2 { font-size: clamp(32px, 8vw, 39px); line-height: 1.12; }
