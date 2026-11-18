@@ -1182,3 +1182,32 @@ body:has(.kerygma-gateway) .site-header {
     font-size: 10px;
   }
 }
+
+/* Let the current-project artwork fill its half of the Company section. */
+@media (min-width: 1024px) {
+  .kerygma-project-section {
+    overflow: hidden;
+    padding-block: 0;
+  }
+
+  .kerygma-project-inner {
+    width: 100%;
+    min-height: clamp(340px, 36vw, 680px);
+    grid-template-columns: minmax(0, .72fr) minmax(0, 1.28fr);
+    align-items: stretch;
+    gap: clamp(36px, 4vw, 72px);
+  }
+
+  .kerygma-project-copy {
+    align-self: center;
+    padding-block: clamp(32px, 4vw, 58px);
+    padding-left: max(28px, calc((100vw - 1380px) / 2));
+  }
+
+  .kerygma-project-art {
+    min-height: 0;
+    height: auto;
+    aspect-ratio: auto;
+    border-radius: 0;
+  }
+}
