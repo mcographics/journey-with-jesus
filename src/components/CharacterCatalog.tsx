@@ -67,7 +67,7 @@ function CharacterCard({ character }: { character: PublicCharacter }) {
     : isEric
       ? character.portrait_url ?? `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/images/eric-oberhausen-portrait.webp`
       : character.portrait_url;
-  const portraitSrcSet = portraitSrc && /\/images\/(jesus-character-primary|eric-oberhausen-portrait|adam-portrait|eve-portrait|samson-portrait|david-portrait|john-apostle-portrait)\.webp$/.test(portraitSrc)
+  const portraitSrcSet = portraitSrc && /\/images\/(eric-oberhausen-portrait|adam-portrait|eve-portrait|samson-portrait|david-portrait|john-apostle-portrait)\.webp$/.test(portraitSrc)
     ? [480, 720, 941].map((width) => `${portraitSrc.replace(/\.webp$/, `-${width}.webp`)} ${width}w`).join(", ")
     : null;
   const portraitSizes = "(max-width: 560px) calc(100vw - 36px), (max-width: 700px) 560px, (max-width: 900px) calc((100vw - 76px) / 2), (max-width: 1100px) calc((100vw - 96px) / 3), 360px";
@@ -111,7 +111,7 @@ function CharacterCard({ character }: { character: PublicCharacter }) {
           <XrayReveal
             className="character-xray-layer"
             imageFit="contain"
-            imageSrc={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/images/jesus-character-xray-720.webp`}
+            imageSrc={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/images/jesus-character-xray.webp`}
           >
             {portrait}
           </XrayReveal>
