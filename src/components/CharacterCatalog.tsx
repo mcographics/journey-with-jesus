@@ -4,6 +4,7 @@ import { useEffect, useId, useState } from "react";
 import { BookOpen, ChevronDown } from "lucide-react";
 import Image from "next/image";
 import XrayReveal from "@/components/XrayReveal";
+import { orderPublicCharacters } from "@/lib/character-order";
 import type { Database } from "@/lib/database.types";
 import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
 
@@ -16,27 +17,28 @@ const defaults: PublicCharacter[] = [
   { id: "adam", name: "Adam", role: "The First Man", summary: "Created by God from the dust of the ground and given the breath of life, Adam was the first man. Placed in the Garden of Eden, he was entrusted with caring for God’s creation. His story marks the beginning of humanity’s journey through creation, temptation, the Fall, and the need for redemption.", scripture_references: "Genesis 2–3", portrait_url: `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/images/adam-portrait.webp` },
   { id: "eve", name: "Eve", role: "The First Woman", summary: "Formed by God and brought to Adam, Eve was the first woman and his companion in the Garden of Eden. Her story includes the serpent’s temptation, the Fall, and the first generations of humanity beyond Eden.", scripture_references: "Genesis 2–4", portrait_url: `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/images/eve-portrait.webp` },
   { id: "samson", name: "Samson", role: "A Judge of Israel", summary: "Set apart from birth as a Nazirite, Samson was called to begin Israel’s deliverance from the Philistines. His great strength was matched by costly choices, and betrayal left him captive. In his final prayer, he asked God for strength once more.", scripture_references: "Judges 13–16", portrait_url: `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/images/samson-portrait.webp` },
+  { id: "david", name: "David", role: "Shepherd, musician, and king of Israel", summary: "Chosen while tending his father’s sheep, David served Saul, faced Goliath, and later became king of Israel. His life holds courage, hardship, worship, and a lasting call to repentance.", scripture_references: "1 Samuel 16–17 · 2 Samuel 5; 11–12 · Psalms", portrait_url: `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/images/david-portrait.webp` },
   { id: "john-the-baptist", name: "John the Baptist", role: "The voice preparing the way", summary: "John calls people to repentance, baptizes Jesus, and points others toward the one whose arrival he announces.", scripture_references: "Matthew 3 · Mark 1:1–11 · Luke 1; 3 · John 1:19–34", portrait_url: null },
   { id: "mary-magdalene", name: "Mary Magdalene", role: "A witness to the resurrection", summary: "Mary Magdalene follows Jesus, remains near the cross, and is among the first witnesses to the empty tomb.", scripture_references: "Luke 8:1–3 · John 19:25 · John 20:1–18", portrait_url: null },
   { id: "beloved-disciple", name: "The Beloved Disciple", role: "A witness in John’s Gospel", summary: "John’s Gospel uses this title for a close disciple who appears at key moments in Jesus’ final days and resurrection story.", scripture_references: "John 13:23 · 19:26–27 · 20:2–8 · 21:7, 20–24", portrait_url: null },
 ];
 
 // Eric's original story and conversation now live inside the second dossier card.
-function EricDossier() {
+function EricDossier({ character }: { character: PublicCharacter }) {
   return (
     <>
-      <p className="character-role">The story’s main character</p>
-      <h2>Eric</h2>
+      <p className="character-role">{character.role}</p>
+      <h2>{character.name}</h2>
       <p className="eric-dossier-heading">A curious heart on the road with Jesus</p>
       <div className="eric-journey-backstory">
-        <p>In this original, Scripture-inspired story, Eric is a thoughtful traveler with a sincere faith and questions he has never quite been able to settle. When he encounters Jesus, he joins Him on the road—through crowded streets, villages, and quiet stretches of wilderness—hoping to understand the words he has heard.</p>
+        <p>{character.summary}</p>
         <p>As the journey unfolds, Eric asks about faith, purpose, suffering, forgiveness, and what it means to love his neighbour. He learns by listening to Jesus and seeing how He treats the people they meet: with mercy, truth, and compassion. Eric does not begin with every answer; he grows as he follows, finding that each conversation invites him to trust and take the next step.</p>
       </div>
       <div className="eric-journey-conversation" aria-label="A dramatized conversation inspired by Matthew 7:7">
         <p className="eric-journey-conversation-kicker">A conversation along the way</p>
         <p className="eric-dialogue-line"><span>Eric</span>“Jesus, how can I know the way when I still have so many questions?”</p>
         <p className="eric-dialogue-line eric-dialogue-jesus"><span>Jesus</span>“Ask, and it shall be given you; seek, and ye shall find.” <strong>Matthew 7:7</strong></p>
-        <p className="eric-journey-conversation-note">An imagined exchange shaped by the words of Scripture.</p>
+        <p className="eric-journey-conversation-note">An imagined exchange shaped by Scripture. Read in the Bible: <strong>{character.scripture_references}</strong></p>
       </div>
     </>
   );
@@ -52,34 +54,19 @@ function isEricCharacter(character: PublicCharacter): boolean {
     character.name.trim().toLowerCase() === "eric";
 }
 
-function orderCharacterDossiers(rows: PublicCharacter[]): PublicCharacter[] {
-  // Preserve the existing Jesus dossier, put Eric in Mary's former slot,
-  // and omit any duplicate Eric or Mary record returned by the database.
-  const source = rows.length ? rows : defaults;
-  const jesus = source.find(isJesusCharacter) ?? defaults[0];
-  const eric = defaults[1];
-  const remaining = source.filter((character) =>
-    !isJesusCharacter(character) &&
-    !isEricCharacter(character) &&
-    character.id !== "mary-mother-of-jesus" &&
-    character.name.trim().toLowerCase() !== "mary, mother of jesus"
-  );
-  return [jesus, eric, ...remaining];
-}
-
 function CharacterCard({ character }: { character: PublicCharacter }) {
   const [expanded, setExpanded] = useState(false);
   const detailsId = useId();
   const toggle = () => setExpanded((current) => !current);
   const isJesus = isJesusCharacter(character);
   const isEric = isEricCharacter(character);
-  const isPortrait = isJesus || isEric || ["adam", "eve", "samson"].includes(character.id);
+  const isPortrait = isJesus || isEric || ["adam", "eve", "samson", "david"].includes(character.id);
   const portraitSrc = isJesus
     ? `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/images/jesus-character-primary.webp`
     : isEric
-      ? `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/images/eric-oberhausen-portrait.webp`
+      ? character.portrait_url ?? `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/images/eric-oberhausen-portrait.webp`
       : character.portrait_url;
-  const portraitSrcSet = portraitSrc && /\/images\/(jesus-character-primary|eric-oberhausen-portrait|adam-portrait|eve-portrait|samson-portrait)\.webp$/.test(portraitSrc)
+  const portraitSrcSet = portraitSrc && /\/images\/(jesus-character-primary|eric-oberhausen-portrait|adam-portrait|eve-portrait|samson-portrait|david-portrait)\.webp$/.test(portraitSrc)
     ? [480, 720, 941].map((width) => `${portraitSrc.replace(/\.webp$/, `-${width}.webp`)} ${width}w`).join(", ")
     : null;
   const portraitSizes = "(max-width: 560px) calc(100vw - 36px), (max-width: 700px) 560px, (max-width: 900px) calc((100vw - 76px) / 2), (max-width: 1100px) calc((100vw - 96px) / 3), 360px";
@@ -147,7 +134,7 @@ function CharacterCard({ character }: { character: PublicCharacter }) {
           <ChevronDown aria-hidden="true" size={16} />
           Close
         </button>
-        {isEric ? <EricDossier /> : (
+        {isEric ? <EricDossier character={character} /> : (
           <>
             <p className="character-role">{character.role}</p>
             <h2>{character.name}</h2>
@@ -164,7 +151,7 @@ function CharacterCard({ character }: { character: PublicCharacter }) {
 }
 
 export function CharacterCatalog() {
-  const [characters, setCharacters] = useState<PublicCharacter[]>(() => orderCharacterDossiers(defaults));
+  const [characters, setCharacters] = useState<PublicCharacter[]>(() => orderPublicCharacters(defaults, defaults));
 
   useEffect(() => {
     const client = createBrowserSupabaseClient();
@@ -175,7 +162,7 @@ export function CharacterCatalog() {
       .eq("published", true)
       .order("sort_order")
       .then(({ data, error }) => {
-        if (active && !error && data) setCharacters(orderCharacterDossiers(data));
+        if (active && !error && data) setCharacters(orderPublicCharacters(data, defaults));
       });
     return () => { active = false; };
   }, []);

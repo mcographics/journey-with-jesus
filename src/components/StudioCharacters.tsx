@@ -6,7 +6,7 @@ import Image from "next/image";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/database.types";
 import { createStorageObjectId } from "@/lib/storage-object-id";
-import { formatStudioError } from "@/lib/supabase/studio-upload";
+import { formatStudioError, getImageUploadInfo } from "@/lib/supabase/studio-upload";
 
 type CharacterRow = Database["public"]["Tables"]["media_characters"]["Row"];
 type Props = {
@@ -88,9 +88,14 @@ export function StudioCharacters({ client, onNotice }: Props) {
       onNotice("Add a character name so Upper Room can create a record ID.", true);
       return;
     }
-    if (imageFile && (!["image/jpeg", "image/png", "image/webp", "image/avif"].includes(imageFile.type) || imageFile.size > 10 * 1024 * 1024)) {
-      onNotice("Choose a JPEG, PNG, WebP, or AVIF image up to 10 MB.", true);
-      return;
+    let imageUploadInfo: ReturnType<typeof getImageUploadInfo> | undefined;
+    if (imageFile) {
+      try {
+        imageUploadInfo = getImageUploadInfo(imageFile);
+      } catch (error) {
+        onNotice(errorMessage(error), true);
+        return;
+      }
     }
 
     setSaving(true);
@@ -98,13 +103,11 @@ export function StudioCharacters({ client, onNotice }: Props) {
     try {
       let portraitUrl = removePortrait ? null : (form.portrait_url || null);
       if (imageFile) {
-        const extensionByType: Record<string, string> = {
-          "image/jpeg": "jpg", "image/png": "png", "image/webp": "webp", "image/avif": "avif",
-        };
-        const path = id + "/" + createStorageObjectId() + "." + extensionByType[imageFile.type];
+        if (!imageUploadInfo) throw new Error("The portrait file could not be validated.");
+        const path = id + "/" + createStorageObjectId() + "." + imageUploadInfo.extension;
         const { data: uploaded, error: uploadError } = await client.storage
           .from("character-portraits")
-          .upload(path, imageFile, { cacheControl: "3600", contentType: imageFile.type, upsert: false });
+          .upload(path, imageFile, { cacheControl: "3600", contentType: imageUploadInfo.contentType, upsert: false });
         if (uploadError || !uploaded) {
           throw new Error("Portrait upload failed: " + (uploadError?.message ?? "unknown upload error"));
         }
@@ -183,7 +186,7 @@ export function StudioCharacters({ client, onNotice }: Props) {
           <label className="studio-span-two">Bible references<input value={form.scripture_references} onChange={(event) => setForm({ ...form, scripture_references: event.target.value })} maxLength={500} placeholder="e.g. Luke 1–2 · John 2" /></label>
           <label>Display order<input type="number" value={form.sort_order} onChange={(event) => setForm({ ...form, sort_order: event.target.value })} /></label>
           <label className="studio-check"><input type="checkbox" checked={form.published} onChange={(event) => setForm({ ...form, published: event.target.checked })} />Publish on the public page</label>
-          <label className="studio-span-two studio-upload-field"><span>Portrait image</span><input ref={portraitInput} type="file" accept="image/jpeg,image/png,image/webp,image/avif" onChange={(event) => { setImageFile(event.target.files?.[0] ?? null); setRemovePortrait(false); }} /><small>{imageFile?.name ?? (form.portrait_url ? "A portrait is saved. Choose a new image to replace it." : "No portrait uploaded.")}</small></label>
+          <label className="studio-span-two studio-upload-field"><span>Portrait image</span><input ref={portraitInput} type="file" aria-label="Portrait image" accept="image/jpeg,image/png,image/webp,image/avif" onChange={(event) => { setImageFile(event.target.files?.[0] ?? null); setRemovePortrait(false); }} /><small>{imageFile?.name ?? (form.portrait_url ? "A portrait is saved. Choose a new image to replace it." : "No portrait uploaded.")}</small></label>
         </div>
         {(form.portrait_url || removePortrait) && (
           <div className="studio-character-preview">
