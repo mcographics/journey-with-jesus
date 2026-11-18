@@ -54,6 +54,17 @@
 .site-share-link-label { display: block; margin: 18px 0 6px; font-size: .8rem; }
 .site-share-link { box-sizing: border-box; width: 100%; min-height: 44px; padding: 10px; border: 1px solid #6583a6; border-radius: 8px; background: #06172d; color: inherit; font: inherit; font-size: .8rem; }
 .site-share-panel .site-share-status { min-height: 1.3em; margin: 10px 0 0; }
+.site-share-preview { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; border: 1px solid #6583a6; border-radius: 10px; }
+.site-share-image-actions { grid-template-columns: 1fr; }
+.site-share-actions .site-share-image-button { border-color: #f2ca7c; background: #e7bd72; color: #102640; font-weight: 700; }
+.site-share-actions .site-share-image-button:hover { background: #f2d59f; }
+.site-share-actions button:disabled { opacity: .6; cursor: not-allowed; }
+.site-share-panel .site-share-help { margin: 10px 0; font-size: .8rem; line-height: 1.55; }
+.site-share-link-options { margin-top: 18px; }
+.site-share-link-options summary { display: list-item; min-height: 44px; padding: 12px 4px; cursor: pointer; font-size: .9rem; }
+.site-share-link-options summary:focus-visible { outline: 3px solid #f4cc7a; outline-offset: 3px; border-radius: 5px; }
+:root[data-theme="light"] .site-share-actions .site-share-image-button { background: #174a9c; color: #fff; border-color: #174a9c; }
+:root[data-theme="light"] .site-share-link-options summary:focus-visible { outline-color: #174a9c; }
 :root[data-theme="light"] .site-share-dialog { background: #f4f8ff; color: #163451; border-color: #96702d; }
 :root[data-theme="light"] .site-share-toggle,
 :root[data-theme="light"] .site-share-dialog :is(a, button, input) { background: #e4effb; color: #163451; border-color: #7995b3; }

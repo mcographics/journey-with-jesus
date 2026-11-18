@@ -1,6 +1,19 @@
 export type SiteLocale = "en" | "fr" | "es";
 
 const translations: Array<[string, string, string]> = [
+  ["Share this image with the page link.", "Partagez cette image avec le lien de la page.", "Comparte esta imagen con el enlace de la página."],
+  ["Share image + link", "Partager l’image + le lien", "Compartir imagen + enlace"],
+  ["Preparing image…", "Préparation de l’image…", "Preparando imagen…"],
+  ["Download image", "Télécharger l’image", "Descargar imagen"],
+  ["Email link", "Envoyer le lien par courriel", "Enviar enlace por correo"],
+  ["Share a link instead", "Partager plutôt un lien", "Compartir un enlace en su lugar"],
+  ["This browser cannot attach images directly. Download the image, then attach it to your post or email.", "Ce navigateur ne peut pas joindre d’images directement. Téléchargez l’image, puis joignez-la à votre publication ou courriel.", "Este navegador no puede adjuntar imágenes directamente. Descarga la imagen y adjúntala a tu publicación o correo."],
+  ["The image could not be prepared for sharing. Download it and attach it to your post or email.", "L’image n’a pas pu être préparée pour le partage. Téléchargez-la et joignez-la à votre publication ou courriel.", "No se pudo preparar la imagen para compartir. Descárgala y adjúntala a tu publicación o correo."],
+  ["Choose an app to receive the image file and page link. Check both are included before posting; each app handles sharing differently.", "Choisissez une application pour recevoir le fichier image et le lien de la page. Vérifiez que les deux sont inclus avant de publier : chaque application gère le partage différemment.", "Elige una aplicación para recibir el archivo de imagen y el enlace. Comprueba que ambos estén incluidos antes de publicar; cada aplicación gestiona el uso compartido de forma diferente."],
+  ["Email link opens a message with links only. To include an attachment, use Share image + link with your email app, or download and attach the image.", "Envoyer le lien par courriel ouvre un message contenant uniquement des liens. Pour joindre l’image, utilisez Partager l’image + le lien avec votre application de courriel, ou téléchargez et joignez l’image.", "Enviar enlace por correo abre un mensaje solo con enlaces. Para incluir un archivo adjunto, usa Compartir imagen + enlace con tu aplicación de correo, o descarga y adjunta la imagen."],
+  ["These buttons share a link. Image previews are controlled by the platform; they are not photo attachments.", "Ces boutons partagent un lien. Les aperçus d’image sont gérés par la plateforme : il ne s’agit pas de photos jointes.", "Estos botones comparten un enlace. La plataforma controla las vistas previas de imágenes; no son fotos adjuntas."],
+  ["Image sent to your sharing app. Check the image and link before posting.", "Image transmise à votre application de partage. Vérifiez l’image et le lien avant de publier.", "Imagen enviada a tu aplicación para compartir. Comprueba la imagen y el enlace antes de publicar."],
+  ["The image could not be shared. Download it and attach it to your post or email.", "L’image n’a pas pu être partagée. Téléchargez-la et joignez-la à votre publication ou courriel.", "No se pudo compartir la imagen. Descárgala y adjúntala a tu publicación o correo."],
   ["Share this page", "Partager cette page", "Compartir esta página"],
   ["Share Kerygma Path", "Partager Kerygma Path", "Compartir Kerygma Path"],
   ["Close sharing options", "Fermer les options de partage", "Cerrar las opciones para compartir"],
