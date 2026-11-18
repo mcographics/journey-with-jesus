@@ -18,6 +18,7 @@ const defaults: PublicCharacter[] = [
   { id: "eve", name: "Eve", role: "The First Woman", summary: "Formed by God and brought to Adam, Eve was the first woman and his companion in the Garden of Eden. Her story includes the serpent’s temptation, the Fall, and the first generations of humanity beyond Eden.", scripture_references: "Genesis 2–4", portrait_url: `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/images/eve-portrait.webp` },
   { id: "samson", name: "Samson", role: "A Judge of Israel", summary: "Set apart from birth as a Nazirite, Samson was called to begin Israel’s deliverance from the Philistines. His great strength was matched by costly choices, and betrayal left him captive. In his final prayer, he asked God for strength once more.", scripture_references: "Judges 13–16", portrait_url: `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/images/samson-portrait.webp` },
   { id: "david", name: "David", role: "Shepherd, musician, and king of Israel", summary: "Chosen while tending his father’s sheep, David served Saul, faced Goliath, and later became king of Israel. His life holds courage, hardship, worship, and a lasting call to repentance.", scripture_references: "1 Samuel 16–17 · 2 Samuel 5; 11–12 · Psalms", portrait_url: `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/images/david-portrait.webp` },
+  { id: "john-the-apostle", name: "John the Apostle", role: "Apostle of Jesus", summary: "The son of Zebedee and brother of James, John left his nets to follow Jesus. One of the Twelve, he witnessed key moments in Jesus’ ministry and became a steady witness to the risen Christ.", scripture_references: "Mark 1:19–20 · 5:37 · 9:2 · Galatians 2:9", portrait_url: `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/images/john-apostle-portrait.webp` },
   { id: "john-the-baptist", name: "John the Baptist", role: "The voice preparing the way", summary: "John calls people to repentance, baptizes Jesus, and points others toward the one whose arrival he announces.", scripture_references: "Matthew 3 · Mark 1:1–11 · Luke 1; 3 · John 1:19–34", portrait_url: null },
   { id: "mary-magdalene", name: "Mary Magdalene", role: "A witness to the resurrection", summary: "Mary Magdalene follows Jesus, remains near the cross, and is among the first witnesses to the empty tomb.", scripture_references: "Luke 8:1–3 · John 19:25 · John 20:1–18", portrait_url: null },
   { id: "beloved-disciple", name: "The Beloved Disciple", role: "A witness in John’s Gospel", summary: "John’s Gospel uses this title for a close disciple who appears at key moments in Jesus’ final days and resurrection story.", scripture_references: "John 13:23 · 19:26–27 · 20:2–8 · 21:7, 20–24", portrait_url: null },
@@ -60,13 +61,13 @@ function CharacterCard({ character }: { character: PublicCharacter }) {
   const toggle = () => setExpanded((current) => !current);
   const isJesus = isJesusCharacter(character);
   const isEric = isEricCharacter(character);
-  const isPortrait = isJesus || isEric || ["adam", "eve", "samson", "david"].includes(character.id);
+  const isPortrait = isJesus || isEric || ["adam", "eve", "samson", "david", "john-the-apostle"].includes(character.id);
   const portraitSrc = isJesus
     ? `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/images/jesus-character-primary.webp`
     : isEric
       ? character.portrait_url ?? `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/images/eric-oberhausen-portrait.webp`
       : character.portrait_url;
-  const portraitSrcSet = portraitSrc && /\/images\/(jesus-character-primary|eric-oberhausen-portrait|adam-portrait|eve-portrait|samson-portrait|david-portrait)\.webp$/.test(portraitSrc)
+  const portraitSrcSet = portraitSrc && /\/images\/(jesus-character-primary|eric-oberhausen-portrait|adam-portrait|eve-portrait|samson-portrait|david-portrait|john-apostle-portrait)\.webp$/.test(portraitSrc)
     ? [480, 720, 941].map((width) => `${portraitSrc.replace(/\.webp$/, `-${width}.webp`)} ${width}w`).join(", ")
     : null;
   const portraitSizes = "(max-width: 560px) calc(100vw - 36px), (max-width: 700px) 560px, (max-width: 900px) calc((100vw - 76px) / 2), (max-width: 1100px) calc((100vw - 96px) / 3), 360px";
