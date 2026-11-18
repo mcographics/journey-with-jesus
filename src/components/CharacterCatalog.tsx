@@ -110,7 +110,7 @@ function CharacterCard({ character }: { character: PublicCharacter }) {
         {isJesus ? (
           <XrayReveal
             className="character-xray-layer"
-            imageFit="contain"
+            imageFit={expanded ? "contain" : "cover"}
             imageSrc={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/images/jesus-character-xray.webp`}
           >
             {portrait}

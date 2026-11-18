@@ -8,7 +8,7 @@ type XrayRevealProps = {
   imageSrc: string;
   className?: string;
   canvasClassName?: string;
-  imageFit?: "fill" | "contain";
+  imageFit?: "fill" | "contain" | "cover";
 };
 
 type TrailBubble = {
@@ -32,6 +32,11 @@ export default function XrayReveal({
 }: XrayRevealProps) {
   const revealAreaRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const imageFitRef = useRef(imageFit);
+
+  useEffect(() => {
+    imageFitRef.current = imageFit;
+  }, [imageFit]);
 
   useEffect(() => {
     const revealArea = revealAreaRef.current;
@@ -63,8 +68,11 @@ export default function XrayReveal({
     let previousTouchTap: { x: number; y: number; time: number } | null = null;
 
     const drawRevealImage = () => {
-      if (imageFit === "contain") {
-        const scale = Math.min(width / revealImage.naturalWidth, height / revealImage.naturalHeight);
+      const fit = imageFitRef.current;
+      if (fit === "contain" || fit === "cover") {
+        const scale = fit === "cover"
+          ? Math.max(width / revealImage.naturalWidth, height / revealImage.naturalHeight)
+          : Math.min(width / revealImage.naturalWidth, height / revealImage.naturalHeight);
         const drawWidth = revealImage.naturalWidth * scale;
         const drawHeight = revealImage.naturalHeight * scale;
         context.drawImage(revealImage, (width - drawWidth) / 2, (height - drawHeight) / 2, drawWidth, drawHeight);
@@ -290,7 +298,7 @@ export default function XrayReveal({
       if (touchRevealCleanupTimer) window.clearTimeout(touchRevealCleanupTimer);
       if (frame) cancelAnimationFrame(frame);
     };
-  }, [imageFit, imageSrc]);
+  }, [imageSrc]);
 
   return (
     <div className={className} ref={revealAreaRef}>
