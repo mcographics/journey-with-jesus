@@ -31,6 +31,12 @@
   touch-action: manipulation;
 }
 
+.character-portrait-picture {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
 .character-xray-layer {
   position: absolute;
   z-index: 0;
