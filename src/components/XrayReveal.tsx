@@ -8,7 +8,7 @@ type XrayRevealProps = {
   imageSrc: string;
   className?: string;
   canvasClassName?: string;
-  imageFit?: "fill" | "contain";
+  imageFit?: "fill" | "contain" | "cover";
 };
 
 type TrailBubble = {
@@ -63,8 +63,10 @@ export default function XrayReveal({
     let previousTouchTap: { x: number; y: number; time: number } | null = null;
 
     const drawRevealImage = () => {
-      if (imageFit === "contain") {
-        const scale = Math.min(width / revealImage.naturalWidth, height / revealImage.naturalHeight);
+      if (imageFit === "contain" || imageFit === "cover") {
+        const scale = imageFit === "cover"
+          ? Math.max(width / revealImage.naturalWidth, height / revealImage.naturalHeight)
+          : Math.min(width / revealImage.naturalWidth, height / revealImage.naturalHeight);
         const drawWidth = revealImage.naturalWidth * scale;
         const drawHeight = revealImage.naturalHeight * scale;
         context.drawImage(revealImage, (width - drawWidth) / 2, (height - drawHeight) / 2, drawWidth, drawHeight);
