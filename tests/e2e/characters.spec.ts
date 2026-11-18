@@ -34,6 +34,7 @@ test("David follows Samson in the responsive character catalogue", async ({ page
     const portrait = david.locator("img.character-portrait-image");
     await expect(portrait).toHaveAttribute("src", /david-portrait\.webp$/);
     await expect.poll(() => portrait.evaluate((image) => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+    expect(await portrait.evaluate((image) => getComputedStyle(image).objectFit)).toBe("cover");
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(viewport.width);
   }
 });
