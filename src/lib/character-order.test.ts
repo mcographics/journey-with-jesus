@@ -12,11 +12,12 @@ describe("public character order", () => {
       { id: "eve", name: "Eve" },
       { id: "samson", name: "Samson" },
       { id: "david", name: "David" },
+      { id: "john-the-apostle", name: "John the Apostle" },
       { id: "john-the-baptist", name: "John the Baptist" },
     ];
 
     expect(orderPublicCharacters(characters, characters).map(({ id }) => id)).toEqual([
-      "jesus-of-nazareth", "eric-oberhausen", "adam", "eve", "samson", "david", "john-the-baptist",
+      "jesus-of-nazareth", "eric-oberhausen", "adam", "eve", "samson", "david", "john-the-apostle", "john-the-baptist",
     ]);
   });
 
