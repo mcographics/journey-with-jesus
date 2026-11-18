@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { ArrowUpRight, Copy, Mail, Share, Smartphone, X } from "lucide-react";
+import { ArrowUpRight, Copy, Forward, Mail, Smartphone, X } from "lucide-react";
 import { shareLinks } from "@/lib/share";
 
 type ShareData = { title: string; url: string };
@@ -111,7 +111,7 @@ export function SiteShareButton() {
         ref={buttonRef}
         title="Share this page"
         type="button"
-      ><Share aria-hidden="true" size={20} strokeWidth={1.8} /></button>
+      ><Forward aria-hidden="true" size={20} strokeWidth={1.8} /></button>
       {data && createPortal(<ShareDialog data={data} onClose={close} />, document.body)}
     </>
   );
