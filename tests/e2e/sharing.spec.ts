@@ -11,6 +11,7 @@ for (const width of [390, 1280]) {
     }
     const trigger = page.getByRole("button", { name: "Share this page" });
     await expect(trigger).toBeVisible();
+    await expect(trigger).toHaveCSS("pointer-events", "auto");
     await trigger.click();
     const dialog = page.getByRole("dialog", { name: "Share Kerygma Path" });
     await expect(dialog).toBeVisible();
@@ -18,6 +19,7 @@ for (const width of [390, 1280]) {
     await expect(dialog.getByRole("link", { name: "Facebook", exact: true })).toHaveAttribute("href", /u=https%3A%2F%2Fkerygmapath.com%2Fcompany%2F/);
     await dialog.getByRole("button", { name: "Copy link" }).click();
     await expect(dialog.getByRole("status")).toHaveText("Link copied!");
+    await expect.poll(() => page.evaluate(() => navigator.clipboard.readText())).toBe("https://kerygmapath.com/company/");
     await expect(dialog.getByRole("link", { name: "Email", exact: true })).toHaveAttribute("href", /^mailto:\?subject=.+&body=.+/);
     const bounds = await dialog.boundingBox();
     expect(bounds!.x).toBeGreaterThanOrEqual(0);

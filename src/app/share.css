@@ -1,5 +1,6 @@
 .site-share-toggle {
   display: inline-flex;
+  pointer-events: auto;
   flex: 0 0 44px;
   align-items: center;
   justify-content: center;
