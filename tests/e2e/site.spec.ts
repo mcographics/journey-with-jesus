@@ -34,7 +34,7 @@ test("desktop utility bar is a compact horizontal row with downward menus", asyn
   const barBox = await bar.boundingBox();
   expect(barBox).not.toBeNull();
   // Compact icon-only Explore button; glass still extends underneath the lip.
-  expect(barBox!.width).toBeLessThanOrEqual(315);
+  expect(barBox!.width).toBeLessThanOrEqual(360);
   expect(barBox!.height).toBeLessThanOrEqual(60);
   // Measure after the slide-out transition settles: the initial bounding box
   // can still be translated rightward while Playwright sees the bar as visible.
@@ -52,6 +52,7 @@ test("desktop utility bar is a compact horizontal row with downward menus", asyn
     bar.locator(".desktop-menu-toggle"),
     bar.locator(".accessibility-settings-trigger"),
     bar.locator(".theme-toggle"),
+    bar.locator(".site-share-toggle"),
   ];
   const positions = await Promise.all(controls.map(control => control.boundingBox()));
   for (let i = 0; i < positions.length; i += 1) {

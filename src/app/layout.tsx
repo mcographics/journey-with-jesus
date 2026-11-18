@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { socialPreview } from "@/lib/share";
 import "./globals.css";
 import "./media-studio.css";
 import "./studio-login.css";
@@ -13,6 +14,7 @@ import "./scripture.css";
 import "./premium-theme.css";
 import "./desktop-utility-drawer.css";
 import "./newsletter.css";
+import "./share.css";
 
 const siteUrl = "https://kerygmapath.com/";
 
@@ -30,9 +32,11 @@ export const metadata: Metadata = {
     title: "Kerygma Path | Christian Animation & Gospel Stories",
     description: "Christian animation, AI-assisted Gospel storytelling, and Journey with Jesus—a Scripture-rooted project about the life of Jesus Christ.",
     url: siteUrl,
+    images: [socialPreview],
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
+    images: [socialPreview],
     title: "Kerygma Path | Christian Animation & Gospel Stories",
     description: "Explore Christian animation, the Gospel, and Journey with Jesus at Kerygma Path.",
   },

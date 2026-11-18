@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { socialPreview } from "@/lib/share";
 
 /** Keep search and social previews tied to the page being shared. */
 export function pageMetadata(title: string, description: string, path: string): Metadata {
@@ -12,9 +13,11 @@ export function pageMetadata(title: string, description: string, path: string): 
       title: `${title} | Kerygma Path`,
       description,
       url: path,
+      images: [socialPreview],
     },
     twitter: {
-      card: "summary",
+      card: "summary_large_image",
+      images: [socialPreview],
       title: `${title} | Kerygma Path`,
       description,
     },

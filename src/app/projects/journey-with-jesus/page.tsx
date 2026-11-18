@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { socialPreview } from "@/lib/share";
 import Link from "next/link";
 import { ArrowRight, BookOpen, Heart, Sparkles } from "lucide-react";
 import { LanguageAwareJourneyWordmark } from "@/components/LanguageAwareJourneyWordmark";
@@ -19,6 +20,7 @@ export const metadata: Metadata = {
   description: "Discover Journey with Jesus, Kerygma Path’s Christian animation project exploring the life, teachings, miracles and resurrection of Jesus Christ.",
   alternates: { canonical: "/projects/journey-with-jesus/" },
   openGraph: {
+    images: [socialPreview],
     title: "Journey with Jesus | Christian Gospel Animation",
     description: "Explore an animated Gospel storytelling project about the life and message of Jesus Christ from Kerygma Path.",
     url: "/projects/journey-with-jesus/",

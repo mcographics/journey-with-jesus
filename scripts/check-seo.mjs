@@ -19,6 +19,11 @@ for (const path of paths) {
   assert.equal(document.querySelector('link[rel="canonical"]').href, origin + path, path);
   assert.equal(meta("og:url"), origin + path, `${path}: incorrect social URL`);
   assert(meta("og:title") && meta("twitter:title"), `${path}: missing social metadata`);
+  assert.equal(meta("og:image"), `${origin}/images/kerygma-path-share-20261117.jpg`, `${path}: missing social image`);
+  assert.equal(meta("og:image:width"), "1600", path);
+  assert.equal(meta("og:image:height"), "900", path);
+  assert.equal(meta("twitter:card"), "summary_large_image", path);
+  assert.equal(meta("twitter:image"), meta("og:image"), path);
   assert(!meta("robots")?.includes("noindex"), `${path}: public page excluded`);
   const graph = [...document.querySelectorAll('script[type="application/ld+json"]')]
     .flatMap((script) => JSON.parse(script.textContent)["@graph"] ?? []);

@@ -1,6 +1,18 @@
 export type SiteLocale = "en" | "fr" | "es";
 
 const translations: Array<[string, string, string]> = [
+  ["Share this page", "Partager cette page", "Compartir esta página"],
+  ["Share Kerygma Path", "Partager Kerygma Path", "Compartir Kerygma Path"],
+  ["Close sharing options", "Fermer les options de partage", "Cerrar las opciones para compartir"],
+  ["Choose where to share this page.", "Choisissez où partager cette page.", "Elige dónde compartir esta página."],
+  ["Social sharing options", "Options de partage social", "Opciones para compartir en redes sociales"],
+  ["Copy link", "Copier le lien", "Copiar enlace"],
+  ["Email", "Courriel", "Correo electrónico"],
+  ["More apps…", "Autres applications…", "Más aplicaciones…"],
+  ["Page link", "Lien de la page", "Enlace de la página"],
+  ["Link copied!", "Lien copié !", "¡Enlace copiado!"],
+  ["Select and copy the link below.", "Sélectionnez et copiez le lien ci-dessous.", "Selecciona y copia el enlace de abajo."],
+  ["Choose a platform or copy the link below.", "Choisissez une plateforme ou copiez le lien ci-dessous.", "Elige una plataforma o copia el enlace de abajo."],
   ["Studio", "Studio", "Estudio"],
   ["John 1:1", "Jean 1:1", "Juan 1:1"],
   ["Blog", "Blog", "Blog"],
