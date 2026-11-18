@@ -15,6 +15,10 @@
   aspect-ratio: 941 / 1908;
 }
 
+.character-card.is-jesus:not(.is-expanded) {
+  aspect-ratio: 941 / 1667;
+}
+
 .character-portrait-trigger {
   position: relative;
   display: block;
