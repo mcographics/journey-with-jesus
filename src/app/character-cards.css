@@ -60,7 +60,7 @@
   max-height: none;
   aspect-ratio: auto;
   border: 0;
-  object-fit: contain;
+  object-fit: cover;
   object-position: center;
 }
 
