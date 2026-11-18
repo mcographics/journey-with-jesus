@@ -10,7 +10,7 @@ export function pageMetadata(title: string, description: string, path: string): 
     openGraph: {
       type: "website",
       siteName: "Kerygma Path",
-      title: `${title} | Kerygma Path`,
+      title: `Kerygma Path | ${title}`,
       description,
       url: path,
       images: [socialPreview],
@@ -18,7 +18,7 @@ export function pageMetadata(title: string, description: string, path: string): 
     twitter: {
       card: "summary_large_image",
       images: [socialPreview],
-      title: `${title} | Kerygma Path`,
+      title: `Kerygma Path | ${title}`,
       description,
     },
   };

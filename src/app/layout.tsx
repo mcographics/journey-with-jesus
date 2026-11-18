@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
     default: "Kerygma Path | Christian Animation & Gospel Stories",
-    template: "%s | Kerygma Path",
+    template: "Kerygma Path | %s",
   },
   description: "Kerygma Path creates Christian animation and AI-assisted Gospel storytelling rooted in Scripture, including the Journey with Jesus animated project.",
   applicationName: "Kerygma Path",

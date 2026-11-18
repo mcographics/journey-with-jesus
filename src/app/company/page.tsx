@@ -7,7 +7,7 @@ import { ArrowRight, BookOpen, Sparkles } from "lucide-react";
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
 export const metadata = pageMetadata(
-  "AI-Assisted Christian Animation Studio",
+  "Christian Animation Studio",
   "Meet Kerygma Path, a Christian animation studio using AI-assisted visual storytelling, character design and animation to bring biblical Gospel stories to life.",
   "/company/",
 );
@@ -114,15 +114,15 @@ export default function CompanyPage() {
           </div>
           <div className="kerygma-project-art">
             <ResponsivePicture
-              alt="Jesus welcomes a young man as they look across a sunlit valley toward an ancient city."
+              alt="Jesus welcomes a young man in a navy cap and jacket, gesturing toward a sunlit city and mountain valley."
               className="kerygma-project-image"
-              fallbackSrc={`${basePath}/images/journey-with-jesus-header-1024.webp`}
+              fallbackSrc={`${basePath}/images/earthly-jc-eric-mid-section-1024.webp`}
               fill
               loading="lazy"
               pictureClassName="responsive-picture-fill"
-              sizes="(max-width: 800px) 100vw, 50vw"
+              sizes="(max-width: 900px) 100vw, 50vw"
               webpSources={[512, 768, 1024, 1440, 1920].map((width) => ({
-                src: `${basePath}/images/journey-with-jesus-header-${width}.webp`,
+                src: `${basePath}/images/earthly-jc-eric-mid-section-${width}.webp`,
                 width,
               }))}
             />
