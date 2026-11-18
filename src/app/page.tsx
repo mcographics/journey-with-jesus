@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { socialPreview } from "@/lib/share";
 import { EnterSiteLink } from "@/components/EnterSiteLink";
 import { GreekStarfield } from "@/components/GreekStarfield";
 import { LanguageAwareLogo } from "@/components/LanguageAwareLogo";
@@ -9,6 +10,7 @@ export const metadata: Metadata = {
     "Kerygma Path is a Christian animation studio creating Scripture-rooted Gospel stories through animation and AI-assisted creative tools. Discover Journey with Jesus.",
   alternates: { canonical: "/" },
   openGraph: {
+    images: [socialPreview],
     title: "Kerygma Path | Christian Animation & Gospel Stories",
     description:
       "Discover Journey with Jesus and AI-assisted Christian animation inspired by Scripture and the Gospel.",

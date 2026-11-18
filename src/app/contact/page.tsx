@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { socialPreview } from "@/lib/share";
 import Link from "next/link";
 import { ContactForm } from "@/components/ContactForm";
 import "./contact.css";
@@ -8,6 +9,7 @@ export const metadata: Metadata = {
   description: "Contact Kerygma Path with questions, feedback, and collaboration inquiries.",
   alternates: { canonical: "/contact/" },
   openGraph: {
+    images: [socialPreview],
     title: "Contact Kerygma Path",
     description: "Get in touch with the Kerygma Path animation studio.",
     url: "/contact/",

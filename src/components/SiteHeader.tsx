@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { BookOpen, Building2, ChevronDown, Clapperboard, Cross, LayoutGrid, Menu, Moon, Newspaper, ShoppingBag, Sun, UserRound, X } from "lucide-react";
 import { AccessibilitySettings } from "@/components/AccessibilitySettings";
 import { SiteLanguageSwitcher } from "@/components/SiteLanguageSwitcher";
+import { SiteShareButton } from "@/components/SiteShareButton";
 
 const navigation = [
   { href: "/company/", label: "Studio" },
@@ -450,6 +451,7 @@ export function SiteHeader() {
             ))}
           </div>
         </div>
+            <SiteShareButton />
           </div>
         </div>
         {!isLandingPage && (
