@@ -322,11 +322,11 @@
 
 .kerygma-project-inner {
   display: grid;
-  width: min(1120px, calc(100% - 56px));
+  width: min(1380px, calc(100% - 56px));
   margin-inline: auto;
-  grid-template-columns: minmax(0, .86fr) minmax(360px, 1fr);
+  grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
   align-items: center;
-  gap: clamp(38px, 7vw, 92px);
+  gap: clamp(38px, 6vw, 88px);
 }
 
 .kerygma-project-copy h2 { font-size: clamp(40px, 5vw, 62px); }
@@ -337,8 +337,10 @@
 
 .kerygma-project-art {
   position: relative;
-  min-height: 360px;
-  aspect-ratio: 1.56;
+  min-width: 0;
+  width: 100%;
+  min-height: 0;
+  aspect-ratio: 16 / 9;
   overflow: hidden;
   border: 1px solid rgba(243, 213, 149, .56);
   border-radius: 5px;
@@ -346,7 +348,7 @@
   box-shadow: 0 24px 54px rgba(0, 0, 0, .32), 0 0 0 7px rgba(243, 213, 149, .045);
 }
 
-.kerygma-project-image { object-fit: cover; object-position: 43% center; }
+.kerygma-project-image { object-fit: cover; object-position: center; }
 .kerygma-project-art-frame { position: absolute; inset: 9px; border: 1px solid rgba(255, 244, 212, .58); pointer-events: none; }
 
 .kerygma-team-invitation { padding-block: clamp(54px, 7vw, 86px); background: #0b1120; }
@@ -412,8 +414,8 @@
   .kerygma-company-hero-art { width: 82%; opacity: .78; }
   .kerygma-company-hero-shade { background: linear-gradient(90deg, rgba(11, 17, 32, .97), rgba(11, 17, 32, .83) 53%, rgba(11, 17, 32, .46)), linear-gradient(0deg, rgba(7, 12, 23, .62), transparent 54%); }
   .kerygma-hero-caption { right: 28px; }
-  .kerygma-project-inner { grid-template-columns: minmax(0, 1fr) minmax(300px, .95fr); gap: 35px; }
-  .kerygma-project-art { min-height: 300px; }
+  .kerygma-project-inner { grid-template-columns: 1fr; gap: 30px; }
+  .kerygma-project-art { min-height: 0; aspect-ratio: 16 / 9; }
 }
 
 @media (max-width: 700px) {
@@ -445,7 +447,6 @@
   .kerygma-principle-card { min-height: 0; padding: 23px 22px; }
   .kerygma-principle-card h3 { margin-top: 18px; font-size: 21px; }
   .kerygma-project-inner { grid-template-columns: 1fr; gap: 30px; }
-  .kerygma-project-art { min-height: 0; aspect-ratio: 1.28; }
   .kerygma-team-invitation-inner { align-items: flex-start; flex-direction: column; }
   .kerygma-footer-brand { width: auto; min-height: 64px; }
   .kerygma-footer-wordmark { font-size: 23px; }
