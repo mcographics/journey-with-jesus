@@ -25,6 +25,9 @@
 }
 
 * { box-sizing: border-box; }
+/* Unsharp mask at amount 0.8; the X-ray reveal uses a canvas, so it stays untouched. */
+.image-filter-definitions { position: absolute; width: 0; height: 0; overflow: hidden; pointer-events: none; }
+:root img { filter: url(#site-image-unsharp-mask-08); }
 html { min-width: 320px; scroll-behavior: smooth; }
 body { margin: 0; min-width: 320px; background: var(--night); color: var(--ink); }
 button, input, textarea, select { font: inherit; }
