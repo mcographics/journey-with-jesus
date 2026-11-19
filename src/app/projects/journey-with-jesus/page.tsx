@@ -8,9 +8,13 @@ import XrayReveal from "@/components/XrayReveal";
 import ResponsivePicture, { type PictureCandidate } from "@/components/ResponsivePicture";
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
-const imageSources = (stem: string, widths: number[]): PictureCandidate[] =>
+const imageSources = (
+  stem: string,
+  widths: number[],
+  extension: "avif" | "webp" = "webp",
+): PictureCandidate[] =>
   widths.map((width) => ({
-    src: `${basePath}/images/${stem}-${width}.webp`,
+    src: `${basePath}/images/${stem}-${width}.${extension}`,
     width,
   }));
 const biblicalHistoryWidths = [480, 768, 1024, 1440, 2048];
@@ -142,7 +146,9 @@ export default function HomePage() {
           loading="lazy"
           pictureClassName="invitation-picture"
           sizes="100vw"
+          avifSources={imageSources("biblical-history-panorama", biblicalHistoryWidths, "avif")}
           webpSources={imageSources("biblical-history-panorama", biblicalHistoryWidths)}
+          mobileAvifSources={imageSources("biblical-history-panorama", biblicalHistoryWidths, "avif")}
           mobileWebpSources={imageSources("biblical-history-panorama", biblicalHistoryWidths)}
         />
         <div className="invitation-shade" aria-hidden="true" />

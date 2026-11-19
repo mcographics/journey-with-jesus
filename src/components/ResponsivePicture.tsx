@@ -7,6 +7,8 @@ export type PictureCandidate = {
 
 type ResponsivePictureProps = Omit<ImageProps, "src" | "srcSet" | "unoptimized"> & {
   fallbackSrc: string;
+  avifSources?: PictureCandidate[];
+  mobileAvifSources?: PictureCandidate[];
   pngSources?: PictureCandidate[];
   webpSources?: PictureCandidate[];
   mobileWebpSources?: PictureCandidate[];
@@ -19,6 +21,8 @@ function toSrcSet(candidates: PictureCandidate[]) {
 
 export default function ResponsivePicture({
   fallbackSrc,
+  avifSources,
+  mobileAvifSources,
   pngSources,
   webpSources,
   mobileWebpSources,
@@ -29,6 +33,14 @@ export default function ResponsivePicture({
 }: ResponsivePictureProps) {
   return (
     <picture className={["responsive-picture", pictureClassName].filter(Boolean).join(" ")}>
+      {mobileAvifSources?.length ? (
+        <source
+          media="(max-width: 700px)"
+          type="image/avif"
+          srcSet={toSrcSet(mobileAvifSources)}
+          sizes="100vw"
+        />
+      ) : null}
       {mobileWebpSources?.length ? (
         <source
           media="(max-width: 700px)"
@@ -36,6 +48,9 @@ export default function ResponsivePicture({
           srcSet={toSrcSet(mobileWebpSources)}
           sizes="100vw"
         />
+      ) : null}
+      {avifSources?.length ? (
+        <source type="image/avif" srcSet={toSrcSet(avifSources)} sizes={sizes} />
       ) : null}
       {pngSources?.length ? (
         <source type="image/png" srcSet={toSrcSet(pngSources)} sizes={sizes} />

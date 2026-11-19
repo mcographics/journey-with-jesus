@@ -17,12 +17,13 @@ for (const viewport of viewports) {
 
       const section = page.locator(".invitation-section");
       const image = section.locator("img.invitation-background");
-      const shade = section.locator(".invitation-shade");
       const heading = section.locator(".invitation-heading");
       const action = section.getByRole("link", { name: /Explore Our Media/ });
       await section.scrollIntoViewIfNeeded();
       await expect(image).toHaveAttribute("alt", /^A biblical history panorama/);
       await image.evaluate(async (element) => (element as HTMLImageElement).decode());
+      const panoramaUrl = await image.evaluate((element) => (element as HTMLImageElement).currentSrc);
+      expect(new URL(panoramaUrl).pathname).toMatch(/biblical-history-panorama-\d+\.avif$/);
       await expect(heading).toBeVisible();
       // Black drop shadow must remain in both themes without changing text colors.
       const headingShadow = await heading.evaluate((element) => getComputedStyle(element).filter);
@@ -67,7 +68,7 @@ for (const viewport of viewports) {
         };
       });
 
-      expect(positions.source).toMatch(/\/images\/biblical-history-panorama-\d+\.webp$/);
+      expect(positions.source).toMatch(/\/images\/biblical-history-panorama-\d+\.avif$/);
       expect(positions.objectFit).toBe("cover");
       expect(positions.imageCoversSection).toBe(true);
       // On desktop, give the wide panorama its natural 2048:877 height, so
