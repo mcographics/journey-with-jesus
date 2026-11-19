@@ -77,6 +77,39 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning>
       <body>
+        <svg
+          aria-hidden="true"
+          className="image-filter-definitions"
+          focusable="false"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <defs>
+            <filter
+              id="site-image-unsharp-mask-08"
+              colorInterpolationFilters="sRGB"
+              x="-10%"
+              y="-10%"
+              width="120%"
+              height="120%"
+            >
+              <feGaussianBlur
+                in="SourceGraphic"
+                result="softened"
+                stdDeviation="0.8"
+                edgeMode="duplicate"
+              />
+              <feComposite
+                in="SourceGraphic"
+                in2="softened"
+                operator="arithmetic"
+                k1="0"
+                k2="1.8"
+                k3="-0.8"
+                k4="0"
+              />
+            </filter>
+          </defs>
+        </svg>
         <script
           dangerouslySetInnerHTML={{
             __html: `(() => {
