@@ -22,6 +22,7 @@ const defaults: PublicCharacter[] = [
   { id: "john-the-baptist", name: "John the Baptist", role: "The voice preparing the way", summary: "John calls people to repentance, baptizes Jesus, and points others toward the one whose arrival he announces.", scripture_references: "Matthew 3 · Mark 1:1–11 · Luke 1; 3 · John 1:19–34", portrait_url: null },
   { id: "mary-magdalene", name: "Mary Magdalene", role: "A witness to the resurrection", summary: "Mary Magdalene follows Jesus, remains near the cross, and is among the first witnesses to the empty tomb.", scripture_references: "Luke 8:1–3 · John 19:25 · John 20:1–18", portrait_url: null },
   { id: "beloved-disciple", name: "The Beloved Disciple", role: "A witness in John’s Gospel", summary: "John’s Gospel uses this title for a close disciple who appears at key moments in Jesus’ final days and resurrection story.", scripture_references: "John 13:23 · 19:26–27 · 20:2–8 · 21:7, 20–24", portrait_url: null },
+  { id: "mary-yu", name: "Mary Yu", role: "Original character", summary: "", scripture_references: "", portrait_url: `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/images/mary-yu-portrait.webp` },
 ];
 
 // Eric's original story and conversation now live inside the second dossier card.
@@ -61,13 +62,14 @@ function CharacterCard({ character }: { character: PublicCharacter }) {
   const toggle = () => setExpanded((current) => !current);
   const isJesus = isJesusCharacter(character);
   const isEric = isEricCharacter(character);
+  const isPortraitOnly = character.id === "mary-yu";
   const isPortrait = isJesus || isEric || ["adam", "eve", "samson", "david", "john-the-apostle"].includes(character.id);
   const portraitSrc = isJesus
     ? `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/images/jesus-character-primary.webp`
     : isEric
       ? character.portrait_url ?? `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/images/eric-oberhausen-portrait.webp`
       : character.portrait_url;
-  const portraitSrcSet = portraitSrc && /\/images\/(eric-oberhausen-portrait|adam-portrait|eve-portrait|samson-portrait|david-portrait|john-apostle-portrait)\.webp$/.test(portraitSrc)
+  const portraitSrcSet = portraitSrc && /\/images\/(eric-oberhausen-portrait|adam-portrait|eve-portrait|samson-portrait|david-portrait|john-apostle-portrait|mary-yu-portrait)\.webp$/.test(portraitSrc)
     ? [480, 720, 941].map((width) => `${portraitSrc.replace(/\.webp$/, `-${width}.webp`)} ${width}w`).join(", ")
     : null;
   const portraitSizes = "(max-width: 560px) calc(100vw - 36px), (max-width: 700px) 560px, (max-width: 900px) calc((100vw - 76px) / 2), (max-width: 1100px) calc((100vw - 96px) / 3), 360px";
@@ -89,6 +91,17 @@ function CharacterCard({ character }: { character: PublicCharacter }) {
       {character.name.split(/\s+/).map((word) => word[0]).slice(0, 2).join("")}
     </span>
   );
+
+  if (isPortraitOnly) {
+    return (
+      <article className="character-card is-portrait">
+        <figure className="character-portrait-trigger character-portrait-static">
+          {portrait}
+          <figcaption className="character-portrait-name-label">{character.name}</figcaption>
+        </figure>
+      </article>
+    );
+  }
 
   return (
     <article className={`character-card${isPortrait ? " is-portrait" : ""}${expanded ? " is-expanded" : ""}`}>
