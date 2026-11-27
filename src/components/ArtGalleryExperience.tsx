@@ -99,7 +99,7 @@ export function ArtGalleryExperience() {
       onCopy={(event) => event.preventDefault()}
       onDragStart={(event) => event.preventDefault()}
       onKeyDownCapture={(event) => {
-        if ((event.ctrlKey || event.metaKey) && ["s", "p"].includes(event.key.toLowerCase())) {
+        if ((event.ctrlKey || event.metaKey) && ["s"].includes(event.key.toLowerCase())) {
           event.preventDefault();
         }
       }}
@@ -199,7 +199,7 @@ export function ArtGalleryExperience() {
             </section>
           </>
         )}
-        <p className={styles.rightsNote}>Please respect the artwork and the creators. Capturing, copying, or redistributing gallery images is not permitted.</p>
+        <p className={styles.rightsNote}>Please respect the artwork and its creators. Gallery images are watermarked; the site can discourage saving, but screenshot shortcuts are controlled by your device and cannot be reliably disabled here.</p>
       </div>
 
       {lightboxOpen && current && (
