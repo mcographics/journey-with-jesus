@@ -22,6 +22,7 @@ function row(id: string, title: string, category: string, published = true): Gal
     published,
     sort_order: 0,
     created_at: "2026-11-27T12:00:00.000Z",
+    updated_at: "2026-11-27T12:00:00.000Z",
     created_by: null,
   };
 }
