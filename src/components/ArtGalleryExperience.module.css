@@ -391,3 +391,31 @@
 @media (prefers-reduced-motion: reduce) {
   .page *, .page *::before, .page *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
 }
+/* This gallery keeps its dark canvas in either site theme, so preserve high-contrast gallery copy. */
+:global(:root) body #main-content.page :global(:is(h1, h2, h3, h4, h5, h6, p, li, span, strong, b, em, small, label, legend, dt, dd, time, figcaption, blockquote, summary, a, button)) {
+  color: #f2f4f7 !important;
+}
+:global(:root) body #main-content.page .kicker,
+:global(:root) body #main-content.page .artCategory,
+:global(:root) body #main-content.page .emptyKicker,
+:global(:root) body #main-content.page .emptyIcon {
+  color: #c8a65e !important;
+}
+:global(:root) body #main-content.page .intro,
+:global(:root) body #main-content.page .caption p,
+:global(:root) body #main-content.page .imageCount,
+:global(:root) body #main-content.page .totalNumber,
+:global(:root) body #main-content.page .message p,
+:global(:root) body #main-content.page .empty > p:last-child,
+:global(:root) body #main-content.page .rightsNote {
+  color: #aeb7c2 !important;
+}
+:global(:root) body #main-content.page .currentNumber {
+  color: #d0b16e !important;
+}
+:global(:root) body #main-content.page .categoryBar button {
+  color: #c4ccd6 !important;
+}
+:global(:root) body #main-content.page .categoryBar .categoryActive {
+  color: #0b1119 !important;
+}
