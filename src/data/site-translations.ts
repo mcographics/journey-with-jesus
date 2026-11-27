@@ -48,7 +48,7 @@ const translations: Array<[string, string, string]> = [
   ["Next artwork", "Œuvre suivante", "Obra siguiente"],
   ["Choose artwork", "Choisir une œuvre", "Elegir obra"],
   ["Close artwork view", "Fermer l’image", "Cerrar vista de la obra"],
-  ["Please respect the artwork and the creators. Capturing, copying, or redistributing gallery images is not permitted.", "Veuillez respecter les œuvres et leurs créateurs. La capture, la copie ou la redistribution des images de la galerie est interdite.", "Respeta las obras y a sus creadores. No se permite capturar, copiar ni redistribuir imágenes de la galería."]
+  ["Please respect the artwork and the creators. Capturing, copying, or redistributing gallery images is not permitted.", "Veuillez respecter les œuvres et leurs créateurs. La capture, la copie ou la redistribution des images de la galerie est interdite.", "Respeta las obras y a sus creadores. No se permite capturar, copiar ni redistribuir imágenes de la galería."],
 
   ["Media", "Médias", "Medios"],
   ["Meet the Characters", "Découvrez les personnages", "Conoce a los personajes"],
