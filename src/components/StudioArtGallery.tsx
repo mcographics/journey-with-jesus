@@ -66,6 +66,7 @@ export function StudioArtGallery({ client }: Props) {
     }
   }, [client]);
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect -- loadGallery updates state after its asynchronous requests resolve.
   useEffect(() => { void loadGallery(); }, [loadGallery]);
 
   async function persistWatermarkSettings(): Promise<WatermarkSettings> {
