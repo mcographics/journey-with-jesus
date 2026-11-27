@@ -13,6 +13,7 @@ const publicPaths = [
   "/company/",
   "/media/",
   "/projects/journey-with-jesus/",
+  "/projects/journey-with-jesus/art-gallery/",
   "/team/",
   "/word/",
   ...legalPolicies.map(({ slug }) => `/policies/${slug}/`),

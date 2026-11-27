@@ -59,6 +59,18 @@ export type Database = {
         Update: { title?: string; description?: string; sort_order?: number; published?: boolean; updated_at?: string };
         Relationships: [];
       };
+      art_gallery_images: {
+        Row: { id: string; title: string; description: string; category: string; storage_path: string; width: number; height: number; sort_order: number; published: boolean; created_by: string | null; created_at: string; updated_at: string };
+        Insert: { id?: string; title: string; description?: string; category?: string; storage_path: string; width: number; height: number; sort_order?: number; published?: boolean; created_by?: string | null };
+        Update: { title?: string; description?: string; category?: string; storage_path?: string; width?: number; height?: number; sort_order?: number; published?: boolean; created_by?: string | null; updated_at?: string };
+        Relationships: [];
+      };
+      art_gallery_settings: {
+        Row: { id: string; watermark_logo_path: string; watermark_position: "bottom-right" | "bottom-left" | "top-right" | "top-left"; watermark_opacity: number; watermark_scale: number; updated_at: string };
+        Insert: { id?: string; watermark_logo_path?: string; watermark_position?: "bottom-right" | "bottom-left" | "top-right" | "top-left"; watermark_opacity?: number; watermark_scale?: number; updated_at?: string };
+        Update: { watermark_logo_path?: string; watermark_position?: "bottom-right" | "bottom-left" | "top-right" | "top-left"; watermark_opacity?: number; watermark_scale?: number; updated_at?: string };
+        Relationships: [];
+      };
       media_playlist_items: {
         Row: { playlist_id: string; episode_id: string; sort_order: number };
         Insert: { playlist_id: string; episode_id: string; sort_order?: number };
