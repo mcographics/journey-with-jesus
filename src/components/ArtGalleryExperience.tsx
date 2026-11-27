@@ -92,7 +92,8 @@ export function ArtGalleryExperience() {
   }, [move]);
 
   return (
-    <main
+    <>
+      <main
       id="main-content"
       className={styles.page}
       onContextMenu={(event) => event.preventDefault()}
@@ -211,6 +212,7 @@ export function ArtGalleryExperience() {
           </div>
           <p>{current.title}</p>
         </div>
-      )}\n    </>
+      )}
+    </>
   );
 }
