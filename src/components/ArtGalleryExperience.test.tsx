@@ -84,7 +84,7 @@ describe("ArtGalleryExperience", () => {
     render(<ArtGalleryExperience />);
 
     fireEvent.click(await screen.findByRole("button", { name: "Characters" }));
-    fireEvent.click(screen.getByRole("button", { name: "Open artwork: Peter" }));
+    fireEvent.click(screen.getByRole("button", { name: "Peter" }));
 
     expect(screen.getByRole("button", { name: "Previous artwork" })).toBeTruthy();
     expect(screen.getByRole("button", { name: "Next artwork" })).toBeTruthy();
