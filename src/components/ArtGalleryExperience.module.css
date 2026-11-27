@@ -91,6 +91,36 @@
   color: #0b1119;
   background: #c8a65e;
 }
+.galleryShell { width: 100%; }
+.categoryOverview,.collection { display: grid; gap: 1.15rem; }
+.overviewHeading,.collectionHeading { display: flex; align-items: end; justify-content: space-between; gap: 1rem; }
+.overviewHeading h2,.collectionHeading h2 { margin: .25rem 0 0; color: #f3f5f7; font-family: Georgia, "Times New Roman", serif; font-size: clamp(1.55rem,3vw,2.3rem); font-weight: 400; }
+.sectionEyebrow { margin: 0; color: #c8a65e; font-size: .7rem; font-weight: 700; letter-spacing: .18em; }
+.categoryCards { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 1rem; }
+.categoryCard { min-width: 0; padding: 0; overflow: hidden; border: 1px solid rgba(255,255,255,.13); border-radius: 1rem; color: inherit; background: #0d141d; text-align: left; cursor: pointer; transition: border-color .2s ease,transform .2s ease,box-shadow .2s ease; }
+.categoryCard:hover,.categoryCard:focus-visible { border-color: rgba(200,166,94,.78); outline: none; transform: translateY(-3px); box-shadow: 0 1.4rem 3rem rgba(0,0,0,.25); }
+.categoryCover { position: relative; display: block; aspect-ratio: 1.62; overflow: hidden; background: #101722; }
+.categoryCover img { width: 100%; height: 100%; object-fit: cover; transition: transform .45s ease; }
+.categoryCard:hover .categoryCover img,.categoryCard:focus-visible .categoryCover img { transform: scale(1.035); }
+.categoryShade { position: absolute; inset: 28% 0 0; background: linear-gradient(transparent,rgba(3,6,10,.94)); }
+.categoryContent { position: absolute; inset: auto 1.2rem 1rem; display: grid; gap: .28rem; }
+.categoryName { color: white; font-family: Georgia,"Times New Roman",serif; font-size: clamp(1.15rem,2.2vw,1.8rem); line-height: 1.2; }
+.categoryDetails { display: flex; gap: .3rem; color: #c5cdd7; font-size: .84rem; }
+.categoryExplore { margin-top: .4rem; color: #d3b775; font-size: .83rem; font-weight: 650; }
+.categoryNavigation { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.backButton { display: inline-flex; align-items: center; gap: .35rem; min-height: 2.65rem; padding: .55rem .85rem; border: 1px solid rgba(255,255,255,.16); border-radius: 999px; color: #e5e9ee; background: rgba(255,255,255,.035); font: inherit; cursor: pointer; white-space: nowrap; }
+.backButton:hover,.backButton:focus-visible { border-color: rgba(200,166,94,.72); outline: none; }
+.collectionCount { display: flex; gap: .3rem; margin: .4rem 0 0; color: #aeb7c2; font-size: .9rem; }
+.collection .categoryBar { justify-content: flex-end; margin: 0; }
+.artworkGrid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 1rem; }
+.artworkTile { min-width: 0; padding: 0; overflow: hidden; border: 1px solid rgba(255,255,255,.1); border-radius: .85rem; color: #f2f4f7; background: #0e151f; text-align: left; cursor: pointer; transition: border-color .2s ease,transform .2s ease; }
+.artworkTile:hover,.artworkTile:focus-visible { border-color: rgba(200,166,94,.7); outline: none; transform: translateY(-2px); }
+.artworkImage { position: relative; display: block; aspect-ratio: 1.38; overflow: hidden; background: #111823; }
+.artworkImage img { width: 100%; height: 100%; object-fit: cover; transition: transform .35s ease; }
+.artworkTile:hover .artworkImage img,.artworkTile:focus-visible .artworkImage img { transform: scale(1.035); }
+.tileExpand { position: absolute; right: .65rem; bottom: .65rem; display: inline-flex; align-items: center; gap: .35rem; padding: .42rem .6rem; border: 1px solid rgba(255,255,255,.23); border-radius: 999px; color: white; background: rgba(7,10,16,.72); font-size: .76rem; }
+.artworkTitle { display: block; overflow: hidden; padding: .75rem .8rem .25rem; color: #f2f4f7; font-size: .97rem; font-weight: 650; text-overflow: ellipsis; white-space: nowrap; }
+.artworkDescription { display: block; overflow: hidden; padding: 0 .8rem .8rem; color: #aeb7c2; font-size: .83rem; line-height: 1.45; text-overflow: ellipsis; white-space: nowrap; }
 .carousel { position: relative; }
 .stage {
   position: relative;
@@ -334,7 +364,7 @@
 }
 .lightbox {
   position: fixed;
-  z-index: 10000;
+  z-index: 2147483000;
   inset: 0;
   display: flex;
   flex-direction: column;
@@ -364,8 +394,8 @@
 .closeLightbox {
   position: absolute;
   z-index: 1;
-  top: .75rem;
-  right: .75rem;
+  top: .45rem;
+  right: .45rem;
   display: grid;
   width: 2.8rem;
   height: 2.8rem;
@@ -384,8 +414,18 @@
   .header { margin-bottom: 1.6rem; }
   .kicker { font-size: .64rem; letter-spacing: .13em; }
   .intro { font-size: .98rem; }
+  .categoryCards { grid-template-columns: 1fr; gap: .75rem; }
+  .categoryCover { aspect-ratio: 1.45; }
+  .categoryContent { inset: auto .95rem .8rem; }
+  .categoryNavigation { align-items: stretch; flex-direction: column; gap: .7rem; }
+  .collection .categoryBar { justify-content: flex-start; }
   .categoryBar { justify-content: flex-start; flex-wrap: nowrap; padding-bottom: .2rem; overflow-x: auto; }
   .categoryBar button { flex: 0 0 auto; min-height: 2.4rem; font-size: .9rem; }
+  .artworkGrid { grid-template-columns: repeat(2,minmax(0,1fr)); gap: .65rem; }
+  .artworkTitle { padding: .65rem .65rem .2rem; font-size: .9rem; }
+  .artworkDescription { padding: 0 .65rem .65rem; font-size: .78rem; }
+  .tileExpand { right: .45rem; bottom: .45rem; padding: .36rem .48rem; font-size: .7rem; }
+  .collectionHeading { align-items: start; flex-direction: column; }
   .stage { min-height: 31rem; border-radius: .9rem; }
   .featured { width: 92%; height: 28rem; border-radius: .7rem; }
   .peek { width: 12%; height: 55%; }
