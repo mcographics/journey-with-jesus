@@ -86,8 +86,8 @@ describe("ArtGalleryExperience", () => {
     fireEvent.click(await screen.findByRole("button", { name: "Characters" }));
     fireEvent.click(screen.getByRole("button", { name: "Peter" }));
 
-    expect(screen.getByRole("button", { name: "Previous artwork" })).toBeTruthy();
-    expect(screen.getByRole("button", { name: "Next artwork" })).toBeTruthy();
+    expect(screen.getAllByRole("button", { name: "Previous artwork" })).toHaveLength(2);
+    expect(screen.getAllByRole("button", { name: "Next artwork" })).toHaveLength(2);
     fireEvent.click(screen.getByRole("button", { name: "View image" }));
     expect(screen.getByRole("dialog", { name: "Peter" })).toBeTruthy();
     fireEvent.click(screen.getByRole("button", { name: "Close artwork view" }));
