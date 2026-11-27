@@ -41,7 +41,6 @@ export function StudioArtGallery({ client }: Props) {
   const logoInput = useRef<HTMLInputElement>(null);
 
   const loadGallery = useCallback(async () => {
-    setLoading(true);
     try {
       const [settingsResult, imagesResult] = await Promise.all([
         client.from("art_gallery_settings").select("*").eq("id", "default").maybeSingle(),
