@@ -2,6 +2,14 @@ import { describe, expect, it } from "vitest";
 import { registerBibleBookNameAliases, translateSiteText } from "@/data/site-translations";
 
 describe("site language translations", () => {
+  it("translates the art gallery categories and navigation", () => {
+    expect(translateSiteText("Scenery & Locations", "fr")).toBe("Paysages et lieux");
+    expect(translateSiteText("Scenes & Moments", "es")).toBe("Escenas y momentos");
+    expect(translateSiteText("Props & Details", "fr")).toBe("Accessoires et détails");
+    expect(translateSiteText("Other", "es")).toBe("Otros");
+    expect(translateSiteText("Browse categories", "fr")).toBe("Parcourir les catégories");
+  });
+
   it("translates the mobile playlist controls", () => {
     expect(translateSiteText("View playlist", "fr")).toBe("Voir la liste de lecture");
     expect(translateSiteText("Hide playlist", "fr")).toBe("Masquer la liste de lecture");
