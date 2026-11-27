@@ -1,9 +1,10 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
-import { Check, Eye, EyeOff, ImagePlus, LoaderCircle, Save, ShieldCheck, Trash2, UploadCloud } from "lucide-react";
+import { Check, Eye, EyeOff, ImagePlus, LoaderCircle, Pencil, Save, ShieldCheck, Trash2, UploadCloud, X } from "lucide-react";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/database.types";
+import { ART_GALLERY_CATEGORIES, getGalleryCategorySection, isArtGalleryCategory } from "@/lib/art-gallery-categories";
 import { formatStudioError, getImageUploadInfo } from "@/lib/supabase/studio-upload";
 import styles from "./StudioArtGallery.module.css";
 
@@ -30,7 +31,10 @@ export function StudioArtGallery({ client }: Props) {
   const [artworkFile, setArtworkFile] = useState<File | null>(null);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [category, setCategory] = useState("Artwork");
+  const [category, setCategory] = useState("");
+  const [editingCategoryId, setEditingCategoryId] = useState<string | null>(null);
+  const [categoryDraft, setCategoryDraft] = useState("");
+  const [savingCategoryId, setSavingCategoryId] = useState<string | null>(null);
   const [publishImmediately, setPublishImmediately] = useState(true);
   const [loading, setLoading] = useState(true);
   const [savingSettings, setSavingSettings] = useState(false);
@@ -130,6 +134,11 @@ export function StudioArtGallery({ client }: Props) {
       setMessageError(true);
       return;
     }
+    if (!isArtGalleryCategory(category)) {
+      setMessage("Choose a category for this artwork.");
+      setMessageError(true);
+      return;
+    }
 
     setUploading(true);
     setMessage("");
@@ -156,7 +165,7 @@ export function StudioArtGallery({ client }: Props) {
       const { error: insertError } = await client.from("art_gallery_images").insert({
         title: title.trim(),
         description: description.trim(),
-        category: category.trim() || "Artwork",
+        category,
         storage_path: uploadedPath,
         width: watermarked.width,
         height: watermarked.height,
@@ -172,7 +181,7 @@ export function StudioArtGallery({ client }: Props) {
       setArtworkFile(null);
       setTitle("");
       setDescription("");
-      setCategory("Artwork");
+      setCategory("");
       if (artworkInput.current) artworkInput.current.value = "";
       await loadGallery();
     } catch (error) {
@@ -182,6 +191,46 @@ export function StudioArtGallery({ client }: Props) {
     } finally {
       setUploading(false);
     }
+  }
+
+  async function saveCategory(item: GalleryItem) {
+    if (!isArtGalleryCategory(categoryDraft)) {
+      setMessage("Choose one of the four gallery categories.");
+      setMessageError(true);
+      return;
+    }
+
+    setSavingCategoryId(item.id);
+    setMessage("");
+    try {
+      const { data, error } = await client.from("art_gallery_images")
+        .update({ category: categoryDraft })
+        .eq("id", item.id)
+        .select("id")
+        .maybeSingle();
+      if (error) throw error;
+      if (!data) throw new Error("The category change was not saved.");
+      setEditingCategoryId(null);
+      setCategoryDraft("");
+      setMessage("Category updated. The stored image and publication status were left unchanged.");
+      setMessageError(false);
+      await loadGallery();
+    } catch (error) {
+      setMessage(formatStudioError(error, "The artwork category could not be changed."));
+      setMessageError(true);
+    } finally {
+      setSavingCategoryId(null);
+    }
+  }
+
+  function startCategoryEdit(item: GalleryItem) {
+    setEditingCategoryId(item.id);
+    setCategoryDraft(isArtGalleryCategory(item.category) ? item.category.trim() : "");
+  }
+
+  function cancelCategoryEdit() {
+    setEditingCategoryId(null);
+    setCategoryDraft("");
   }
 
   async function setPublished(item: GalleryItem, published: boolean) {
@@ -302,7 +351,12 @@ export function StudioArtGallery({ client }: Props) {
           </label>
           <label>Title<input value={title} onChange={(event) => setTitle(event.target.value)} maxLength={180} required /></label>
           <label>Caption<textarea value={description} onChange={(event) => setDescription(event.target.value)} maxLength={1200} rows={3} /></label>
-          <label>Category<input value={category} onChange={(event) => setCategory(event.target.value)} maxLength={60} /></label>
+          <label>Category
+            <select value={category} onChange={(event) => setCategory(event.target.value)} required>
+              <option value="">Select a category</option>
+              {ART_GALLERY_CATEGORIES.map((option) => <option key={option} value={option}>{option}</option>)}
+            </select>
+          </label>
           <label className={styles.check}><input type="checkbox" checked={publishImmediately} onChange={(event) => setPublishImmediately(event.target.checked)} />Publish after upload</label>
           <button className={styles.primaryButton} type="submit" disabled={uploading || savingSettings || !artworkFile}>
             {uploading ? <LoaderCircle className={styles.spinner} size={16} /> : <Check size={16} aria-hidden="true" />}
@@ -323,8 +377,33 @@ export function StudioArtGallery({ client }: Props) {
                   <img src={item.previewUrl} alt="" draggable={false} />
                   <div className={styles.itemInfo}>
                     <strong>{item.title}</strong>
-                    <span>{item.category} · {item.published ? "Published" : "Draft"}</span>
+                    <span>{getGalleryCategorySection(item.category)} · {item.published ? "Published" : "Draft"}</span>
+                    {editingCategoryId === item.id && (
+                      <div className={styles.categoryEditor}>
+                        <label htmlFor={"gallery-category-" + item.id}>Category for {item.title}
+                          <select
+                            id={"gallery-category-" + item.id}
+                            value={categoryDraft}
+                            onChange={(event) => setCategoryDraft(event.target.value)}
+                          >
+                            <option value="">Choose a category</option>
+                            {ART_GALLERY_CATEGORIES.map((option) => <option key={option} value={option}>{option}</option>)}
+                          </select>
+                        </label>
+                        <div className={styles.itemActions}>
+                          <button type="button" onClick={() => void saveCategory(item)} disabled={savingCategoryId === item.id} aria-label={"Save category for " + item.title}>
+                            <Save size={15} aria-hidden="true" />{savingCategoryId === item.id ? "Saving…" : "Save category"}
+                          </button>
+                          <button type="button" onClick={cancelCategoryEdit} disabled={savingCategoryId === item.id} aria-label={"Cancel category change for " + item.title}>
+                            <X size={15} aria-hidden="true" />Cancel
+                          </button>
+                        </div>
+                      </div>
+                    )}
                     <div className={styles.itemActions}>
+                      <button type="button" onClick={() => startCategoryEdit(item)} aria-label={"Change category for " + item.title}>
+                        <Pencil size={15} aria-hidden="true" />Category
+                      </button>
                       <button type="button" onClick={() => void setPublished(item, !item.published)} aria-label={(item.published ? "Hide " : "Publish ") + item.title}>
                         {item.published ? <EyeOff size={15} aria-hidden="true" /> : <Eye size={15} aria-hidden="true" />}
                         {item.published ? "Hide" : "Publish"}
