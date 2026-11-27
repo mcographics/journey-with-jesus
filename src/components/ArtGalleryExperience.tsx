@@ -92,7 +92,8 @@ export function ArtGalleryExperience() {
   }, [move]);
 
   return (
-    <main
+    <>
+      <main
       id="main-content"
       className={styles.page}
       onContextMenu={(event) => event.preventDefault()}
@@ -202,13 +203,16 @@ export function ArtGalleryExperience() {
         <p className={styles.rightsNote}>Please respect the artwork and its creators. Gallery images are watermarked; the site can discourage saving, but screenshot shortcuts are controlled by your device and cannot be reliably disabled here.</p>
       </div>
 
+    </main>
       {lightboxOpen && current && (
         <div className={styles.lightbox} role="dialog" aria-modal="true" aria-label={current.title} onClick={() => setLightboxOpen(false)}>
-          <button className={styles.closeLightbox} type="button" aria-label="Close artwork view" onClick={() => setLightboxOpen(false)}><X size={22} aria-hidden="true" /></button>
-          <img src={current.imageUrl} alt={current.title} draggable={false} onClick={(event) => event.stopPropagation()} />
+          <div className={styles.lightboxArtwork} onClick={(event) => event.stopPropagation()}>
+            <button className={styles.closeLightbox} type="button" aria-label="Close artwork view" onClick={() => setLightboxOpen(false)}><X size={22} aria-hidden="true" /></button>
+            <img src={current.imageUrl} alt={current.title} draggable={false} />
+          </div>
           <p>{current.title}</p>
         </div>
       )}
-    </main>
+    </>
   );
 }
