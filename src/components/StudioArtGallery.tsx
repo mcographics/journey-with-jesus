@@ -380,7 +380,7 @@ export function StudioArtGallery({ client }: Props) {
                     <span>{getGalleryCategorySection(item.category)} · {item.published ? "Published" : "Draft"}</span>
                     {editingCategoryId === item.id && (
                       <div className={styles.categoryEditor}>
-                        <label htmlFor={"gallery-category-" + item.id}>Category
+                        <label htmlFor={"gallery-category-" + item.id}>Category for {item.title}
                           <select
                             id={"gallery-category-" + item.id}
                             value={categoryDraft}
