@@ -67,7 +67,7 @@ export function ArtGalleryExperience() {
     [artwork, category],
   );
   const currentIndex = visibleArtwork.length ? activeIndex % visibleArtwork.length : 0;
-  const current = visibleArtwork[currentIndex];
+  const current = visibleArtwork[currentIndex]!;
   const previous = visibleArtwork.length > 1
     ? visibleArtwork[(currentIndex + visibleArtwork.length - 1) % visibleArtwork.length]
     : undefined;
