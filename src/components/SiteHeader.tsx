@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { BookOpen, Building2, ChevronDown, Clapperboard, Cross, LayoutGrid, Menu, Moon, Newspaper, ShoppingBag, Sun, UserRound, X } from "lucide-react";
+import { BookOpen, Building2, ChevronDown, Clapperboard, Cross, LayoutGrid, Menu, Images, Moon, Newspaper, ShoppingBag, Sun, UserRound, X } from "lucide-react";
 import { AccessibilitySettings } from "@/components/AccessibilitySettings";
 import { SiteLanguageSwitcher } from "@/components/SiteLanguageSwitcher";
 import { SiteShareButton } from "@/components/SiteShareButton";
@@ -13,6 +13,7 @@ const navigation = [
   { href: "/blog/", label: "Blog" },
   { href: "/word/", label: "The Word" },
   { href: "/projects/journey-with-jesus/", label: "Journey with Jesus" },
+  { href: "/projects/journey-with-jesus/art-gallery/", label: "Art Gallery" },
   { href: "/media/", label: "Media" },
   { href: "/characters/", label: "Meet the Characters" },
   { href: "/team/", label: "Meet the Team" },
@@ -59,7 +60,7 @@ export function SiteHeader() {
   const visibleNavigation = navigation.filter(({ href }) => {
     if (href === "/blog/" || href === "/word/") return true;
     if (href === "/company/") return normalizedPath !== "/company/";
-    if (isJourneySection) return href === "/media/" || href === "/characters/";
+    if (isJourneySection) return href === "/media/" || href === "/characters/" || href === "/projects/journey-with-jesus/art-gallery/";
     return href === "/projects/journey-with-jesus/" || href === "/team/" || href === "/store/";
   });
   const [isDesktopMenuOpen, setIsDesktopMenuOpen] = useState(false);
@@ -391,7 +392,9 @@ export function SiteHeader() {
                         ? <Building2 aria-hidden="true" size={15} strokeWidth={1.7} />
                         : href === "/projects/journey-with-jesus/"
                           ? <Cross aria-hidden="true" size={15} strokeWidth={1.7} />
-                          : href === "/media/"
+                          : href === "/projects/journey-with-jesus/art-gallery/"
+                            ? <Images aria-hidden="true" size={15} strokeWidth={1.7} />
+                            : href === "/media/"
                             ? <Clapperboard aria-hidden="true" size={15} strokeWidth={1.7} />
                             : href === "/store/"
                               ? <ShoppingBag aria-hidden="true" size={15} strokeWidth={1.7} />
@@ -483,7 +486,9 @@ export function SiteHeader() {
                         ? <Building2 aria-hidden="true" size={15} strokeWidth={1.7} />
                         : href === "/projects/journey-with-jesus/"
                           ? <Cross aria-hidden="true" size={15} strokeWidth={1.7} />
-                          : href === "/media/"
+                          : href === "/projects/journey-with-jesus/art-gallery/"
+                            ? <Images aria-hidden="true" size={15} strokeWidth={1.7} />
+                            : href === "/media/"
                             ? <Clapperboard aria-hidden="true" size={15} strokeWidth={1.7} />
                             : href === "/store/"
                               ? <ShoppingBag aria-hidden="true" size={15} strokeWidth={1.7} />

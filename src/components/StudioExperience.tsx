@@ -1,6 +1,6 @@
 "use client";
 import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
-import { ArrowLeft, Check, ChevronRight, Eye, EyeOff, Film, KeyRound, ListVideo, LoaderCircle, LockKeyhole, LogOut, Mail, MessageCircle, Plus, Share2, ShieldCheck, Trash2, UploadCloud, Users, X } from "lucide-react";
+import { ArrowLeft, Check, ChevronRight, Eye, EyeOff, Film, Images, KeyRound, ListVideo, LoaderCircle, LockKeyhole, LogOut, Mail, MessageCircle, Plus, Share2, ShieldCheck, Trash2, UploadCloud, Users, X } from "lucide-react";
 import type { Session } from "@supabase/supabase-js";
 import type { Database, MediaAudioLanguage, VideoContentType, VideoQuality } from "@/lib/database.types";
 import { createBrowserSupabaseClient, isSupabaseConfigured } from "@/lib/supabase/browser";
@@ -12,6 +12,7 @@ import { StudioDigitalRain } from "@/components/StudioDigitalRain";
 import { StudioTurnstile } from "@/components/StudioTurnstile";
 import { StudioMfaGate, StudioMfaSettings } from "@/components/StudioMfa";
 import { StudioStaff } from "@/components/StudioStaff";
+import { StudioArtGallery } from "@/components/StudioArtGallery";
 import { StudioSocialLinks } from "@/components/StudioSocialLinks";
 import { parseYouTubeId, youtubeWatchUrl } from "@/lib/youtube";
 import { resolveStoryPublication } from "@/lib/studio-publishing";
@@ -28,7 +29,7 @@ type EpisodeForm = {
   duration: string; number: string; orientation: "landscape" | "portrait"; audioLanguage: MediaAudioLanguage; published: boolean;
 };
 type PlaylistForm = { id: string; title: string; description: string; order: string; published: boolean; episodeIds: string[] };
-type Section = "episodes" | "playlists" | "comments" | "characters" | "staff" | "socials";
+type Section = "episodes" | "playlists" | "comments" | "characters" | "staff" | "socials" | "gallery";
 type LoginMethod = "magic-link" | "passkey" | "authenticator";
 const qualities: VideoQuality[] = ["720p", "1080p", "4K"];
 const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "";
@@ -838,6 +839,7 @@ export function StudioExperience() {
           <button type="button" role="tab" aria-selected={section === "characters"} onClick={() => setSection("characters")}><Users size={16} />Characters</button>
           <button type="button" role="tab" aria-selected={section === "staff"} onClick={() => setSection("staff")}><Users size={16} />Staff</button>
           <button type="button" role="tab" aria-selected={section === "socials"} onClick={() => setSection("socials")}><Share2 size={16} />Social Links</button>
+          <button type="button" role="tab" aria-selected={section === "gallery"} onClick={() => setSection("gallery")}><Images size={16} />Art Gallery</button>
         </div>
         {loadingData && <p className="studio-loading" role="status"><LoaderCircle className="studio-spin" size={16} />Loading Studio…</p>}
 
@@ -1027,6 +1029,7 @@ export function StudioExperience() {
         {section === "characters" && <StudioCharacters client={client} onNotice={reportStudioNotice} />}
         {section === "staff" && <StudioStaff client={client} onNotice={reportStudioNotice} />}
         {section === "socials" && client && <StudioSocialLinks client={client} />}
+        {section === "gallery" && client && <StudioArtGallery client={client} />}
       </div>
     </main>
   );
