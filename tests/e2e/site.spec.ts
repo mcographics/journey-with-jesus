@@ -705,7 +705,7 @@ for (const route of ["/projects/journey-with-jesus/", "/media/", "/characters/",
     const menu = page.getByRole("navigation", { name: "Primary navigation" });
     const expected = route === "/team/" || route === "/store/" || route === "/blog/"
       ? ["Studio", "Blog", "The Word", "Journey with Jesus", "Meet the Team", "Store"]
-      : ["Studio", "Blog", "The Word", "Media", "Meet the Characters"];
+      : ["Studio", "Blog", "The Word", "Art Gallery", "Media", "Meet the Characters"];
     await expect(menu.getByRole("link")).toHaveText(expected);
   });
 }
