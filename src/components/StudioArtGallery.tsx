@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState, type FormEvent } from "react"
 import { Check, Eye, EyeOff, ImagePlus, LoaderCircle, Pencil, Save, ShieldCheck, Trash2, UploadCloud, X } from "lucide-react";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/database.types";
+import { BIBLE_CHARACTER_NAMES, isBibleCharacterName } from "@/lib/art-gallery-characters";
 import { ART_GALLERY_CATEGORIES, getGalleryCategorySection, isArtGalleryCategory } from "@/lib/art-gallery-categories";
 import { formatStudioError, getImageUploadInfo } from "@/lib/supabase/studio-upload";
 import styles from "./StudioArtGallery.module.css";
@@ -32,8 +33,10 @@ export function StudioArtGallery({ client }: Props) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
+  const [characterName, setCharacterName] = useState("");
   const [editingCategoryId, setEditingCategoryId] = useState<string | null>(null);
   const [categoryDraft, setCategoryDraft] = useState("");
+  const [characterNameDraft, setCharacterNameDraft] = useState("");
   const [savingCategoryId, setSavingCategoryId] = useState<string | null>(null);
   const [publishImmediately, setPublishImmediately] = useState(true);
   const [loading, setLoading] = useState(true);
@@ -139,6 +142,11 @@ export function StudioArtGallery({ client }: Props) {
       setMessageError(true);
       return;
     }
+    if (category === "Characters" && !isBibleCharacterName(characterName)) {
+      setMessage("Choose a Bible character for this artwork.");
+      setMessageError(true);
+      return;
+    }
 
     setUploading(true);
     setMessage("");
@@ -166,6 +174,7 @@ export function StudioArtGallery({ client }: Props) {
         title: title.trim(),
         description: description.trim(),
         category,
+        character_name: category === "Characters" ? characterName : null,
         storage_path: uploadedPath,
         width: watermarked.width,
         height: watermarked.height,
@@ -182,6 +191,7 @@ export function StudioArtGallery({ client }: Props) {
       setTitle("");
       setDescription("");
       setCategory("");
+      setCharacterName("");
       if (artworkInput.current) artworkInput.current.value = "";
       await loadGallery();
     } catch (error) {
@@ -199,12 +209,17 @@ export function StudioArtGallery({ client }: Props) {
       setMessageError(true);
       return;
     }
+    if (categoryDraft === "Characters" && !isBibleCharacterName(characterNameDraft)) {
+      setMessage("Choose a Bible character for this artwork.");
+      setMessageError(true);
+      return;
+    }
 
     setSavingCategoryId(item.id);
     setMessage("");
     try {
       const { data, error } = await client.from("art_gallery_images")
-        .update({ category: categoryDraft })
+        .update({ category: categoryDraft, character_name: categoryDraft === "Characters" ? characterNameDraft : null })
         .eq("id", item.id)
         .select("id")
         .maybeSingle();
@@ -212,7 +227,8 @@ export function StudioArtGallery({ client }: Props) {
       if (!data) throw new Error("The category change was not saved.");
       setEditingCategoryId(null);
       setCategoryDraft("");
-      setMessage("Category updated. The stored image and publication status were left unchanged.");
+      setCharacterNameDraft("");
+      setMessage("Category and character updated. The stored image and publication status were left unchanged.");
       setMessageError(false);
       await loadGallery();
     } catch (error) {
@@ -225,12 +241,15 @@ export function StudioArtGallery({ client }: Props) {
 
   function startCategoryEdit(item: GalleryItem) {
     setEditingCategoryId(item.id);
-    setCategoryDraft(isArtGalleryCategory(item.category) ? item.category.trim() : "");
+    const currentCategory = isArtGalleryCategory(item.category) ? item.category.trim() : "";
+    setCategoryDraft(currentCategory);
+    setCharacterNameDraft(currentCategory === "Characters" ? item.character_name ?? "" : "");
   }
 
   function cancelCategoryEdit() {
     setEditingCategoryId(null);
     setCategoryDraft("");
+    setCharacterNameDraft("");
   }
 
   async function setPublished(item: GalleryItem, published: boolean) {
@@ -352,12 +371,20 @@ export function StudioArtGallery({ client }: Props) {
           <label>Title<input value={title} onChange={(event) => setTitle(event.target.value)} maxLength={180} required /></label>
           <label>Caption<textarea value={description} onChange={(event) => setDescription(event.target.value)} maxLength={1200} rows={3} /></label>
           <label>Category
-            <select value={category} onChange={(event) => setCategory(event.target.value)} required>
+            <select value={category} onChange={(event) => { const value = event.target.value; setCategory(value); if (value !== "Characters") setCharacterName(""); }} required>
               <option value="">Select a category</option>
               {ART_GALLERY_CATEGORIES.map((option) => <option key={option} value={option}>{option}</option>)}
             </select>
           </label>
-          <label className={styles.check}><input type="checkbox" checked={publishImmediately} onChange={(event) => setPublishImmediately(event.target.checked)} />Publish after upload</label>
+          {category === "Characters" && (
+            <label>Bible character
+              <select value={characterName} onChange={(event) => setCharacterName(event.target.value)} required>
+                <option value="">Select a character</option>
+                {BIBLE_CHARACTER_NAMES.map((name) => <option key={name} value={name}>{name}</option>)}
+              </select>
+            </label>
+          )}
+          <label className={styles.check}><input type="checkbox" checked={publishImmediately> onChange={(event) => setPublishImmediately(event.target.checked)} />Publish after upload</label>
           <button className={styles.primaryButton} type="submit" disabled={uploading || savingSettings || !artworkFile}>
             {uploading ? <LoaderCircle className={styles.spinner} size={16} /> : <Check size={16} aria-hidden="true" />}
             {uploading ? "Watermarking and uploading…" : "Upload to gallery"}
@@ -377,22 +404,30 @@ export function StudioArtGallery({ client }: Props) {
                   <img src={item.previewUrl} alt="" draggable={false} />
                   <div className={styles.itemInfo}>
                     <strong>{item.title}</strong>
-                    <span>{getGalleryCategorySection(item.category)} · {item.published ? "Published" : "Draft"}</span>
+                    <span>{getGalleryCategorySection(item.category)}{item.character_name ? " · " + item.character_name : ""} · {item.published ? "Published" : "Draft"}</span>
                     {editingCategoryId === item.id && (
                       <div className={styles.categoryEditor}>
                         <label htmlFor={"gallery-category-" + item.id}>Category for {item.title}
                           <select
                             id={"gallery-category-" + item.id}
                             value={categoryDraft}
-                            onChange={(event) => setCategoryDraft(event.target.value)}
+                            onChange={(event) => { const value = event.target.value; setCategoryDraft(value); if (value !== "Characters") setCharacterNameDraft(""); }}
                           >
                             <option value="">Choose a category</option>
                             {ART_GALLERY_CATEGORIES.map((option) => <option key={option} value={option}>{option}</option>)}
                           </select>
                         </label>
+                        {categoryDraft === "Characters" && (
+                          <label htmlFor={"gallery-character-" + item.id}>Bible character for {item.title}
+                            <select id={"gallery-character-" + item.id} value={characterNameDraft} onChange={(event) => setCharacterNameDraft(event.target.value)} required>
+                              <option value="">Choose a Bible character</option>
+                              {BIBLE_CHARACTER_NAMES.map((name) => <option key={name} value={name}>{name}</option>)}
+                            </select>
+                          </label>
+                        )}
                         <div className={styles.itemActions}>
                           <button type="button" onClick={() => void saveCategory(item)} disabled={savingCategoryId === item.id} aria-label={"Save category for " + item.title}>
-                            <Save size={15} aria-hidden="true" />{savingCategoryId === item.id ? "Saving…" : "Save category"}
+                            <Save size={15} aria-hidden="true" />{savingCategoryId === item.id ? "Saving…" : "Save category and character"}
                           </button>
                           <button type="button" onClick={cancelCategoryEdit} disabled={savingCategoryId === item.id} aria-label={"Cancel category change for " + item.title}>
                             <X size={15} aria-hidden="true" />Cancel
