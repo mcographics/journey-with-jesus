@@ -384,7 +384,7 @@ export function StudioArtGallery({ client }: Props) {
               </select>
             </label>
           )}
-          <label className={styles.check}><input type="checkbox" checked={publishImmediately> onChange={(event) => setPublishImmediately(event.target.checked)} />Publish after upload</label>
+          <label className={styles.check}><input type="checkbox" checked={publishImmediately} onChange={(event) => setPublishImmediately(event.target.checked)} />Publish after upload</label>
           <button className={styles.primaryButton} type="submit" disabled={uploading || savingSettings || !artworkFile}>
             {uploading ? <LoaderCircle className={styles.spinner} size={16} /> : <Check size={16} aria-hidden="true" />}
             {uploading ? "Watermarking and uploading…" : "Upload to gallery"}
