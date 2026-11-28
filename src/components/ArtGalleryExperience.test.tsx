@@ -10,13 +10,13 @@ vi.mock("@/lib/supabase/browser", () => ({
 
 type GalleryRow = Database["public"]["Tables"]["art_gallery_images"]["Row"];
 
-function row(id: string, title: string, category: string, published = true): GalleryRow {
+function row(id: string, title: string, category: string, published = true, character_name: string | null = null): GalleryRow {
   return {
     id,
     title,
     description: "A test gallery entry.",
     category,
-    character_name: null,
+    character_name,
     storage_path: "artwork/" + id + ".webp",
     width: 1200,
     height: 800,
