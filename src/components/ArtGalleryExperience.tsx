@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { ChevronLeft, ChevronRight, Expand, Images, X } from "lucide-react";
 import type { Database } from "@/lib/database.types";
+import { BIBLE_CHARACTER_NAMES, isBibleCharacterName } from "@/lib/art-gallery-characters";
 import {
   getAvailableGalleryCategories,
   getGalleryCategorySection,
@@ -14,10 +15,12 @@ import styles from "./ArtGalleryExperience.module.css";
 type GalleryRow = Database["public"]["Tables"]["art_gallery_images"]["Row"];
 type GalleryArtwork = GalleryRow & { imageUrl: string };
 const GALLERY_BUCKET = "journey-art-gallery";
+const UNASSIGNED_CHARACTER_FILTER = "__unassigned__";
 
 export function ArtGalleryExperience() {
   const [artwork, setArtwork] = useState<GalleryArtwork[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<GalleryCategorySection | null>(null);
+  const [selectedCharacter, setSelectedCharacter] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);
   const [carouselOpen, setCarouselOpen] = useState(false);
   const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -65,12 +68,29 @@ export function ArtGalleryExperience() {
   }, []);
 
   const categories = useMemo(() => getAvailableGalleryCategories(artwork), [artwork]);
-  const visibleArtwork = useMemo(
-    () => selectedCategory
-      ? artwork.filter((item) => getGalleryCategorySection(item.category) === selectedCategory)
-      : [],
-    [artwork, selectedCategory],
+  const availableCharacters = useMemo(() => {
+    const publishedCharacterNames = new Set(
+      artwork
+        .filter((item) => getGalleryCategorySection(item.category) === "Characters")
+        .map((item) => item.character_name)
+        .filter((name): name is string => isBibleCharacterName(name)),
+    );
+    return BIBLE_CHARACTER_NAMES.filter((name) => publishedCharacterNames.has(name));
+  }, [artwork]);
+  const hasUnassignedCharacterArtwork = useMemo(
+    () => artwork.some((item) =>
+      getGalleryCategorySection(item.category) === "Characters" && !isBibleCharacterName(item.character_name),
+    ),
+    [artwork],
   );
+  const visibleArtwork = useMemo(() => {
+    if (!selectedCategory) return [];
+    const categoryArtwork = artwork.filter((item) => getGalleryCategorySection(item.category) === selectedCategory);
+    if (selectedCategory !== "Characters" || !selectedCharacter) return categoryArtwork;
+    return categoryArtwork.filter((item) => selectedCharacter === UNASSIGNED_CHARACTER_FILTER
+      ? !isBibleCharacterName(item.character_name)
+      : item.character_name === selectedCharacter);
+  }, [artwork, selectedCategory, selectedCharacter]);
   const current = visibleArtwork[activeIndex] ?? null;
   const previous = visibleArtwork.length > 1
     ? visibleArtwork[(activeIndex + visibleArtwork.length - 1) % visibleArtwork.length]
@@ -107,6 +127,7 @@ export function ArtGalleryExperience() {
 
   function chooseCategory(category: GalleryCategorySection) {
     setSelectedCategory(category);
+    setSelectedCharacter("");
     setActiveIndex(0);
     setCarouselOpen(false);
     setLightboxOpen(false);
@@ -114,6 +135,7 @@ export function ArtGalleryExperience() {
 
   function returnToCategories() {
     setSelectedCategory(null);
+    setSelectedCharacter("");
     setActiveIndex(0);
     setCarouselOpen(false);
     setLightboxOpen(false);
@@ -212,6 +234,27 @@ export function ArtGalleryExperience() {
                   ))}
                 </div>
               </nav>
+              {selectedCategory === "Characters" && (
+                <div className={styles.characterFilterRow}>
+                  <label className={styles.characterFilter}>
+                    <span>Filter by character</span>
+                    <select
+                      aria-label="Filter by character"
+                      value={selectedCharacter}
+                      onChange={(event) => {
+                        setSelectedCharacter(event.target.value);
+                        setActiveIndex(0);
+                        setCarouselOpen(false);
+                        setLightboxOpen(false);
+                      }}
+                    >
+                      <option value="">All characters</option>
+                      {availableCharacters.map((name) => <option key={name} value={name}>{name}</option>)}
+                      {hasUnassignedCharacterArtwork && <option value={UNASSIGNED_CHARACTER_FILTER}>Unassigned</option>}
+                    </select>
+                  </label>
+                </div>
+              )}
 
               <div className={styles.collectionHeading}>
                 <div>
@@ -241,6 +284,7 @@ export function ArtGalleryExperience() {
                         <img src={item.imageUrl} alt="" draggable={false} loading="lazy" />
                         <span className={styles.tileExpand}><Expand size={16} aria-hidden="true" /> View image</span>
                       </span>
+                      {item.character_name && <span className={styles.artworkCharacter}>{item.character_name}</span>}
                       <span className={styles.artworkTitle}>{item.title}</span>
                       {item.description && <span className={styles.artworkDescription}>{item.description}</span>}
                     </button>
@@ -261,7 +305,7 @@ export function ArtGalleryExperience() {
                       </button>
                       <figcaption className={styles.caption}>
                         <div>
-                          <span className={styles.artCategory}>{getGalleryCategorySection(current.category)}</span>
+                          <span className={styles.artCategory}>{getGalleryCategorySection(current.category)}{current.character_name ? " · " + current.character_name : ""}</span>
                           <h2>{current.title}</h2>
                           {current.description && <p>{current.description}</p>}
                         </div>
