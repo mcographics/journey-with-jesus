@@ -108,6 +108,11 @@
 .categoryDetails { display: flex; gap: .3rem; color: #c5cdd7; font-size: .84rem; }
 .categoryExplore { margin-top: .4rem; color: #d3b775; font-size: .83rem; font-weight: 650; }
 .categoryNavigation { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.characterFilterRow { display: flex; justify-content: flex-end; }
+.characterFilter { display: flex; align-items: center; gap: .6rem; color: #aeb7c2; font-size: .88rem; }
+.characterFilter select { min-height: 2.65rem; min-width: 13rem; padding: .5rem .8rem; border: 1px solid rgba(255,255,255,.16); border-radius: .65rem; color: #f2f4f7; background: #111823; font: inherit; }
+.characterFilter select:focus-visible { border-color: rgba(200,166,94,.72); outline: 2px solid rgba(200,166,94,.35); outline-offset: 2px; }
+.artworkCharacter { display: block; overflow: hidden; padding: .55rem .8rem .1rem; color: #d3b775; font-size: .72rem; font-weight: 700; letter-spacing: .1em; text-overflow: ellipsis; text-transform: uppercase; white-space: nowrap; }
 .backButton { display: inline-flex; align-items: center; gap: .35rem; min-height: 2.65rem; padding: .55rem .85rem; border: 1px solid rgba(255,255,255,.16); border-radius: 999px; color: #e5e9ee; background: rgba(255,255,255,.035); font: inherit; cursor: pointer; white-space: nowrap; }
 .backButton:hover,.backButton:focus-visible { border-color: rgba(200,166,94,.72); outline: none; }
 .collectionCount { display: flex; gap: .3rem; margin: .4rem 0 0; color: #aeb7c2; font-size: .9rem; }
@@ -418,10 +423,14 @@
   .categoryCover { aspect-ratio: 1.45; }
   .categoryContent { inset: auto .95rem .8rem; }
   .categoryNavigation { align-items: stretch; flex-direction: column; gap: .7rem; }
+  .characterFilterRow { justify-content: flex-start; }
+  .characterFilter { align-items: flex-start; flex-direction: column; gap: .35rem; width: min(100%, 22rem); }
+  .characterFilter select { width: 100%; }
   .collection .categoryBar { justify-content: flex-start; }
   .categoryBar { justify-content: flex-start; flex-wrap: nowrap; padding-bottom: .2rem; overflow-x: auto; }
   .categoryBar button { flex: 0 0 auto; min-height: 2.4rem; font-size: .9rem; }
   .artworkGrid { grid-template-columns: repeat(2,minmax(0,1fr)); gap: .65rem; }
+  .artworkCharacter { padding: .5rem .65rem .1rem; font-size: .67rem; }
   .artworkTitle { padding: .65rem .65rem .2rem; font-size: .9rem; }
   .artworkDescription { padding: 0 .65rem .65rem; font-size: .78rem; }
   .tileExpand { right: .45rem; bottom: .45rem; padding: .36rem .48rem; font-size: .7rem; }

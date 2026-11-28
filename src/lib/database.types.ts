@@ -60,9 +60,9 @@ export type Database = {
         Relationships: [];
       };
       art_gallery_images: {
-        Row: { id: string; title: string; description: string; category: string; storage_path: string; width: number; height: number; sort_order: number; published: boolean; created_by: string | null; created_at: string; updated_at: string };
-        Insert: { id?: string; title: string; description?: string; category?: string; storage_path: string; width: number; height: number; sort_order?: number; published?: boolean; created_by?: string | null };
-        Update: { title?: string; description?: string; category?: string; storage_path?: string; width?: number; height?: number; sort_order?: number; published?: boolean; created_by?: string | null; updated_at?: string };
+        Row: { id: string; title: string; description: string; category: string; character_name: string | null; storage_path: string; width: number; height: number; sort_order: number; published: boolean; created_by: string | null; created_at: string; updated_at: string };
+        Insert: { id?: string; title: string; description?: string; category?: string; character_name?: string | null; storage_path: string; width: number; height: number; sort_order?: number; published?: boolean; created_by?: string | null };
+        Update: { title?: string; description?: string; category?: string; character_name?: string | null; storage_path?: string; width?: number; height?: number; sort_order?: number; published?: boolean; created_by?: string | null; updated_at?: string };
         Relationships: [];
       };
       art_gallery_settings: {
