@@ -16,6 +16,7 @@ function row(id: string, title: string, category: string, published = true): Gal
     title,
     description: "A test gallery entry.",
     category,
+    character_name: null,
     storage_path: "artwork/" + id + ".webp",
     width: 1200,
     height: 800,
@@ -72,6 +73,29 @@ describe("ArtGalleryExperience", () => {
     expect(screen.getByRole("heading", { name: "Characters" })).toBeTruthy();
     expect(screen.getByRole("button", { name: "Peter" })).toBeTruthy();
     expect(screen.queryByText("Legacy artwork")).toBeNull();
+  });
+
+  it("lets visitors filter the Characters collection by published Bible character", async () => {
+    const { client } = makeClient([
+      row("jesus", "Jesus at the river", "Characters", true, "Jesus"),
+      row("peter", "Peter by the lake", "Characters", true, "Peter"),
+      row("legacy", "Older unnamed portrait", "Characters"),
+    ]);
+    mocks.createClient.mockReturnValue(client);
+
+    render(<ArtGalleryExperience />);
+    fireEvent.click(await screen.findByRole("button", { name: "Characters" }));
+
+    const filter = screen.getByRole("combobox", { name: "Filter by character" }) as HTMLSelectElement;
+    expect([...filter.options].map((option) => option.textContent)).toEqual([
+      "All characters", "Jesus", "Peter", "Unassigned",
+    ]);
+    fireEvent.change(filter, { target: { value: "Peter" } });
+    expect(screen.getByRole("button", { name: "Peter by the lake" })).toBeTruthy();
+    expect(screen.queryByText("Jesus at the river")).toBeNull();
+
+    fireEvent.change(filter, { target: { value: "__unassigned__" } });
+    expect(screen.getByRole("button", { name: "Older unnamed portrait" })).toBeTruthy();
   });
 
   it("keeps the existing carousel and image viewer available from a category grid", async () => {
